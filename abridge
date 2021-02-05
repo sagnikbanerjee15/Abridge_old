@@ -1,0 +1,404 @@
+#! /usr/bin/env python
+
+########################################################################################################################################################
+# The software 'abridge' will compress aligned files to a bare minimum needed for generating assemblies and producing read counts
+########################################################################################################################################################
+
+"""
+(time \
+abridge \
+-c \
+--ignore_unmapped_reads \
+-G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ERR4221199_STAR_Aligned.sortedByCoord.out.bam \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ERR4221199_STAR_Aligned.sortedByCoord.out) > output 2> error & 
+
+Abdrige Compression 
+
+(time \
+abridge \
+-c \
+--ignore_unmapped_reads \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.fa  \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.error &
+
+(time \
+abridge \
+-c \
+--ignore_unmapped_reads \
+-G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.sam \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_compress.error &
+
+Abdrige decompression 
+
+(time \
+abridge \
+-d \
+--ignore_unmapped_reads \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.fa  \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_decompress.error &
+
+(time \
+abridge \
+-d \
+--ignore_unmapped_reads \
+-G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_decompress.error &
+
+Boiler compress
+
+(time pypy \
+/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler/boiler.py \
+compress \
+/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.sam \
+/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.boiler) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler_ART_SE_compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler_ART_SE_compress.error & 
+ 
+"""
+
+from argparse import RawTextHelpFormatter
+import argparse
+import logging
+import os
+import pprint
+import sys
+import re
+import time
+import multiprocessing
+from scripts.extractSequencesFromReferences import *
+
+
+def parseCommandLineArguments():
+    parser = argparse.ArgumentParser(prog="abridge",description="Compress reference alignments for storage",formatter_class=RawTextHelpFormatter)
+    requiredNamed = parser.add_argument_group('Required arguments')
+    optionalNamed = parser.add_argument_group('Optional arguments')
+    
+    # Required arguments
+    requiredNamed.add_argument("-i","--inputfilename",help="Enter the name of the alignment file you wish to compress. Alignments in BAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You may choose to compress multiple alignment files together.",required = True, nargs="+")
+    requiredNamed.add_argument("-G","--genome",help="Enter a single fasta file for the reference",required=True)
+    
+    compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
+    compress_decompress_group.add_argument("-c","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
+    compress_decompress_group.add_argument("-d","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
+    
+    # Optional arguments 
+    optionalNamed.add_argument("-gsc","--ignore_soft_clippings",help="No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference",action="store_true")
+    optionalNamed.add_argument("-gm","--ignore_mismatches",help="All mismatches will be ignored",action="store_true")
+    optionalNamed.add_argument("-gs","--ignore_sequence",help="No nucleotide sequence will be produced during decompression",action="store_true")
+    optionalNamed.add_argument("-gu","--ignore_unmapped_reads",help="Request abridge to discard all reads that are unmapped",action="store_false")
+    optionalNamed.add_argument("-l","--quality",help="Enter dummy quality scores while decompressing",default='I')
+    optionalNamed.add_argument("-dna","--dnaseq",help="Set this parameter if your data is DNA-Seq",action = "store_true")
+    optionalNamed.add_argument("-o","--outputfilenameprefix",help="Enter the prefix of the output file. If this parameter is not provided then abridge will attempt to write to the directory where the input file is present. Please make sure that the directory has write permissions enabled. This parameter is ignored while decompressing.")
+    optionalNamed.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
+    optionalNamed.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of available reference sequences in the genome.",default = 1)
+    optionalNamed.add_argument("-p","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags. Please note that generating more tags will require more time.",nargs="*")
+    
+    # Suppressed arguments
+    parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
+    parser.add_argument("--files_for_removal","-files_for_removal",help=argparse.SUPPRESS)# Files will be removed later
+    parser.add_argument("--softwares","-softwares",help=argparse.SUPPRESS) # Software paths
+    parser.add_argument("--single_ended","-single_ended",help=argparse.SUPPRESS) # Software paths
+    parser.add_argument("--reference_to_length","-num_of_reference_sequences",help=argparse.SUPPRESS)
+    parser.add_argument("--outputfilename","-outputfilena",help=argparse.SUPPRESS)
+    
+    return parser.parse_args()
+
+def configureLogger(options):
+    if os.path.exists(options.logfilename)==True:
+        os.system(f"rm {options.logfilename}")
+    logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',level=logging.DEBUG, filename=options.logfilename)
+    
+def validateCommandLineArguments(options):
+    """
+    """
+    for file in options.inputfilename:
+        if os.path.exists(file)==False:
+            print(f"The input file {file} does not exist. Exiting...")
+            if options.quiet==False:
+                logging.info(f"The input file {file} does not exist. Exiting...")
+            sys.exit()
+     
+    #Check if the input format is sam
+    for file in options.inputfilename:
+        if file[-3:]!="sam" and options.compress==True:
+            print(f"The input file {file} needs to be in sam format. Exiting...")
+            if options.quiet==False:
+                logging.info(f"The input file {file} needs to be in sam format. Exiting...")
+            sys.exit()
+    
+    # Set output filename
+    if options.outputfilenameprefix is None:
+        options.outputfilename = options.inputfilename[:-4]+".abridge"
+        options.logfilename = options.inputfilename[:-4]+".log"
+    else:   
+        options.logfilename = options.outputfilenameprefix+".log"
+        options.outputfilename = options.outputfilenameprefix+".abridge"
+    options.files_for_removal = []
+    options.softwares = {}
+    cmd=f"which abridge > {options.logfilename[:-3]}temp"
+    os.system(cmd)
+    fhr=open(f"{options.logfilename[:-3]}temp","r")
+    abridge_location = fhr.read().split()[-1]
+    fhr.close()
+    options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
+    options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
+    options.softwares["compressSamFileSingleEndedPass2"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass2"
+    options.softwares["compressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEnded"
+    options.softwares["splitSamFileIntoEachReferenceSequence"] = "/".join(abridge_location.split("/")[:-1])+"/src/splitSamFileIntoEachReferenceSequence"
+    options.softwares["buildABRIDGEIndex"]= "/".join(abridge_location.split("/")[:-1])+"/src/buildAbridgeIndex"
+    options.softwares["decompressSamFileSingleEnded"]= "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFileSingleEnded"
+    options.softwares["extractSequencesFromReferences"] = "/".join(abridge_location.split("/")[:-1])+"/scripts/extractSequencesFromReferences.py"
+    if options.ignore_soft_clippings == True:
+        options.ignore_soft_clippings = 1
+    else:
+        options.ignore_soft_clippings = 0
+        
+    if options.ignore_mismatches == True:
+        options.ignore_mismatches = 1
+    else:
+        options.ignore_mismatches = 0
+        
+    if options.ignore_sequence == True:
+        options.ignore_sequence = 1
+    else:
+        options.ignore_sequence = 0
+        
+    if options.ignore_unmapped_reads == True:
+        options.ignore_unmapped_reads = 1
+    else:
+        options.ignore_unmapped_reads = 0
+
+def checkSAMAlignments(options,logging):
+    """
+    """
+    for file in options.inputfilename:
+        if "SO:coordinate" not in open(f"{file}","r").readline():
+            print(f"The file {file} is not sorted. Exiting")
+            if options.quiet == False:
+                logging.info(f"The file {file} is not sorted. Exiting")
+            sys.exit()
+    
+    # Verify that all the headers are exactly same
+    headers = []
+    for file in options.inputfilename:
+        fhr=open(f"{file}","r")
+        header=""
+        for line in fhr:
+            if line[0]=='@':
+                header+=line
+            else:
+                break
+        headers.append(header)
+    if len(set(headers))!=1:
+        print("All the headers must be same. Please check your bamfile. Exiting...")
+        if options.quiet == False:
+            logging.info("All the headers must be same. Please check your bamfile. Exiting...")
+
+def cleanUp(options):
+    return
+    for file in options.files_for_removal:
+        cmd=f"rm -rf {file}"
+        os.system(cmd)
+
+def runCommand(eachpinput):
+    cmd,dummy = eachpinput
+    os.system(cmd)
+
+def compressSamFile(options):
+    """
+    """
+    if options.single_ended == True:
+        #Single ended
+        compressSamFileSingleEndedPass1 = options.softwares["compressSamFileSingleEndedPass1"]
+        compressSamFileSingleEndedPass2 = options.softwares["compressSamFileSingleEndedPass2"]
+        buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
+        cmd=f"gcc {compressSamFileSingleEndedPass1}.c -o {compressSamFileSingleEndedPass1} -Ofast"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        cmd=f"gcc {compressSamFileSingleEndedPass2}.c -o {compressSamFileSingleEndedPass2} -Ofast"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        cmd=f"gcc {buildABRIDGEIndex}.c -o {buildABRIDGEIndex} -Ofast"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        
+        file = options.inputfilename[0]
+        if options.quiet == False:
+            logging.info("Starting Pass1")
+        cmd=f"{compressSamFileSingleEndedPass1} dummy {options.ignore_soft_clippings} {options.ignore_mismatches} {options.ignore_sequence} {options.ignore_unmapped_reads} {file} {options.outputfilename}.pass1 {options.outputfilename}.quality"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        #all_inputs.append([cmd,"dummy"])
+        os.system(cmd)
+        if options.quiet == False:
+            logging.info("Completed Pass1")
+        
+        if options.quiet == False:
+            logging.info("Starting Pass1")
+        cmd=f"{compressSamFileSingleEndedPass2} {options.outputfilename}.pass1 {options.outputfilename}.pass2"   
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}") 
+        #all_inputs.append([cmd,"dummy"])
+        os.system(cmd)
+        if options.quiet == False:
+            logging.info("Completed Pass2")
+        
+        cmd=f"{buildABRIDGEIndex} {options.outputfilename}.pass2 {options.outputfilename}.pass2.index"
+        if options.quiet == False:
+            logging.info("Starting to build index")
+            logging.info(f"Running cmd - {cmd}")
+        os.system(cmd)
+        
+        
+    else:
+        # Paired ended
+        pass
+    if options.quiet == False:
+        logging.info("Starting compression")
+    cmd=f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {options.outputfilename}.pass2.7z {options.outputfilename}.pass2 {options.outputfilename}.pass2.index"
+    if options.quiet == False:
+        logging.info(f"Running command - {cmd}")
+    os.system(cmd)
+    if options.quiet == False:
+        logging.info("Completed compression")
+
+def findEndedness(options,logging):
+    """
+    """
+    endedness = []
+    for file in options.inputfilename:
+        fhr=open(f"{file}","r")
+        for line in fhr:
+            if line[0]!='@':
+                samformatflag = int(line.strip().split()[1])
+                endedness.append(samformatflag % 2)
+                break
+    
+    if len(set(endedness))!=1:
+        print("A mixture of single and paired ended files is not allowed. Exiting...")
+        if options.quiet == False:
+            logging.info("A mixture of single and paired ended files is not allowed. Exiting...")
+            
+    if endedness[0] == 0:
+        options.single_ended = True
+    else:
+        options.single_ended = False
+    
+def collectReferenceSequenceNameAndLength(options,logging):
+    """
+    """
+    reference_to_length = {}
+    fhr=open(f"{options.inputfilename[0][:-3]}header","r")
+    for line in fhr:
+        if line[:3]=="@SQ":
+            useless,reference_name,reference_length = line.strip().split("\t")
+            reference_name = reference_name.split(":")[-1]
+            reference_length = int(reference_length.split(":")[-1])
+            reference_to_length[reference_name] = reference_length
+    fhr.close()     
+    options.reference_to_length = reference_to_length
+  
+def decompressSamFile(options):
+    """
+    """
+    
+    cmd=f"7za e {options.inputfilename[0]} -y"
+    if options.quiet == False:
+        logging.info(f"Running command - {cmd}")
+    os.system(cmd)
+    
+    index_filename = f"{options.inputfilename[0][:-2]}index"
+    
+    cmd=f"samtools faidx {options.genome}"
+    if os.path.exists(f"{options.genome}.fai")==False:
+        if options.quiet ==False:
+            logging.info(f"Running cmd - {cmd}")
+        os.system(cmd)
+    
+    prefix_without_fullpath=options.outputfilename.split("/")[-1]
+    whole_index = readPass2Index(f"{index_filename}")
+    for chromosome in whole_index:
+        output_filename = f"{options.genome}.{prefix_without_fullpath}.{chromosome}"
+        if os.path.exists(output_filename)==True:continue
+        extractSequenceFromReferenceFile(options.genome,chromosome,whole_index,output_filename,options,logging)
+    
+    decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
+    cmd=f"gcc {decompressSamFileSingleEnded}.c -o {decompressSamFileSingleEnded} -Ofast"
+    if options.quiet == False:
+        logging.info(f"Running command - {cmd}")
+    os.system(cmd)
+    
+    output_sam_filename = f"{options.inputfilename[0][:-16]}decompressed.sam"
+    genome_prefix = "/".join(options.genome.split("/")[:-1])+"/"+options.genome.split("/")[-1]+"."+options.inputfilename[0][:-9].split("/")[-1]
+    cmd=f"{decompressSamFileSingleEnded} {index_filename} {options.genome} {output_sam_filename} {options.inputfilename[0][:-3]} {genome_prefix}"
+    if options.quiet == False:
+        logging.info(f"Running command - {cmd}")
+    os.system(cmd)
+    
+    """
+    # Remove the sequences 
+    for chromosome in whole_index:
+        output_filename = f"{options.genome}.{prefix_without_fullpath}.{chromosome}"
+        cmd=f"rm {output_filename}"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+     """   
+  
+def main():
+    commandLineArg=sys.argv
+    if len(commandLineArg)==1:
+        print("Please use the --help option to get usage information")
+    options=parseCommandLineArguments()
+    
+    validateCommandLineArguments(options)
+    
+    configureLogger(options)
+    if options.quiet == False:
+        logging.info("Logger has been configured")
+    if options.quiet == False:
+        logging.info("validateCommandLineArguments() execution is complete")
+    
+    if options.compress==True:
+        checkSAMAlignments(options,logging)
+        if options.quiet == False:
+            logging.info(f"convertInputToSAM() execution is complete")
+
+    if options.compress==True:
+        findEndedness(options,logging)
+        if options.quiet == False:
+            logging.info(f"findEndedness() execution is complete")
+    if options.compress==True:
+        compressSamFile(options)
+        if options.quiet == False:
+            logging.info(f"compressSamFile() execution is complete")
+    
+    if options.decompress==True:
+        decompressSamFile(options)
+        if options.quiet == False:
+            logging.info(f"decompressSamFile() execution is complete")
+            
+    cleanUp(options)
+    if options.quiet == False:
+        logging.info(f"cleanUp() execution is complete")
+        
+    
+
+if __name__ == "__main__":
+    main()
