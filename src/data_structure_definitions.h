@@ -12,12 +12,12 @@
 # define MAX_CIGAR_LENGTH 10000
 # define MAX_TAG_LENGTH 25
 # define MAX_POOL_SIZE 1000000
-# define MIN_POOL_SIZE 500
+# define MIN_POOL_SIZE 10000
 # define MAX_UNIQUE_CIGARS 10000
 # define MAX_LINE_TO_BE_WRITTEN_TO_FILE 1000000
 # define MAX_LENGTH_RLE 1000
 # define MAX_CIGAR_FREQ_SIZE 1000000
-# define MAX_ICIGAR_LENGTH 10000
+# define MAX_ICIGAR_LENGTH 100000
 # define MAX_ICIGAR_LENGTH_PASS1_COL2 1000000
 # define MAX_REFERENCE_SEQUENCES 10000
 # define MAX_SYMBOLS_FOR_PASS3_COMPRESSION 44
@@ -47,7 +47,7 @@ struct Sam_Tags
 		 */
 		char *name; // Name of the sam tag. Could be MD, NH, etc.
 		char *type; // Datatype of the tag
-		char *val; // Value of the tag. Must be a string even ig tag has a single character
+		char *val; // Value of the tag. Must be a string even if tag has a single character
 };
 
 struct Soft_Clippings
@@ -57,6 +57,8 @@ struct Soft_Clippings
 		 */
 		char *left;
 		char *right;
+		char *left_qual;
+		char *right_qual;
 };
 
 struct Cigar_Frequency
@@ -154,6 +156,8 @@ struct Sam_Alignment
 		char *icigar; // Stores the integrated representation comprising of all relevant information about the alignment
 		char **splices;
 		char *soft_clips_removed_seq;
+		char *soft_clips_removed_qual;
+		char *selected_qual;
 		int soft_clips_removed_seq_len;
 
 };

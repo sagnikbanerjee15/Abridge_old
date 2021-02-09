@@ -169,6 +169,11 @@ void findContinousClusters(char *input_filename, char *output_filename)
 	while ((line_len = getline(&line, &len, fhr)) != -1)
 	{
 		num_lines_read++;
+		if (num_lines_read == 1)
+		{
+			fprintf(fhw, "%s", line);
+			continue;
+		}
 		if (line[0] == '@')
 		{
 			if (start_position_of_cluster != -1 && end_position_of_cluster != -1)

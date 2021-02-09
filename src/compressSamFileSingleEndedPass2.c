@@ -194,7 +194,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 
 	split_line = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
-		split_line[i] = (char*) malloc(sizeof(char) * COLS);
+		split_line[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
 
 	write_to_file_col1 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col3 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
@@ -205,44 +205,51 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 	line_to_be_written_to_file = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	line_to_be_written_to_file[0] = '\0';
 
-	replacement_character = (char*) malloc(sizeof(char) * MAX_POOL_SIZE);
+	replacement_character = (char*) malloc(sizeof(char) * MIN_POOL_SIZE * 10);
 	split_icigars = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
-	for (i = 0; i < MAX_POOL_SIZE; i++)
+	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_icigars[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
 
-	split_icigars_cp = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
-	for (i = 0; i < MAX_POOL_SIZE; i++)
+	split_icigars_cp = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
+	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_icigars_cp[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
 
-	split_icigars_final = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
-	for (i = 0; i < MAX_POOL_SIZE; i++)
+	split_icigars_final = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
+	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_icigars_final[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
 
-	split_num_reads = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
-	for (i = 0; i < MAX_POOL_SIZE; i++)
+	split_num_reads = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
+	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_num_reads[i] = (char*) malloc(sizeof(char) * 25);
 
-	split_num_reads_cp = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
-	for (i = 0; i < MAX_POOL_SIZE; i++)
+	split_num_reads_cp = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
+	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_num_reads_cp[i] = (char*) malloc(sizeof(char) * 25);
 
-	split_num_reads_final = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
-	for (i = 0; i < MAX_POOL_SIZE; i++)
+	split_num_reads_final = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
+	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_num_reads_final[i] = (char*) malloc(sizeof(char) * 25);
-	/********************************************************************/
 
+	//line = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
+	/********************************************************************/
 	while ((line_len = getline(&line, &len, fhr)) != -1)
 	{
 		line_num++;
+		if (line_num == 1)
+		{
+			fprintf(fhw, "%s", line);
+			continue;
+		}
+		//printf("\nLine num: %d line_len %d len %d", line_num, line_len, len);
+		//fflush(stdout);
 		splitByDelimiter(line, '\t', split_line);
-		/*printf("\nLine: %s Col1: %s Length: %d", line, split_line[0], strlen(split_line[0]));
-		 fflush(stdout);*/
-		/*printf("\n%d %d", pass1_compressed_DS_pool_index, MAX_POOL_SIZE);
-		 fflush(stdout);*/
+		//printf("\nLine: %s Col1: %s Length: %d", line, split_line[0], strlen(split_line[0]));
+		//fflush(stdout);
 		if (isCommaInLine(split_line[1]) == 1)
 		{
 			splitByDelimiter(split_line[1], ',', split_icigars);
 			number_of_cigars = splitByDelimiter(split_line[2], ',', split_num_reads);
+			//continue;
 			//printf("\n%s", line);
 			//printf("\n icigar: %s number_of_cigars: %d", split_line[1], number_of_cigars);
 			splitByDelimiter(split_line[1], ',', split_icigars_cp);
@@ -256,6 +263,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 					printf("\n%d) Before function call: %s", i + 1, split_icigars[i]);
 				printf("\n====================================================================================================================");
 			}
+
 			reModeliCIGARS(split_icigars, split_num_reads, number_of_cigars, split_icigars_cp, split_num_reads_cp, split_icigars_final, split_num_reads_final, replacement_character, line_num);
 			line_to_be_written_to_file[0] = '\0';
 			if (strlen(split_line[0]) != 0)
@@ -294,6 +302,8 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 			strcat(line_to_be_written_to_file, "\n");
 			fprintf(fhw, "%s", line_to_be_written_to_file);
 		}
+		free(line);
+		line = NULL;
 	}
 }
 

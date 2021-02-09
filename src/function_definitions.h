@@ -19,6 +19,8 @@ struct Sam_Alignment* allocateMemorySam_Alignment()
 	s->qual = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
 	s->soft_clippings.left = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
 	s->soft_clippings.right = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clippings.left_qual = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clippings.right_qual = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
 	s->cigar_items = (struct Cigar_Items*) malloc(sizeof(struct Cigar_Items) * MAX_CIGAR_ITEMS);
 	s->number_of_cigar_items = 0;
 	s->number_of_tag_items = 0;
@@ -40,6 +42,8 @@ struct Sam_Alignment* allocateMemorySam_Alignment()
 	for (i = 0; i < 100; i++)
 		s->splices[i] = (char*) malloc(sizeof(char) * 50);
 	s->soft_clips_removed_seq = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clips_removed_qual = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
+	s->selected_qual = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
 	s->temp = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
 
 	s->temp[0] = '\0';
@@ -49,8 +53,26 @@ struct Sam_Alignment* allocateMemorySam_Alignment()
 	s->soft_clips_removed_seq[0] = '\0';
 	s->soft_clippings.left[0] = '\0';
 	s->soft_clippings.right[0] = '\0';
+	s->soft_clippings.left_qual[0] = '\0';
+	s->soft_clippings.right_qual[0] = '\0';
+	s->soft_clips_removed_qual[0] = '\0';
+	s->soft_clips_removed_seq[0] = '\0';
 
 	return s;
+}
+
+void reInitializeSamAlignmentInstance(struct Sam_Alignment *s)
+{
+	s->number_of_cigar_items = 0;
+	s->number_of_tag_items = 0;
+	s->temp[0] = '\0';
+	s->cigar_extended[0] = '\0';
+	s->icigar[0] = '\0';
+	s->md_extended[0] = '\0';
+	s->soft_clips_removed_seq[0] = '\0';
+	s->soft_clippings.left[0] = '\0';
+	s->soft_clippings.right[0] = '\0';
+
 }
 
 struct Pass3_Compression_Symbol_icigar_Mapping* allocateMemoryPass3_Compression_Symbol_icigar_Mapping()
@@ -65,8 +87,12 @@ struct Pass3_Compression_Symbol_icigar_Mapping* allocateMemoryPass3_Compression_
 struct Compressed_DS* allocateMemoryCompressed_DS()
 {
 	struct Compressed_DS *s;
+	int i;
 	s = (struct Compressed_DS*) malloc(sizeof(struct Compressed_DS));
-	s->icigar = (char*) malloc(sizeof(char) * (MAX_SEQ_LEN * 2));
+	s->icigar = (char*) malloc(sizeof(char) * MAX_SEQ_LEN * 2);
+	/*s->qual = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE);
+	 for (i = 0; i < MIN_POOL_SIZE; i++)
+	 s->qual[i] = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);*/
 	s->num_reads = 0;
 	s->position = 0;
 	return s;
@@ -218,7 +244,7 @@ void populateSamAlignmentInstance(struct Sam_Alignment *dest, char **src, int nu
 	int i;
 	/********************************************************************/
 
-// Assign the first 11 mandatory sam fields
+	// Assign the first 11 mandatory sam fields
 	/*
 	 dest->read_name = src[0];
 	 dest->samflag = strtol(src[1], &temp, 10);
@@ -244,8 +270,10 @@ void populateSamAlignmentInstance(struct Sam_Alignment *dest, char **src, int nu
 	dest->template_length = strtol(src[8], &temp, 10);
 	strcpy(dest->seq, src[9]);
 	strcpy(dest->qual, src[10]);
+	for (i = 0; dest->qual[i] != '\0'; i++)
+		dest->qual[i] += 90;
 
-// Assign SAM tags
+	// Assign SAM tags
 	for (i = 11; i < number_of_fields; i++)
 	{
 		//printf("%s\n",src[i]);
@@ -447,7 +475,7 @@ void convertRegularCIGARToStringRepresentation(struct Cigar_Items *cigar_items_i
 	}
 }
 
-void designIntegratedCIGAR(char *md, char *seq, int *seq_length, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices)
+void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clips_removed_qual, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices, short int flag_ignore_quality_score, short int flag_ignore_mismatches)
 {
 	int i;
 	int num;
@@ -520,19 +548,19 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, struct Cigar_It
 			switch (seq[i])
 			{
 				case 'A':
-					md_extended[i] = mismatch_characters[0];
+					md_extended[i] = flag_ignore_mismatches == 0 ? mismatch_characters[0] : '=';
 					break;
 				case 'T':
-					md_extended[i] = mismatch_characters[1];
+					md_extended[i] = flag_ignore_mismatches == 0 ? mismatch_characters[1] : '=';
 					break;
 				case 'G':
-					md_extended[i] = mismatch_characters[2];
+					md_extended[i] = flag_ignore_mismatches == 0 ? mismatch_characters[2] : '=';
 					break;
 				case 'C':
-					md_extended[i] = mismatch_characters[3];
+					md_extended[i] = flag_ignore_mismatches == 0 ? mismatch_characters[3] : '=';
 					break;
 				case 'N':
-					md_extended[i] = mismatch_characters[4];
+					md_extended[i] = flag_ignore_mismatches == 0 ? mismatch_characters[4] : '=';
 					break;
 			}
 		}
@@ -598,8 +626,14 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, struct Cigar_It
 			num = 0;
 			if ((md_extended[i] >= 33 && md_extended[i] <= 37) || (md_extended[i] >= 38 && md_extended[i] <= 42)) // Either a mismatch or an insertion
 			{
-				temp_convert_int_to_string[1] = '\0';
+
 				temp_convert_int_to_string[0] = md_extended[i];
+				if (flag_ignore_quality_score == 0)
+				{
+					temp_convert_int_to_string[1] = soft_clips_removed_qual[i];
+					temp_convert_int_to_string[2] = '\0';
+				}
+				else temp_convert_int_to_string[1] = '\0';
 				strcat(icigar, temp_convert_int_to_string);
 			}
 			else if (md_extended[i] >= '0' && md_extended[i] <= '9')
@@ -662,7 +696,7 @@ int isAlignmentPerfect(char *cigar, struct Sam_Tags *tags, int MD_tag_index, int
 	return 1;
 }
 
-void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences)
+void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score)
 {
 	/*
 	 * Creates the integrated cigar
@@ -673,7 +707,6 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 	int left_soft_clip_point = 0;
 	int right_soft_clip_point = 0;
 	int i;
-	int number_of_mismatches_in_each_pair = -1;
 	int MD_tag_index;
 	int nM_tag_index;
 	int XS_tag_index;
@@ -705,6 +738,12 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 		{
 			left_soft_clip_point = curr_alignment->cigar_items[0].len;
 			extractSubString(curr_alignment->seq, curr_alignment->soft_clippings.left, 0, left_soft_clip_point - 1);
+			extractSubString(curr_alignment->qual, curr_alignment->soft_clippings.left_qual, 0, left_soft_clip_point - 1);
+			// Increment all values by 90
+			/*
+			 for (i = 0; curr_alignment->soft_clippings.left_qual[i] != '\0'; i++)
+			 curr_alignment->soft_clippings.left_qual[i] += 90;
+			 */
 			if (print_outputs > 1) printf("\nLSC: %d %s", curr_alignment->cigar_items[0].len, curr_alignment->soft_clippings.left);
 			curr_alignment->soft_clips_removed_seq_len = curr_alignment->read_seq_len - curr_alignment->cigar_items[0].len;
 			for (i = 0; i <= left_soft_clip_point - 1; i++)
@@ -716,9 +755,14 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 		{
 			right_soft_clip_point = curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len;
 			extractSubString(curr_alignment->seq, curr_alignment->soft_clippings.right, curr_alignment->read_seq_len - right_soft_clip_point, curr_alignment->read_seq_len);
+			extractSubString(curr_alignment->qual, curr_alignment->soft_clippings.right_qual, curr_alignment->read_seq_len - right_soft_clip_point, curr_alignment->read_seq_len);
+			// Increment all values by 90
+			/*
+			 for (i = 0; curr_alignment->soft_clippings.right_qual[i] != '\0'; i++)
+			 curr_alignment->soft_clippings.right_qual[i] += 90;
+			 */
 			if (print_outputs > 1) printf("\nRSC: %d %s", curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len, curr_alignment->soft_clippings.right);
 			curr_alignment->soft_clips_removed_seq_len = curr_alignment->read_seq_len - curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len;
-
 			for (i = 0; i <= right_soft_clip_point; i++)
 				//curr_alignment->soft_clippings.right[i] =(curr_alignment->soft_clippings.right[i] >= 65 && curr_alignment->soft_clippings.right[i] <= 90) ? curr_alignment->soft_clippings.right[i] + 32 : curr_alignment->soft_clippings.right[i];
 				curr_alignment->soft_clippings.right[i] =
@@ -728,21 +772,22 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 		/*
 		 * Remove the soft-clips and construct new sequence
 		 */
-		if (left_soft_clip_point != 0 || right_soft_clip_point != 0)
+
+		int j = 0;
+		for (i = left_soft_clip_point; i <= curr_alignment->read_seq_len - right_soft_clip_point; i++)
 		{
-			for (i = left_soft_clip_point; i <= curr_alignment->read_seq_len - right_soft_clip_point; i++)
-				curr_alignment->soft_clips_removed_seq[i] = curr_alignment->seq[i];
-			if (print_outputs > 1) printf("\nSEQ: %s newSEQ: %s", curr_alignment->seq, curr_alignment->soft_clips_removed_seq);
+			curr_alignment->soft_clips_removed_seq[j] = curr_alignment->seq[i];
+			curr_alignment->soft_clips_removed_qual[j] = curr_alignment->qual[i];
+			j++;
 		}
-		else
-		{
-			curr_alignment->soft_clips_removed_seq = curr_alignment->seq;
-			if (print_outputs > 1) printf("\nSEQ: %s newSEQ: %s", curr_alignment->seq, curr_alignment->soft_clips_removed_seq);
-		}
+		curr_alignment->soft_clips_removed_seq[j] = '\0';
+		curr_alignment->soft_clips_removed_qual[j] = '\0';
+		if (print_outputs > 1) printf("\nSEQ: %s newSEQ: %s", curr_alignment->seq, curr_alignment->soft_clips_removed_seq);
 	}
 	else
 	{
-		curr_alignment->soft_clips_removed_seq = curr_alignment->seq;
+		strcpy(curr_alignment->soft_clips_removed_seq, curr_alignment->seq);
+		strcpy(curr_alignment->soft_clips_removed_qual, curr_alignment->qual);
 		if (print_outputs > 1) printf("\nSEQ: %s newSEQ: %s", curr_alignment->seq, curr_alignment->soft_clips_removed_seq);
 	}
 
@@ -765,7 +810,7 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 
 	perfect_alignment_indicator = isAlignmentPerfect(curr_alignment->cigar, curr_alignment->tags, MD_tag_index, NM_tag_index, nM_tag_index);
 
-	if (perfect_alignment_indicator == 0) designIntegratedCIGAR(curr_alignment->tags[MD_tag_index].val, curr_alignment->soft_clips_removed_seq, &curr_alignment->soft_clips_removed_seq_len, curr_alignment->cigar_items, curr_alignment->number_of_cigar_items, curr_alignment->cigar, curr_alignment->cigar_extended, curr_alignment->md_extended, curr_alignment->icigar, curr_alignment->splices);
+	if (perfect_alignment_indicator == 0) designIntegratedCIGAR(curr_alignment->tags[MD_tag_index].val, curr_alignment->soft_clips_removed_seq, &curr_alignment->soft_clips_removed_seq_len, curr_alignment->soft_clips_removed_qual, curr_alignment->cigar_items, curr_alignment->number_of_cigar_items, curr_alignment->cigar, curr_alignment->cigar_extended, curr_alignment->md_extended, curr_alignment->icigar, curr_alignment->splices, flag_ignore_quality_score, flag_ignore_mismatches);
 	else
 	{
 		if (curr_alignment->cigar_items[0].def == 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S')
@@ -805,26 +850,78 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 			}
 		}
 		else strcpy(curr_alignment->icigar, curr_alignment->cigar);
+		//printf("\nPartial icigar %s left soft clip %d right soft clip %d", curr_alignment->icigar, left_soft_clip_point, right_soft_clip_point);
 	}
 	if (print_outputs > 1) printf("\nPrevious iCIGAR: %s", curr_alignment->icigar);
 
-	if (left_soft_clip_point != 0 && right_soft_clip_point == 0)
+	/*
+	 * Prepend and append the soft clips to icigar
+	 */
+	curr_alignment->temp[0] = '\0';
+	if (flag_ignore_soft_clippings == 0) // DO NOT ignore soft clippings
 	{
-		strcpy(curr_alignment->temp, curr_alignment->soft_clippings.left);
-		strcat(curr_alignment->temp, curr_alignment->icigar);
+		if (left_soft_clip_point != 0 && right_soft_clip_point == 0)
+		{
+			if (flag_ignore_quality_score == 0)
+			{
+				int j = 0;
+				for (i = 0; curr_alignment->soft_clippings.left_qual[i] != '\0'; i++)
+				{
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.left[i];
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.left_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+			else strcpy(curr_alignment->temp, curr_alignment->soft_clippings.left);
+			strcat(curr_alignment->temp, curr_alignment->icigar);
+		}
+		else if (left_soft_clip_point == 0 && right_soft_clip_point != 0)
+		{
+			strcpy(curr_alignment->temp, curr_alignment->icigar);
+			if (flag_ignore_quality_score == 1) strcat(curr_alignment->temp, curr_alignment->soft_clippings.right);
+			else
+			{
+				int j = strlen(curr_alignment->temp);
+				for (i = 0; curr_alignment->soft_clippings.right_qual[i] != '\0'; i++)
+				{
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.right[i];
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.right_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+		}
+		else if (left_soft_clip_point != 0 && right_soft_clip_point != 0)
+		{
+			if (flag_ignore_quality_score == 0)
+			{
+				int j = 0;
+				for (i = 0; curr_alignment->soft_clippings.left_qual[i] != '\0'; i++)
+				{
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.left[i];
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.left_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+			else strcpy(curr_alignment->temp, curr_alignment->soft_clippings.left);
+			strcat(curr_alignment->temp, curr_alignment->icigar);
+			if (flag_ignore_quality_score == 1) strcat(curr_alignment->temp, curr_alignment->soft_clippings.right);
+			else
+			{
+				int j = strlen(curr_alignment->temp);
+				for (i = 0; curr_alignment->soft_clippings.right_qual[i] != '\0'; i++)
+				{
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.right[i];
+					curr_alignment->temp[j++] = curr_alignment->soft_clippings.right_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+		}
+		else if (left_soft_clip_point == 0 && right_soft_clip_point == 0)
+		{
+			strcpy(curr_alignment->temp, curr_alignment->icigar);
+		}
 	}
-	else if (left_soft_clip_point == 0 && right_soft_clip_point != 0)
-	{
-		strcpy(curr_alignment->temp, curr_alignment->icigar);
-		strcat(curr_alignment->temp, curr_alignment->soft_clippings.right);
-	}
-	else if (left_soft_clip_point != 0 && right_soft_clip_point != 0)
-	{
-		strcpy(curr_alignment->temp, curr_alignment->soft_clippings.left);
-		strcat(curr_alignment->temp, curr_alignment->icigar);
-		strcat(curr_alignment->temp, curr_alignment->soft_clippings.right);
-	}
-	else
+	else // DO ignore soft clippings
 	{
 		strcpy(curr_alignment->temp, curr_alignment->icigar);
 	}
@@ -855,7 +952,6 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 				break;
 			case 272:
 				M_replacement_character = 'H';
-				break;
 				break;
 		}
 		for (i = 0; i < strlen(curr_alignment->icigar); i++)
@@ -950,6 +1046,16 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 
 	if (print_outputs > 0)
 		printf("\nIntegrated CIGAR: %s CIGAR: %s MD: %s perfect_alignment_indicator: %d SEQ: %s READ_NAME: %s", curr_alignment->icigar, curr_alignment->cigar, curr_alignment->tags[MD_tag_index].val, perfect_alignment_indicator, curr_alignment->seq, curr_alignment->read_name);
+	/*
+	 printf("\n%s", curr_alignment->cigar);
+	 printf("\n%s", curr_alignment->cigar_extended);
+	 printf("\n%s", curr_alignment->md_extended);
+	 printf("\n");
+	 for (i = 0; curr_alignment->soft_clips_removed_qual[i] != '\0'; i++)
+	 printf("%c", curr_alignment->soft_clips_removed_qual[i] - 90);
+	 printf("\n%s", curr_alignment->icigar);
+	 */
+	//printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	if (print_outputs > 1) printf("\n\n\n");
 }
 
