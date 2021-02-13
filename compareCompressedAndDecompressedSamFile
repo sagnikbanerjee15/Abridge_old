@@ -1,0 +1,119 @@
+#! /usr/bin/env python
+
+"""
+compareCompressedAndDecompressedSamFile \
+-f1 /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
+-f2 /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.decompressed.sam \
+> output \
+2> error &
+"""
+
+import os
+import argparse
+import sys
+
+def parseCommandLineArguments():
+    parser = argparse.ArgumentParser(prog="compareCompressedAndDecompressedSamFile",description="Compares two Sam files line by line and reports error. The two sam files are expected to be same. Execution will stop at the first inconsistent line. This program will also headers.")
+    required_named = parser.add_argument_group('Required arguments')
+    optional_named = parser.add_argument_group('Optional arguments')
+    
+    # Required arguments
+    required_named.add_argument("-f1","--f1",help="Name of 1st samfile",required=True)
+    required_named.add_argument("-f2","--f2",help="Name of 2nd samfile",required=True)
+    
+    return parser.parse_args()
+
+def compareReadsFrom2Files(reads_mapping_to_same_location_file1,reads_mapping_to_same_location_file2):
+    i=0
+    while i<len(reads_mapping_to_same_location_file1):
+        j=0
+        flag=0
+        read_1,flag_1,chromosome_1,position_1,mapq_1,cigar_1,chromosome_next_1,position_next_1,template_len_1,seq_1,qual_1 = reads_mapping_to_same_location_file1[i]
+        while j<len(reads_mapping_to_same_location_file2):
+            read_2,flag_2,chromosome_2,position_2,mapq_2,cigar_2,chromosome_next_2,position_next_2,template_len_2,seq_2,qual_2 = reads_mapping_to_same_location_file2[j]
+            if flag_1==flag_2 and chromosome_1==chromosome_2 and seq_1==seq_2:
+                break
+            j+=1
+        if j<len(reads_mapping_to_same_location_file2):
+            reads_mapping_to_same_location_file2.pop(j)
+        elif j==len(reads_mapping_to_same_location_file2):
+            print("Alignment not found in file 2")
+            print(reads_mapping_to_same_location_file1[i])
+            sys.exit()
+        i+=1
+    
+    if len(reads_mapping_to_same_location_file2)>0:
+        print("Alignments not found in file 1")
+        for row in reads_mapping_to_same_location_file2:
+            print(row)
+        sys.exit()
+
+def compareTwoFiles(samfilename1,samfilename2):
+    fhr1=open(samfilename1,"r",encoding='latin-1')
+    fhr2=open(samfilename2,"r",encoding='latin-1')
+    line_num_file1=1
+    line_num_file2=1
+    
+    for line in fhr1:
+        if line[0]!="@": break
+        line_num_file1+=1
+    for line in fhr2:
+        if line[0]!="@": break
+        line_num_file2+=1
+    
+    print(f"{line_num_file1} {line_num_file2}")
+    reads_mapping_to_same_location_file1=[]
+    reads_mapping_to_same_location_file2=[]
+    previous_location_file1=0
+    previous_location_file2=0
+    
+    line1=fhr1.readline().strip()
+    read_1,flag_1,chromosome_1,position_1,mapq_1,cigar_1,chromosome_next_1,position_next_1,template_len_1,seq_1,qual_1 = line1.split("\t")[:11]
+    line_num_file1+=1
+    
+    line2=fhr2.readline().strip()
+    read_2,flag_2,chromosome_2,position_2,mapq_2,cigar_2,chromosome_next_2,position_next_2,template_len_2,seq_2,qual_2 = line2.split("\t")[:11]
+    line_num_file2+=1
+    
+    while True:
+        if not fhr1 or not fhr2:break
+        while len(reads_mapping_to_same_location_file1)==0 or position_1==previous_location_file1:
+            if not fhr1:break
+            previous_location_file1=position_1
+            reads_mapping_to_same_location_file1.append([read_1,flag_1,chromosome_1,position_1,mapq_1,cigar_1,chromosome_next_1,position_next_1,template_len_1,seq_1,qual_1])
+            line1=fhr1.readline().strip()
+            line_num_file1+=1
+            if line_num_file1 % 1000 == 0:
+                print(f"{line_num_file1} lines processed from file1 and {line_num_file2} lines processed from file2 ")
+                sys.stdout.flush()
+            read_1,flag_1,chromosome_1,position_1,mapq_1,cigar_1,chromosome_next_1,position_next_1,template_len_1,seq_1,qual_1 = line1.split("\t")[:11]
+            
+        while len(reads_mapping_to_same_location_file2)==0 or position_2==previous_location_file2:
+            if not fhr2:break
+            previous_location_file2=position_2
+            reads_mapping_to_same_location_file2.append([read_2,flag_2,chromosome_2,position_2,mapq_2,cigar_2,chromosome_next_2,position_next_2,template_len_2,seq_2,qual_2 ])
+            line2=fhr2.readline().strip()
+            line_num_file2+=1
+            read_2,flag_2,chromosome_2,position_2,mapq_2,cigar_2,chromosome_next_2,position_next_2,template_len_2,seq_2,qual_2 = line2.split("\t")[:11]
+        
+        compareReadsFrom2Files(reads_mapping_to_same_location_file1,reads_mapping_to_same_location_file2)
+        reads_mapping_to_same_location_file1=[]
+        reads_mapping_to_same_location_file2=[]
+        reads_mapping_to_same_location_file1.append([read_1,flag_1,chromosome_1,position_1,mapq_1,cigar_1,chromosome_next_1,position_next_1,template_len_1,seq_1,qual_1])
+        reads_mapping_to_same_location_file2.append([read_2,flag_2,chromosome_2,position_2,mapq_2,cigar_2,chromosome_next_2,position_next_2,template_len_2,seq_2,qual_2 ])
+        previous_location_file1=position_1
+        previous_location_file2=position_2
+        
+    fhr1.close()
+    fhr2.close()
+
+def main():
+    commandLineArg=sys.argv
+    if len(commandLineArg)==1:
+        print("Please use the --help option to get usage information")
+    options=parseCommandLineArguments()
+    
+    compareTwoFiles(options.f1,options.f2)
+    
+if __name__ == "__main__":
+    main()

@@ -18,6 +18,8 @@
  * <outputfilename> argv[7]
  */
 
+int total_mapped_reads;
+
 void writeToFile(FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string)
 {
 	int i;
@@ -65,7 +67,7 @@ void writeToFile(FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int
 
 }
 
-void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *reference_id, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score)
+void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -114,10 +116,12 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 
 	struct Sam_Alignment *prev_alignment;
 	struct Sam_Alignment *curr_alignment;
+	struct Sam_Alignment *sam_alignment_instance_diagnostics;
 	struct Sam_Alignment *temp_alignment;
 	struct Sam_Alignment **alignment_pool_same_position;
 	struct Compressed_DS **compressed_ds_pool;
 	struct Reference_Sequence_Info **reference_info;
+	struct Whole_Genome_Sequence *whole_genome;
 	/********************************************************************/
 
 	/********************************************************************
@@ -175,11 +179,14 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 	curr_alignment = allocateMemorySam_Alignment();
 	prev_alignment = allocateMemorySam_Alignment();
 	temp_alignment = allocateMemorySam_Alignment();
+	sam_alignment_instance_diagnostics = allocateMemorySam_Alignment();
 	reference_info = (struct Reference_Sequence_Info**) malloc(sizeof(struct Reference_Sequence_Info*) * MAX_REFERENCE_SEQUENCES);
 	for (i = 0; i < MAX_REFERENCE_SEQUENCES; i++)
 		reference_info[i] = allocateMemoryReference_Sequence_Info();
 
 	temp = (char*) malloc(sizeof(char) * MAX_GENERAL_LEN);
+	whole_genome = (struct Whole_Genome_Sequence*) malloc(sizeof(struct Whole_Genome_Sequence));
+
 	/********************************************************************/
 
 	/*
@@ -200,6 +207,10 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 	strcat(temp, "\n");
 	fprintf(fhw_pass1, "%s", temp);
 
+	/*
+	 * For diagnostics
+	 */
+	readInTheEntireGenome(genome_filename, whole_genome);
 	/*
 	 * Read in the reference sequence information
 	 */
@@ -227,6 +238,7 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 		}
 		number_of_fields = splitByDelimiter(line, '\t', split_line);
 		populateSamAlignmentInstance(curr_alignment, split_line, number_of_fields, split_tags);
+		//populateSamAlignmentInstance(sam_alignment_instance_diagnostics, split_line, number_of_fields, split_tags);
 		strcpy(curr_reference_name, curr_alignment->reference_name);
 
 		if (curr_alignment->samflag == 4)
@@ -234,13 +246,13 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 			if (flag_ignore_unmapped_sequences == 0)
 			{
 				//Write the unmapped reads into file
-				fprintf(fhw_unmapped, "%s", "@");
-				fprintf(fhw_unmapped, "%s", curr_alignment->read_name);
-				fprintf(fhw_unmapped, "%s", "\n");
+				//fprintf(fhw_unmapped, "%s", "@");
+				//fprintf(fhw_unmapped, "%s", curr_alignment->read_name);
+				//fprintf(fhw_unmapped, "%s", "\n");
 				fprintf(fhw_unmapped, "%s", curr_alignment->seq);
 				fprintf(fhw_unmapped, "%s", "\n");
-				fprintf(fhw_unmapped, "%s", "+");
-				fprintf(fhw_unmapped, "%s", "\n");
+				//fprintf(fhw_unmapped, "%s", "+");
+				//fprintf(fhw_unmapped, "%s", "\n");
 				for (i = 0; curr_alignment->qual[i] != '\0'; i++)
 					curr_alignment->qual[i] -= 90;
 				fprintf(fhw_unmapped, "%s", curr_alignment->qual);
@@ -250,7 +262,7 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 		}
 		current_position = curr_alignment->start_position;
 		//printSamAlignmentInstance(curr_alignment);
-		generateIntegratedCigar(curr_alignment, flag_ignore_soft_clippings, flag_ignore_mismatches, flag_ignore_unmapped_sequences, flag_ignore_quality_score);
+		generateIntegratedCigar(curr_alignment, flag_ignore_soft_clippings, flag_ignore_mismatches, flag_ignore_unmapped_sequences, flag_ignore_quality_score, whole_genome, sam_alignment_instance_diagnostics, number_of_records_read);
 		//printf("\n Position:%lld iCIGAR: %s", curr_alignment->start_position, curr_alignment->icigar);
 		if (strlen(prev_reference_name) == 0) // 1st chromosome - initialize stuffs
 		{
@@ -346,7 +358,7 @@ int main(int argc, char *argv[])
 	 ********************************************************************/
 	char input_samfilename[FILENAME_LENGTH];
 	char output_abridgefilename[FILENAME_LENGTH];
-	char reference_id[FILENAME_LENGTH];
+	char genome_filename[FILENAME_LENGTH];
 	char unmapped_filename[FILENAME_LENGTH];
 	char *temp; //Required for strtoi
 
@@ -359,7 +371,7 @@ int main(int argc, char *argv[])
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	strcpy(reference_id, argv[1]);
+	strcpy(genome_filename, argv[1]);
 	flag_ignore_soft_clippings = strtol(argv[2], &temp, 10);
 	flag_ignore_mismatches = strtol(argv[3], &temp, 10);
 	flag_ignore_quality_score = strtol(argv[4], &temp, 10);
@@ -372,13 +384,12 @@ int main(int argc, char *argv[])
 	/*
 	 * If user requests no sequence information then everything else is also ignored
 	 */
-
 	printf("\nflag_ignore_soft_clippings: %d", flag_ignore_soft_clippings);
 	printf("\nflag_ignore_mismatches: %d", flag_ignore_mismatches);
 	printf("\nflag_ignore_quality_score : %d", flag_ignore_quality_score);
 	printf("\nflag_ignore_unmapped_sequences: %d", flag_ignore_unmapped_sequences);
 	printf("\n");
 	fflush(stdout);
-	readAlignmentsAndCompress(input_samfilename, output_abridgefilename, unmapped_filename, reference_id, flag_ignore_soft_clippings, flag_ignore_mismatches, flag_ignore_unmapped_sequences, flag_ignore_quality_score);
+	readAlignmentsAndCompress(input_samfilename, output_abridgefilename, unmapped_filename, genome_filename, flag_ignore_soft_clippings, flag_ignore_mismatches, flag_ignore_unmapped_sequences, flag_ignore_quality_score);
 	return 0;
 }

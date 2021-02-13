@@ -18,14 +18,11 @@ Abdrige Compression
 (/usr/bin/time --verbose  \
 abridge \
 -c \
---ignore_unmapped_reads \
--G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.fa  \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
 -i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
 -o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
 1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.output \
 2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.error &
-
-Abdrige Compression with all quality value saving
 
 (/usr/bin/time --verbose  \
 abridge \
@@ -41,7 +38,7 @@ abridge \
 -c \
 --ignore_unmapped_reads \
 --ignore_soft_clippings \
--G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.fa  \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
 -i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
 -o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
 1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.output \
@@ -53,7 +50,7 @@ Abdrige decompression
 (/usr/bin/time --verbose  \
 abridge \
 -d \
--G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.fa  \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
 -i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
 -o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
 1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_decompress.output \
@@ -91,7 +88,7 @@ import re
 import time
 import multiprocessing
 from scripts.extractSequencesFromReferences import *
-
+from scripts.assessMemoryRequirement import *
 
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser(prog="abridge",description="Compress reference alignments for storage",formatter_class=RawTextHelpFormatter)
@@ -118,6 +115,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
     optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of available reference sequences in the genome.",default = 1)
     optional_named.add_argument("-p","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags. Please note that generating more tags will require more time.",nargs="*")
+    optional_named.add_argument("-m","--max_memory",help="Enter the maximum memory allowed (in GB)",default=10)
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
@@ -299,6 +297,7 @@ def compressSamFile(options):
     if options.quiet == False:
         logging.info("Starting compression")
     
+    return
     cmd=f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {options.outputfilename}.pass2.7z {options.outputfilename}.pass2 {options.outputfilename}.pass2.index {options.outputfilename}.unmapped"
     if options.quiet == False:
         logging.info(f"Running command - {cmd}")
@@ -358,19 +357,16 @@ def decompressSamFile(options):
         if options.quiet ==False:
             logging.info(f"Running cmd - {cmd}")
         os.system(cmd)
-    """
-    prefix_without_fullpath=options.outputfilename.split("/")[-1]
-    whole_index = readPass2Index(f"{index_filename}")
-    for chromosome in whole_index:
-        output_filename = f"{options.genome}.{prefix_without_fullpath}.{chromosome}"
-        if os.path.exists(output_filename)==True:continue
-        extractSequenceFromReferenceFile(options.genome,chromosome,whole_index,output_filename,options,logging)
-    """
+    
     decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
     cmd=f"gcc {decompressSamFileSingleEnded}.c -o {decompressSamFileSingleEnded} -Ofast"
     if options.quiet == False:
         logging.info(f"Running command - {cmd}")
     os.system(cmd)
+    
+    # Check the amount memory needed
+    if options.ignore_sequence == 0:
+        assessMemoryRequirement(f"{options.genome}.fai",options)
     
     output_sam_filename = f"{options.inputfilename[0][:-16]}decompressed.sam"
     genome_prefix = "/".join(options.genome.split("/")[:-1])+"/"+options.genome.split("/")[-1]+"."+options.inputfilename[0][:-9].split("/")[-1]
@@ -382,6 +378,7 @@ def decompressSamFile(options):
     cmd+=f" {genome_prefix} "# argv[5]
     cmd+=f" {options.quality} "# argv[6]
     cmd+=f" {options.ignore_sequence}" #argv[7]
+    cmd+=f" {options.outputfilename}.unmapped" #argv[8]
     if options.quiet == False:
         logging.info(f"Running command - {cmd}")
     os.system(cmd)

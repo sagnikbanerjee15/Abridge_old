@@ -307,7 +307,9 @@ void printSamAlignmentInstance(struct Sam_Alignment *s)
 	printf("\n");
 	printf("Mapping quality score: %d", s->mapping_quality_score);
 	printf("\n");
-	printf("Cigar: %s", s->cigar);
+	printf("CIGAR: %s", s->cigar);
+	printf("\n");
+	printf("iCIGAR: %s", s->icigar);
 	printf("\n");
 	printf("Reference name next mate: %s", s->reference_name_next_mate);
 	printf("\n");
@@ -315,15 +317,16 @@ void printSamAlignmentInstance(struct Sam_Alignment *s)
 	printf("\n");
 	printf("Template length: %d", s->template_length);
 	printf("\n");
-	printf("Sequence: %s %d ", s->seq, s->read_seq_len);
+	printf("Seq:  %s %d ", s->seq, s->read_seq_len);
 	printf("\n");
-	printf("Quality scores: %s", s->qual);
+	printf("Qual: %s", s->qual);
 	printf("\n");
 	for (i = 0; i < s->number_of_tag_items; i++)
 	{
 		printf("Tag item %s Tag value %s", s->tags[i].name, s->tags[i].val);
 		printf("\n");
 	}
+
 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 	fflush (stdout);
 }
@@ -334,6 +337,288 @@ int isSequenceSoftClipped(char *cigar)
 	for (i = 0; cigar[i] != '\0'; i++)
 		if (cigar[i] == 'S') return 1;
 	return 0;
+}
+
+void convertIcigarToCigarandMD(int cluster_index, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value)
+{
+	/*
+	 * Coverts the iCIGAR into CIGAR and MD
+	 * Returns the samformatflag
+	 */
+
+	int samformatflag = -1;
+	int NH_value;
+	int icigar_length;
+	int i;
+	int j;
+	int processing_left_soft_clip = 1;
+	int left_soft_clip_index = 0;
+	int right_soft_clip_index = 0;
+	int cigar_index = 0;
+	int num = 0;
+	int cigar_temp_index = 0;
+	int cigar_items_instance_index;
+	int flag = 0;
+	int soft_clips_removed_qual_index;
+	int soft_clips_removed_seq_index;
+
+	char XS[2];
+
+	struct Cigar_Items cigar_items_instance[MAX_SEQ_LEN];
+
+	char temp[100];
+	char cigar_temp[MAX_SEQ_LEN];
+
+	//printf("\niCIGAR at the beginning %s ", sam_alignment_instance->icigar);
+
+	icigar_length = strlen(sam_alignment_instance->icigar);
+	NH_value = extractNHfromicigar(sam_alignment_instance->icigar, icigar_length);
+
+	XS[1] = '\0';
+	samformatflag = findSamFormatFlag(sam_alignment_instance->icigar, icigar_length, XS);
+	sam_alignment_instance->samflag = samformatflag;
+	/*
+	 * Construct the Cigar string, MD string, Soft Clips, etc.
+	 */
+	splitCigar(sam_alignment_instance->icigar, &cigar_items_instance_index, cigar_items_instance);
+	/*printf("\nICIGAR %s Number of items: %d", sam_alignment_instance->icigar, cigar_items_instance_index);
+	 for (i = 0; i < cigar_items_instance_index; i++)
+	 printf("\n%d %c", cigar_items_instance[i].len, cigar_items_instance[i].def);
+	 */
+
+	strcpy(sam_alignment_instance->reference_name, chromosome);
+	sam_alignment_instance->cigar[0] = '\0';
+	sam_alignment_instance->temp[0] = '\0';
+	sam_alignment_instance->soft_clippings.left[0] = '\0';
+	sam_alignment_instance->soft_clippings.right[0] = '\0';
+	sam_alignment_instance->soft_clippings.left_qual[0] = '\0';
+	sam_alignment_instance->soft_clippings.right_qual[0] = '\0';
+	sam_alignment_instance->soft_clips_removed_qual[0] = '\0';
+	sam_alignment_instance->soft_clips_removed_seq[0] = '\0';
+	soft_clips_removed_qual_index = 0;
+	soft_clips_removed_seq_index = 0;
+
+	strcpy(sam_alignment_instance->tags[0].name, "NH");
+	strcpy(sam_alignment_instance->tags[0].type, "i");
+	sprintf(temp, "%d", NH_value);
+	strcpy(sam_alignment_instance->tags[0].val, temp);
+
+	strcpy(sam_alignment_instance->tags[1].name, "XS");
+	strcpy(sam_alignment_instance->tags[1].type, ".");
+	strcpy(sam_alignment_instance->tags[1].val, XS);
+
+	strcpy(sam_alignment_instance->tags[2].name, "MD");
+	strcpy(sam_alignment_instance->tags[2].type, "Z");
+	strcpy(sam_alignment_instance->tags[2].val, "dummy");
+
+	/*
+	 for (i = 0; i < cigar_items_instance_index; i++)
+	 printf("\n%d %c", cigar_items_instance[i].len, cigar_items_instance[i].def);
+	 */
+	for (i = 0; i < cigar_items_instance_index; i++)
+	{
+		if (processing_left_soft_clip == 1 && isCharacterInString("atgcn", cigar_items_instance[i].def))
+		{
+			sam_alignment_instance->soft_clippings.left[left_soft_clip_index] = cigar_items_instance[i].def - 32;
+			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] = '\0';
+			if (flag_ignore_quality_score == 0)
+			{
+				i++;
+				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
+				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index + 1] = '\0';
+			}
+			left_soft_clip_index++;
+		}
+		else if (processing_left_soft_clip == 0 && isCharacterInString("atgcn", cigar_items_instance[i].def))
+		{
+			sam_alignment_instance->soft_clippings.right[right_soft_clip_index] = cigar_items_instance[i].def - 32;
+			sam_alignment_instance->soft_clippings.right[right_soft_clip_index + 1] = '\0';
+			if (flag_ignore_quality_score == 0)
+			{
+				i++;
+				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
+				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index + 1] = '\0';
+			}
+			right_soft_clip_index++;
+		}
+		else // Capital letters & special characters - cannot be soft clips
+		{
+			flag = 0;
+			processing_left_soft_clip = 0;
+			if (left_soft_clip_index > 0) //There were some left soft clips
+			{
+				sprintf(temp, "%d", left_soft_clip_index);
+				strcat(sam_alignment_instance->cigar, temp);
+				strcat(sam_alignment_instance->cigar, "S");
+				num = 0;
+				left_soft_clip_index = 0;
+			}
+			if (cigar_items_instance[i].def == 'N')
+			{
+				sprintf(temp, "%d", cigar_items_instance[i].len);
+				strcat(sam_alignment_instance->cigar, temp);
+				strcat(sam_alignment_instance->cigar, "N");
+				num = 0;
+			}
+			else if (cigar_items_instance[i].def == 'D')
+			{
+				sprintf(temp, "%d", cigar_items_instance[i].len);
+				strcat(sam_alignment_instance->cigar, temp);
+				strcat(sam_alignment_instance->cigar, "D");
+				num = 0;
+			}
+			else if (isCharacterInString(insert_characters, cigar_items_instance[i].def))
+			{
+				num = 0;
+				while (i < cigar_items_instance_index && isCharacterInString(insert_characters, cigar_items_instance[i].def))
+				{
+					switch (cigar_items_instance[i].def)
+					{
+						case '!':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'A';
+							break;
+						case '"':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'T';
+							break;
+						case '#':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'G';
+							break;
+						case '$':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'C';
+							break;
+						case '%':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'N';
+							break;
+					}
+					if (flag_ignore_quality_score == 0)
+					{
+						i++;
+						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
+						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
+						soft_clips_removed_qual_index++;
+					}
+					num++;
+					i++;
+				}
+				i--;
+				sprintf(temp, "%d", num);
+				strcat(sam_alignment_instance->cigar, temp);
+				strcat(sam_alignment_instance->cigar, "I");
+				num = 0;
+
+			}
+			// Merging consecutive matches and mismatches
+			if (isCharacterInString("BEFHJKLOPQRU", cigar_items_instance[i].def) || isCharacterInString(mismatch_characters, cigar_items_instance[i].def))
+			{
+				num = 0;
+				while (i < cigar_items_instance_index && (isCharacterInString("BEFHJKLOPQRU", cigar_items_instance[i].def) || isCharacterInString(mismatch_characters, cigar_items_instance[i].def)))
+				{
+					if (isCharacterInString("BEFHJKLOPQRU", cigar_items_instance[i].def))
+					{
+						for (j = 0; j < cigar_items_instance[i].len; j++)
+						{
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = '-';
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index] = '\0';
+						}
+
+						if (flag_ignore_quality_score == 0)
+						{
+							for (j = 0; j < cigar_items_instance[i].len; j++)
+							{
+								sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = default_quality_value[0];
+								sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
+								soft_clips_removed_qual_index++;
+							}
+						}
+						num += cigar_items_instance[i].len;
+					}
+					else if (isCharacterInString(mismatch_characters, cigar_items_instance[i].def))
+					{
+						if (isCharacterInString(mismatch_characters, cigar_items_instance[i].def))
+						{
+							switch (cigar_items_instance[i].def)
+							{
+								case '&':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'A';
+									break;
+								case '\'':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'T';
+									break;
+								case '(':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'G';
+									break;
+								case ')':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'C';
+									break;
+								case '*':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++] = 'N';
+									break;
+							}
+						}
+						if (flag_ignore_quality_score == 0)
+						{
+							i++;
+							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
+							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
+							soft_clips_removed_qual_index++;
+						}
+						num++;
+					}
+					i++;
+					flag = 1;
+				}
+				i--;
+				sprintf(temp, "%d", num);
+				strcat(sam_alignment_instance->cigar, temp);
+				strcat(sam_alignment_instance->cigar, "M");
+				num = 0;
+			}
+		}
+	}
+	if (right_soft_clip_index > 0) //There were some right soft clips
+	{
+		sprintf(temp, "%d", right_soft_clip_index);
+		strcat(sam_alignment_instance->cigar, temp);
+		strcat(sam_alignment_instance->cigar, "S");
+		num = 0;
+	}
+
+	strcpy(sam_alignment_instance->seq, sam_alignment_instance->soft_clippings.left);
+	strcat(sam_alignment_instance->seq, sam_alignment_instance->soft_clips_removed_seq);
+	strcat(sam_alignment_instance->seq, sam_alignment_instance->soft_clippings.right);
+
+	strcpy(sam_alignment_instance->qual, sam_alignment_instance->soft_clippings.left_qual);
+	strcat(sam_alignment_instance->qual, sam_alignment_instance->soft_clips_removed_qual);
+	strcat(sam_alignment_instance->qual, sam_alignment_instance->soft_clippings.right_qual);
+
+	splitCigar(sam_alignment_instance->cigar, &sam_alignment_instance->number_of_cigar_items, sam_alignment_instance->cigar_items);
+	if (flag_ignore_sequence_information == 0) generateReadSequenceAndMDString(sam_alignment_instance, whole_genome, cluster_index);
+	else
+	{
+		splitCigar(sam_alignment_instance->cigar, &cigar_items_instance_index, cigar_items_instance);
+		int length_of_read = 0;
+		for (i = 0; i < cigar_items_instance_index; i++)
+			if (cigar_items_instance[cigar_items_instance_index].def == 'M') length_of_read += cigar_items_instance[cigar_items_instance_index].len;
+		for (i = 0; i < length_of_read; i++)
+		{
+			sam_alignment_instance->seq[i] = 'A';
+			sam_alignment_instance->qual[i] = default_quality_value[0];
+		}
+		sam_alignment_instance->seq[i] = '\0';
+		sam_alignment_instance->qual[i] = '\0';
+	}
+	/*
+	 //printf("\nsoft_clips_removed_qual_index:%d ", soft_clips_removed_qual_index);
+	 //printf("\nflag_ignore_mismatches %d flag_ignore_soft_clippings %d flag_ignore_unmapped_sequences %d flag_ignore_quality_score %d", flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score);
+	 printf("\nicigar %s ", sam_alignment_instance->icigar);
+	 printf("\nCIGAR %s ", sam_alignment_instance->cigar);
+	 printf("\nSEQ  %s ", sam_alignment_instance->seq);
+	 //printf("\nQUAL %s ", sam_alignment_instance->qual);
+	 printf("\nNH:%d \nsamformat_flag: %d", NH_value, samformatflag);
+	 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+	 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+	 fflush(stdout);
+	 */
 }
 
 void extractSubString(char *str, char *substr, int start_index, int end_index)
@@ -448,7 +733,7 @@ void replaceNucleotidesInSeqWithInsertSymbols(char *seq, int *seq_length, struct
 					}
 					sequence_index_to_be_replaced++;
 				}
-				sequence_index_to_be_replaced += cigar_items_instance[i].len;
+				//sequence_index_to_be_replaced += cigar_items_instance[i].len;
 				break;
 		}
 	}
@@ -459,6 +744,7 @@ void convertRegularCIGARToStringRepresentation(struct Cigar_Items *cigar_items_i
 	int i;
 	int j;
 	int cigar_extended_index = 0;
+	cigar_extended[0] = '\0';
 	for (i = 0; i < number_of_cigar_items; i++)
 	{
 		switch (cigar_items_instance[i].def)
@@ -473,6 +759,7 @@ void convertRegularCIGARToStringRepresentation(struct Cigar_Items *cigar_items_i
 				break;
 		}
 	}
+	cigar_extended[cigar_extended_index++] = '\0';
 }
 
 void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clips_removed_qual, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices, short int flag_ignore_quality_score, short int flag_ignore_mismatches)
@@ -487,14 +774,16 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clip
 	char temp_convert_int_to_string[100];
 	int intron_splice_index;
 	int print_outputs = 0;
+	int soft_clips_removed_qual_len = 0;
 
 	md_extended_index = 0;
 	i = 0;
 	num = 0;
-	if (print_outputs) printf("\n%s", seq);
+	printf("\n%s", seq);
 	replaceNucleotidesInSeqWithInsertSymbols(seq, seq_length, cigar_items_instance, number_of_cigar_items);
-	if (print_outputs) printf("\n%s", seq);
+	printf("\n%s", seq);
 	convertRegularCIGARToStringRepresentation(cigar_items_instance, number_of_cigar_items, cigar_extended);
+	soft_clips_removed_qual_len = strlen(soft_clips_removed_qual);
 
 	/*
 	 * Expand the md string
@@ -533,8 +822,39 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clip
 	/*
 	 * Add insert symbols to md_extended
 	 */
+	j = 0;
 	for (i = 0; i < *seq_length; i++)
-		if (seq[i] >= 33 && seq[i] <= 37) insertCharacterInString(md_extended, &md_extended_length, seq[i], i, 1);
+	{
+		if (seq[i] >= 33 && seq[i] <= 37)
+		{
+			//printf("\nBefore: %s %d", md_extended, i);
+			insertCharacterInString(md_extended, &md_extended_length, seq[i], i, 1);
+			/*
+			 for (j = strlen(md_extended) + 1; j > i; j--)
+			 md_extended[j] = md_extended[j - 1];
+			 md_extended[j] = seq[i];
+			 */
+			j = -1;
+			//printf("\n After: %s %d", md_extended, i);
+		}
+	}
+	/*
+	 if (j == -1)
+	 {
+	 for (i = 0; i < *seq_length; i++)
+	 printf("\n%d %c %d %d %s", i, seq[i], *seq_length, strlen(seq), cigar);
+	 }
+	 */
+	if (strlen(seq) != strlen(md_extended))
+	{
+		printf("\nInside here");
+		printf("\nLengths do not match %d %d %d %s", strlen(soft_clips_removed_qual), strlen(md_extended), strlen(seq), cigar);
+		printf("\n%s", seq);
+		printf("\n");
+		for (i = 0; soft_clips_removed_qual[i] != '\0'; i++)
+			printf("%c", soft_clips_removed_qual[i] - 90);
+		printf("\n%s", md_extended);
+	}
 	/*printf("\n%s %d", md_extended, md_extended_length);*/
 
 	/*
@@ -579,13 +899,18 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clip
 				md_extended_index += cigar_items_instance[i].len;
 				break;
 			case 'N':
-				md_extended[md_extended_index] = splice_number_index++ + 48;
+				//md_extended[md_extended_index] = splice_number_index++ + 48;
+				insertCharacterInString(md_extended, &md_extended_length, splice_number_index++ + 48, md_extended_index, 1);
+				insertCharacterInString(soft_clips_removed_qual, &soft_clips_removed_qual_len, 'X', md_extended_index, 1);
+				md_extended_index += 1;
 				break;
 			case 'I':
 				md_extended_index += cigar_items_instance[i].len;
 				break;
 			case 'D':
 				insertCharacterInString(md_extended, &md_extended_length, '-', md_extended_index, cigar_items_instance[i].len);
+				insertCharacterInString(soft_clips_removed_qual, &soft_clips_removed_qual_len, '-', md_extended_index, cigar_items_instance[i].len);
+				md_extended_index += cigar_items_instance[i].len;
 				break;
 		}
 	}
@@ -609,10 +934,14 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clip
 			splices_index++;
 		}
 	}
+
+	/*
+	 * Prepare the icigar string
+	 */
 	num = 0;
 	icigar[0] = '\0';
 	intron_splice_index = 0;
-	for (i = 0; i < md_extended_length; i++)
+	for (i = 0; md_extended[i] != '\0'; i++)
 	{
 		if (md_extended[i] == '=') num++;
 		else
@@ -646,6 +975,7 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clip
 					i++;
 					num++;
 				}
+				num = 0;
 				strcat(icigar, splices[intron_splice_index]);
 				i--;
 			}
@@ -667,7 +997,14 @@ void designIntegratedCIGAR(char *md, char *seq, int *seq_length, char *soft_clip
 	sprintf(temp_convert_int_to_string, "%d", num);
 	strcat(icigar, temp_convert_int_to_string);
 	strcat(icigar, "M");
-
+	/*
+	 printf("\n");
+	 printf("\n%s", seq);
+	 printf("\n%s", md_extended);
+	 printf("\n%s", cigar_extended);
+	 printf("\n%s", soft_clips_removed_qual);
+	 printf("\n%s", icigar);
+	 */
 	/*times[1] = clock();*/
 	if (print_outputs) printf("\n%s", icigar);
 }
@@ -696,7 +1033,7 @@ int isAlignmentPerfect(char *cigar, struct Sam_Tags *tags, int MD_tag_index, int
 	return 1;
 }
 
-void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score)
+void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read)
 {
 	/*
 	 * Creates the integrated cigar
@@ -707,6 +1044,7 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 	int left_soft_clip_point = 0;
 	int right_soft_clip_point = 0;
 	int i;
+	int flag;
 	int MD_tag_index;
 	int nM_tag_index;
 	int XS_tag_index;
@@ -718,7 +1056,9 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 	char str[1000];
 	char temp_str[5];
 	char M_replacement_character;
+	char dummy;
 	/********************************************************************/
+
 	splitCigar(curr_alignment->cigar, &curr_alignment->number_of_cigar_items, curr_alignment->cigar_items);
 
 	for (i = 0; i < curr_alignment->number_of_cigar_items; i++)
@@ -754,8 +1094,8 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 		if (curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S')
 		{
 			right_soft_clip_point = curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len;
-			extractSubString(curr_alignment->seq, curr_alignment->soft_clippings.right, curr_alignment->read_seq_len - right_soft_clip_point, curr_alignment->read_seq_len);
-			extractSubString(curr_alignment->qual, curr_alignment->soft_clippings.right_qual, curr_alignment->read_seq_len - right_soft_clip_point, curr_alignment->read_seq_len);
+			extractSubString(curr_alignment->seq, curr_alignment->soft_clippings.right, curr_alignment->read_seq_len - right_soft_clip_point, curr_alignment->read_seq_len - 1);
+			extractSubString(curr_alignment->qual, curr_alignment->soft_clippings.right_qual, curr_alignment->read_seq_len - right_soft_clip_point, curr_alignment->read_seq_len - 1);
 			// Increment all values by 90
 			/*
 			 for (i = 0; curr_alignment->soft_clippings.right_qual[i] != '\0'; i++)
@@ -774,7 +1114,7 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 		 */
 
 		int j = 0;
-		for (i = left_soft_clip_point; i <= curr_alignment->read_seq_len - right_soft_clip_point; i++)
+		for (i = left_soft_clip_point; i < curr_alignment->read_seq_len - right_soft_clip_point; i++)
 		{
 			curr_alignment->soft_clips_removed_seq[j] = curr_alignment->seq[i];
 			curr_alignment->soft_clips_removed_qual[j] = curr_alignment->qual[i];
@@ -788,6 +1128,7 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 	{
 		strcpy(curr_alignment->soft_clips_removed_seq, curr_alignment->seq);
 		strcpy(curr_alignment->soft_clips_removed_qual, curr_alignment->qual);
+		curr_alignment->soft_clips_removed_seq_len = strlen(curr_alignment->soft_clips_removed_seq);
 		if (print_outputs > 1) printf("\nSEQ: %s newSEQ: %s", curr_alignment->seq, curr_alignment->soft_clips_removed_seq);
 	}
 
@@ -1046,16 +1387,51 @@ void generateIntegratedCigar(struct Sam_Alignment *curr_alignment, short int fla
 
 	if (print_outputs > 0)
 		printf("\nIntegrated CIGAR: %s CIGAR: %s MD: %s perfect_alignment_indicator: %d SEQ: %s READ_NAME: %s", curr_alignment->icigar, curr_alignment->cigar, curr_alignment->tags[MD_tag_index].val, perfect_alignment_indicator, curr_alignment->seq, curr_alignment->read_name);
+
 	/*
+	 //printSamAlignmentInstance(curr_alignment);
+	 if (strcmp(curr_alignment->read_name, "8301409") == 0)
+	 {
 	 printf("\n%s", curr_alignment->cigar);
+	 printf("\n%s", curr_alignment->tags[MD_tag_index].val);
+	 printf("\n%s", curr_alignment->seq);
 	 printf("\n%s", curr_alignment->cigar_extended);
 	 printf("\n%s", curr_alignment->md_extended);
+
 	 printf("\n");
 	 for (i = 0; curr_alignment->soft_clips_removed_qual[i] != '\0'; i++)
 	 printf("%c", curr_alignment->soft_clips_removed_qual[i] - 90);
 	 printf("\n%s", curr_alignment->icigar);
+	 printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	 }
 	 */
-	//printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+	/*
+	 * For diagnostics
+	 */
+	dummy = 'Z';
+	strcpy(sam_alignment_instance_diagnostics->icigar, curr_alignment->icigar);
+	sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
+	convertIcigarToCigarandMD(0, whole_genome, sam_alignment_instance_diagnostics, curr_alignment->reference_name, flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, 0, &dummy);
+	flag = 0;
+	if (strcmp(sam_alignment_instance_diagnostics->cigar, curr_alignment->cigar) != 0)
+	{
+		printf("\nCIGAR Mismatch");
+		flag = 1;
+	}
+	if (strcmp(sam_alignment_instance_diagnostics->seq, curr_alignment->seq) != 0)
+	{
+		printf("\nSEQ Mismatch");
+		flag = 1;
+	}
+
+	if (flag)
+	{
+		printf("\nRecord Number : %lld", number_of_records_read);
+		printSamAlignmentInstance(curr_alignment);
+		printSamAlignmentInstance(sam_alignment_instance_diagnostics);
+		exit(1);
+	}
 	if (print_outputs > 1) printf("\n\n\n");
 }
 
@@ -1091,6 +1467,586 @@ void assignicigarsToSymbols(struct Cigar_Frequency **cigar_freq_pool, int cigar_
 	 for (i = 0; i < cigar_freq_pool_index; i++)
 	 printf("\n icigar: %s symbol: %s", symbol_icigar_mapping[i]->icigar, symbol_icigar_mapping[i]->symbolic_icigar);
 	 */
+}
+
+void readInTheEntireGenome(char *genome_filename, struct Whole_Genome_Sequence *whole_genome)
+{
+	FILE *fhr;
+	char *buffer = NULL;
+	size_t len = 0;
+	ssize_t line_len;
+	int i;
+	int j;
+
+	//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
+	fhr = fopen(genome_filename, "rb");
+	if (fhr == NULL)
+	{
+		printf("Error! File not found");
+		exit(1);
+	}
+
+	whole_genome->nucleotides = (char**) malloc(sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	whole_genome->reference_sequence_name = (char**) malloc(sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	whole_genome->reference_sequence_length = (unsigned long long int*) malloc(sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES);
+	whole_genome->number_of_reference_sequences = 0;
+
+	while ((line_len = getline(&buffer, &len, fhr)) != -1)
+	{
+		//printf("\n%lld", strlen(buffer));
+		if (strlen(buffer) <= 1) continue;
+		if (buffer[0] == '>')
+		{
+			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = (char*) malloc(sizeof(char) * (len + 1));
+			j = 0;
+			for (i = 1; buffer[i] != 32; i++)
+				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences][j++] = buffer[i];
+			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences][j++] = '\0';
+		}
+		else
+		{
+			whole_genome->nucleotides[whole_genome->number_of_reference_sequences] = (char*) malloc(sizeof(char) * (len + 1));
+			strcpy(whole_genome->nucleotides[whole_genome->number_of_reference_sequences], buffer);
+			whole_genome->reference_sequence_length[whole_genome->number_of_reference_sequences] = strlen(buffer);
+			whole_genome->number_of_reference_sequences++;
+		}
+
+	}
+	//free(buffer);
+	//buffer = NULL;
+	/*
+	 for (i = 0; i < whole_genome->number_of_reference_sequences; i++)
+	 printf("\n %d %s %lld %lld", i + 1, whole_genome->reference_sequence_name[i], strlen(whole_genome->nucleotides[i]), whole_genome->reference_sequence_length[i]);
+	 */
+	fclose(fhr);
+}
+
+void reverseComplement(char *seq, char *rev_seq)
+{
+	int i;
+	int j;
+
+	j = 0;
+	for (i = strlen(seq) - 1; i >= 0; i--)
+	{
+		switch (seq[i])
+		{
+			case 'A':
+				rev_seq[j++] = 'T';
+				break;
+			case 'T':
+				rev_seq[j++] = 'A';
+				break;
+			case 'G':
+				rev_seq[j++] = 'C';
+				break;
+			case 'C':
+				rev_seq[j++] = 'G';
+				break;
+			case 'N':
+				rev_seq[j++] = 'N';
+				break;
+		}
+	}
+	rev_seq[j++] = '\0';
+}
+
+void readAbridgeIndex(struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	FILE *fhr;
+
+	unsigned long long int line_num = 0;
+
+	size_t len = 0;
+	ssize_t line_len;
+
+	char *temp; //Useless
+	char *line = NULL; // for reading each line
+	char str[100];
+
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	fhr = fopen(abridge_index_filename, "r");
+	if (fhr == NULL)
+	{
+		printf("Error! File not found");
+		exit(1);
+	}
+	/********************************************************************/
+	while ((line_len = getline(&line, &len, fhr)) != -1)
+	{
+		line_num++;
+		splitByDelimiter(line, '\t', split_line);
+		if (line_num == 1)
+		{
+			*flag_ignore_mismatches = strtol(split_line[0], &temp, 10);
+			*flag_ignore_soft_clippings = strtol(split_line[1], &temp, 10);
+			*flag_ignore_unmapped_sequences = strtol(split_line[2], &temp, 10);
+			*flag_ignore_quality_score = strtol(split_line[3], &temp, 10);
+			continue;
+		}
+		//printf("\n%d %s", abridge_index->number_of_items, split_line[0]);
+		//fflush(stdout);
+		strcpy(abridge_index->chromosome[abridge_index->number_of_items], split_line[0]);
+		abridge_index->start[abridge_index->number_of_items] = strtol(split_line[1], &temp, 10);
+		abridge_index->end[abridge_index->number_of_items] = strtol(split_line[2], &temp, 10);
+		abridge_index->start_byte[abridge_index->number_of_items] = strtol(split_line[3], &temp, 10);
+		abridge_index->end_byte[abridge_index->number_of_items] = strtol(split_line[4], &temp, 10);
+		abridge_index->number_of_items++;
+		//printf("\n %lld", MAX_POOL_SIZE - abridge_index->number_of_items);
+	}
+	fclose(fhr);
+}
+
+int maxClusterSize(struct Abridge_Index *abridge_index)
+{
+	long long int i;
+	long long int max_cluster_size = -1;
+	for (i = 0; i < abridge_index->number_of_items; i++)
+		if (max_cluster_size < (abridge_index->end[i] - abridge_index->start[i])) max_cluster_size = (abridge_index->end[i] - abridge_index->start[i]);
+	return max_cluster_size;
+
+}
+
+void loadSequencesFromFile(char **sequences, char *filename)
+{
+	FILE *fhr;
+	long long int num_sequence = 0;
+	size_t len = 0;
+	ssize_t line_len;
+	char *line = NULL; // for reading each line
+
+	fhr = fopen(filename, "rb");
+	if (fhr == NULL)
+	{
+		printf("Error! File not found");
+		exit(1);
+	}
+	while ((line_len = getline(&line, &len, fhr)) != -1)
+		if (line[0] != '>') strcpy(sequences[num_sequence++], line);
+
+}
+
+long long int reverseInteger(long long int val)
+{
+	long long int temp = 0;
+	while (val)
+	{
+		temp = temp * 10 + (val % 10);
+		val /= 10;
+	}
+	return temp;
+}
+
+long long int extractNHfromicigar(char *icigar, int icigar_length)
+{
+	char nh_val_string[15];
+	char nh_val_string_rev[15];
+	long long int nh_val = 0;
+	int i;
+	int j;
+	int k;
+	char *t;
+
+	j = 0;
+	for (i = icigar_length - 1; i >= 0; i--)
+	{
+		if (isdigit(icigar[i]) == 0) break;
+		//nh_val = nh_val * 10 + icigar[i] - 48;
+		nh_val_string[j++] = icigar[i];
+	}
+	icigar[i + 1] = '\0';
+	nh_val_string[j] = '\0';
+
+	k = j - 1;
+	for (i = 0; i < j; i++)
+		nh_val_string_rev[i] = nh_val_string[k--];
+	nh_val_string_rev[j] = '\0';
+	nh_val = strtol(nh_val_string_rev, &t, 10);
+	return nh_val;
+}
+
+void replaceCharacterInString(char *str, char ch_to_be_replaced, char replace_with, int str_length)
+{
+	int i;
+	for (i = 0; i < str_length; i++)
+		if (str[i] == ch_to_be_replaced) str[i] = replace_with;
+}
+
+int findSamFormatFlag(char *icigar, int icigar_length, char *XS)
+{
+	int i;
+	int samformatflag;
+
+	for (i = 0; i < icigar_length; i++)
+	{
+		switch (icigar[i])
+		{
+			case 'B':
+				//replaceCharacterInString(icigar, 'B', 'M', icigar_length);
+				samformatflag = 0;
+				XS[0] = '.';
+				break;
+			case 'E':
+				//replaceCharacterInString(icigar, 'E', 'M', icigar_length);
+				samformatflag = 16;
+				XS[0] = '.';
+				break;
+			case 'F':
+				//replaceCharacterInString(icigar, 'F', 'M', icigar_length);
+				samformatflag = 256;
+				XS[0] = '.';
+				break;
+			case 'H':
+				//replaceCharacterInString(icigar, 'H', 'M', icigar_length);
+				samformatflag = 272;
+				XS[0] = '.';
+				break;
+			case 'J':
+				//replaceCharacterInString(icigar, 'J', 'M', icigar_length);
+				samformatflag = 0;
+				XS[0] = '+';
+				break;
+			case 'K':
+				//replaceCharacterInString(icigar, 'K', 'M', icigar_length);
+				samformatflag = 16;
+				XS[0] = '+';
+				break;
+			case 'L':
+				//replaceCharacterInString(icigar, 'L', 'M', icigar_length);
+				samformatflag = 256;
+				XS[0] = '+';
+				break;
+			case 'O':
+				//replaceCharacterInString(icigar, 'O', 'M', icigar_length);
+				samformatflag = 272;
+				XS[0] = '+';
+				break;
+			case 'P':
+				//replaceCharacterInString(icigar, 'P', 'M', icigar_length);
+				samformatflag = 0;
+				XS[0] = '-';
+				break;
+			case 'Q':
+				//replaceCharacterInString(icigar, 'Q', 'M', icigar_length);
+				samformatflag = 16;
+				XS[0] = '-';
+				break;
+			case 'R':
+				//replaceCharacterInString(icigar, 'R', 'M', icigar_length);
+				samformatflag = 256;
+				XS[0] = '-';
+				break;
+			case 'U':
+				//replaceCharacterInString(icigar, 'U', 'M', icigar_length);
+				samformatflag = 272;
+				XS[0] = '-';
+				break;
+		}
+	}
+	return samformatflag;
+}
+
+void generateReadSequenceAndMDString(struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, int cluster_index)
+{
+	int i;
+	int j;
+	int k;
+	int chromosome_index;
+	int read_from_genome_index;
+	int distance_from_start_pos;
+	char read_from_genome[MAX_SEQ_LEN];
+	char MD[MAX_SEQ_LEN];
+
+	/*
+	 * Find the chromosome
+	 */
+	for (chromosome_index = 0; chromosome_index < whole_genome->number_of_reference_sequences; chromosome_index++)
+		if (strcmp(sam_alignment_instance->reference_name, whole_genome->reference_sequence_name[chromosome_index]) == 0) break;
+
+	if (chromosome_index == whole_genome->number_of_reference_sequences)
+	{
+		printf("\n Chromosome not found %s", sam_alignment_instance->reference_name);
+	}
+
+	read_from_genome_index = 0;
+	distance_from_start_pos = 0;
+	for (i = 0; i < sam_alignment_instance->number_of_cigar_items; i++)
+	{
+		if (sam_alignment_instance->cigar_items[i].def == 'S')
+		{
+			//Soft clips - not present in genome. Hence ignore
+			for (j = 0; j < sam_alignment_instance->cigar_items[i].len; j++)
+				read_from_genome[read_from_genome_index++] = 'S';
+		}
+		else if (sam_alignment_instance->cigar_items[i].def == 'M')
+		{
+			for (j = distance_from_start_pos; j < distance_from_start_pos + sam_alignment_instance->cigar_items[i].len; j++)
+			{
+				/*if (sam_alignment_instance->start_position + j - 1 >= strlen(whole_genome->nucleotides[chromosome_index]))
+				 {
+				 printf("\n TROUBLE!!! Accessing location: %lld of chromosome %s having length %lld", sam_alignment_instance->start_position + j - 1, whole_genome->reference_sequence_name[chromosome_index], strlen(whole_genome->nucleotides[chromosome_index]));
+				 exit(1);
+				 }*/
+				read_from_genome[read_from_genome_index++] = whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1];
+			}
+			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
+		}
+		else if (sam_alignment_instance->cigar_items[i].def == 'N')
+		{
+			// Genome sequence is not consumed but pointer will move ahead
+			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
+		}
+		else if (sam_alignment_instance->cigar_items[i].def == 'I')
+		{
+			for (j = 0; j < sam_alignment_instance->cigar_items[i].len; j++)
+				read_from_genome[read_from_genome_index++] = 'I';
+		}
+		else if (sam_alignment_instance->cigar_items[i].def == 'D')
+		{
+			// Genome sequence is not consumed but pointer will move ahead
+			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
+		}
+	}
+	read_from_genome[read_from_genome_index++] = '\0';
+
+	/*
+	 if (cluster_index > 330000)
+	 {
+	 if ((double) (sam_alignment_instance->start_position + j - 1) / (double) strlen(whole_genome->nucleotides[chromosome_index]) >= 1)
+	 {
+	 printf("\n%lf %lf", (double) read_from_genome_index / (double) MAX_SEQ_LEN, (double) (sam_alignment_instance->start_position + j - 1) / (double) strlen(whole_genome->nucleotides[chromosome_index]));
+	 printf(" %s", whole_genome->reference_sequence_name[chromosome_index]);
+	 printSamAlignmentInstance(sam_alignment_instance);
+	 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+	 fflush(stdout);
+	 }
+	 }
+	 */
+
+	for (i = 0; sam_alignment_instance->seq[i] != '\0'; i++)
+		if (sam_alignment_instance->seq[i] == '-') sam_alignment_instance->seq[i] = read_from_genome[i];
+
+	/*
+	 printf("\n cigar %s", sam_alignment_instance->cigar);
+	 printf("\n%s %d", read_from_genome, strlen(read_from_genome));
+	 printf("\n%s %d", sam_alignment_instance->seq, strlen(sam_alignment_instance->seq));
+	 printf("\n%s %d", sam_alignment_instance->qual, strlen(sam_alignment_instance->qual));
+	 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+	 fflush(stdout);
+	 */
+
+}
+
+void writeAlignmentToFile(struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw)
+{
+	int i;
+	char line_to_be_written_to_file[MAX_GENERAL_LEN];
+	char temp[100];
+	for (i = 0; i < number_of_repititions_of_the_same_reads; i++)
+	{
+		line_to_be_written_to_file[0] = '\0';
+		strcat(line_to_be_written_to_file, sam_alignment->read_name);
+		sprintf(temp, "%d", i + 1);
+		strcat(line_to_be_written_to_file, "_");
+		strcat(line_to_be_written_to_file, temp);
+		strcat(line_to_be_written_to_file, "\t");
+
+		sprintf(temp, "%d", sam_alignment->samflag);
+		strcat(line_to_be_written_to_file, temp);
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, sam_alignment->reference_name);
+
+		strcat(line_to_be_written_to_file, "\t");
+		sprintf(temp, "%d", sam_alignment->start_position);
+		strcat(line_to_be_written_to_file, temp);
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "255");
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, sam_alignment->cigar);
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "*");
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "0");
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "0");
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, sam_alignment->seq);
+
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, sam_alignment->qual);
+
+		strcat(line_to_be_written_to_file, "\t");
+		//Tags
+		strcat(line_to_be_written_to_file, "NH:i:");
+		strcat(line_to_be_written_to_file, sam_alignment->tags[0].val);
+		strcat(line_to_be_written_to_file, "\t");
+
+		if (strcmp(sam_alignment->tags[1].val, ".") != 0)
+		{
+			strcat(line_to_be_written_to_file, "XS:A:");
+			strcat(line_to_be_written_to_file, sam_alignment->tags[1].val);
+			strcat(line_to_be_written_to_file, "\t");
+		}
+
+		if (flag_ignore_sequence_information != 0)
+		{
+			strcat(line_to_be_written_to_file, "MD:i");
+			strcat(line_to_be_written_to_file, sam_alignment->tags[2].val);
+			strcat(line_to_be_written_to_file, "\t");
+		}
+
+		strcat(line_to_be_written_to_file, "\n");
+		fprintf(fhw, "%s", line_to_be_written_to_file);
+	}
+}
+
+void convertToAlignment(struct Sam_Alignment *sam_alignment_instance, int sam_alignment_pool_index, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, FILE *fhw)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	long long int start_position;
+
+	int number_of_columns;
+	int number_of_distinct_cigars_in_a_line;
+	int number_of_repititions_of_the_same_reads;
+	int samformatflag;
+	int i;
+	int j;
+
+	char *temp; //Useless
+	char *distinct_icigars_in_a_line;
+	char *icigar;
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	distinct_icigars_in_a_line = (char*) malloc(sizeof(char) * MAX_GENERAL_LEN);
+
+	/********************************************************************/
+	for (i = 0; i < number_of_entries_in_cluster; i++)
+	{
+		//printf("\nProcessing this line %s", split_on_newline[i]);
+		number_of_columns = splitByDelimiter(split_on_newline[i], '\t', split_on_tab);
+		//printf("\nNumber of columns %d", number_of_columns);
+
+		if (number_of_columns == 1)
+		{
+			strcpy(distinct_icigars_in_a_line, split_on_tab[0]);
+			if (i == 0) start_position = 1;
+			else start_position++;
+		}
+		else if (number_of_columns == 2)
+		{
+			if (i == 0) start_position = abridge_index->start[cluster_index];
+			else start_position += strtol(split_on_tab[0], &temp, 10);
+			strcpy(distinct_icigars_in_a_line, split_on_tab[1]);
+		}
+		else
+		{
+			// Should never enter here
+			printf("\nTrouble");
+		}
+		number_of_distinct_cigars_in_a_line = splitByDelimiter(distinct_icigars_in_a_line, ',', split_on_comma);
+		sam_alignment_pool_index = 0;
+		for (j = 0; j < number_of_distinct_cigars_in_a_line; j++)
+		{
+			//printf("\n %d-%d", i, j);
+			//fflush(stdout);
+			splitByDelimiter(split_on_comma[j], '-', split_on_dash);
+			number_of_repititions_of_the_same_reads = strtol(split_on_dash[1], &temp, 10);
+			sam_alignment_instance->start_position = start_position;
+			if (split_on_dash[0][1] == '-' && isalpha(split_on_dash[0][0]) != 0)
+			{
+				// Use the same cigar
+				sprintf(temp, "%d", *read_number);
+				(*read_number)++;
+				strcpy(sam_alignment_instance->read_name, temp);
+			}
+			else
+			{
+				//printf("\nSplit_on_dash %s %d sam_alignment_pool_index %d ", split_on_dash[0], strlen(split_on_dash[0]), sam_alignment_pool_index);
+				strcpy(sam_alignment_instance->icigar, split_on_dash[0]);
+				//printf("\nsam_alignment_pool[i]->icigar %s %d Original_icigar %s %d", sam_alignment_pool[sam_alignment_pool_index]->icigar, strlen(sam_alignment_pool[sam_alignment_pool_index]->icigar), split_on_dash[0], strlen(split_on_dash[0]));
+				convertIcigarToCigarandMD(cluster_index, whole_genome, sam_alignment_instance, abridge_index->chromosome[cluster_index], flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, flag_ignore_sequence_information, default_quality_value);
+				sprintf(temp, "%d", *read_number);
+				(*read_number)++;
+				strcpy(sam_alignment_instance->read_name, temp);
+			}
+			writeAlignmentToFile(sam_alignment_instance, flag_ignore_sequence_information, number_of_repititions_of_the_same_reads, fhw);
+			(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
+			sam_alignment_pool_index++;
+		}
+	}
+}
+
+void readInGenomeFaidx(FILE *fhw, char *genome_filename)
+{
+	FILE *fhr;
+
+	char temp[100];
+	char faidx_filename[1000];
+	char *buffer = NULL;
+	char **split_on_tab;
+	char line_to_be_written_to_file[10000];
+
+	size_t len = 0;
+	ssize_t line_len;
+
+	int i;
+
+	strcpy(faidx_filename, genome_filename);
+	strcat(faidx_filename, ".fai");
+
+	fhr = fopen(faidx_filename, "r");
+	if (fhr == NULL)
+	{
+		printf("Error! File not found");
+		exit(1);
+	}
+
+	split_on_tab = (char**) malloc(sizeof(char*) * ROWS);
+	for (i = 0; i < ROWS; i++)
+		split_on_tab[i] = (char*) malloc(sizeof(char) * COLS);
+
+	strcpy(line_to_be_written_to_file, "@HD");
+	strcat(line_to_be_written_to_file, "\t");
+	strcat(line_to_be_written_to_file, "VN:1.4");
+	strcat(line_to_be_written_to_file, "\t");
+	strcat(line_to_be_written_to_file, "SO:coordinate");
+	strcat(line_to_be_written_to_file, "\n");
+	fprintf(fhw, "%s", line_to_be_written_to_file);
+	while ((line_len = getline(&buffer, &len, fhr)) != -1)
+	{
+		splitByDelimiter(buffer, '\t', split_on_tab);
+		strcpy(line_to_be_written_to_file, "@SQ");
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "SN:");
+		strcat(line_to_be_written_to_file, split_on_tab[0]);
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "LN:");
+		strcat(line_to_be_written_to_file, split_on_tab[1]);
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "\n");
+		fprintf(fhw, "%s", line_to_be_written_to_file);
+	}
+
+	fclose(fhr);
 }
 
 #endif /* ABRIDGE_SRC_FUNCTIONS_DEFINITIONS_H_ */
