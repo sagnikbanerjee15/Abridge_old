@@ -198,7 +198,6 @@ void decompressFile(char *abridge_index_filename, char *genome_filename, char *o
 		strcat(line_to_be_written_to_file, "\tNH:i:0\tHI:i:0\tnM:i:1\tuT:A:1");
 
 		strcat(line_to_be_written_to_file, "\n");
-		printf("%s", line_to_be_written_to_file);
 		fprintf(fhw, "%s", line_to_be_written_to_file);
 
 		line_number++;

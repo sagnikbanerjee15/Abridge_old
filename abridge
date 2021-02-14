@@ -18,6 +18,7 @@ Abdrige Compression
 (/usr/bin/time --verbose  \
 abridge \
 -c \
+--run_diagnostics \
 -G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
 -i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
 -o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
@@ -116,6 +117,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of available reference sequences in the genome.",default = 1)
     optional_named.add_argument("-p","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags. Please note that generating more tags will require more time.",nargs="*")
     optional_named.add_argument("-m","--max_memory",help="Enter the maximum memory allowed (in GB)",default=10)
+    optional_named.add_argument("-run_diagnostics","--run_diagnostics",help="abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies",action="store_true")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
@@ -267,6 +269,10 @@ def compressSamFile(options):
         cmd+=f" {input_filename} " #argv[6]
         cmd+=f" {options.outputfilename}.pass1 " #argv[7]
         cmd+=f" {options.outputfilename}.unmapped " #argv[8]
+        if options.run_diagnostics==True:
+            cmd+=f" 1" # argv[9]
+        else:
+            cmd+=f" 0" # argv[9]
         
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
