@@ -4,81 +4,6 @@
 # The software 'abridge' will compress aligned files to a bare minimum needed for generating assemblies and producing read counts
 ########################################################################################################################################################
 
-"""
-(/usr/bin/time --verbose  \
-abridge \
--c \
---ignore_unmapped_reads \
--G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
--i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ERR4221199_STAR_Aligned.sortedByCoord.out.bam \
--o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ERR4221199_STAR_Aligned.sortedByCoord.out) > output 2> error & 
-
-Abdrige Compression 
-
-(/usr/bin/time --verbose  \
-abridge \
--c \
---run_diagnostics \
--G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
--i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
--o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
-1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.output \
-2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
--c \
--G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
--i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.sam \
--o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out) \
-1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_compress.output \
-2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_compress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
--c \
---ignore_unmapped_reads \
---ignore_soft_clippings \
--G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
--i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
--o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
-1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.output \
-2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.error &
-
-Abdrige decompression 
---------------------
-
-(/usr/bin/time --verbose  \
-abridge \
--d \
--G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
--i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
--o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
-1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_decompress.output \
-2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_decompress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
--d \
---ignore_unmapped_reads \
--G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
--i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
--o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out) \
-1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_decompress.output \
-2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_decompress.error &
-
-Boiler compress
-
-(/usr/bin/time --verbose  pypy \
-/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler/boiler.py \
-compress \
-/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.sam \
-/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.boiler) \
-1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler_ART_SE_compress.output \
-2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler_ART_SE_compress.error & 
- 
-"""
-
 from argparse import RawTextHelpFormatter
 import argparse
 import logging
@@ -88,8 +13,11 @@ import sys
 import re
 import time
 import multiprocessing
-from scripts.extractSequencesFromReferences import *
+import random
 from scripts.assessMemoryRequirement import *
+from scripts.printHeader import *
+from scripts.verifyPositions import *
+from scripts.sortPositionsForRandomAccess import *
 
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser(prog="abridge",description="Compress reference alignments for storage",formatter_class=RawTextHelpFormatter)
@@ -103,6 +31,8 @@ def parseCommandLineArguments():
     compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
     compress_decompress_group.add_argument("-c","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-d","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
+    compress_decompress_group.add_argument("-r","--random",help="Retrieve alignments from random locations",action="store_true")
+    compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
     
     # Optional arguments
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
@@ -115,9 +45,10 @@ def parseCommandLineArguments():
     optional_named.add_argument("-o","--outputfilenameprefix",help="Enter the prefix of the output file. If this parameter is not provided then abridge will attempt to write to the directory where the input file is present. Please make sure that the directory has write permissions enabled. This parameter is ignored while decompressing.")
     optional_named.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
     optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of available reference sequences in the genome.",default = 1)
-    optional_named.add_argument("-p","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags. Please note that generating more tags will require more time.",nargs="*")
+    optional_named.add_argument("-t","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags. Please note that generating more tags will require more time.",nargs="*")
     optional_named.add_argument("-m","--max_memory",help="Enter the maximum memory allowed (in GB)",default=10)
     optional_named.add_argument("-run_diagnostics","--run_diagnostics",help="abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies",action="store_true")
+    optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
@@ -153,19 +84,33 @@ def validateCommandLineArguments(options):
             sys.exit()
     
     # Set output filename
-    if options.outputfilenameprefix is None:
-        options.outputfilename = options.inputfilename[:-4]+".abridge"
-        options.logfilename = options.inputfilename[:-4]+".log"
-    else:   
-        options.logfilename = options.outputfilenameprefix+".log"
-        options.outputfilename = options.outputfilenameprefix+".abridge"
+    if options.header==False:
+        if options.outputfilenameprefix is None:
+            options.outputfilename = options.inputfilename[:-4]+".abridge"
+            options.logfilename = options.inputfilename[:-4]+".log"
+        else:   
+            options.logfilename = options.outputfilenameprefix+".log"
+            options.outputfilename = options.outputfilenameprefix+".abridge"
     options.files_for_removal = []
     options.softwares = {}
-    cmd=f"which abridge > {options.logfilename[:-3]}temp"
-    os.system(cmd)
-    fhr=open(f"{options.logfilename[:-3]}temp","r")
-    abridge_location = fhr.read().split()[-1]
-    fhr.close()
+    if options.header==False:
+        cmd=f"which abridge > {options.logfilename[:-3]}temp"
+        os.system(cmd)
+        fhr=open(f"{options.logfilename[:-3]}temp","r")
+        abridge_location = fhr.read().split()[-1]
+        fhr.close()
+    else:
+        cmd=f"which abridge > temp"
+        os.system(cmd)
+        fhr=open(f"temp","r")
+        abridge_location = fhr.read().split()[-1]
+        fhr.close()
+        options.quiet = True
+    
+    if options.random==True and options.positions==None:
+        print("You need to enter at least one location from where reads will be retrieved")
+        sys.exit()
+    
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
     options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
     options.softwares["compressSamFileSingleEndedPass2"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass2"
@@ -174,6 +119,11 @@ def validateCommandLineArguments(options):
     options.softwares["buildABRIDGEIndex"]= "/".join(abridge_location.split("/")[:-1])+"/src/buildAbridgeIndex"
     options.softwares["decompressSamFileSingleEnded"]= "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFileSingleEnded"
     options.softwares["extractSequencesFromReferences"] = "/".join(abridge_location.split("/")[:-1])+"/scripts/extractSequencesFromReferences.py"
+    options.softwares["randomRetrievalSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalSingleEnded"
+    if options.decompress==True and len(options.inputfilename)>1:
+        print("abridge can decompress only file at a time")
+        sys.exit()
+        
     if options.ignore_soft_clippings == True:
         options.ignore_soft_clippings = 1
     else:
@@ -399,6 +349,28 @@ def decompressSamFile(options):
         os.system(cmd)
      """   
   
+def retrieveAlignmentsRandomly(chromosome,start,end,options):
+    
+    abridge_index_filename = f"{options.inputfilename[0][:-2]}index"
+    genome_filename = options.genome
+    genome_index_filename = options.genome+".fai"
+    
+    randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"] 
+    cmd=f"gcc {randomRetrievalSingleEnded}.c -o {randomRetrievalSingleEnded} -g"
+    os.system(cmd)
+    
+    cmd=f" {randomRetrievalSingleEnded} " #argv[0]
+    cmd+=f" {abridge_index_filename} " #argv[1]
+    cmd+=f" {genome_filename} " #argv[2]
+    cmd+=f" {genome_index_filename} " #argv[3]
+    cmd+=f" {chromosome} " #argv[4]
+    cmd+=f" {start} " #argv[5]
+    cmd+=f" {end} " #argv[6]
+    print(cmd)
+    os.system(cmd)
+    
+    
+    
 def main():
     commandLineArg=sys.argv
     if len(commandLineArg)==1:
@@ -407,7 +379,9 @@ def main():
     
     validateCommandLineArguments(options)
     
-    configureLogger(options)
+    if options.quiet == False:
+        configureLogger(options)
+        
     if options.quiet == False:
         logging.info("Logger has been configured")
     if options.quiet == False:
@@ -432,6 +406,59 @@ def main():
         decompressSamFile(options)
         if options.quiet == False:
             logging.info(f"decompressSamFile() execution is complete")
+    
+    if options.header==True:
+        """
+        cmd=f"7za e {options.inputfilename[0]} -y"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        """
+        cmd=f"cat {options.inputfilename[0][:-3]}|grep ^@ > {options.inputfilename[0][:-3]}.headers"
+        os.system(cmd)
+        print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
+        os.system(f"rm {options.inputfilename[0][:-3]}.headers")
+        
+    if options.random==True:
+        """
+        cmd=f"7za e {options.inputfilename[0]} -y"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        """
+        cmd=f"cat {options.inputfilename[0][:-3]}|grep ^@ > {options.inputfilename[0][:-3]}.headers"
+        os.system(cmd)
+        chromosome_to_length = {}
+        fhr=open(f"{options.inputfilename[0][:-3]}.headers","r")
+        for line in fhr:
+            useless,chromosome,length = line.strip().split("\t")
+            chromosome=chromosome.split(":")[-1]
+            length=length.split(":")[-1]
+            #print(useless,chromosome,length)
+            chromosome_to_length[chromosome] = int(length)
+        fhr.close()
+        if options.positions.count(":")!=1 or options.positions.count("-")!=1:
+            print("Error in position. Please specify in chromosome:start-end format")
+            sys.exit()
+        chromosome = options.positions.split(":")[0]
+        start,end = options.positions.split(":")[-1].split("-")
+        start,end=int(start),int(end)
+        if start>chromosome_to_length[chromosome] or end>chromosome_to_length[chromosome] or start>end:
+            print("Error in chromosome lengths")
+            sys.exit()
+        retrieveAlignmentsRandomly(chromosome,start,end,options)
+        
+        """
+        FUTURE VERSION
+        correct,message=verifyPositions(options.positions,chromosome_to_length)
+        if correct==0:
+            print(f"Incorrect positions - {message}")
+        else:
+            sortPositions(options.positions)
+        """
+        
+        os.system(f"rm {options.inputfilename[0][:-3]}.headers")
+        
             
     cleanUp(options)
     if options.quiet == False:

@@ -1,6 +1,8 @@
 #ifndef _ABRIDGE_SRC_FUNCTIONS_DEFINITIONS_H_
 #define _ABRIDGE_SRC_FUNCTIONS_DEFINITIONS_H_
 
+#include <stdbool.h>
+
 struct Sam_Alignment* allocateMemorySam_Alignment()
 {
 	/********************************************************************
@@ -1502,6 +1504,143 @@ void reverseComplement(char *seq, char *rev_seq)
 	rev_seq[j++] = '\0';
 }
 
+void readInGenomeSequenceSingleChromosome(struct Whole_Genome_Sequence *single_genome_sequence, char *chromosome, char *genome_filename, struct Abridge_Index *genome_index)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	FILE *fhr;
+
+	char *buffer;
+
+	size_t len = 0;
+	ssize_t line_len;
+
+	int i;
+	int j;
+	int fseek_ret_val;
+	int fread_ret_val;
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	fhr = fopen(genome_filename, "rb");
+	if (fhr == NULL)
+	{
+		printf("Error! File not found");
+		exit(1);
+	}
+	/********************************************************************/
+
+	buffer = (char*) malloc(sizeof(char) * MAX_REFERENCE_SEQ_LEN);
+	single_genome_sequence->nucleotides = (char**) malloc(sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	single_genome_sequence->reference_sequence_name = (char**) malloc(sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	single_genome_sequence->reference_sequence_length = (unsigned long long int*) malloc(sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES);
+	single_genome_sequence->number_of_reference_sequences = 1;
+
+	for (i = 0; i < genome_index->number_of_items; i++)
+		if (strcmp(chromosome, genome_index->chromosome[i]) == 0) break;
+
+	fseek_ret_val = fseek(fhr, genome_index->start_byte[i], SEEK_SET);
+	fread_ret_val = fread(buffer, 1, genome_index->end_byte[i] - genome_index->start_byte[i], fhr);
+	if (buffer == NULL) printf("\nBuffer is null chromosome number %d", i);
+	//printf("\nReading from %lld Num bytes read %lld fseek_ret_val %lld fread_ret_val %lld ferror %lld feof %lld Genome filename %s\n", genome_index->start_byte[i], genome_index->end_byte[i] - genome_index->start_byte[i], fseek_ret_val, fread_ret_val, ferror(fhr), feof(fhr), genome_filename);
+	//fflush (stdout);
+	buffer[genome_index->end_byte[i] - genome_index->start_byte[i] + 1] = '\0';
+	single_genome_sequence->reference_sequence_name[0] = (char*) malloc(sizeof(char) * (100));
+	strcpy(single_genome_sequence->reference_sequence_name[0], chromosome);
+	single_genome_sequence->nucleotides[0] = (char*) malloc(sizeof(char) * strlen(buffer));
+	strcpy(single_genome_sequence->nucleotides[0], buffer);
+	single_genome_sequence->reference_sequence_length[0] = genome_index->end_byte[i] - genome_index->start_byte[i];
+	fclose(fhr);
+}
+
+void findReadClusterFromAbridgeIndex(struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	int i;
+	long long int start1, start2;
+	long long int end1, end2;
+	bool condition1;
+	bool condition2;
+	bool condition3;
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	*abridge_match_start_index = -1;
+	*abridge_match_end_index = -1;
+	start1 = start;
+	end1 = end;
+	/********************************************************************/
+	for (i = 0; i < abridge_index->number_of_items; i++)
+	{
+		if (strcmp(chromosome, abridge_index->chromosome[i]) == 0)
+		{
+			start2 = abridge_index->start[i];
+			end2 = abridge_index->end[i];
+			condition1 = start1 >= start2 && start1 <= end2 && end1 >= start1 && end1 <= end2;
+			condition2 = start1 <= start2 && start1 <= end2 && end1 >= start1 && end1 <= end2;
+			condition3 = start1 >= start2 && start1 <= end2 && end1 >= start2 && end1 >= end2;
+
+			condition1 = end1 < start2;
+			condition2 = end2 < start1;
+			//printf("\n%d %d %d %d %d %d %d", start1, end1, start2, end2, condition1, condition2, !(condition1 || condition2));
+			if (!(condition1 || condition2))
+			{
+				if (*abridge_match_end_index == -1) *abridge_match_start_index = i;
+				*abridge_match_end_index = i;
+			}
+		}
+	}
+
+}
+
+void readGenomeIndex(struct Abridge_Index *genome_index, char *genome_index_filename, char **split_line)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	FILE *fhr;
+
+	unsigned long long int line_num = 0;
+
+	size_t len = 0;
+	ssize_t line_len;
+
+	char *temp; //Useless
+	char *line = NULL; // for reading each line
+	char str[100];
+
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	fhr = fopen(genome_index_filename, "r");
+	if (fhr == NULL)
+	{
+		printf("Error! File not found");
+		exit(1);
+	}
+	/********************************************************************/
+
+	genome_index->number_of_items = 0;
+	while ((line_len = getline(&line, &len, fhr)) != -1)
+	{
+		line_num++;
+		splitByDelimiter(line, '\t', split_line);
+		strcpy(genome_index->chromosome[genome_index->number_of_items], split_line[0]);
+		genome_index->start_byte[genome_index->number_of_items] = strtol(split_line[2], &temp, 10);
+		genome_index->end_byte[genome_index->number_of_items] = genome_index->start_byte[genome_index->number_of_items] + strtol(split_line[3], &temp, 10);
+		genome_index->number_of_items++;
+	}
+}
+
 void readAbridgeIndex(struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score)
 {
 	/********************************************************************
@@ -1791,7 +1930,7 @@ void generateReadSequenceAndMDString(struct Sam_Alignment *sam_alignment_instanc
 		printf("\n%s\n%s", sam_alignment_instance->md_extended, read_from_genome_including_deletions);
 		exit(1);
 	}
-	//return;
+//return;
 	/*
 	 * Construct MD String
 	 */
@@ -1836,9 +1975,9 @@ void generateReadSequenceAndMDString(struct Sam_Alignment *sam_alignment_instanc
 		sprintf(temp, "%d", num);
 		strcat(sam_alignment_instance->tags[2].val, temp);
 	}
-	//printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
-	//printf("\n%s\n%s\n%s", sam_alignment_instance->soft_clips_removed_seq, read_from_genome_including_deletions, read_from_genome);
-	//printf("\n");
+//printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
+//printf("\n%s\n%s\n%s", sam_alignment_instance->soft_clips_removed_seq, read_from_genome_including_deletions, read_from_genome);
+//printf("\n");
 }
 
 void writeAlignmentToFile(struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw)

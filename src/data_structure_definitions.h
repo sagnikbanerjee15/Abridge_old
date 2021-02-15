@@ -25,6 +25,7 @@
 # define MAX_REFERENCE_SEQ_LENGTH 1000
 # define MAX_GENERAL_LEN 1000000
 # define MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE 1073741824
+# define MAX_REFERENCE_SEQ_LEN 1000000000
 
 char *sam_tags[] =
 { "NH", "HI", "AS", "nM", "NM", "MD", "jM", "jI", "XS", "RG", "XT", "XM", "AM", "X0", "X1", "XO", "XG" };
@@ -169,8 +170,6 @@ struct Abridge_Index
 		long long int *end;
 		long long int *start_byte;
 		long long int *end_byte;
-		//long long int *line_number_start;
-		//long long int *line_number_end;
 		long long int number_of_items;
 };
 

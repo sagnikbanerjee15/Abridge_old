@@ -1,11 +1,85 @@
-         TAAATTATGTCATGTTTATCCTAATGTT!ATTTTTTTTTGAACCGTGATAATTGCTATGAATTTTGTGCATGCTCTTT""TTTTTTTTAATTAAAAAAAATTTTTTTTTAGAGACACAAGGGTGTTATATGTTGCCAGGCT 
-CTTCCGATCTAAATTATGTCATGTTTATCCTAATGTTAATTTTTTTTTGAACCGTGATAATTGCTATGAATTTTGTGCATGCTCTTTTTTTTTTTTTAATTAAAAAAAATTTTTTTTTAGAGACACAAGGGTGTTATATGTTGCCAGGCT
-SSSSSSSSSMMMMMMMMMMMMMMMMMMMMMMMMMMMMIMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMIIMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-SSSSSSSSSMMMMMMMMMMMMMMMMMMMMMMMMXMMM MXMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
+(/usr/bin/time --verbose  \
+abridge \
+-c \
+--ignore_unmapped_reads \
+-G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ERR4221199_STAR_Aligned.sortedByCoord.out.bam \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ERR4221199_STAR_Aligned.sortedByCoord.out) > output 2> error & 
 
-CCACCCACTGCCCAGATACGGACCCCCCCCCCACCCACTGCCCAGATACGGACCCGGCCCACCCACTGCCCAGATACGGACCCCCCCCACCCACTGCCCAGATACGGACCCCCCACCCACTGCCCAAATATGGGCCCTTTCCACCCA
+Abdrige Compression 
 
+(/usr/bin/time --verbose  \
+abridge \
+-c \
+--run_diagnostics \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.error &
 
-TGGCCACCCACTGCCCAGATACGGACCCCCCGCCACCCACTGCCCAGATATGGACCCGGCCCACCCACTGCCCAGATACGGACCCCCCCCCACCCACTGCCCAGATACGGACCCCCCACCCACTGCCCAAATATGGGCCCTTTCCACCCA
-TGGCCACCCACTGCCCAGATACGGACCCCCCGCCACCCACTGCCCAGATATGGACCCGGCCCACCCACTGCCCAGATACGGACCCCCCCCCACCCACTGCCCAGATACGGACCCCCCACCCACTGCCCAAATATGGGCCCTTTCCACCCA
+(/usr/bin/time --verbose  \
+abridge \
+-c \
+-G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.sam \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_compress.error &
+
+(/usr/bin/time --verbose  \
+abridge \
+-c \
+--ignore_unmapped_reads \
+--ignore_soft_clippings \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_compress.error &
+
+Abdrige decompression 
+--------------------
+
+(/usr/bin/time --verbose  \
+abridge \
+-d \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_decompress.error &
+
+(/usr/bin/time --verbose  \
+abridge \
+-d \
+--ignore_unmapped_reads \
+-G /project/maizegdb/sagnik/data/finder/Arabidopsis_thaliana/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/abridge_ART_SE_decompress.error &
+
+Boiler compress
+
+(/usr/bin/time --verbose  pypy \
+/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler/boiler.py \
+compress \
+/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.sam \
+/project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/ART_SE_STAR_Aligned.sortedByCoord.out.boiler) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler_ART_SE_compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/boiler_ART_SE_compress.error &
+
+Abdrige random retrieval 
+------------------------
+(/usr/bin/time --verbose  \
+abridge \
+-r \
+-p 1:9000-10100 \
+-G /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
+-i /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.abridge.pass2.7z \
+-o /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out) \
+1> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_random_retrieve.output \
+2> /project/maizegdb/sagnik/ABRIDGE/analysis/developing_abridge/SRR13009993_random_retrieve.error &
+
