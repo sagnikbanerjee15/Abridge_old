@@ -186,13 +186,15 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 				test_for_end_of_chromsome_alignments += reached_end_of_chromsome[i];
 			if (test_for_end_of_chromsome_alignments == number_of_files_to_be_compressed) break;
 			if (time_to_quit) break;
-			printf("\n%s ", chromosome_info->name[j]);
-			for (i = 0; i < number_of_files_to_be_compressed; i++)
-				printf("%lld ", pass2_compressed_ds_instance[i]->position);
-			for (i = 0; i < number_of_files_to_be_compressed; i++)
-				printf("%d", merge_lines_from_these_files[i]);
-			printf(" %lf", (double) lowest_position / (double) chromosome_info->length[j]);
-			fflush(stdout);
+			/*
+			 printf("\n%s ", chromosome_info->name[j]);
+			 for (i = 0; i < number_of_files_to_be_compressed; i++)
+			 printf("%lld ", pass2_compressed_ds_instance[i]->position);
+			 for (i = 0; i < number_of_files_to_be_compressed; i++)
+			 printf("%d", merge_lines_from_these_files[i]);
+			 printf(" %lf", (double) lowest_position / (double) chromosome_info->length[j]);
+			 fflush(stdout);
+			 */
 		}
 	}
 }
