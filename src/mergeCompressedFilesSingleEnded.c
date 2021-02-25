@@ -75,28 +75,34 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 
 	long long int lowest_position;
 
-	unsigned long long int line_numbers[MAX_FILES_FOR_MERGING];
+	unsigned long long int *line_numbers;
 
-	short int merge_lines_from_these_files[MAX_FILES_FOR_MERGING];
-	short int reached_end_of_chromsome[MAX_FILES_FOR_MERGING];
-	short int read_from_file[MAX_FILES_FOR_MERGING];
+	short int *merge_lines_from_these_files;
+	short int *reached_end_of_chromsome;
+	short int *read_from_file;
 	short int time_to_quit;
-	short int chromosome_present[MAX_FILES_FOR_MERGING];
+	short int *chromosome_present;
 
-	size_t len[MAX_FILES_FOR_MERGING];
-	ssize_t line_len[MAX_FILES_FOR_MERGING];
+	size_t *len;
+	ssize_t *line_len;
 
 	char *temp; // For strtol
-	char *chromosome;
-	char *line[MAX_FILES_FOR_MERGING]; // for reading each line
+	char **line; // for reading each line
 
-	struct Pass2_Compressed_DS *pass2_compressed_ds_instance[MAX_FILES_FOR_MERGING];
+	struct Pass2_Compressed_DS **pass2_compressed_ds_instance;
 	/********************************************************************/
 
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-
+	line_numbers = (unsigned long long int*) malloc(sizeof(unsigned long long int) * number_of_files_to_be_compressed);
+	merge_lines_from_these_files = (short int*) malloc(sizeof(short int) * number_of_files_to_be_compressed);
+	reached_end_of_chromsome = (short int*) malloc(sizeof(short int) * number_of_files_to_be_compressed);
+	chromosome_present = (short int*) malloc(sizeof(short int) * number_of_files_to_be_compressed);
+	len = (size_t*) malloc(sizeof(size_t) * number_of_files_to_be_compressed);
+	line_len = (ssize_t*) malloc(sizeof(ssize_t) * number_of_files_to_be_compressed);
+	line = (char**) malloc(sizeof(char*) * number_of_files_to_be_compressed);
+	pass2_compressed_ds_instance = (struct Pass2_Compressed_DS**) malloc(sizeof(struct Pass2_Compressed_DS*) * number_of_files_to_be_compressed);
 	/********************************************************************/
 	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
 	{
