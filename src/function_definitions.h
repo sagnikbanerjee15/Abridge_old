@@ -130,6 +130,7 @@ struct Chromosome_Starting_Byte* allocateMemoryChromosome_Starting_Byte()
 	s->start_byte_in_pass2_file = (long int*) malloc(sizeof(long int) * MAX_NUMBER_OF_CHROMOSOMES);
 	for (i = 0; i < MAX_NUMBER_OF_CHROMOSOMES; i++)
 		s->name[i] = (char*) malloc(sizeof(char) * 1000);
+	s->number_of_chromosomes = 0;
 	return s;
 }
 struct Chromosome_Info* allocateMemoryChromosome_Info()

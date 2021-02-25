@@ -94,12 +94,12 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
 	{
 		//if (strcmp(chromosome_info->name[j], "KI270591.1") != 0) continue;
-		printf("\nProcessing chromsosome %s number_of_files_to_be_compressed %d", chromosome_info->name[j], number_of_files_to_be_compressed);
-		fflush(stdout);
+		//printf("\nProcessing chromsosome %s number_of_files_to_be_compressed %d", chromosome_info->name[j], number_of_files_to_be_compressed);
+		//fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
 		{
-			printf("\nInitialization ongoing for file no %d", i);
-			fflush(stdout);
+			//printf("\nInitialization ongoing for file no %d", i);
+			//fflush(stdout);
 			fhr[i] = fopen(pass2_filenames[i], "rb");
 			if (fhr[i] == NULL)
 			{
@@ -113,11 +113,11 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			line_len[i] = 0;
 			chromosome_present[i] = 0;
 		}
-		printf("\nInitialization complete");
-		fflush(stdout);
+		//printf("\nInitialization complete");
+		//fflush(stdout);
 		seekFilePointersToAppropriatePosition(chromosome_info->name[j], fhr, number_of_files_to_be_compressed, split_on_tab, starting_bytes, chromosome_present);
-		printf("\nFile Pointers have been set");
-		fflush(stdout);
+		//printf("\nFile Pointers have been set");
+		//fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
 		{
 			pass2_compressed_ds_instance[i]->position = 0;
@@ -228,7 +228,7 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	index_filename = (char*) malloc(sizeof(char) * 10000);
+
 	/********************************************************************/
 	for (i = 0; i < number_of_files_to_be_compressed; i++)
 	{
