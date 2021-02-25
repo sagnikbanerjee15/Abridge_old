@@ -17,7 +17,6 @@ import random
 import glob
 
 from scripts.assessMemoryRequirement import *
-from scripts.printHeader import *
 from scripts.verifyPositions import *
 from scripts.sortPositionsForRandomAccess import *
 
