@@ -189,7 +189,7 @@ int isChromosomePresent(struct Chromosome_Info *chromosome_info, char *chromosom
 	return 0;
 }
 
-void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Info *chromosome_info, struct Chromosome_Starting_Byte *starting_bytes)
+void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Info *chromosome_info, struct Chromosome_Starting_Byte **starting_bytes)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -231,9 +231,9 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 				if (isChromosomePresent(chromosome_info, split_on_tab[1])) continue;
 
 				strcpy(chromosome_info->name[chromosome_info->number_of_chromosomes], split_on_tab[1]);
-				strcpy(starting_bytes[i].name[starting_bytes[i].number_of_chromosomes], split_on_tab[1]);
-				starting_bytes[i].number_of_chromosomes++;
-				starting_bytes[i].start_byte_in_pass2_file = ftell(fhr);
+				strcpy(starting_bytes[i]->name[starting_bytes[i]->number_of_chromosomes], split_on_tab[1]);
+				starting_bytes[i]->number_of_chromosomes++;
+				starting_bytes[i]->start_byte_in_pass2_file = ftell(fhr);
 
 				splitByDelimiter(line, '\t', split_on_tab);
 				strcpy(temp, split_on_tab[2]);
@@ -245,8 +245,8 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 		}
 	}
 	for (i = 0; i < number_of_files_to_be_compressed; i++)
-		for (j = 0; j < starting_bytes[i].number_of_chromosomes; j++)
-			printf("\n%d %s %lld", i, starting_bytes[i].name[j], starting_bytes[i].start_byte_in_pass2_file[j]);
+		for (j = 0; j < starting_bytes[i]->number_of_chromosomes; j++)
+			printf("\n%d %s %lld", i, starting_bytes[i]->name[j], starting_bytes[i]->start_byte_in_pass2_file[j]);
 	exit(1);
 }
 
