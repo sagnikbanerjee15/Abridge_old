@@ -93,7 +93,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
 	{
 		//if (strcmp(chromosome_info->name[j], "KI270591.1") != 0) continue;
-		printf("\nProcessing chromsosome %s", chromosome_info->name[j]);
+		printf("\nProcessing chromsosome %s number_of_files_to_be_compressed %d", chromosome_info->name[j], number_of_files_to_be_compressed);
 		fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
 		{
