@@ -26,6 +26,8 @@
 # define MAX_GENERAL_LEN 1000000
 # define MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE 1073741824
 # define MAX_REFERENCE_SEQ_LEN 1000000000
+# define MAX_FILES_FOR_MERGING 1000
+# define MAX_NUMBER_OF_CHROMOSOMES 25000
 
 char *sam_tags[] =
 { "NH", "HI", "AS", "nM", "NM", "MD", "jM", "jI", "XS", "RG", "XT", "XM", "AM", "X0", "X1", "XO", "XG" };
@@ -107,12 +109,27 @@ struct Pass2_Compressed_DS
 		 */
 		char *col1;
 		char *col2;
+		long long int position;
 };
 
 struct Pass3_Compression_Symbol_icigar_Mapping
 {
 		char *symbolic_icigar;
 		char *icigar;
+};
+
+struct Chromosome_Info
+{
+		char **name;
+		long long int *length;
+		int number_of_chromosomes;
+};
+
+struct Chromosome_Starting_Byte
+{
+		char **name;
+		int number_of_chromosomes;
+		unsigned long long int *start_byte_in_pass2_file;
 };
 
 struct Sam_Alignment

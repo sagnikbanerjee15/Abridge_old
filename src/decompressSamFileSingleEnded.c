@@ -37,6 +37,8 @@ void decompressFile(char *abridge_index_filename, char *genome_filename, char *o
 	long long int max_cluster_size;
 	unsigned long long int line_num = 0;
 	unsigned long long int read_number = 1;
+	unsigned long long int from = -1;
+	unsigned long long int to = -1;
 	int number_of_entries_in_cluster;
 	int number_of_elements_after_split_on_delimiter;
 
@@ -53,6 +55,7 @@ void decompressFile(char *abridge_index_filename, char *genome_filename, char *o
 	char *output_prefix_without_path;
 	char line_to_be_written_to_file[MAX_GENERAL_LEN];
 	char temp[100];
+	char read_prefix[10];
 
 	struct Sam_Alignment **sam_alignment_pool;
 	struct Sam_Alignment *sam_alignment_instance;
@@ -104,13 +107,14 @@ void decompressFile(char *abridge_index_filename, char *genome_filename, char *o
 	sam_alignment = allocateMemorySam_Alignment();
 	whole_genome = (struct Whole_Genome_Sequence*) malloc(sizeof(struct Whole_Genome_Sequence));
 	sam_alignment_instance = allocateMemorySam_Alignment();
+	read_prefix[0] = '\0'; // Emptry string
 
 	/********************************************************************/
 
 	readAbridgeIndex(abridge_index, abridge_index_filename, split_on_newline, &flag_ignore_mismatches, &flag_ignore_soft_clippings, &flag_ignore_unmapped_sequences, &flag_ignore_quality_score);
 	readInTheEntireGenome(genome_filename, whole_genome);
+	writeSequenceHeaders(fhw, genome_filename);
 
-	readInGenomeFaidx(fhw, genome_filename);
 	for (i = 0; i < abridge_index->number_of_items; i++)
 	{
 
@@ -139,10 +143,13 @@ void decompressFile(char *abridge_index_filename, char *genome_filename, char *o
 			//fflush(stdout);
 		}
 		number_of_entries_in_cluster--; //Last line is always empty
-		convertToAlignment(sam_alignment_instance, sam_alignment_pool_index, whole_genome, split_on_newline, sam_alignment, i, abridge_index, number_of_entries_in_cluster, split_on_tab, split_on_dash, split_on_comma, default_quality_value, flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, flag_ignore_sequence_information, &read_number, &total_mapped_reads, fhw);
+		convertToAlignment(sam_alignment_instance, sam_alignment_pool_index, whole_genome, split_on_newline, sam_alignment, i, abridge_index, number_of_entries_in_cluster, split_on_tab, split_on_dash, split_on_comma, default_quality_value, flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, flag_ignore_sequence_information, &read_number, &total_mapped_reads, read_prefix, from, to, fhw);
 		//if (i == 10) break;
 	}
 
+	/*
+	 * Write all unmapped reads to samfile
+	 */
 	fhr = fopen(unmapped_filename, "r");
 	if (fhr == NULL)
 	{
@@ -238,7 +245,7 @@ int main(int argc, char *argv[])
 	/********************************************************************/
 
 	decompressFile(abridge_index_filename, genome_filename, output_sam_filename, pass2_filename, genome_prefix, unmapped_filename, default_quality_value, flag_ignore_sequence_information);
-	printf("\nTotal mapped reads %lld", total_mapped_reads);
-	printf("\n");
+	//printf("\nTotal mapped reads %lld", total_mapped_reads);
+	//printf("\n");
 	return 0;
 }

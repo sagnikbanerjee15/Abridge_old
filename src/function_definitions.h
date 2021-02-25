@@ -116,6 +116,33 @@ struct Pass2_Compressed_DS* allocateMemoryPass2_Compressed_DS()
 	s = (struct Pass2_Compressed_DS*) malloc(sizeof(struct Pass2_Compressed_DS));
 	s->col1 = (char*) malloc(sizeof(char) * (MAX_SEQ_LEN * 2));
 	s->col2 = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+	s->position = 0;
+	return s;
+}
+
+struct Chromosome_Starting_Byte* allocateMemoryChromosome_Starting_Byte()
+{
+	struct Chromosome_Starting_Byte *s;
+	int i;
+
+	s = (struct Chromosome_Starting_Byte) malloc(sizeof(struct Chromosome_Starting_Byte));
+	s->name = (char**) malloc(sizeof(char*) * MAX_NUMBER_OF_CHROMOSOMES);
+	s->start_byte_in_pass2_file = (unsigned long long int*) malloc(sizeof(unsigned long long int) * MAX_NUMBER_OF_CHROMOSOMES);
+	for (i = 0; i < MAX_NUMBER_OF_CHROMOSOMES; i++)
+		s->name[i] = (char*) malloc(sizeof(char) * 1000);
+	return s;
+}
+struct Chromosome_Info* allocateMemoryChromosome_Info()
+{
+	struct Chromosome_Info *s;
+	int i;
+
+	s = (struct Chromosome_Info*) malloc(sizeof(struct Chromosome_Info));
+	s->length = (long long int*) malloc(sizeof(long long int) * MAX_NUMBER_OF_CHROMOSOMES);
+	s->number_of_chromosomes = 0;
+	s->name = (char**) malloc(sizeof(char*) * MAX_NUMBER_OF_CHROMOSOMES);
+	for (i = 0; i < MAX_NUMBER_OF_CHROMOSOMES; i++)
+		s->name[i] = (char*) malloc(sizeof(char) * 1000);
 	return s;
 }
 
@@ -1655,7 +1682,6 @@ void readAbridgeIndex(struct Abridge_Index *abridge_index, char *abridge_index_f
 
 	char *temp; //Useless
 	char *line = NULL; // for reading each line
-	char str[100];
 
 	/********************************************************************/
 
@@ -1980,7 +2006,7 @@ void generateReadSequenceAndMDString(struct Sam_Alignment *sam_alignment_instanc
 //printf("\n");
 }
 
-void writeAlignmentToFile(struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw)
+void writeAlignmentToFile(struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw)
 {
 	int i;
 	char line_to_be_written_to_file[MAX_GENERAL_LEN];
@@ -1988,6 +2014,7 @@ void writeAlignmentToFile(struct Sam_Alignment *sam_alignment, short int flag_ig
 	for (i = 0; i < number_of_repititions_of_the_same_reads; i++)
 	{
 		line_to_be_written_to_file[0] = '\0';
+		strcat(line_to_be_written_to_file, read_prefix);
 		strcat(line_to_be_written_to_file, sam_alignment->read_name);
 		sprintf(temp, "%d", i + 1);
 		strcat(line_to_be_written_to_file, "_");
@@ -2050,7 +2077,7 @@ void writeAlignmentToFile(struct Sam_Alignment *sam_alignment, short int flag_ig
 	}
 }
 
-void convertToAlignment(struct Sam_Alignment *sam_alignment_instance, int sam_alignment_pool_index, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, FILE *fhw)
+void convertToAlignment(struct Sam_Alignment *sam_alignment_instance, int sam_alignment_pool_index, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2106,6 +2133,7 @@ void convertToAlignment(struct Sam_Alignment *sam_alignment_instance, int sam_al
 			//fflush(stdout);
 			splitByDelimiter(split_on_comma[j], '-', split_on_dash);
 			number_of_repititions_of_the_same_reads = strtol(split_on_dash[1], &temp, 10);
+			if (from != -1 && to != -1) if (!(start_position >= from && start_position <= to)) continue;
 			sam_alignment_instance->start_position = start_position;
 			if (split_on_dash[0][1] == '-' && isalpha(split_on_dash[0][0]) != 0)
 			{
@@ -2124,14 +2152,14 @@ void convertToAlignment(struct Sam_Alignment *sam_alignment_instance, int sam_al
 				(*read_number)++;
 				strcpy(sam_alignment_instance->read_name, temp);
 			}
-			writeAlignmentToFile(sam_alignment_instance, flag_ignore_sequence_information, number_of_repititions_of_the_same_reads, fhw);
+			writeAlignmentToFile(sam_alignment_instance, flag_ignore_sequence_information, number_of_repititions_of_the_same_reads, read_prefix, fhw);
 			(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
 			sam_alignment_pool_index++;
 		}
 	}
 }
 
-void readInGenomeFaidx(FILE *fhw, char *genome_filename)
+void writeSequenceHeaders(FILE *fhw, char *genome_filename)
 {
 	FILE *fhr;
 

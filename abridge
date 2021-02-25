@@ -5,7 +5,7 @@
 ########################################################################################################################################################
 
 from argparse import RawTextHelpFormatter
-import argparse
+import argparse 
 import logging
 import os
 import pprint
@@ -14,6 +14,8 @@ import re
 import time
 import multiprocessing
 import random
+import glob
+
 from scripts.assessMemoryRequirement import *
 from scripts.printHeader import *
 from scripts.verifyPositions import *
@@ -25,30 +27,37 @@ def parseCommandLineArguments():
     optional_named = parser.add_argument_group('Optional arguments')
     
     # Required arguments
-    required_named.add_argument("-i","--inputfilename",help="Enter the name of the alignment file you wish to compress. Alignments in BAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You may choose to compress multiple alignment files together.",required = True, nargs="+")
+    input_group = parser.add_mutually_exclusive_group(required=True)
+    input_group.add_argument("-isam","--inputsamfilenames",help="Enter the names of the alignment filew you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You may choose to compress multiple alignment files together.", nargs="+")
+    input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the names of the compressed alignment files you wish to merge. These files must be compressed using abridge. You may choose to compress multiple files together.", nargs="+")
     required_named.add_argument("-G","--genome",help="Enter a single fasta file for the reference",required=True)
+    required_named.add_argument("-o","--outputdir",help="Enter the prefix of the output directory.",required=True)
     
     compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
     compress_decompress_group.add_argument("-c","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
+    compress_decompress_group.add_argument("-m","--merge",help="Set this option if you wish to compress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-d","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-r","--random",help="Retrieve alignments from random locations",action="store_true")
     compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
+    compress_decompress_group.add_argument("-l","--list",help="List the constituents of the compressed file and exit. This option will come in handy to find the samples that have been compressed.")
+    compress_decompress_group.add_argument("-s","--split_files",help="Enter the name of the compressed merged file which you wish to split.")
     
     # Optional arguments
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
-    optional_named.add_argument("-l","--quality",help="Enter dummy quality scores while decompressing",default='I')
+    optional_named.add_argument("-qual","--quality",help="Enter dummy quality scores while decompressing",default='I')
     optional_named.add_argument("-gsc","--ignore_soft_clippings",help="No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference",action="store_true")
     optional_named.add_argument("-gm","--ignore_mismatches",help="All mismatches will be ignored",action="store_true")
     optional_named.add_argument("-gs","--ignore_sequence",help="No nucleotide sequence will be produced during decompression",action="store_true")
     optional_named.add_argument("-gu","--ignore_unmapped_reads",help="Request abridge to discard all reads that are unmapped",action="store_true")
     optional_named.add_argument("-dna","--dnaseq",help="Set this parameter if your data is DNA-Seq",action = "store_true")
-    optional_named.add_argument("-o","--outputfilenameprefix",help="Enter the prefix of the output file. If this parameter is not provided then abridge will attempt to write to the directory where the input file is present. Please make sure that the directory has write permissions enabled. This parameter is ignored while decompressing.")
+    #optional_named.add_argument("-o","--outputfilenameprefix",help="Enter the prefix of the output file. If this parameter is not provided then abridge will attempt to write to the directory where the input file is present. Please make sure that the directory has write permissions enabled. This parameter is ignored while decompressing.")
     optional_named.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
-    optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of available reference sequences in the genome.",default = 1)
-    optional_named.add_argument("-t","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags. Please note that generating more tags will require more time.",nargs="*")
-    optional_named.add_argument("-m","--max_memory",help="Enter the maximum memory allowed (in GB)",default=10)
+    optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of samples submitted for compression or decompression.",default = 1)
+    optional_named.add_argument("-t","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags.",nargs="*")
+    optional_named.add_argument("-mem","--max_memory",help="Enter the maximum memory allowed (in GB)",default=10)
     optional_named.add_argument("-run_diagnostics","--run_diagnostics",help="abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies",action="store_true")
-    optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end")
+    optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
+    optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
@@ -56,7 +65,7 @@ def parseCommandLineArguments():
     parser.add_argument("--softwares","-softwares",help=argparse.SUPPRESS) # Software paths
     parser.add_argument("--single_ended","-single_ended",help=argparse.SUPPRESS) # Software paths
     parser.add_argument("--reference_to_length","-num_of_reference_sequences",help=argparse.SUPPRESS)
-    parser.add_argument("--outputfilename","-outputfilena",help=argparse.SUPPRESS)
+    parser.add_argument("--outputfilename","-outputfilena",help=argparse.SUPPRESS) 
     
     return parser.parse_args()
 
@@ -68,7 +77,21 @@ def configureLogger(options):
 def validateCommandLineArguments(options):
     """
     """
-    for file in options.inputfilename:
+    if options.compress == True and options.inputsamfilenames is None and options.inputabrfilenames is not None:
+        print("For compression you need to provide a list of space spearated samfiles using -isam ")
+        if options.quiet==False:
+            logging.info("For compression you need to provide a list of space spearated samfiles using -isam ")
+        sys.exit()
+    if options.decompress == True and options.inputsamfilenames is not None and options.inputabrfilenames is None:
+        print("For decompression you need to provide a list of abridge compressed files using -iabr")
+        if options.quiet==False:
+            logging.info("For decompression you need to provide a list of abridge compressed files using -iabr")
+        sys.exit()
+    if options.inputsamfilenames is not None:
+        inputfiles = options.inputsamfilenames
+    else:
+        inputfiles = options.inputabrfilenames
+    for file in inputfiles:
         if os.path.exists(file)==False:
             print(f"The input file {file} does not exist. Exiting...")
             if options.quiet==False:
@@ -76,21 +99,17 @@ def validateCommandLineArguments(options):
             sys.exit()
      
     #Check if the input format is sam
-    for file in options.inputfilename:
-        if file[-3:]!="sam" and options.compress==True:
-            print(f"The input file {file} needs to be in sam format. Exiting...")
-            if options.quiet==False:
-                logging.info(f"The input file {file} needs to be in sam format. Exiting...")
-            sys.exit()
-    
-    # Set output filename
-    if options.header==False:
-        if options.outputfilenameprefix is None:
-            options.outputfilename = options.inputfilename[:-4]+".abridge"
-            options.logfilename = options.inputfilename[:-4]+".log"
-        else:   
-            options.logfilename = options.outputfilenameprefix+".log"
-            options.outputfilename = options.outputfilenameprefix+".abridge"
+    if options.inputsamfilenames is not None:
+        for file in options.inputsamfilenames:
+            if file[-3:]!="sam" and options.compress==True:
+                print(f"The input file {file} needs to be in sam format. Exiting...")
+                if options.quiet==False:
+                    logging.info(f"The input file {file} needs to be in sam format. Exiting...")
+                sys.exit()
+        
+    options.logfilename = options.outputdir+"/progress.log"
+    os.system("mkdir -p "+options.outputdir)
+    #options.outputdir = "/".join(options.outputfilenameprefix.split("/")[:-1])
     options.files_for_removal = []
     options.softwares = {}
     if options.header==False:
@@ -120,9 +139,15 @@ def validateCommandLineArguments(options):
     options.softwares["decompressSamFileSingleEnded"]= "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFileSingleEnded"
     options.softwares["extractSequencesFromReferences"] = "/".join(abridge_location.split("/")[:-1])+"/scripts/extractSequencesFromReferences.py"
     options.softwares["randomRetrievalSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalSingleEnded"
-    if options.decompress==True and len(options.inputfilename)>1:
-        print("abridge can decompress only file at a time")
-        sys.exit()
+    options.softwares["mergeCompressedFilesSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/mergeCompressedFilesSingleEnded"
+    
+    if options.decompress==True:
+        for file in options.inputabrfilenames:
+            if file[-7:]!="abridge":
+                print(f"The input file {file} needs to be in abridge format. Exiting...")
+                if options.quiet==False:
+                    logging.info(f"The input file {file} needs to be in abridge format. Exiting...")
+                sys.exit()
         
     if options.ignore_soft_clippings == True:
         options.ignore_soft_clippings = 1
@@ -152,7 +177,7 @@ def validateCommandLineArguments(options):
 def checkSAMAlignments(options,logging):
     """
     """
-    for file in options.inputfilename:
+    for file in options.inputsamfilenames:
         if "SO:coordinate" not in open(f"{file}","r").readline():
             print(f"The file {file} is not sorted. Exiting")
             if options.quiet == False:
@@ -161,11 +186,11 @@ def checkSAMAlignments(options,logging):
     
     # Verify that all the headers are exactly same
     headers = []
-    for file in options.inputfilename:
+    for file in options.inputsamfilenames:
         fhr=open(f"{file}","r")
         header=""
         for line in fhr:
-            if line[0]=='@':
+            if line[:3]=='@SQ' or line[:3]=="@HD":
                 header+=line
             else:
                 break
@@ -174,6 +199,7 @@ def checkSAMAlignments(options,logging):
         print("All the headers must be same. Please check your bamfile. Exiting...")
         if options.quiet == False:
             logging.info("All the headers must be same. Please check your bamfile. Exiting...")
+            sys.exit()
 
 def cleanUp(options):
     return
@@ -188,8 +214,13 @@ def runCommand(eachpinput):
 def compressSamFile(options):
     """
     """
+    pool = multiprocessing.Pool(processes=int(options.cpu))
     if options.single_ended == True:
         #Single ended
+        
+        ######################################################################################
+        # Compiling programs - will be removed during final version
+        ######################################################################################
         compressSamFileSingleEndedPass1 = options.softwares["compressSamFileSingleEndedPass1"]
         compressSamFileSingleEndedPass2 = options.softwares["compressSamFileSingleEndedPass2"]
         buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
@@ -206,66 +237,108 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
+        ######################################################################################
         
-        input_filename = options.inputfilename[0]
-        if options.quiet == False:
-            logging.info("Starting Pass1")
-        cmd=f"{compressSamFileSingleEndedPass1}" # argv[0]
-        cmd+=f" {options.genome}" # argv[1]
-        cmd+=f" {options.ignore_soft_clippings}" #argv[2]
-        cmd+=f" {options.ignore_mismatches} " #argv[3]
-        cmd+=f" {options.ignore_quality_score_flag} " #argv[4]
-        cmd+=f" {options.ignore_unmapped_reads} " #argv[5]
-        cmd+=f" {input_filename} " #argv[6]
-        cmd+=f" {options.outputfilename}.pass1 " #argv[7]
-        cmd+=f" {options.outputfilename}.unmapped " #argv[8]
-        if options.run_diagnostics==True:
-            cmd+=f" 1" # argv[9]
-        else:
-            cmd+=f" 0" # argv[9]
+        all_commands = []
+        for input_filename in options.inputsamfilenames:
+            if options.quiet == False:
+                logging.info(f"Starting Pass1 for {input_filename}")
+            
+            pass1_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass1"
+            pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
+            unmapped_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".unmapped"
+            
+            cmd=f"{compressSamFileSingleEndedPass1}" # argv[0] - name of the program
+            cmd+=f" {options.genome}" # argv[1] - genome_filename
+            cmd+=f" {options.ignore_soft_clippings}" #argv[2]
+            cmd+=f" {options.ignore_mismatches} " #argv[3]
+            cmd+=f" {options.ignore_quality_score_flag} " #argv[4]
+            cmd+=f" {options.ignore_unmapped_reads} " #argv[5]
+            cmd+=f" {input_filename} " #argv[6] - Input samfile
+            cmd+=f" {pass1_outputfilename} " #argv[7] - Output filename
+            cmd+=f" {unmapped_outputfilename} " #argv[8] - Filename for unmapped reads
+            if options.run_diagnostics==True:
+                cmd+=f" 1" # argv[9] - run diagnostics
+            else:
+                cmd+=f" 0" # argv[9] - run diagnostics
+            
+            if options.quiet == False:
+                logging.info(f"Running command - {cmd}")
+            all_commands.append([cmd,"dummy"])
+            #os.system(cmd)
+        pool.map(runCommand,all_commands)
+         
+        all_commands = []
+        for input_filename in options.inputsamfilenames:
+            if options.quiet == False:
+                logging.info("Starting Pass2")
+            pass1_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass1"
+            pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
         
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        #all_inputs.append([cmd,"dummy"])
-        os.system(cmd)
-        if options.quiet == False:
-            logging.info("Completed Pass1")
-        
-        if options.quiet == False:
-            logging.info("Starting Pass2")
-        cmd=f"{compressSamFileSingleEndedPass2} {options.outputfilename}.pass1 {options.outputfilename}.pass2"   
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}") 
-        #all_inputs.append([cmd,"dummy"])
-        os.system(cmd)
-        if options.quiet == False:
-            logging.info("Completed Pass2")
-        
-        cmd=f"{buildABRIDGEIndex} {options.outputfilename}.pass2 {options.outputfilename}.pass2.index"
-        if options.quiet == False:
-            logging.info("Starting to build index")
-            logging.info(f"Running cmd - {cmd}")
-        os.system(cmd)
-        
+            cmd=f"{compressSamFileSingleEndedPass2} {pass1_outputfilename} {pass2_outputfilename}"   
+            if options.quiet == False:
+                logging.info(f"Running command - {cmd}") 
+            #all_inputs.append([cmd,"dummy"])
+            all_commands.append([cmd,"dummy"])
+            #os.system(cmd)
+        pool.map(runCommand,all_commands)
+         
+        all_commands = []
+        for input_filename in options.inputsamfilenames:  
+            pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
+            pass2_index_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2.index"
+            cmd=f"{buildABRIDGEIndex} {pass2_outputfilename} {pass2_index_outputfilename}"
+            if options.quiet == False:
+                logging.info(f"Starting to build index for {input_filename}")
+                logging.info(f"Running cmd - {cmd}")
+            all_commands.append([cmd,"dummy"])
+            #os.system(cmd)
+        pool.map(runCommand,all_commands)
     else:
         # Paired ended
         pass
+
     if options.quiet == False:
         logging.info("Starting compression")
     
-    return
-    cmd=f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {options.outputfilename}.pass2.7z {options.outputfilename}.pass2 {options.outputfilename}.pass2.index {options.outputfilename}.unmapped"
-    if options.quiet == False:
-        logging.info(f"Running command - {cmd}")
-    os.system(cmd)
-    if options.quiet == False:
-        logging.info("Completed compression")
+    all_commands = []
+    for input_filename in options.inputsamfilenames:
+        pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
+        pass2_index_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2.index"
+        unmapped_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".unmapped"
+        compressed_abridged_filename = options.outputdir + "/" + input_filename.split("/")[-1] + ".abridge"
+        
+        cmd=f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename} {pass2_outputfilename} {pass2_index_outputfilename} {unmapped_outputfilename}"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        all_commands.append([cmd,"dummy"])
+        #os.system(cmd)
+        if options.quiet == False:
+            logging.info(f"Completed compression of {input_filename}")
+    pool.map(runCommand,all_commands)
+       
+    # Remove all intermediate files
+    files_to_be_removed = []
+    for input_filename in options.inputsamfilenames:
+        pass1_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass1"
+        pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
+        unmapped_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".unmapped"
+        pass2_index_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2.index"
+            
+        files_to_be_removed.append(pass1_outputfilename)
+        files_to_be_removed.append(pass2_outputfilename)
+        files_to_be_removed.append(unmapped_outputfilename)
+        files_to_be_removed.append(pass2_index_outputfilename)
+    
+    for file in files_to_be_removed:
+        os.system("rm "+file)
+        
 
 def findEndedness(options,logging):
     """
     """
     endedness = []
-    for file in options.inputfilename:
+    for file in options.inputsamfilenames:
         fhr=open(f"{file}","r")
         for line in fhr:
             if line[0]!='@':
@@ -296,17 +369,69 @@ def collectReferenceSequenceNameAndLength(options,logging):
             reference_to_length[reference_name] = reference_length
     fhr.close()     
     options.reference_to_length = reference_to_length
-  
+
+def mergeAbridgeData(options):
+    pool = multiprocessing.Pool(processes=int(options.cpu))
+    
+    cmd=f"samtools faidx {options.genome}"
+    if os.path.exists(f"{options.genome}.fai")==False:
+        if options.quiet ==False:
+            logging.info(f"Running cmd - {cmd}")
+        os.system(cmd)
+        
+    files_to_be_removed = []
+    all_commands = []
+    for input_filename in options.inputabrfilenames:
+        input_filename_without_extension = input_filename.split("/")[-1][:-8]
+        pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
+        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
+        unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+        compressed_abridged_filename = input_filename
+        
+        cmd=f"7za e {input_filename} -y"
+        cmd+=f" -o{options.outputdir}"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        all_commands.append([cmd,"dummy"])
+        #os.system(cmd)
+    
+        files_to_be_removed.extend([input_filename_without_extension,
+                                    pass2_filename,
+                                    pass2_index_filename,
+                                    unmapped_outputfilename])
+    #pool.map(runCommand,all_commands)
+    
+    ######################################################################################
+    # Compiling programs - will be removed during final version
+    ######################################################################################
+    mergeCompressedFilesSingleEnded = options.softwares["mergeCompressedFilesSingleEnded"]
+    cmd=f"gcc -o {mergeCompressedFilesSingleEnded} {mergeCompressedFilesSingleEnded}.c -g"
+    os.system(cmd)
+    ######################################################################################
+    
+    cmd=mergeCompressedFilesSingleEnded
+    for input_filename in options.inputabrfilenames:
+        input_filename_without_extension = input_filename.split("/")[-1][:-8]
+        pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
+        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
+        unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+        compressed_abridged_filename = input_filename
+        
+        cmd+=" "+pass2_filename
+    
+    if options.quiet ==False:
+        logging.info(f"Running cmd - {cmd}")
+    os.system(cmd)
+    """
+    for file in files_to_be_removed:
+        os.system("rm "+file)
+    """
+
 def decompressSamFile(options):
     """
     """
-    """
-    cmd=f"7za e {options.inputfilename[0]} -y"
-    if options.quiet == False:
-        logging.info(f"Running command - {cmd}")
-    os.system(cmd)
-    """
-    index_filename = f"{options.inputfilename[0][:-2]}index"
+    pool = multiprocessing.Pool(processes=int(options.cpu))
+    #genome_prefix = "/".join(options.genome.split("/")[:-1])+"/"+options.genome.split("/")[-1]+"."+options.inputfilename[0][:-9].split("/")[-1]
     
     cmd=f"samtools faidx {options.genome}"
     if os.path.exists(f"{options.genome}.fai")==False:
@@ -315,61 +440,110 @@ def decompressSamFile(options):
         os.system(cmd)
     
     decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
+    ######################################################################################
+    # Compiling programs - will be removed during final version
+    ######################################################################################
     cmd=f"gcc {decompressSamFileSingleEnded}.c -o {decompressSamFileSingleEnded} -Ofast"
     if options.quiet == False:
         logging.info(f"Running command - {cmd}")
     os.system(cmd)
+    ######################################################################################
     
     # Check the amount memory needed
     if options.ignore_sequence == 0:
         assessMemoryRequirement(f"{options.genome}.fai",options)
+        
+    files_to_be_removed = []
+    all_commands = []
+    for input_filename in options.inputabrfilenames:
+        input_filename_without_extension = input_filename.split("/")[-1][:-8]
+        pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
+        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
+        unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+        compressed_abridged_filename = input_filename
+        output_sam_filename = options.outputdir + "/" + input_filename_without_extension + ".decompressed.sam"
+        
+        cmd=f"7za e {input_filename} -y"
+        cmd+=f" -o{options.outputdir}"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        all_commands.append([cmd,"dummy"])
+        #os.system(cmd)
+        """
+        print(input_filename_without_extension)
+        print(pass2_filename)
+        print(pass2_index_filename)
+        print(unmapped_outputfilename)
+        print(compressed_abridged_filename)
+        print(output_sam_filename)
+        """
+        files_to_be_removed.extend([input_filename_without_extension,
+                                    pass2_filename,
+                                    pass2_index_filename,
+                                    unmapped_outputfilename])
+    pool.map(runCommand,all_commands)
     
-    output_sam_filename = f"{options.inputfilename[0][:-16]}decompressed.sam"
-    genome_prefix = "/".join(options.genome.split("/")[:-1])+"/"+options.genome.split("/")[-1]+"."+options.inputfilename[0][:-9].split("/")[-1]
-    cmd =f" {decompressSamFileSingleEnded} " # argv[0]
-    cmd+=f" {index_filename} "# argv[1]
-    cmd+=f" {options.genome} "# argv[2]
-    cmd+=f" {output_sam_filename} "# argv[3]
-    cmd+=f" {options.inputfilename[0][:-3]} "# argv[4]
-    cmd+=f" {genome_prefix} "# argv[5]
-    cmd+=f" {options.quality} "# argv[6]
-    cmd+=f" {options.ignore_sequence}" #argv[7]
-    cmd+=f" {options.outputfilename}.unmapped" #argv[8]
+    all_commands = []
+    for input_filename in options.inputabrfilenames:
+        input_filename_without_extension = input_filename.split("/")[-1][:-8]
+        pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
+        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
+        unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+        compressed_abridged_filename = input_filename
+        output_sam_filename = options.outputdir + "/" + input_filename_without_extension + ".decompressed.sam"
+    
+        cmd =f" {decompressSamFileSingleEnded} " # argv[0] - Name of the program
+        cmd+=f" {pass2_index_filename} "# argv[1] - Abridge index, pass2_index_outputfilename
+        cmd+=f" {options.genome} "# argv[2] - genome file
+        cmd+=f" {output_sam_filename} "# argv[3] - decompressed SAM filename
+        cmd+=f" {pass2_filename} "# argv[4] - Name of the pass2 filename
+        cmd+=f" dummy "# argv[5] - Dummy
+        cmd+=f" {options.quality} "# argv[6] - Quality of reads
+        cmd+=f" {options.ignore_sequence}" #argv[7] - Whether or not to produce sequences from genome file
+        cmd+=f" {unmapped_outputfilename}" #argv[8] - Name of file with unmapped reads
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        all_commands.append([cmd,"dummy"])
+        #os.system(cmd)
+    pool.map(runCommand,all_commands)
+    
+    for file in files_to_be_removed:
+        os.system("rm "+file)
+  
+def retrieveAlignmentsRandomly(chromosome,start,end,options):
+    """
+    cmd=f"7za e {options.inputfilename[0]} -y"
     if options.quiet == False:
         logging.info(f"Running command - {cmd}")
     os.system(cmd)
-    
     """
-    # Remove the sequences 
-    for chromosome in whole_index:
-        output_filename = f"{options.genome}.{prefix_without_fullpath}.{chromosome}"
-        cmd=f"rm {output_filename}"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-     """   
-  
-def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
     abridge_index_filename = f"{options.inputfilename[0][:-2]}index"
     genome_filename = options.genome
     genome_index_filename = options.genome+".fai"
     
     randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"] 
+    ######################################################################################
+    # Compiling programs - will be removed during final version
+    ######################################################################################
     cmd=f"gcc {randomRetrievalSingleEnded}.c -o {randomRetrievalSingleEnded} -g"
     os.system(cmd)
+    ######################################################################################
     
     cmd=f" {randomRetrievalSingleEnded} " #argv[0]
     cmd+=f" {abridge_index_filename} " #argv[1]
     cmd+=f" {genome_filename} " #argv[2]
     cmd+=f" {genome_index_filename} " #argv[3]
     cmd+=f" {chromosome} " #argv[4]
-    cmd+=f" {start} " #argv[5]
-    cmd+=f" {end} " #argv[6]
+    cmd+=f" {options.inputfilename[0][:-3]}  " #argv[5]
+    cmd+=f" {start} " #argv[6]
+    cmd+=f" {end} " #argv[7]
+    cmd+=f" {options.outputfilename}" #argv[8]
+    cmd+=f" {options.quality}" #argv[9[
+    cmd+=f" {options.ignore_sequence}" #argv[10]
+    cmd+=f" {options.read_prefix}" #argv[11]
     print(cmd)
     os.system(cmd)
-    
-    
     
 def main():
     commandLineArg=sys.argv
@@ -418,7 +592,15 @@ def main():
         os.system(cmd)
         print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
         os.system(f"rm {options.inputfilename[0][:-3]}.headers")
+    
+    if options.merge == True:
+        """
+        """
+        mergeAbridgeData(options)
+        if options.quiet == False:
+            logging.info(f"mergeAbridgeData() execution is complete")
         
+    
     if options.random==True:
         """
         cmd=f"7za e {options.inputfilename[0]} -y"
@@ -456,10 +638,8 @@ def main():
         else:
             sortPositions(options.positions)
         """
-        
         os.system(f"rm {options.inputfilename[0][:-3]}.headers")
         
-            
     cleanUp(options)
     if options.quiet == False:
         logging.info(f"cleanUp() execution is complete")

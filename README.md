@@ -6,7 +6,23 @@
 
 # Installation
 
-Conda
+You can install `abridge` by executing a simple conda command. It will install all the dependencies within the conda environment
+
+```bash
+conda install -c bioconda abridge
+```
+
+Please note that the conda version might not be the latest. It will host a stable version though. If you wish to work with the most recent version please execute the following commands
+
+```bash
+git clone https://github.com/sagnikbanerjee15/abridge.git
+cd abridge
+./install.py
+echo "export PATH=\$PATH:$(pwd)" >> ~/.bashrc # Add this path permanently to the bashrc file
+export PATH=$PATH:$(pwd)
+echo "export PATH=\$PATH:$(pwd)/utils" >> ~/.bashrc # Add this path permanently to the bashrc file
+export PATH=$PATH:$(pwd)/utils
+```
 
 
 
@@ -15,18 +31,6 @@ Conda
 
 
 ## STAR
-
-
-
-## HiSAT2
-
-
-
-## Bowtie
-
-
-
-## Bowtie2
 
 
 
@@ -71,6 +75,8 @@ Explain the process and refer to paper and supplemental information
 3. How do I know that the compression is lossless?
 4. I need to view only the references and not alignments. What command should I execute?
 5. What is the correct command for viewing alignments without reference headers?
+6. How do I retreive alignments to a particular chromosome?
+7. I have only bamfiles but `abridge` needs samfiles to compress. What should I do?
 
 
 
@@ -79,7 +85,6 @@ Explain the process and refer to paper and supplemental information
 Here is a list of future upgrades to `abridge`
 
 1. Retrieve alignments from multiple locations from compressed file
-2. Retrieve alignments to a whole chromosome from compressed file
 
 # License
 
