@@ -256,7 +256,7 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 				splitByDelimiter(temp, ':', split_on_tab);
 
 				strcpy(starting_bytes[i]->name[starting_bytes[i]->number_of_chromosomes], split_on_tab[1]);
-				starting_bytes[i]->start_byte_in_pass2_file[starting_bytes[i]->number_of_chromosomes] = ftell(fhr) + 1;
+				starting_bytes[i]->start_byte_in_pass2_file[starting_bytes[i]->number_of_chromosomes] = ftell(fhr);
 				starting_bytes[i]->number_of_chromosomes++;
 				if (isChromosomePresent(chromosome_info, split_on_tab[1])) continue;
 
