@@ -8,7 +8,8 @@
 
 void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Starting_Byte **starting_bytes, short int *chromosome_present)
 {
-	//printf("\nAdjusting file pointer for chromosome %s", chromosome);
+	printf("\nAdjusting file pointer for chromosome %s", chromosome);
+	fflush(stdout);
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
@@ -86,7 +87,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 	line = (char**) malloc(sizeof(char*) * number_of_files_to_be_compressed);
 	pass2_compressed_ds_instance = (struct Pass2_Compressed_DS**) malloc(sizeof(struct Pass2_Compressed_DS*) * number_of_files_to_be_compressed);
 
-	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
+	for (i = 0; i < number_of_files_to_be_compressed; i++)
 		pass2_compressed_ds_instance[i] = allocateMemoryPass2_Compressed_DS();
 	/********************************************************************/
 	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
@@ -109,7 +110,11 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			line_len[i] = 0;
 			chromosome_present[i] = 0;
 		}
+		printf("\nInitialization complete");
+		fflush(stdout);
 		seekFilePointersToAppropriatePosition(chromosome_info->name[j], fhr, number_of_files_to_be_compressed, split_on_tab, starting_bytes, chromosome_present);
+		printf("\nFile Pointers have been set");
+		fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
 		{
 			pass2_compressed_ds_instance[i]->position = 0;
