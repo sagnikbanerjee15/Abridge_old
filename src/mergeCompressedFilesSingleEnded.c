@@ -46,6 +46,7 @@ void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int num
 			fseek(fhr[i], starting_bytes[i]->start_byte_in_pass2_file[index_of_chromosome], SEEK_SET);
 			getline(&line, &len, fhr[i]);
 			printf("\nLine Read right after fseek to chromosome %s\n%s", chromosome, line);
+			fflush(stdout);
 		}
 	}
 
