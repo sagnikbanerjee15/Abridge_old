@@ -85,11 +85,15 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 	line_len = (ssize_t*) malloc(sizeof(ssize_t) * number_of_files_to_be_compressed);
 	line = (char**) malloc(sizeof(char*) * number_of_files_to_be_compressed);
 	pass2_compressed_ds_instance = (struct Pass2_Compressed_DS**) malloc(sizeof(struct Pass2_Compressed_DS*) * number_of_files_to_be_compressed);
+
+	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
+		pass2_compressed_ds_instance[i] = allocateMemoryPass2_Compressed_DS();
 	/********************************************************************/
 	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
 	{
 		//if (strcmp(chromosome_info->name[j], "KI270591.1") != 0) continue;
 		printf("\nProcessing chromsosome %s", chromosome_info->name[j]);
+		fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
 		{
 			fhr[i] = fopen(pass2_filenames[i], "rb");
@@ -101,7 +105,6 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			line[i] = NULL;
 			len[i] = 0;
 			read_from_file[i] = 1;
-			pass2_compressed_ds_instance[i] = allocateMemoryPass2_Compressed_DS();
 			line_numbers[i] = 0;
 			line_len[i] = 0;
 			chromosome_present[i] = 0;
@@ -181,6 +184,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			for (i = 0; i < number_of_files_to_be_compressed; i++)
 				printf("%d", merge_lines_from_these_files[i]);
 			printf(" %lf", (double) lowest_position / (double) chromosome_info->length[j]);
+			fflush(stdout);
 		}
 	}
 }
@@ -250,12 +254,13 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 			}
 		}
 	}
-	/*
-	 for (i = 0; i < number_of_files_to_be_compressed; i++)
-	 for (j = 0; j < starting_bytes[i]->number_of_chromosomes; j++)
-	 printf("\n%d %s %lld", i, starting_bytes[i]->name[j], starting_bytes[i]->start_byte_in_pass2_file[j]);
-	 exit(1);
-	 */
+
+	for (i = 0; i < number_of_files_to_be_compressed; i++)
+		for (j = 0; j < starting_bytes[i]->number_of_chromosomes; j++)
+			printf("\n%d %s %lld", i, starting_bytes[i]->name[j], starting_bytes[i]->start_byte_in_pass2_file[j]);
+	//exit(1);
+	fflush(stdout);
+
 }
 
 int main(int argc, char *argv[])
