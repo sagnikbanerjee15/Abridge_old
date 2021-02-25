@@ -8,8 +8,8 @@
 
 void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Starting_Byte **starting_bytes, short int *chromosome_present)
 {
-	printf("\nAdjusting file pointer for chromosome %s", chromosome);
-	fflush(stdout);
+	//printf("\nAdjusting file pointer for chromosome %s", chromosome);
+	//fflush(stdout);
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
