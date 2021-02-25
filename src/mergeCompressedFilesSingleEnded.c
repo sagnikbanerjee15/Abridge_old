@@ -6,7 +6,7 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Starting_Byte **starting_bytes)
+void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Starting_Byte **starting_bytes, short int *chromosome_present)
 {
 	//printf("\nAdjusting file pointer for chromosome %s", chromosome);
 	/********************************************************************
@@ -34,10 +34,11 @@ void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int num
 			if (strcmp(chromosome, starting_bytes[i]->name[j]) == 0)
 			{
 				index_of_chromosome = j;
+				chromosome_present[i] = 1;
 				break;
 			}
 		}
-		fseek(fhr[i], starting_bytes[i]->start_byte_in_pass2_file[index_of_chromosome], SEEK_SET);
+		if (index_of_chromosome != -1) fseek(fhr[i], starting_bytes[i]->start_byte_in_pass2_file[index_of_chromosome], SEEK_SET);
 		/*
 		 rewind(fhr[i]);
 		 while ((line_len = getline(&line, &len, fhr[i])) != -1)
@@ -80,6 +81,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 	short int reached_end_of_chromsome[MAX_FILES_FOR_MERGING];
 	short int read_from_file[MAX_FILES_FOR_MERGING];
 	short int time_to_quit;
+	short int chromosome_present[MAX_FILES_FOR_MERGING];
 
 	size_t len[MAX_FILES_FOR_MERGING];
 	ssize_t line_len[MAX_FILES_FOR_MERGING];
@@ -114,8 +116,9 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			pass2_compressed_ds_instance[i] = allocateMemoryPass2_Compressed_DS();
 			line_numbers[i] = 0;
 			line_len[i] = 0;
+			chromosome_present[i] = 0;
 		}
-		seekFilePointersToAppropriatePosition(chromosome_info->name[j], fhr, number_of_files_to_be_compressed, split_on_tab, starting_bytes);
+		seekFilePointersToAppropriatePosition(chromosome_info->name[j], fhr, number_of_files_to_be_compressed, split_on_tab, starting_bytes, chromosome_present);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
 		{
 			pass2_compressed_ds_instance[i]->position = 0;
@@ -127,7 +130,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			time_to_quit = 1;
 			for (i = 0; i < number_of_files_to_be_compressed; i++)
 			{
-				if (read_from_file[i] == 1 && reached_end_of_chromsome[i] == 0)
+				if (read_from_file[i] == 1 && reached_end_of_chromsome[i] == 0 && chromosome_present[i] == 1)
 				{
 					line_len[i] = getline(&line[i], &len[i], fhr[i]);
 					if (line_len[i] == -1)
