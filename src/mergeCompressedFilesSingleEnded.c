@@ -26,6 +26,8 @@ void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int num
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
+
+	/********************************************************************/
 	for (i = 0; i < number_of_files_to_be_compressed; i++)
 	{
 		index_of_chromosome = -1;
@@ -39,27 +41,7 @@ void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int num
 			}
 		}
 		if (index_of_chromosome != -1) fseek(fhr[i], starting_bytes[i]->start_byte_in_pass2_file[index_of_chromosome], SEEK_SET);
-		/*
-		 rewind(fhr[i]);
-		 while ((line_len = getline(&line, &len, fhr[i])) != -1)
-		 {
-		 if (line[0] == '@')
-		 {
-		 splitByDelimiter(line, '\t', split_on_tab);
-		 strcpy(temp, split_on_tab[1]);
-		 splitByDelimiter(temp, ':', split_on_tab);
-		 //printf("\nSplit on tab [1] : %s", split_on_tab[1]);
-		 if (strcmp(split_on_tab[1], chromosome) == 0)
-		 {
-		 //printf("\nChromosome found %s", split_on_tab[1]);
-		 break;
-		 }
-		 }
-		 }
-		 */
 	}
-
-	/********************************************************************/
 
 }
 void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Info *chromosome_info, struct Chromosome_Starting_Byte **starting_bytes)
