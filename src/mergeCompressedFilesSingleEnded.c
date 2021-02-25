@@ -145,6 +145,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 						continue;
 					}
 					//line_numbers[i]++;
+					printf("%s", line[i]);
 					number_of_columns = splitByDelimiter(line[i], '\t', split_on_tab);
 					if (number_of_columns == 1)
 					{
