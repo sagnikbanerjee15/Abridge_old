@@ -41,7 +41,12 @@ void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int num
 				break;
 			}
 		}
-		if (index_of_chromosome != -1) fseek(fhr[i], starting_bytes[i]->start_byte_in_pass2_file[index_of_chromosome], SEEK_SET);
+		if (index_of_chromosome != -1)
+		{
+			fseek(fhr[i], starting_bytes[i]->start_byte_in_pass2_file[index_of_chromosome], SEEK_SET);
+			getline(&line, &len, fhr[i]);
+			printf("\nLine Read right after fseek to chromosome %s\n%s", chromosome, line);
+		}
 	}
 
 }
@@ -145,7 +150,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 						continue;
 					}
 					//line_numbers[i]++;
-					printf("%s", line[i]);
+					//printf("%s", line[i]);
 					number_of_columns = splitByDelimiter(line[i], '\t', split_on_tab);
 					if (number_of_columns == 1)
 					{
@@ -265,13 +270,13 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 			}
 		}
 	}
-
-	for (i = 0; i < number_of_files_to_be_compressed; i++)
-		for (j = 0; j < starting_bytes[i]->number_of_chromosomes; j++)
-			printf("\n%d %s %lld", i, starting_bytes[i]->name[j], starting_bytes[i]->start_byte_in_pass2_file[j]);
-	//exit(1);
-	fflush(stdout);
-
+	/*
+	 for (i = 0; i < number_of_files_to_be_compressed; i++)
+	 for (j = 0; j < starting_bytes[i]->number_of_chromosomes; j++)
+	 printf("\n%d %s %lld", i, starting_bytes[i]->name[j], starting_bytes[i]->start_byte_in_pass2_file[j]);
+	 //exit(1);
+	 fflush(stdout);
+	 */
 }
 
 int main(int argc, char *argv[])
