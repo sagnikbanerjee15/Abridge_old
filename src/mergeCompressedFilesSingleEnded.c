@@ -97,6 +97,8 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 		fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
 		{
+			printf("\nInitialization ongoing for file no %d", i);
+			fflush(stdout);
 			fhr[i] = fopen(pass2_filenames[i], "rb");
 			if (fhr[i] == NULL)
 			{
