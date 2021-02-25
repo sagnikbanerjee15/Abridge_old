@@ -81,6 +81,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 	line_numbers = (unsigned long long int*) malloc(sizeof(unsigned long long int) * number_of_files_to_be_compressed);
 	merge_lines_from_these_files = (short int*) malloc(sizeof(short int) * number_of_files_to_be_compressed);
 	reached_end_of_chromsome = (short int*) malloc(sizeof(short int) * number_of_files_to_be_compressed);
+	read_from_file = (short int*) malloc(sizeof(short int) * number_of_files_to_be_compressed);
 	chromosome_present = (short int*) malloc(sizeof(short int) * number_of_files_to_be_compressed);
 	len = (size_t*) malloc(sizeof(size_t) * number_of_files_to_be_compressed);
 	line_len = (ssize_t*) malloc(sizeof(ssize_t) * number_of_files_to_be_compressed);
