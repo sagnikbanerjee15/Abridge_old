@@ -129,7 +129,7 @@ struct Chromosome_Starting_Byte
 {
 		char **name;
 		int number_of_chromosomes;
-		unsigned long long int *start_byte_in_pass2_file;
+		long int *start_byte_in_pass2_file;
 };
 
 struct Sam_Alignment

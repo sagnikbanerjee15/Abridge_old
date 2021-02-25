@@ -232,8 +232,8 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 
 				strcpy(chromosome_info->name[chromosome_info->number_of_chromosomes], split_on_tab[1]);
 				strcpy(starting_bytes[i]->name[starting_bytes[i]->number_of_chromosomes], split_on_tab[1]);
+				starting_bytes[i]->start_byte_in_pass2_file[starting_bytes[i]->number_of_chromosomes] = ftell(fhr);
 				starting_bytes[i]->number_of_chromosomes++;
-				starting_bytes[i]->start_byte_in_pass2_file = ftell(fhr);
 
 				splitByDelimiter(line, '\t', split_on_tab);
 				strcpy(temp, split_on_tab[2]);
