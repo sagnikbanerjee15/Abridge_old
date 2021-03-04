@@ -8,7 +8,7 @@
 
 void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Starting_Byte **starting_bytes, short int *chromosome_present)
 {
-	//printf("\nAdjusting file pointer for chromosome %s", chromosome);
+	//printf("\nAdjusting file pointer for chromosome %s - ", chromosome);
 	//fflush(stdout);
 	/********************************************************************
 	 * Variable declaration
@@ -32,26 +32,148 @@ void seekFilePointersToAppropriatePosition(char *chromosome, FILE **fhr, int num
 	for (i = 0; i < number_of_files_to_be_compressed; i++)
 	{
 		index_of_chromosome = -1;
-		for (j = 0; starting_bytes[i]->number_of_chromosomes; j++)
+		for (j = 0; j < starting_bytes[i]->number_of_chromosomes; j++)
 		{
+			//printf("\nSample=%d Chromosome_num=%d %s %s Number_of_chromosomes=%d", i, j, chromosome, starting_bytes[i]->name[j], starting_bytes[i]->number_of_chromosomes);
+			//fflush(stdout);
 			if (strcmp(chromosome, starting_bytes[i]->name[j]) == 0)
 			{
 				index_of_chromosome = j;
 				chromosome_present[i] = 1;
+				//printf("%d", i);
+				//fflush(stdout);
 				break;
 			}
 		}
 		if (index_of_chromosome != -1)
 		{
 			fseek(fhr[i], starting_bytes[i]->start_byte_in_pass2_file[index_of_chromosome], SEEK_SET);
-			getline(&line, &len, fhr[i]);
-			printf("\nLine Read right after fseek to chromosome %s\n%s", chromosome, line);
-			fflush(stdout);
+			//getline(&line, &len, fhr[i]);
+			//printf("\nLine Read right after fseek to chromosome %s\n%s", chromosome, line);
+			//fflush(stdout);
 		}
 	}
-
+	//printf("\nExiting file pointer adjustment for chromosome %s ", chromosome);
 }
-void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Info *chromosome_info, struct Chromosome_Starting_Byte **starting_bytes)
+
+void mergeEntriesFromMultipleFiles(struct Pass2_Compressed_DS **pass2_compressed_ds_instance, short int *merge_lines_from_these_files, int number_of_files_to_be_compressed, char **split_on_comma, char **split_on_dash, struct Merged_Compressed_DS *previous_alignment, struct Merged_Compressed_DS *current_alignment, char *line_to_be_written_to_file, FILE *fhw)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	int i;
+	int j;
+	int k;
+
+	int number_of_icigars;
+	int number_of_reads_for_icigar;
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	char icigar[MAX_ICIGAR_LENGTH];
+	char *temp_strtol;
+	char temp_sprintf[100];
+
+	/********************************************************************/
+	for (i = 0; i < number_of_files_to_be_compressed; i++)			//ith file
+	{
+		if (merge_lines_from_these_files[i] == 1)
+		{
+			current_alignment->position = pass2_compressed_ds_instance[i]->position;
+			number_of_icigars = splitByDelimiter(pass2_compressed_ds_instance[i]->col2, ',', split_on_comma);
+			for (k = 0; k < number_of_icigars; k++)			//kth icigar in the ith file
+			{
+				splitByDelimiter(split_on_comma[k], '-', split_on_dash);
+				strcpy(icigar, split_on_dash[0]);
+				number_of_reads_for_icigar = strtol(split_on_dash[1], &temp_strtol, 10);
+				for (j = 0; j < current_alignment->number_of_unique_cigars; j++)			//jth icigar in current alignment
+				{
+					if (strcmp(icigar, current_alignment->icigars[j]) == 0)
+					{
+						current_alignment->number_of_reads[j][i] = number_of_reads_for_icigar;
+						break;
+					}
+				}
+				if (j == current_alignment->number_of_unique_cigars)			//icigar not found
+				{
+					strcpy(current_alignment->icigars[current_alignment->number_of_unique_cigars], icigar);
+					current_alignment->number_of_reads[current_alignment->number_of_unique_cigars][i] = number_of_reads_for_icigar;
+					current_alignment->number_of_unique_cigars++;
+				}
+			}
+		}
+	}
+	/*
+	 * Create the merged col2 representation
+	 */
+	current_alignment->col2[0] = '\0';
+	for (j = 0; j < current_alignment->number_of_unique_cigars; j++)
+	{
+		strcat(current_alignment->col2, current_alignment->icigars[j]);
+		strcat(current_alignment->col2, "-");
+		for (i = 0; i < number_of_files_to_be_compressed; i++)			//ith file
+		{
+			//printf("\ncurrent_alignment->icigars[j][i]=%lld", current_alignment->number_of_reads[j][i]);
+			sprintf(temp_sprintf, "%d", current_alignment->number_of_reads[j][i]);
+			strcat(current_alignment->col2, temp_sprintf);
+			if (i != number_of_files_to_be_compressed - 1)
+			strcat(current_alignment->col2, "|");
+		}
+		if (j != current_alignment->number_of_unique_cigars - 1)
+		strcat(current_alignment->col2, ",");
+	}
+	//printf("\nPosition: %lld COMPRESSED_ICIGAR: %s", current_alignment->position, current_alignment->col2);
+
+	/*
+	 * Writing to file
+	 */
+	line_to_be_written_to_file[0] = '\0';
+	if (previous_alignment->position == 0)
+	{
+		sprintf(temp_sprintf, "%d", current_alignment->position);
+		strcat(line_to_be_written_to_file, temp_sprintf);
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, current_alignment->col2);
+		strcat(line_to_be_written_to_file, "\n");
+		fprintf(fhw, "%s", line_to_be_written_to_file);
+	}
+	else
+	{
+		if (current_alignment->position - previous_alignment->position > 1)
+		{
+			sprintf(temp_sprintf, "%d", current_alignment->position - previous_alignment->position);
+			strcat(line_to_be_written_to_file, temp_sprintf);
+			strcat(line_to_be_written_to_file, "\t");
+		}
+		strcat(line_to_be_written_to_file, current_alignment->col2);
+		strcat(line_to_be_written_to_file, "\n");
+		fprintf(fhw, "%s", line_to_be_written_to_file);
+	}
+
+	/*
+	 * Copy the position to previous alignment. Can skip rest of the fields
+	 */
+	previous_alignment->position = current_alignment->position;
+
+	/*
+	 * Reinitialize current alignment
+	 */
+	current_alignment->col1[0] = '\0';
+	current_alignment->col2[0] = '\0';
+	current_alignment->number_of_unique_cigars = 0;
+	current_alignment->position = 0;
+	for (i = 0; i < MAX_UNIQUE_CIGARS; i++)
+	{
+		for (j = 0; j < MAX_FILES_FOR_MERGING; j++)
+			current_alignment->number_of_reads[i][j] = 0;
+	}
+	for (i = 0; i < MAX_UNIQUE_CIGARS; i++)
+		current_alignment->icigars[i][0] = '\0';
+}
+
+void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_of_files_to_be_compressed, char **split_on_tab, struct Chromosome_Info *chromosome_info, struct Chromosome_Starting_Byte **starting_bytes, char *merged_output_filename, char *chromosome_to_be_processed)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -77,8 +199,16 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 
 	char *temp; // For strtol
 	char **line; // for reading each line
+	char **split_on_comma;
+	char **split_on_dash;
+	char *line_to_be_written_to_file;
+	char temp_sprintf[100];
 
 	struct Pass2_Compressed_DS **pass2_compressed_ds_instance;
+	struct Merged_Compressed_DS *previous_alignment;
+	struct Merged_Compressed_DS *current_alignment;
+
+	FILE *fhw;
 	/********************************************************************/
 
 	/********************************************************************
@@ -93,13 +223,35 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 	line_len = (ssize_t*) malloc(sizeof(ssize_t) * number_of_files_to_be_compressed);
 	line = (char**) malloc(sizeof(char*) * number_of_files_to_be_compressed);
 	pass2_compressed_ds_instance = (struct Pass2_Compressed_DS**) malloc(sizeof(struct Pass2_Compressed_DS*) * number_of_files_to_be_compressed);
+	split_on_comma = (char**) malloc(sizeof(char*) * ROWS * 10);
+	split_on_dash = (char**) malloc(sizeof(char*) * ROWS * 10);
+	line_to_be_written_to_file = (char*) malloc(sizeof(char) * MAX_GENERAL_LEN);
 
 	for (i = 0; i < number_of_files_to_be_compressed; i++)
 		pass2_compressed_ds_instance[i] = allocateMemoryPass2_Compressed_DS();
+
+	split_on_comma = (char**) malloc(sizeof(char*) * ROWS * 10);
+	for (i = 0; i < ROWS * 10; i++)
+		split_on_comma[i] = (char*) malloc(sizeof(char) * COLS * 10);
+
+	split_on_dash = (char**) malloc(sizeof(char*) * ROWS * 10);
+	for (i = 0; i < ROWS * 10; i++)
+		split_on_dash[i] = (char*) malloc(sizeof(char) * COLS * 10);
+
+	previous_alignment = allocateMemoryMerged_Compressed_DS();
+	current_alignment = allocateMemoryMerged_Compressed_DS();
+
+	fhw = fopen(merged_output_filename, "w");
+	if (fhw == NULL)
+	{
+		printf("\nError opening file %s for writing", merged_output_filename);
+		exit(1);
+	}
+
 	/********************************************************************/
 	for (j = 0; j < chromosome_info->number_of_chromosomes; j++)
 	{
-		//if (strcmp(chromosome_info->name[j], "KI270591.1") != 0) continue;
+		if (strcmp(chromosome_to_be_processed, chromosome_info->name[j]) != 0) continue;
 		//printf("\nProcessing chromsosome %s number_of_files_to_be_compressed %d", chromosome_info->name[j], number_of_files_to_be_compressed);
 		//fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
@@ -119,9 +271,32 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			line_len[i] = 0;
 			chromosome_present[i] = 0;
 		}
+		/*
+		 * Write chromosome info to merged file
+		 */
+		line_to_be_written_to_file[0] = '\0';
+		strcat(line_to_be_written_to_file, "@SQ");
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "SN:");
+		strcat(line_to_be_written_to_file, chromosome_info->name[j]);
+		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file, "LN:");
+		sprintf(temp_sprintf, "%d", chromosome_info->length[j]);
+		strcat(line_to_be_written_to_file, temp_sprintf);
+		strcat(line_to_be_written_to_file, "\n");
+		fprintf(fhw, "%s", line_to_be_written_to_file);
+
 		//printf("\nInitialization complete");
 		//fflush(stdout);
 		seekFilePointersToAppropriatePosition(chromosome_info->name[j], fhr, number_of_files_to_be_compressed, split_on_tab, starting_bytes, chromosome_present);
+		/*printf(" ");
+		 for (i = 0; i < number_of_files_to_be_compressed; i++)
+		 {
+		 printf("%d", chromosome_present[i]);
+		 fflush(stdout);
+		 }
+		 */
+		//continue;
 		//printf("\nFile Pointers have been set");
 		//fflush(stdout);
 		for (i = 0; i < number_of_files_to_be_compressed; i++)
@@ -167,6 +342,11 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 					}
 				}
 			}
+			test_for_end_of_chromsome_alignments = 0;
+			for (i = 0; i < number_of_files_to_be_compressed; i++)
+				test_for_end_of_chromsome_alignments += reached_end_of_chromsome[i];
+			if (test_for_end_of_chromsome_alignments == number_of_files_to_be_compressed) break;
+			if (time_to_quit) break;
 
 			// Find lowest position
 			lowest_position = -1;
@@ -187,12 +367,8 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 				}
 				else read_from_file[i] = 0;
 			}
+			mergeEntriesFromMultipleFiles(pass2_compressed_ds_instance, merge_lines_from_these_files, number_of_files_to_be_compressed, split_on_comma, split_on_dash, previous_alignment, current_alignment, line_to_be_written_to_file, fhw);
 
-			test_for_end_of_chromsome_alignments = 0;
-			for (i = 0; i < number_of_files_to_be_compressed; i++)
-				test_for_end_of_chromsome_alignments += reached_end_of_chromsome[i];
-			if (test_for_end_of_chromsome_alignments == number_of_files_to_be_compressed) break;
-			if (time_to_quit) break;
 			/*
 			 printf("\n%s ", chromosome_info->name[j]);
 			 for (i = 0; i < number_of_files_to_be_compressed; i++)
@@ -204,6 +380,7 @@ void mergeAbridgeCompressedFiles(char **pass2_filenames, FILE **fhr, int number_
 			 */
 		}
 	}
+	fclose(fhw);
 }
 
 int isChromosomePresent(struct Chromosome_Info *chromosome_info, char *chromosome)
@@ -270,14 +447,17 @@ void collectChromosomeInformationFromAllFiles(char **pass2_filenames, int number
 
 			}
 		}
+		fclose(fhr);
 	}
-	/*
-	 for (i = 0; i < number_of_files_to_be_compressed; i++)
+	/*for (i = 0; i < number_of_files_to_be_compressed; i++)
+	 {
 	 for (j = 0; j < starting_bytes[i]->number_of_chromosomes; j++)
-	 printf("\n%d %s %lld", i, starting_bytes[i]->name[j], starting_bytes[i]->start_byte_in_pass2_file[j]);
-	 //exit(1);
+	 {
+	 printf("\n%d %s %lld %d", i, starting_bytes[i]->name[j], starting_bytes[i]->start_byte_in_pass2_file[j], starting_bytes[i]->number_of_chromosomes);
 	 fflush(stdout);
-	 */
+	 }
+	 }*/
+	//exit(1);
 }
 
 int main(int argc, char *argv[])
@@ -289,6 +469,8 @@ int main(int argc, char *argv[])
 	char **split_on_tab;
 
 	char abridge_index_filename[FILENAME_LENGTH];
+	char merged_output_filename[FILENAME_LENGTH];
+	char chromosome_to_be_processed[1000];
 
 	int number_of_files_to_be_compressed;
 	int i;
@@ -308,7 +490,7 @@ int main(int argc, char *argv[])
 	 * Variable initialization
 	 ********************************************************************/
 	chromosome_info = allocateMemoryChromosome_Info();
-	number_of_files_to_be_compressed = argc - 1;
+	number_of_files_to_be_compressed = argc - 3;
 	pass2_filenames = (char**) malloc(sizeof(char*) * number_of_files_to_be_compressed);
 	flags = (short int**) malloc(sizeof(short int*) * number_of_files_to_be_compressed);
 	starting_bytes = (struct Chromosome_Starting_Byte**) malloc(sizeof(struct Chromosome_Starting_Byte*) * number_of_files_to_be_compressed);
@@ -322,6 +504,15 @@ int main(int argc, char *argv[])
 		abridge_index[i] = allocateMemoryAbridge_Index();
 		starting_bytes[i] = allocateMemoryChromosome_Starting_Byte();
 	}
+	//printf("\n%d", argc);
+	//fflush(stdout);
+	strcpy(merged_output_filename, argv[i + 1]);
+	//printf("\n%s", merged_output_filename);
+	//fflush(stdout);
+	strcpy(chromosome_to_be_processed, argv[i + 2]);
+	//printf("\n%s", chromosome_to_be_processed);
+	//fflush(stdout);
+	//exit(1);
 
 	split_on_tab = (char**) malloc(sizeof(char*) * ROWS * 10);
 	for (i = 0; i < ROWS * 10; i++)
@@ -343,7 +534,7 @@ int main(int argc, char *argv[])
 	 }*/
 
 	collectChromosomeInformationFromAllFiles(pass2_filenames, number_of_files_to_be_compressed, split_on_tab, chromosome_info, starting_bytes);
-	mergeAbridgeCompressedFiles(pass2_filenames, fhr, number_of_files_to_be_compressed, split_on_tab, chromosome_info, starting_bytes);
+	mergeAbridgeCompressedFiles(pass2_filenames, fhr, number_of_files_to_be_compressed, split_on_tab, chromosome_info, starting_bytes, merged_output_filename, chromosome_to_be_processed);
 	printf("\n");
 	return 0;
 }

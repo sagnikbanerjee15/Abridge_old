@@ -18,7 +18,7 @@
 # define MAX_LENGTH_RLE 1000
 # define MAX_CIGAR_FREQ_SIZE 1000000
 # define MAX_ICIGAR_LENGTH 100000
-# define MAX_ICIGAR_LENGTH_PASS1_COL2 1000000
+# define MAX_ICIGAR_LENGTH_PASS1_COL2 10000000
 # define MAX_REFERENCE_SEQUENCES 10000
 # define MAX_SYMBOLS_FOR_PASS3_COMPRESSION 44
 # define MAX_SYMBOLIC_ICIGAR_LENGTH 3
@@ -130,6 +130,16 @@ struct Chromosome_Starting_Byte
 		char **name;
 		int number_of_chromosomes;
 		long int *start_byte_in_pass2_file;
+};
+
+struct Merged_Compressed_DS
+{
+		char *col1;
+		char *col2;
+		char **icigars;
+		int **number_of_reads;
+		long long int position;
+		int number_of_unique_cigars;
 };
 
 struct Sam_Alignment

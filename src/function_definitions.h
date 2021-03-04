@@ -120,6 +120,30 @@ struct Pass2_Compressed_DS* allocateMemoryPass2_Compressed_DS()
 	return s;
 }
 
+struct Merged_Compressed_DS* allocateMemoryMerged_Compressed_DS()
+{
+	struct Merged_Compressed_DS *s;
+	int i;
+	int j;
+
+	s = (struct Merged_Compressed_DS*) malloc(sizeof(struct Merged_Compressed_DS));
+	s->col1 = (char*) malloc(sizeof(char) * (MAX_SEQ_LEN * 2));
+	s->col2 = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+	s->position = 0;
+	s->icigars = (char**) malloc(sizeof(char*) * MAX_UNIQUE_CIGARS);
+	for (i = 0; i < MAX_UNIQUE_CIGARS; i++)
+		s->icigars[i] = (char*) malloc(sizeof(char) * 1000);
+	s->number_of_reads = (int**) malloc(sizeof(int*) * MAX_UNIQUE_CIGARS);
+	for (i = 0; i < MAX_UNIQUE_CIGARS; i++)
+	{
+		s->number_of_reads[i] = (int*) malloc(sizeof(int) * MAX_FILES_FOR_MERGING);
+		for (j = 0; j < MAX_FILES_FOR_MERGING; j++)
+			s->number_of_reads[i][j] = 0;
+	}
+	s->number_of_unique_cigars = 0;
+	return s;
+}
+
 struct Chromosome_Starting_Byte* allocateMemoryChromosome_Starting_Byte()
 {
 	struct Chromosome_Starting_Byte *s;
