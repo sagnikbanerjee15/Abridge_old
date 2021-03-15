@@ -52,15 +52,20 @@ if len(abridge_installation_locations)>0:
                 fhw.write(line)
         else:
             fhw.write(line)
-    fhw.close()
     
-    cmd=f"mv {temp_file} {actual_file}"
-    os.system(cmd)
     
-    cmd=f"rm {temp_file}"
-    os.system(cmd)
-    
-pwd = os.getcwd()
+
+pwd = os.getcwd()   
+fhw.write(f"export PATH=$PATH:{pwd}")
+fhw.close()
+
+cmd=f"mv {temp_file} {actual_file}"
+os.system(cmd)
+
+cmd=f"rm {temp_file}"
+os.system(cmd)
+
+
 
 os.chdir(pwd+"/src/")
 all_c_programs = glob.glob("*.c")
