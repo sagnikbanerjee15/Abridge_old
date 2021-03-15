@@ -52,7 +52,7 @@ for line in fhr:
     else:
         fhw.write(line)
 
-pwd = os.getcwd()   
+pwd = os.getcwd()
 fhw.close()
 
 cmd=f"mv {temp_file} {actual_file}"
