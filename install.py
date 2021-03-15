@@ -9,16 +9,16 @@ Check the bashrc file to check if finder was previously installed
 temp_file=os.path.expanduser('~')+"/"+ '.bashrc.temp'
 actual_file=os.path.expanduser('~')+"/"+ '.bashrc'
 
-finder_installation_locations=[]
+abridge_installation_locations=[]
 fhr=open(os.path.expanduser('~')+"/"+ '.bashrc',"r")
 for line in fhr:
-    if "export" in line and "Finder" in line:
-        finder_installation_locations.append(line.strip().split("$PATH:")[-1])
+    if "export" in line and "abridge" in line:
+        abridge_installation_locations.append(line.strip().split("$PATH:")[-1])
 fhr.close()
 
-#print(finder_installation_locations)
+#print(abridge_installation_locations)
 remove_these_indices=[]
-for i,each_installation in enumerate(finder_installation_locations):
+for i,each_installation in enumerate(abridge_installation_locations):
     check_this_file="software_identity"
     verify_contents="abridge: compress alignments to a reference for improved storage"
     #print(each_installation+"/"+check_this_file)
@@ -35,16 +35,16 @@ for i,each_installation in enumerate(finder_installation_locations):
 
 #print(remove_these_indices)
 for i in remove_these_indices[::-1]:
-    finder_installation_locations.pop(i)
+    abridge_installation_locations.pop(i)
     
 
-#print(finder_installation_locations)
-if len(finder_installation_locations)>0:
+#print(abridge_installation_locations)
+if len(abridge_installation_locations)>0:
     fhr=open(os.path.expanduser('~')+"/"+ '.bashrc',"r")
     fhw = open(os.path.expanduser('~')+"/"+ '.bashrc.temp',"w")
     for line in fhr:
         if "export" in line and "abridge" in line:
-            if line.strip().split("$PATH:")[-1] in finder_installation_locations:
+            if line.strip().split("$PATH:")[-1] in abridge_installation_locations:
                 loc=line.strip().split("$PATH:")[-1] 
                 print(f"{loc} will be removed from $PATH")
                 continue
