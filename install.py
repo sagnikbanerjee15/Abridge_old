@@ -65,7 +65,7 @@ pwd = os.getcwd()
 os.chdir(pwd+"/src/")
 all_c_programs = glob.glob("*.c")
 for program in all_c_programs:
-    os.system(f"gcc -o {program[:-1]o} -Ofast -g {program}")
+    os.system(f"gcc -o {program[:-1]} -Ofast -g {program}")
 os.system("chmod -R a+x *")
 os.chdir(pwd)
 
