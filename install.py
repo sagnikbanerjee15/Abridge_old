@@ -53,7 +53,6 @@ for line in fhr:
         fhw.write(line)
 
 pwd = os.getcwd()   
-fhw.write(f"export PATH=$PATH:{pwd}")
 fhw.close()
 
 cmd=f"mv {temp_file} {actual_file}"
