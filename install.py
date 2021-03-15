@@ -59,9 +59,6 @@ fhw.close()
 cmd=f"mv {temp_file} {actual_file}"
 os.system(cmd)
 
-cmd=f"rm {temp_file}"
-os.system(cmd)
-
 os.chdir(pwd+"/src/")
 all_c_programs = glob.glob("*.c")
 for program in all_c_programs:
