@@ -39,9 +39,9 @@ for i in remove_these_indices[::-1]:
     
 
 print(abridge_installation_locations)
+fhw = open(os.path.expanduser('~')+"/"+ '.bashrc.temp',"w")
 if len(abridge_installation_locations)>0:
     fhr=open(os.path.expanduser('~')+"/"+ '.bashrc',"r")
-    fhw = open(os.path.expanduser('~')+"/"+ '.bashrc.temp',"w")
     for line in fhr:
         if "export" in line and "abridge" in line:
             if line.strip().split("$PATH:")[-1] in abridge_installation_locations:
