@@ -38,7 +38,7 @@ for i in remove_these_indices[::-1]:
     abridge_installation_locations.pop(i)
     
 
-#print(abridge_installation_locations)
+print(abridge_installation_locations)
 if len(abridge_installation_locations)>0:
     fhr=open(os.path.expanduser('~')+"/"+ '.bashrc',"r")
     fhw = open(os.path.expanduser('~')+"/"+ '.bashrc.temp',"w")
