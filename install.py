@@ -38,22 +38,19 @@ for i in remove_these_indices[::-1]:
     abridge_installation_locations.pop(i)
     
 
-print(abridge_installation_locations)
+#print(abridge_installation_locations)
 fhw = open(os.path.expanduser('~')+"/"+ '.bashrc.temp',"w")
-if len(abridge_installation_locations)>0:
-    fhr=open(os.path.expanduser('~')+"/"+ '.bashrc',"r")
-    for line in fhr:
-        if "export" in line and "abridge" in line:
-            if line.strip().split("$PATH:")[-1] in abridge_installation_locations:
-                loc=line.strip().split("$PATH:")[-1] 
-                print(f"{loc} will be removed from $PATH")
-                continue
-            else:
-                fhw.write(line)
+fhr=open(os.path.expanduser('~')+"/"+ '.bashrc',"r")
+for line in fhr:
+    if "export" in line and "abridge" in line:
+        if line.strip().split("$PATH:")[-1] in abridge_installation_locations:
+            loc=line.strip().split("$PATH:")[-1] 
+            print(f"{loc} will be removed from $PATH")
+            continue
         else:
             fhw.write(line)
-    
-    
+    else:
+        fhw.write(line)
 
 pwd = os.getcwd()   
 fhw.write(f"export PATH=$PATH:{pwd}")
@@ -64,8 +61,6 @@ os.system(cmd)
 
 cmd=f"rm {temp_file}"
 os.system(cmd)
-
-
 
 os.chdir(pwd+"/src/")
 all_c_programs = glob.glob("*.c")
