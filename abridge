@@ -408,7 +408,7 @@ def mergeAbridgeData(options):
                                     pass2_filename,
                                     pass2_index_filename,
                                     unmapped_outputfilename])
-    #pool.map(runCommand,all_commands)
+    pool.map(runCommand,all_commands)
     
     ######################################################################################
     # Compiling programs - will be removed during final version

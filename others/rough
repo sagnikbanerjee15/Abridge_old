@@ -7,9 +7,9 @@ Abdrige Compression
 abridge \
 --compress \
 --cpu $CPU \
---genome /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
---inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13009993_STAR_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13009994_STAR_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13009995_STAR_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13009996_STAR_Aligned.sortedByCoord.out.sam \
---outputdir /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests) \
+--genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
+--inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam \
+--outputdir /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.error &
 
@@ -20,8 +20,8 @@ Abridge Decompression
 abridge \
 --decompress \
 --cpu $CPU \
---genome /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009993_STAR_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009994_STAR_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009995_STAR_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009996_STAR_Aligned.sortedByCoord.out.sam.abridge \
+--genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam \
 --outputdir /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
@@ -33,9 +33,9 @@ Abridge Merge
 abridge \
 --merge \
 --cpu $CPU \
---genome /90daydata/maizegdb/sagnik/data/HOMSA/genome/Homo_sapiens.GRCh38.dna.primary_assembly.single_line.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009993_STAR_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009994_STAR_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009995_STAR_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests/SRR13009996_STAR_Aligned.sortedByCoord.out.sam.abridge \
--o /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests) \
+--genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam \
+-o /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.error &
 
