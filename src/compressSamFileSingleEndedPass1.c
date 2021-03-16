@@ -231,11 +231,11 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 	do
 	{
 		number_of_records_read += 1;
-		if (number_of_records_read % 1000000 == 0)
-		{
-			printf("\nNumber of records read: %lld Million %s", number_of_records_read / 1000000, output_abridgefilename);
-			fflush(stdout);
-		}
+		/*if (number_of_records_read % 1000000 == 0)
+		 {
+		 printf("\nNumber of records read: %lld Million %s", number_of_records_read / 1000000, output_abridgefilename);
+		 fflush(stdout);
+		 }*/
 		number_of_fields = splitByDelimiter(line, '\t', split_line);
 		populateSamAlignmentInstance(curr_alignment, split_line, number_of_fields, split_tags);
 		strcpy(curr_reference_name, curr_alignment->reference_name);
