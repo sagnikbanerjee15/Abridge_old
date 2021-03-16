@@ -34,7 +34,7 @@ abridge \
 --merge \
 --cpu $CPU \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_0_SE_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.abridge \
 -o /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.error &
