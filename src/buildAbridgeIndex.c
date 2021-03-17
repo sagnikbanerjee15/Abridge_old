@@ -246,6 +246,7 @@ void findContinousClusters(char *input_filename, char *output_filename)
 		else
 		{
 			number_of_fields = splitByDelimiter(line, '\t', split_line);
+			continue;
 			if (number_of_fields == 1)
 			{
 				start_position_of_read++;
@@ -256,7 +257,7 @@ void findContinousClusters(char *input_filename, char *output_filename)
 				start_position_of_read += strtol(split_line[0], &temp, 10);
 				number_of_fields = splitByDelimiter(split_line[1], ',', split_icigar_field);
 			}
-			continue;
+
 			/*
 			 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 			 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
