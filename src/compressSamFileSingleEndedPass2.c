@@ -194,7 +194,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 
 	split_line = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
-		split_line[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
+		split_line[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	write_to_file_col1 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col3 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
@@ -208,15 +208,15 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 	replacement_character = (char*) malloc(sizeof(char) * MIN_POOL_SIZE * 10);
 	split_icigars = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
-		split_icigars[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
+		split_icigars[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	split_icigars_cp = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
-		split_icigars_cp[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
+		split_icigars_cp[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	split_icigars_final = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
-		split_icigars_final[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH);
+		split_icigars_final[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	split_num_reads = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
