@@ -430,8 +430,8 @@ def mergeAbridgeData(options):
         all_chromosomes.extend(findChromosomes(pass2_index_filename))
     all_chromosomes=list(set(all_chromosomes))
     all_chromosomes=sorted(all_chromosomes)
-    print(all_chromosomes)
-    sys.stdout.flush()
+    """print(all_chromosomes)
+    sys.stdout.flush()"""
     
     all_commands = []
     for chromosome in all_chromosomes:
@@ -632,7 +632,7 @@ def main():
         """
         cmd=f"cat {options.inputfilename[0][:-3]}|grep ^@ > {options.inputfilename[0][:-3]}.headers"
         os.system(cmd)
-        print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
+        #print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
         os.system(f"rm {options.inputfilename[0][:-3]}.headers")
     
     if options.merge == True:
