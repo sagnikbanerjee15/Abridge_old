@@ -163,7 +163,6 @@ void findContinousClusters(char *input_filename, char *output_filename)
 	current_reference_sequence = (char*) malloc(sizeof(char) * MAX_REFERENCE_SEQ_LENGTH);
 	temp = (char*) malloc(sizeof(char) * MAX_GENERAL_LEN);
 	line_to_be_written_to_file[0] = '\0';
-	return;
 	/********************************************************************/
 
 	line_len_previous = -1;
