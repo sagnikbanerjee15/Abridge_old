@@ -112,7 +112,7 @@ def validateCommandLineArguments(options):
     #options.outputdir = "/".join(options.outputfilenameprefix.split("/")[:-1])
     options.files_for_removal = []
     options.softwares = {}
-    abridge_location = subprocess.run(['abridge', 'abridge'], stdout=subprocess.PIPE).split()[-1]
+    abridge_location = str(subprocess.run(['abridge', 'abridge'], stdout=subprocess.PIPE)).split()[-1]
     print(abridge_location)
     sys.exit()
     if options.header==False:
