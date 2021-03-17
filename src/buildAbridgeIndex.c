@@ -176,6 +176,7 @@ void findContinousClusters(char *input_filename, char *output_filename)
 		}
 		if (line[0] == '@')
 		{
+			continue;
 			if (start_position_of_cluster != -1 && end_position_of_cluster != -1)
 			{
 				byte_number_end_cluster = ftell(fhr) - line_len;
@@ -245,7 +246,6 @@ void findContinousClusters(char *input_filename, char *output_filename)
 		}
 		else
 		{
-			continue;
 			number_of_fields = splitByDelimiter(line, '\t', split_line);
 			if (number_of_fields == 1)
 			{
