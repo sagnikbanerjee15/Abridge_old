@@ -151,7 +151,7 @@ void findContinousClusters(char *input_filename, char *output_filename)
 		split_line_another[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	split_icigar_field = (char**) malloc(sizeof(char*) * MAX_ICIGAR_LENGTH_PASS1_COL2);
-	for (i = 0; i < ROWS; i++)
+	for (i = 0; i < MAX_ICIGAR_LENGTH_PASS1_COL2; i++)
 		split_icigar_field[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	split_icigar_and_num_reads = (char**) malloc(sizeof(char*) * ROWS);
