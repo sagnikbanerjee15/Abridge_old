@@ -112,24 +112,11 @@ def validateCommandLineArguments(options):
     #options.outputdir = "/".join(options.outputfilenameprefix.split("/")[:-1])
     options.files_for_removal = []
     options.softwares = {}
-    print(subprocess.run(['which', 'abridge'], stdout=subprocess.PIPE))
     abridge_location = subprocess.run(['which', 'abridge'], stdout=subprocess.PIPE).stdout.decode('utf-8').split()[-1]
-    print(abridge_location)
-    sys.exit()
-    if options.header==False:
-        #cmd=f"which abridge > {options.logfilename[:-3]}temp"
-        #os.system(cmd)
-        #fhr=open(f"{options.logfilename[:-3]}temp","r")
-        abridge_location = subprocess.run(['which', 'abridge'], stdout=subprocess.PIPE).split()[-1]
-        #fhr.close()
-    else:
-        cmd=f"which abridge > temp"
-        os.system(cmd)
-        fhr=open(f"temp","r")
-        abridge_location = fhr.read().split()[-1]
-        fhr.close()
+    if options.header==True:
         options.quiet = True
     
+
     if options.random==True and options.positions==None:
         print("You need to enter at least one location from where reads will be retrieved")
         sys.exit()
