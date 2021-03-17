@@ -145,18 +145,18 @@ void findContinousClusters(char *input_filename, char *output_filename)
 
 	split_line = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
-		split_line[i] = (char*) malloc(sizeof(char) * COLS);
+		split_line[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 	split_line_another = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
-		split_line_another[i] = (char*) malloc(sizeof(char) * COLS);
+		split_line_another[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	split_icigar_field = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
-		split_icigar_field[i] = (char*) malloc(sizeof(char) * COLS);
+		split_icigar_field[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	split_icigar_and_num_reads = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
-		split_icigar_and_num_reads[i] = (char*) malloc(sizeof(char) * COLS);
+		split_icigar_and_num_reads[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	line_to_be_written_to_file = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	pass2_compressed_ds_instance = allocateMemoryPass2_Compressed_DS();
