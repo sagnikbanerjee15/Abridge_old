@@ -15,6 +15,7 @@ import time
 import multiprocessing
 import random
 import glob
+import subprocess
 
 from scripts.assessMemoryRequirement import *
 from scripts.verifyPositions import *
@@ -111,12 +112,15 @@ def validateCommandLineArguments(options):
     #options.outputdir = "/".join(options.outputfilenameprefix.split("/")[:-1])
     options.files_for_removal = []
     options.softwares = {}
+    abridge_location = subprocess.run(['abridge', 'abridge'], stdout=subprocess.PIPE).split()[-1]
+    print(abridge_location)
+    sys.exit()
     if options.header==False:
-        cmd=f"which abridge > {options.logfilename[:-3]}temp"
-        os.system(cmd)
-        fhr=open(f"{options.logfilename[:-3]}temp","r")
-        abridge_location = fhr.read().split()[-1]
-        fhr.close()
+        #cmd=f"which abridge > {options.logfilename[:-3]}temp"
+        #os.system(cmd)
+        #fhr=open(f"{options.logfilename[:-3]}temp","r")
+        abridge_location = subprocess.run(['abridge', 'abridge'], stdout=subprocess.PIPE).split()[-1]
+        #fhr.close()
     else:
         cmd=f"which abridge > temp"
         os.system(cmd)
