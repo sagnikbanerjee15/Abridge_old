@@ -245,6 +245,7 @@ void findContinousClusters(char *input_filename, char *output_filename)
 		}
 		else
 		{
+			continue;
 			number_of_fields = splitByDelimiter(line, '\t', split_line);
 			if (number_of_fields == 1)
 			{
