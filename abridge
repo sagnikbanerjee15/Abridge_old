@@ -71,7 +71,7 @@ def parseCommandLineArguments():
 
 def configureLogger(options):
     if os.path.exists(options.logfilename)==True:
-        os.system(f"rm {options.logfilename}")
+        os.system(f"rm -f {options.logfilename}")
     logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S',level=logging.DEBUG, filename=options.logfilename)
     
 def validateCommandLineArguments(options):
@@ -323,7 +323,7 @@ def compressSamFile(options):
         files_to_be_removed.append(pass2_index_outputfilename)
     
     for file in files_to_be_removed:
-        os.system("rm "+file)
+        os.system("rm -f "+file)
         
 
 def findEndedness(options,logging):
@@ -455,7 +455,7 @@ def mergeAbridgeData(options):
         cmd += " " + options.outputdir + "/" + options.outputdir.split("/")[-1] + ".merged"
         os.system(cmd)
         
-        os.system("rm "+options.outputdir + "/" + options.outputdir.split("/")[-1] + ".merged." + chromosome) 
+        os.system("rm -f "+options.outputdir + "/" + options.outputdir.split("/")[-1] + ".merged." + chromosome) 
     """
     for file in files_to_be_removed:
         os.system("rm "+file)
@@ -542,7 +542,7 @@ def decompressSamFile(options):
     pool.map(runCommand,all_commands)
     
     for file in files_to_be_removed:
-        os.system("rm "+file)
+        os.system("rm -f "+file)
   
 def retrieveAlignmentsRandomly(chromosome,start,end,options):
     """
@@ -625,7 +625,7 @@ def main():
         cmd=f"cat {options.inputfilename[0][:-3]}|grep ^@ > {options.inputfilename[0][:-3]}.headers"
         os.system(cmd)
         #print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
-        os.system(f"rm {options.inputfilename[0][:-3]}.headers")
+        os.system(f"rm -f {options.inputfilename[0][:-3]}.headers")
     
     if options.merge == True:
         """
@@ -671,7 +671,7 @@ def main():
         else:
             sortPositions(options.positions)
         """
-        os.system(f"rm {options.inputfilename[0][:-3]}.headers")
+        os.system(f"rm -f {options.inputfilename[0][:-3]}.headers")
         
     cleanUp(options)
     if options.quiet == False:
