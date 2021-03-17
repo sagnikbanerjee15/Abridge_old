@@ -39,3 +39,12 @@ abridge \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.error &
 
+
+
+gcc /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass1.c -o /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass1 -Ofast
+gcc /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass2.c -o /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass2 -Ofast
+gcc /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/buildAbridgeIndex.c -o /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/buildAbridgeIndex -Ofast
+
+/90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass1 /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa 0 0  0  0  /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/star_alignments/SRR13711353_SE.sam  /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711353_SE.sam.pass1  /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711353_SE.sam.unmapped  0
+/90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass2 /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711353_SE.sam.pass1 /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711353_SE.sam.pass2
+/90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/buildAbridgeIndex /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711353_SE.sam.pass2 /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711353_SE.sam.pass2.index
