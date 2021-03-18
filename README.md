@@ -33,9 +33,6 @@ export PATH=$PATH:$(pwd)/utils
 ## STAR
 
 
-
-
-
 # Compress
 
 ## Compress a single RNA-Seq file
