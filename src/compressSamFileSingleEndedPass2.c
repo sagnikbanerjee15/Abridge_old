@@ -165,7 +165,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 	replacement_character = (char*) malloc(sizeof(char) * MIN_POOL_SIZE * 10);
 	split_icigars = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
-		split_icigars[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+		split_icigars[i] = (char*) malloc(sizeof(char) * 10000);
 
 	split_icigars_cp = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
