@@ -193,7 +193,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 	}
 
 	split_on_tab = (char**) malloc(sizeof(char*) * 5);
-	for (i = 0; i < ROWS; i++)
+	for (i = 0; i < 5; i++)
 		split_on_tab[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	write_to_file_col1 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
