@@ -6,49 +6,6 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void writeToFile(struct Pass1_Compressed_DS **pass1_compressed_DS_pool, int pass1_compressed_DS_pool_index, FILE *fhw, char *write_to_file_col1, char *write_to_file_col3, char *line_to_be_written_to_file)
-{
-	int i;
-	line_to_be_written_to_file[0] = '\0';
-	write_to_file_col1[0] = '\0';
-	write_to_file_col3[0] = '\0';
-
-	if (pass1_compressed_DS_pool_index == 0) return;
-	for (i = 0; i < pass1_compressed_DS_pool_index; i++)
-	{
-		strcat(write_to_file_col1, pass1_compressed_DS_pool[i]->col1);
-		strcat(write_to_file_col1, ";");
-		strcat(write_to_file_col3, pass1_compressed_DS_pool[i]->col3);
-		strcat(write_to_file_col3, ";");
-	}
-	write_to_file_col1[strlen(write_to_file_col1) - 1] = '\0'; // Removing the last semi colon
-	write_to_file_col3[strlen(write_to_file_col3) - 1] = '\0'; // Removing the last semi colon
-	//printf("\n Col1: %s Col3: %s", write_to_file_col1, write_to_file_col3);
-
-	strcat(line_to_be_written_to_file, write_to_file_col1);
-	strcat(line_to_be_written_to_file, "\t");
-	strcat(line_to_be_written_to_file, pass1_compressed_DS_pool[pass1_compressed_DS_pool_index - 1]->col2);
-	strcat(line_to_be_written_to_file, "\t");
-	strcat(line_to_be_written_to_file, write_to_file_col3);
-	strcat(line_to_be_written_to_file, "\n");
-	//printf("\n to file: %s", line_to_be_written_to_file);
-	fprintf(fhw, "%s", line_to_be_written_to_file);
-
-	line_to_be_written_to_file[0] = '\0';
-	write_to_file_col1[0] = '\0';
-	write_to_file_col3[0] = '\0';
-
-}
-
-void swapPointers(char **a, char **b)
-{
-	char *temp;
-	temp = *a;
-	*a = *b;
-	*b = temp;
-
-}
-
 void reModeliCIGARS(char **split_icigars, char **split_num_reads, int number_of_cigars, char **split_icigars_cp, char **split_num_reads_cp, char **split_icigars_final, char **split_num_reads_final, char *replacement_character, int line_num)
 {
 	int i;
@@ -206,7 +163,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 	line_to_be_written_to_file[0] = '\0';
 
 	replacement_character = (char*) malloc(sizeof(char) * MIN_POOL_SIZE * 10);
-	split_icigars = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE * 10);
+	split_icigars = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE * 10);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_icigars[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
