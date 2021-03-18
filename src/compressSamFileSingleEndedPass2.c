@@ -211,7 +211,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 			  for(i=number_of_cigars-10;i<number_of_cigars;i++)
 				printf("\n%d %s %s",number_of_cigars, split_icigars[i],split_num_reads[i]);
 			if (number_of_cigars>=10)
-			  printf("\n====================================================================================================================");
+			  printf("\n%d ====================================================================================================================",number_of_cigars);
 			splitByDelimiter(split_on_tab[1], ',', split_icigars_cp);
 			splitByDelimiter(split_on_tab[2], ',', split_num_reads_cp);
 			if (line_num == -1)
