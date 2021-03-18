@@ -152,11 +152,11 @@ void findContinousClusters(char *input_filename, char *output_filename)
 
 	split_icigar_field = (char**) malloc(sizeof(char*) * 100000);
 	for (i = 0; i < 100000; i++)
-		split_icigar_field[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+		split_icigar_field[i] = (char*) malloc(sizeof(char) * 10000);
 
-	split_icigar_and_num_reads = (char**) malloc(sizeof(char*) * ROWS);
-	for (i = 0; i < ROWS; i++)
-		split_icigar_and_num_reads[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+	split_icigar_and_num_reads = (char**) malloc(sizeof(char*) * 5);
+	for (i = 0; i < 5; i++)
+		split_icigar_and_num_reads[i] = (char*) malloc(sizeof(char) * 100000);
 
 	line_to_be_written_to_file = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	pass2_compressed_ds_instance = allocateMemoryPass2_Compressed_DS();
