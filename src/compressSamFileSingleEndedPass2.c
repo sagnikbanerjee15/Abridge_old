@@ -128,13 +128,11 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 	char **split_icigars_final;
 	char **split_num_reads_final;
 
-	struct Pass1_Compressed_DS *pass1_compressed_DS;
 	/********************************************************************/
 
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	pass1_compressed_DS = (struct Pass1_Compressed_DS*) malloc(sizeof(struct Pass1_Compressed_DS));
 
 	fhr = fopen(input_filename, "r");
 	if (fhr == NULL)
