@@ -31,7 +31,7 @@ def parseCommandLineArguments():
     input_group.add_argument("-isam","--inputsamfilenames",help="Enter the names of the alignment filew you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You may choose to compress multiple alignment files together.", nargs="+")
     input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the names of the compressed alignment files you wish to merge. These files must be compressed using abridge. You may choose to compress multiple files together.", nargs="+")
     required_named.add_argument("-G","--genome",help="Enter a single fasta file for the reference",required=True)
-    required_named.add_argument("-o","--outputdir",help="Enter the prefix of the output directory.",required=True)
+    required_named.add_argument("-o","--output_directory",help="Enter the prefix of the output directory.",required=True)
     
     compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
     compress_decompress_group.add_argument("-c","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
@@ -58,6 +58,10 @@ def parseCommandLineArguments():
     optional_named.add_argument("-run_diagnostics","--run_diagnostics",help="abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies",action="store_true")
     optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
     optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
+    optional_named.add_argument("--fast","-f",help="Enables faster compression using brotli compressor",action="store_true")
+    optional_named.add_argument("--both","-b",help="Compress using both approaches. This option is reserved for diagnostic purposes",action="store_true")
+    optional_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory",default=None)
+    optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
@@ -107,9 +111,9 @@ def validateCommandLineArguments(options):
                     logging.info(f"The input file {file} needs to be in sam format. Exiting...")
                 sys.exit()
         
-    options.logfilename = options.outputdir+"/progress.log"
-    os.system("mkdir -p "+options.outputdir)
-    #options.outputdir = "/".join(options.outputfilenameprefix.split("/")[:-1])
+    options.logfilename = options.output_directory+"/progress.log"
+    os.system("mkdir -p "+options.output_directory)
+    #options.output_directory = "/".join(options.outputfilenameprefix.split("/")[:-1])
     options.files_for_removal = []
     options.softwares = {}
     abridge_location = subprocess.run(['which', 'abridge'], stdout=subprocess.PIPE).stdout.decode('utf-8').split()[-1]
@@ -120,6 +124,11 @@ def validateCommandLineArguments(options):
     if options.random==True and options.positions==None:
         print("You need to enter at least one location from where reads will be retrieved")
         sys.exit()
+        
+    if options.error_directory == None:
+        options.error_directory = options.output_directory
+    else:
+        os.system(f"mkdir -p {options.error_directory}")
     
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
     options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
@@ -235,24 +244,31 @@ def compressSamFile(options):
         for input_filename in options.inputsamfilenames:
             if options.quiet == False:
                 logging.info(f"Starting Pass1 for {input_filename}")
+            name_of_input_file_without_location = input_filename.split("/")[-1] 
+            pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+            pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
+            unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
             
-            pass1_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass1"
-            pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
-            unmapped_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".unmapped"
-            
-            cmd=f"{compressSamFileSingleEndedPass1}" # argv[0] - name of the program
-            cmd+=f" {options.genome}" # argv[1] - genome_filename
-            cmd+=f" {options.ignore_soft_clippings}" #argv[2]
-            cmd+=f" {options.ignore_mismatches} " #argv[3]
-            cmd+=f" {options.ignore_quality_score_flag} " #argv[4]
-            cmd+=f" {options.ignore_unmapped_reads} " #argv[5]
-            cmd+=f" {input_filename} " #argv[6] - Input samfile
-            cmd+=f" {pass1_outputfilename} " #argv[7] - Output filename
-            cmd+=f" {unmapped_outputfilename} " #argv[8] - Filename for unmapped reads
+            cmd  = f"(/usr/bin/time --verbose "
+            cmd += f"{compressSamFileSingleEndedPass1}" # argv[0] - name of the program
+            cmd += f" {options.genome}" # argv[1] - genome_filename
+            cmd += f" {options.ignore_soft_clippings}" #argv[2]
+            cmd += f" {options.ignore_mismatches} " #argv[3]
+            cmd += f" {options.ignore_quality_score_flag} " #argv[4]
+            cmd += f" {options.ignore_unmapped_reads} " #argv[5]
+            cmd += f" {input_filename} " #argv[6] - Input samfile
+            cmd += f" {pass1_outputfilename} " #argv[7] - Output filename
+            cmd += f" {unmapped_outputfilename} " #argv[8] - Filename for unmapped reads
             if options.run_diagnostics==True:
-                cmd+=f" 1" # argv[9] - run diagnostics
+                cmd += f" 1" # argv[9] - run diagnostics
             else:
-                cmd+=f" 0" # argv[9] - run diagnostics
+                cmd += f" 0" # argv[9] - run diagnostics
+            cmd += f") "
+            cmd += f"1> /dev/null "
+            if options.keep_intermediate_error_files == True:
+                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_compress_pass1.error"
+            else:
+                cmd += f"2> /dev/null"
             
             if options.quiet == False:
                 logging.info(f"Running command - {cmd}")
@@ -262,29 +278,43 @@ def compressSamFile(options):
          
         all_commands = []
         for input_filename in options.inputsamfilenames:
+            name_of_input_file_without_location = input_filename.split("/")[-1] 
             if options.quiet == False:
                 logging.info("Starting Pass2")
-            pass1_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass1"
-            pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
+            pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+            pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
         
-            cmd=f"{compressSamFileSingleEndedPass2} {pass1_outputfilename} {pass2_outputfilename}"   
+            cmd  = f"(/usr/bin/time --verbose "
+            cmd += f"{compressSamFileSingleEndedPass2} {pass1_outputfilename} {pass2_outputfilename}"
+            cmd += f") "   
+            cmd += f"1> /dev/null "
+            if options.keep_intermediate_error_files == True:
+                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_compress_pass2.error"
+            else:
+                cmd += f"2> /dev/null"
             if options.quiet == False:
                 logging.info(f"Running command - {cmd}") 
-            #all_inputs.append([cmd,"dummy"])
             all_commands.append([cmd,"dummy"])
-            #os.system(cmd)
         pool.map(runCommand,all_commands)
          
         all_commands = []
         for input_filename in options.inputsamfilenames:  
-            pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
-            pass2_index_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2.index"
-            cmd=f"{buildABRIDGEIndex} {pass2_outputfilename} {pass2_index_outputfilename}"
+            name_of_input_file_without_location = input_filename.split("/")[-1] 
+            pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
+            pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
+            
+            cmd  = f"(/usr/bin/time --verbose "
+            cmd += f"{buildABRIDGEIndex} {pass2_outputfilename} {pass2_index_outputfilename}"
+            cmd += f") "   
+            cmd += f"1> /dev/null "
+            if options.keep_intermediate_error_files == True:
+                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_prep_abridge_index.error"
+            else:
+                cmd += f"2> /dev/null"
             if options.quiet == False:
-                logging.info(f"Starting to build index for {input_filename}")
+                logging.info(f"Starting to build index for {name_of_input_file_without_location}")
                 logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
-            #os.system(cmd)
         pool.map(runCommand,all_commands)
     else:
         # Paired ended
@@ -295,27 +325,72 @@ def compressSamFile(options):
     
     all_commands = []
     for input_filename in options.inputsamfilenames:
-        pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
-        pass2_index_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2.index"
-        unmapped_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".unmapped"
-        compressed_abridged_filename = options.outputdir + "/" + input_filename.split("/")[-1] + ".abridge"
+        name_of_input_file_without_location = input_filename.split("/")[-1] 
+        pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
+        pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
+        unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
+        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.7z"
+        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.br"
         
-        cmd=f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename} {pass2_outputfilename} {pass2_index_outputfilename} {unmapped_outputfilename}"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        all_commands.append([cmd,"dummy"])
-        #os.system(cmd)
-        if options.quiet == False:
-            logging.info(f"Completed compression of {input_filename}")
+        if options.both == True or options.fast == False:
+            cmd  = f"(/usr/bin/time --verbose "
+            cmd += f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_7z} {pass2_outputfilename} {pass2_index_outputfilename} {unmapped_outputfilename}"
+            cmd += f") "   
+            cmd += f"1> /dev/null "
+            if options.keep_intermediate_error_files == True:
+                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_7z_compression.error"
+            else:
+                cmd += f"2> /dev/null"
+            if options.quiet == False:
+                logging.info(f"Running command - {cmd}")
+            all_commands.append([cmd,"dummy"])
+            
+        if options.both == True or options.fast == True:
+            cmd  = f"(/usr/bin/time --verbose "
+            cmd += f"brotli -9 -f -k -n {pass2_outputfilename} {pass2_index_outputfilename} {unmapped_outputfilename}"
+            cmd += f") "   
+            cmd += f"1> /dev/null "
+            if options.keep_intermediate_error_files == True:
+                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_7z_compression.error"
+            else:
+                cmd += f"2> /dev/null"
+            if options.quiet == False:
+                logging.info(f"Running command - {cmd}")
+            all_commands.append([cmd,"dummy"])
+    pool.map(runCommand,all_commands)
+    
+    files_to_be_removed = []
+    #################################################################################################
+    # Tar the files generated by brotli
+    #################################################################################################
+    all_commands = []
+    for input_filename in options.inputsamfilenames:
+        name_of_input_file_without_location = input_filename.split("/")[-1] 
+        pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
+        pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
+        unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
+        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.7z"
+        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.br"
+        
+        files_to_be_removed.append(f"{pass2_outputfilename}.br")
+        files_to_be_removed.append(f"{pass2_index_outputfilename}.br")
+        files_to_be_removed.append(f"{unmapped_outputfilename}.br")
+        
+        if options.both == True or options.fast == True:
+            cmd  = f"(/usr/bin/time --verbose "
+            cmd += f" tar -cf {compressed_abridged_filename_br} {pass2_outputfilename}.br {pass2_index_outputfilename}.br {unmapped_outputfilename}.br"
+            cmd += f") "   
+            cmd += f"1> /dev/null "
+            cmd += f"2> /dev/null"
+            all_commands.append([cmd,"dummy"])
     pool.map(runCommand,all_commands)
        
     # Remove all intermediate files
-    files_to_be_removed = []
     for input_filename in options.inputsamfilenames:
-        pass1_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass1"
-        pass2_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2"
-        unmapped_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".unmapped"
-        pass2_index_outputfilename = options.outputdir + "/" + input_filename.split("/")[-1] + ".pass2.index"
+        pass1_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass1"
+        pass2_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2"
+        unmapped_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".unmapped"
+        pass2_index_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2.index"
             
         files_to_be_removed.append(pass1_outputfilename)
         files_to_be_removed.append(pass2_outputfilename)
@@ -384,13 +459,13 @@ def mergeAbridgeData(options):
     all_commands = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
-        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
-        unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+        pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
+        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+        unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
         compressed_abridged_filename = input_filename
         
         cmd=f"7za e {input_filename} -y"
-        cmd+=f" -o{options.outputdir}"
+        cmd+=f" -o{options.output_directory}"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         all_commands.append([cmd,"dummy"])
@@ -418,7 +493,7 @@ def mergeAbridgeData(options):
     all_chromosomes = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
+        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
         all_chromosomes.extend(findChromosomes(pass2_index_filename))
     all_chromosomes=list(set(all_chromosomes))
     all_chromosomes=sorted(all_chromosomes)
@@ -427,13 +502,13 @@ def mergeAbridgeData(options):
     
     all_commands = []
     for chromosome in all_chromosomes:
-        merged_output_filename = options.outputdir + "/" + options.outputdir.split("/")[-1] + ".merged." + chromosome 
+        merged_output_filename = options.output_directory + "/" + options.output_directory.split("/")[-1] + ".merged." + chromosome 
         cmd=mergeCompressedFilesSingleEnded
         for input_filename in options.inputabrfilenames:
             input_filename_without_extension = input_filename.split("/")[-1][:-8]
-            pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
-            pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
-            unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+            pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
+            pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+            unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
             compressed_abridged_filename = input_filename
             
             cmd+=" "+pass2_filename
@@ -451,11 +526,11 @@ def mergeAbridgeData(options):
     
     for chromosome in all_chromosomes:
         cmd = "cat "
-        cmd += options.outputdir + "/" + options.outputdir.split("/")[-1] + ".merged." + chromosome + ">> "
-        cmd += " " + options.outputdir + "/" + options.outputdir.split("/")[-1] + ".merged"
+        cmd += options.output_directory + "/" + options.output_directory.split("/")[-1] + ".merged." + chromosome + ">> "
+        cmd += " " + options.output_directory + "/" + options.output_directory.split("/")[-1] + ".merged"
         os.system(cmd)
         
-        os.system("rm -f "+options.outputdir + "/" + options.outputdir.split("/")[-1] + ".merged." + chromosome) 
+        os.system("rm -f "+options.output_directory + "/" + options.output_directory.split("/")[-1] + ".merged." + chromosome) 
     """
     for file in files_to_be_removed:
         os.system("rm "+file)
@@ -491,14 +566,14 @@ def decompressSamFile(options):
     all_commands = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
-        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
-        unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+        pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
+        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+        unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
         compressed_abridged_filename = input_filename
-        output_sam_filename = options.outputdir + "/" + input_filename_without_extension + ".decompressed.sam"
+        output_sam_filename = options.output_directory + "/" + input_filename_without_extension + ".decompressed.sam"
         
         cmd=f"7za e {input_filename} -y"
-        cmd+=f" -o{options.outputdir}"
+        cmd+=f" -o{options.output_directory}"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         all_commands.append([cmd,"dummy"])
@@ -520,11 +595,11 @@ def decompressSamFile(options):
     all_commands = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_filename = options.outputdir + "/" + input_filename_without_extension + ".pass2"
-        pass2_index_filename = options.outputdir + "/" + input_filename_without_extension+ ".pass2.index"
-        unmapped_outputfilename = options.outputdir + "/" + input_filename_without_extension + ".unmapped"
+        pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
+        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+        unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
         compressed_abridged_filename = input_filename
-        output_sam_filename = options.outputdir + "/" + input_filename_without_extension + ".decompressed.sam"
+        output_sam_filename = options.output_directory + "/" + input_filename_without_extension + ".decompressed.sam"
     
         cmd =f" {decompressSamFileSingleEnded} " # argv[0] - Name of the program
         cmd+=f" {pass2_index_filename} "# argv[1] - Abridge index, pass2_index_outputfilename
