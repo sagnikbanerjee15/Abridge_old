@@ -146,6 +146,7 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 		exit(1);
 	}
 
+	/*
 	split_line = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
 		split_line[i] = (char*) malloc(sizeof(char) * COLS);
@@ -157,7 +158,7 @@ void readAlignmentsAndCompress(char *input_samfilename, char *output_abridgefile
 	split_reference_info = (char**) malloc(sizeof(char*) * ROWS);
 	for (i = 0; i < ROWS; i++)
 		split_reference_info[i] = (char*) malloc(sizeof(char) * COLS);
-
+  */
 	compressed_ds_pool = (struct Compressed_DS**) malloc(sizeof(struct Compressed_DS*) * MAX_POOL_SIZE);
 	for (i = 0; i < MAX_POOL_SIZE; i++)
 		compressed_ds_pool[i] = allocateMemoryCompressed_DS();
