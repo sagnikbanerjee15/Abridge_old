@@ -351,7 +351,7 @@ def compressSamFile(options):
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
-                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_7z_compression.error"
+                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_br_compression.error"
             else:
                 cmd += f"2> /dev/null"
             if options.quiet == False:
