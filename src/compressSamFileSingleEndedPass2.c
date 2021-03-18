@@ -209,7 +209,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 
 			if (number_of_cigars==27562)
 			{
-			  for(i=0;i;<number_of_cigars;i++)
+			  for(i=0;i<number_of_cigars;i++)
 				printf("\n%s %d",split_icigars[i],split_num_reads[i]);
 			}
 			//printf( "\n%d", number_of_cigars );
