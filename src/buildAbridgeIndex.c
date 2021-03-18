@@ -119,8 +119,8 @@ void findContinousClusters(char *input_filename, char *output_filename)
 	char *line = NULL; // for reading each line
 	char *current_reference_sequence;
 	char *line_to_be_written_to_file;
-	char **split_line;
-	char **split_line_another;
+	char **split_on_tab;
+	char **split_on_colon;
 	char **split_icigar_field;
 	char **split_icigar_and_num_reads;
 
@@ -143,12 +143,12 @@ void findContinousClusters(char *input_filename, char *output_filename)
 		exit(1);
 	}
 
-	split_line = (char**) malloc(sizeof(char*) * ROWS);
-	for (i = 0; i < ROWS; i++)
-		split_line[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
-	split_line_another = (char**) malloc(sizeof(char*) * ROWS);
-	for (i = 0; i < ROWS; i++)
-		split_line_another[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+	split_on_tab = (char**) malloc(sizeof(char*) * 5);
+	for (i = 0; i < 5; i++)
+		split_on_tab[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+	split_on_colon = (char**) malloc(sizeof(char*) * 5);
+	for (i = 0; i < 5; i++)
+		split_on_colon[i] = (char*) malloc(sizeof(char) * 1000);
 
 	split_icigar_field = (char**) malloc(sizeof(char*) * 100000);
 	for (i = 0; i < 100000; i++)
@@ -207,18 +207,18 @@ void findContinousClusters(char *input_filename, char *output_filename)
 				byte_number_start_cluster = ftell(fhr) - line_len;
 			}
 			// New chromosome encountered;
-			splitByDelimiter(line, '\t', split_line);
-			splitByDelimiter(split_line[1], ':', split_line_another);
-			strcpy(current_reference_sequence, split_line_another[1]);
+			splitByDelimiter(line, '\t', split_on_tab);
+			splitByDelimiter(split_on_tab[1], ':', split_on_colon);
+			strcpy(current_reference_sequence, split_on_colon[1]);
 			file_position = ftell(fhr);
 
 			line_len = getline(&line, &len, fhr);
 			num_lines_read++;
-			number_of_fields = splitByDelimiter(line, '\t', split_line);
+			number_of_fields = splitByDelimiter(line, '\t', split_on_tab);
 			if (number_of_fields == 1)
 			{
 				start_position_of_read = 1;
-				number_of_fields = splitByDelimiter(split_line[0], ',', split_icigar_field);
+				number_of_fields = splitByDelimiter(split_on_tab[0], ',', split_icigar_field);
 				/*
 				 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
@@ -231,8 +231,8 @@ void findContinousClusters(char *input_filename, char *output_filename)
 			}
 			else
 			{
-				start_position_of_read = strtol(split_line[0], &temp, 10);
-				number_of_fields = splitByDelimiter(split_line[1], ',', split_icigar_field);
+				start_position_of_read = strtol(split_on_tab[0], &temp, 10);
+				number_of_fields = splitByDelimiter(split_on_tab[1], ',', split_icigar_field);
 				/*
 				 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
@@ -245,16 +245,16 @@ void findContinousClusters(char *input_filename, char *output_filename)
 		}
 		else
 		{
-			number_of_fields = splitByDelimiter(line, '\t', split_line);
+			number_of_fields = splitByDelimiter(line, '\t', split_on_tab);
 			if (number_of_fields == 1)
 			{
 				start_position_of_read++;
-				number_of_fields = splitByDelimiter(split_line[0], ',', split_icigar_field);
+				number_of_fields = splitByDelimiter(split_on_tab[0], ',', split_icigar_field);
 			}
 			else
 			{
-				start_position_of_read += strtol(split_line[0], &temp, 10);
-				number_of_fields = splitByDelimiter(split_line[1], ',', split_icigar_field);
+				start_position_of_read += strtol(split_on_tab[0], &temp, 10);
+				number_of_fields = splitByDelimiter(split_on_tab[1], ',', split_icigar_field);
 			}
 
 			/*
