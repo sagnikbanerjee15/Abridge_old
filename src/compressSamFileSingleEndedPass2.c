@@ -196,17 +196,17 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 	for (i = 0; i < 5; i++)
 		split_on_tab[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
-	write_to_file_col1 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
-	write_to_file_col3 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	//write_to_file_col1 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	//write_to_file_col3 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 
-	write_to_file_col1[0] = '\0';
-	write_to_file_col3[0] = '\0';
+	//write_to_file_col1[0] = '\0';
+	//write_to_file_col3[0] = '\0';
 
 	line_to_be_written_to_file = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	line_to_be_written_to_file[0] = '\0';
 
 	replacement_character = (char*) malloc(sizeof(char) * MIN_POOL_SIZE * 10);
-	split_icigars = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
+	split_icigars = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE * 10);
 	for (i = 0; i < MIN_POOL_SIZE * 10; i++)
 		split_icigars[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
