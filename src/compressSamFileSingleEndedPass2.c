@@ -158,7 +158,7 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 
 	char *temp; //Useless
 	char *line = NULL; // for reading each line
-	char **split_line; // List of strings to store each element of a single alignment
+	char **split_on_tab; // List of strings to store each element of a single alignment
 	char *write_to_file_col1;
 	char *write_to_file_col2;
 	char *write_to_file_col3;
@@ -192,9 +192,9 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 		exit(1);
 	}
 
-	split_line = (char**) malloc(sizeof(char*) * ROWS);
+	split_on_tab = (char**) malloc(sizeof(char*) * 5);
 	for (i = 0; i < ROWS; i++)
-		split_line[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+		split_on_tab[i] = (char*) malloc(sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 
 	write_to_file_col1 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col3 = (char*) malloc(sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
@@ -242,22 +242,22 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 		}
 		//printf("\nLine num: %d line_len %d len %d", line_num, line_len, len);
 		//fflush(stdout);
-		splitByDelimiter(line, '\t', split_line);
-		//printf("\nLine: %s Col1: %s Length: %d", line, split_line[0], strlen(split_line[0]));
+		splitByDelimiter(line, '\t', split_on_tab);
+		//printf("\nLine: %s Col1: %s Length: %d", line, split_on_tab[0], strlen(split_on_tab[0]));
 		//fflush(stdout);
-		if (isCommaInLine(split_line[1]) == 1)
+		if (isCommaInLine(split_on_tab[1]) == 1)
 		{
-			splitByDelimiter(split_line[1], ',', split_icigars);
-			number_of_cigars = splitByDelimiter(split_line[2], ',', split_num_reads);
+			splitByDelimiter(split_on_tab[1], ',', split_icigars);
+			number_of_cigars = splitByDelimiter(split_on_tab[2], ',', split_num_reads);
 			//continue;
 			//printf("\n%s", line);
-			//printf("\n icigar: %s number_of_cigars: %d", split_line[1], number_of_cigars);
-			splitByDelimiter(split_line[1], ',', split_icigars_cp);
-			splitByDelimiter(split_line[2], ',', split_num_reads_cp);
+			//printf("\n icigar: %s number_of_cigars: %d", split_on_tab[1], number_of_cigars);
+			splitByDelimiter(split_on_tab[1], ',', split_icigars_cp);
+			splitByDelimiter(split_on_tab[2], ',', split_num_reads_cp);
 			if (line_num == -1)
 			{
 				printf("\nLine read from file: %s", line);
-				printf("\nMiddle column: %s", split_line[1]);
+				printf("\nMiddle column: %s", split_on_tab[1]);
 				printf("\nNumber of cigars: %d", number_of_cigars);
 				for (i = 0; i < number_of_cigars; i++)
 					printf("\n%d) Before function call: %s", i + 1, split_icigars[i]);
@@ -266,9 +266,9 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 
 			reModeliCIGARS(split_icigars, split_num_reads, number_of_cigars, split_icigars_cp, split_num_reads_cp, split_icigars_final, split_num_reads_final, replacement_character, line_num);
 			line_to_be_written_to_file[0] = '\0';
-			if (strlen(split_line[0]) != 0)
+			if (strlen(split_on_tab[0]) != 0)
 			{
-				strcpy(line_to_be_written_to_file, split_line[0]);
+				strcpy(line_to_be_written_to_file, split_on_tab[0]);
 				strcat(line_to_be_written_to_file, "\t");
 			}
 			for (i = 0; i < number_of_cigars; i++)
@@ -291,14 +291,14 @@ void compressSimilarAlignments(char *input_filename, char *output_abridgefilenam
 		else
 		{
 			line_to_be_written_to_file[0] = '\0';
-			if (strlen(split_line[0]) != 0)
+			if (strlen(split_on_tab[0]) != 0)
 			{
-				strcpy(line_to_be_written_to_file, split_line[0]);
+				strcpy(line_to_be_written_to_file, split_on_tab[0]);
 				strcat(line_to_be_written_to_file, "\t");
 			}
-			strcat(line_to_be_written_to_file, split_line[1]);
+			strcat(line_to_be_written_to_file, split_on_tab[1]);
 			strcat(line_to_be_written_to_file, "-");
-			strcat(line_to_be_written_to_file, split_line[2]);
+			strcat(line_to_be_written_to_file, split_on_tab[2]);
 			strcat(line_to_be_written_to_file, "\n");
 			fprintf(fhw, "%s", line_to_be_written_to_file);
 		}
