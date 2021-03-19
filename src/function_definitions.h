@@ -157,6 +157,7 @@ struct Chromosome_Starting_Byte* allocateMemoryChromosome_Starting_Byte()
 	s->number_of_chromosomes = 0;
 	return s;
 }
+
 struct Chromosome_Info* allocateMemoryChromosome_Info()
 {
 	struct Chromosome_Info *s;
