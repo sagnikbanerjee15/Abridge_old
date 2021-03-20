@@ -388,7 +388,7 @@ def compressSamFile(options):
     # Generate SHA512 for genome file
     ######################################################################################
     genome_sha512_filename = f"{options.output_directory}/genome_sha512"
-    cmd = f"sha512sum {options.genome} {genome_sha512_filename}.temp"
+    cmd = f"sha512sum {options.genome} > {genome_sha512_filename}.temp"
     os.system(cmd)
     open(genome_sha512_filename,"w").write(open(f"{genome_sha512_filename}.temp","r").read().strip().split()[0])
     os.system(f"rm {genome_sha512_filename}.temp")
