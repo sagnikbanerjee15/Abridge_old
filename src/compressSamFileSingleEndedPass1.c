@@ -189,7 +189,7 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 
 	temp = ( char* ) malloc ( sizeof(char) * MAX_GENERAL_LEN );
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc ( sizeof(struct Whole_Genome_Sequence) );
-
+	return;
 	/********************************************************************/
 
 	/*
