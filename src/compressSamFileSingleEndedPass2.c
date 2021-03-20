@@ -6,7 +6,7 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void reModeliCIGARS ( char **split_icigars, char **split_num_reads, int number_of_cigars, char **split_icigars_cp, char **split_num_reads_cp, char **split_icigars_final, char **split_num_reads_final, char *replacement_character, int line_num )
+void reModeliCIGARS ( char **split_icigars, char **split_num_reads, int number_of_cigars, char **split_icigars_cp, char **split_icigars_final, char **split_num_reads_final, char *replacement_character, int line_num )
 {
 	int i;
 	int j;
@@ -175,10 +175,11 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_num_reads[i] = ( char* ) malloc ( sizeof(char) * 10 );
 
+	/*
 	split_num_reads_cp = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_num_reads_cp[i] = ( char* ) malloc ( sizeof(char) * 10 );
-
+	 */
 	split_num_reads_final = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_num_reads_final[i] = ( char* ) malloc ( sizeof(char) * 10 );
@@ -214,7 +215,7 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 			 printf("\n%d ====================================================================================================================",number_of_cigars);
 			 */
 			splitByDelimiter ( split_on_tab[1] , ',' , split_icigars_cp );
-			splitByDelimiter ( split_on_tab[2] , ',' , split_num_reads_cp );
+			//splitByDelimiter ( split_on_tab[2] , ',' , split_num_reads_cp );
 			if ( line_num == -1 )
 			{
 				printf ( "\nLine read from file: %s" , line );
@@ -225,7 +226,8 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 				printf ( "\n====================================================================================================================" );
 			}
 
-			reModeliCIGARS ( split_icigars , split_num_reads , number_of_cigars , split_icigars_cp , split_num_reads_cp , split_icigars_final , split_num_reads_final , replacement_character , line_num );
+			//reModeliCIGARS ( split_icigars , split_num_reads , number_of_cigars , split_icigars_cp , split_num_reads_cp , split_icigars_final , split_num_reads_final , replacement_character , line_num );
+			reModeliCIGARS ( split_icigars , split_num_reads , number_of_cigars , split_icigars_cp  , split_icigars_final , split_num_reads_final , replacement_character , line_num );
 			line_to_be_written_to_file[0] = '\0';
 			if ( strlen ( split_on_tab[0] ) != 0 )
 			{
