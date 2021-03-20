@@ -282,8 +282,8 @@ def compressSamFile(options):
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
             pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
             unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
-            name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
-            name_of_file_with_max_commas = f"{input_filename}.max_commas"
+            name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
+            name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             
             max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
             if options.quiet == False:
@@ -328,8 +328,8 @@ def compressSamFile(options):
                 logging.info("Starting Pass2")
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
             pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
-            name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
-            name_of_file_with_max_commas = f"{input_filename}.max_commas"
+            name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
+            name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             
             max_commas = int(open(name_of_file_with_max_commas,"r").read().strip())
             if options.quiet == False:
@@ -356,8 +356,8 @@ def compressSamFile(options):
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
             pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
-            name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
-            name_of_file_with_max_commas = f"{input_filename}.max_commas"
+            name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
+            name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             
             max_commas = int(open(name_of_file_with_max_commas,"r").read().strip())
             if options.quiet == False:
@@ -467,8 +467,8 @@ def compressSamFile(options):
         pass2_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2"
         unmapped_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".unmapped"
         pass2_index_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2.index"
-        name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
-        name_of_file_with_max_commas = f"{input_filename}.max_commas"
+        name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
+        name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             
         files_to_be_removed.append(pass1_outputfilename)
         files_to_be_removed.append(pass2_outputfilename)
