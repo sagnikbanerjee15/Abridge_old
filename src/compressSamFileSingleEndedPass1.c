@@ -282,7 +282,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 			//fflush(stdout);
 			writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
-			//printf ( "\n%lld %lld" , curr_commas , max_commas );
+			printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
 			previous_position = current_position;
 			strcpy ( prev_reference_name , curr_reference_name );
@@ -327,7 +327,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 				//fflush(stdout);
 				writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
-				//printf ( "\n%lld %lld" , curr_commas , max_commas );
+				printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
 				strcpy ( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
@@ -343,9 +343,9 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	//Write final data to file
 	writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
-	//printf ( "\n%lld %lld" , curr_commas , max_commas );
+	printf ( "\n%lld %lld" , curr_commas , max_commas );
 
-	sprintf ( temp , "%d" , max_commas );
+	sprintf ( temp , "%lld" , max_commas );
 	strcat ( temp , "\n" );
 	fprintf ( fhw_name_of_file_with_max_commas , "%s" , temp );
 
