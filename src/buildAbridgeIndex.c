@@ -148,13 +148,13 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 	max_input_reads_in_a_single_nucl_loc += 5;
 	split_on_tab = ( char** ) malloc ( sizeof(char*) * 5 );
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
+		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc * 10000 );
 	split_on_colon = ( char** ) malloc ( sizeof(char*) * 5 );
 	for ( i = 0 ; i < 5 ; i++ )
 		split_on_colon[i] = ( char* ) malloc ( sizeof(char) * 1000 );
 
-	split_icigar_field = ( char** ) malloc ( sizeof(char*) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
-	for ( i = 0 ; i < MAX_ICIGAR_LENGTH_PASS1_COL2 ; i++ )
+	split_icigar_field = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		split_icigar_field[i] = ( char* ) malloc ( sizeof(char) * 10000 );
 
 	split_icigar_and_num_reads = ( char** ) malloc ( sizeof(char*) * 5 );
@@ -248,6 +248,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 		}
 		else
 		{
+			continue;
 			number_of_fields = splitByDelimiter ( line , '\t' , split_on_tab );
 			if ( number_of_fields == 1 )
 			{
