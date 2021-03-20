@@ -37,7 +37,6 @@ void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, i
 	write_to_file_col3[strlen ( write_to_file_col3 ) - 1] = '\0'; // Removing the last comma
 
 	*count = countNumberOfCharatersInString ( write_to_file_col2 , ',' );
-	printf ( "\n%d" , *count );
 	strcpy ( line_to_be_written_to_file , write_to_file_col1 );
 	strcat ( line_to_be_written_to_file , "\t" );
 	strcat ( line_to_be_written_to_file , write_to_file_col2 );
@@ -283,6 +282,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 			//fflush(stdout);
 			writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
+			printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
 			previous_position = current_position;
 			strcpy ( prev_reference_name , curr_reference_name );
@@ -327,6 +327,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 				//fflush(stdout);
 				writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
+				printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
 				strcpy ( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
@@ -342,6 +343,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	//Write final data to file
 	writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
+	printf ( "\n%lld %lld" , curr_commas , max_commas );
 
 	sprintf ( temp , "%d" , curr_commas );
 	strcat ( temp , "\n" );
