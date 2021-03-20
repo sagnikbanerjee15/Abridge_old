@@ -6,48 +6,37 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-/*
- * Usage:
- * compressSamFileSingleEnded \ argv[0]
- * <reference_sequence_id> \ argv[1]
- * <ignore-soft-clippings> \ argv[2]
- * <ignore-mismatches> \ argv[3]
- * <ignore-sequence-information> \ argv[4]
- * <ignore-unmapped-reads> \ argv[5]
- * <inputinputsamfilename> \ argv[6]
- * <outputfilename> argv[7]
- */
-
 int total_mapped_reads;
 
-void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string )
+void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string, long long int *count )
 {
 	int i;
-	char str [ 1000 ];
-	char line_to_be_written_to_file [ MAX_LINE_TO_BE_WRITTEN_TO_FILE ];
+	char str[1000];
+	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 
 	//printf("\nInside writeToFile compressed_ds_pool_total: %d", compressed_ds_pool_total);
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
 		if ( i == 0 )
 		{
-			if ( compressed_ds_pool [ i ]->position != 1 )
-				sprintf ( str , "%lld" , compressed_ds_pool [ i ]->position );
-			else str [ 0 ] = '\0'; // empty string
+			if ( compressed_ds_pool[i]->position != 1 )
+				sprintf ( str , "%lld" , compressed_ds_pool[i]->position );
+			else str[0] = '\0'; // empty string
 			strcat ( write_to_file_col1 , str );
 		}
-		strcat ( write_to_file_col2 , compressed_ds_pool [ i ]->icigar );
+		strcat ( write_to_file_col2 , compressed_ds_pool[i]->icigar );
 		strcat ( write_to_file_col2 , "," );
 
-		sprintf ( str , "%ld" , compressed_ds_pool [ i ]->num_reads );
+		sprintf ( str , "%ld" , compressed_ds_pool[i]->num_reads );
 		strcat ( write_to_file_col3 , str );
 		strcat ( write_to_file_col3 , "," );
 	}
 
 	//write_to_file_col1[strlen(write_to_file_col1) - 1] = '\0'; // Removing the last comma
-	write_to_file_col2 [ strlen ( write_to_file_col2 ) - 1 ] = '\0'; // Removing the last comma
-	write_to_file_col3 [ strlen ( write_to_file_col3 ) - 1 ] = '\0'; // Removing the last comma
+	write_to_file_col2[strlen ( write_to_file_col2 ) - 1] = '\0'; // Removing the last comma
+	write_to_file_col3[strlen ( write_to_file_col3 ) - 1] = '\0'; // Removing the last comma
 
+	*count = countNumberOfCharatersInString ( write_to_file_col2 , ',' );
 	strcpy ( line_to_be_written_to_file , write_to_file_col1 );
 	strcat ( line_to_be_written_to_file , "\t" );
 	strcat ( line_to_be_written_to_file , write_to_file_col2 );
@@ -62,13 +51,13 @@ void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, i
 	fprintf ( fhw_pass1 , "%s" , line_to_be_written_to_file );
 
 	// Reinitialize for next iteration
-	write_to_file_col1 [ 0 ] = '\0';
-	write_to_file_col2 [ 0 ] = '\0';
-	write_to_file_col3 [ 0 ] = '\0';
+	write_to_file_col1[0] = '\0';
+	write_to_file_col2[0] = '\0';
+	write_to_file_col3[0] = '\0';
 
 }
 
-void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc )
+void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc )
 {
 	/********************************************************************
 	 * Variable declaration
@@ -76,6 +65,7 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	FILE *fhr;
 	FILE *fhw_pass1;
 	FILE *fhw_unmapped;
+	FILE *fhw_name_of_file_with_max_commas;
 
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags; // List of strings to store tag information
@@ -91,7 +81,7 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	char *write_to_file_col2;
 	char *write_to_file_col3;
 	char *encoded_string;
-	char str [ 100 ];
+	char str[100];
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -114,6 +104,8 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	long long int number_of_records_written = 0;
 	long long int number_of_records_read = 0;
 	long long int num_pools_written = 0;
+	long long int max_commas = 0;
+	long long int curr_commas = 0;
 
 	struct Sam_Alignment *prev_alignment;
 	struct Sam_Alignment *curr_alignment;
@@ -146,38 +138,43 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 		printf ( "%s File cannot be created" , unmapped_filename );
 		exit ( 1 );
 	}
+	if ( fhw_name_of_file_with_max_commas == NULL )
+	{
+		printf ( "%s File cannot be created" , name_of_file_with_max_commas );
+		exit ( 1 );
+	}
 
 	split_line = ( char** ) malloc ( sizeof(char*) * ROWS );
 	for ( i = 0 ; i < ROWS ; i++ )
-		split_line [ i ] = ( char* ) malloc ( sizeof(char) * COLS );
+		split_line[i] = ( char* ) malloc ( sizeof(char) * COLS );
 
 	split_tags = ( char** ) malloc ( sizeof(char*) * ROWS );
 	for ( i = 0 ; i < ROWS ; i++ )
-		split_tags [ i ] = ( char* ) malloc ( sizeof(char) * COLS );
+		split_tags[i] = ( char* ) malloc ( sizeof(char) * COLS );
 
 	split_reference_info = ( char** ) malloc ( sizeof(char*) * ROWS );
 	for ( i = 0 ; i < ROWS ; i++ )
-		split_reference_info [ i ] = ( char* ) malloc ( sizeof(char) * COLS );
+		split_reference_info[i] = ( char* ) malloc ( sizeof(char) * COLS );
 
 	max_input_reads_in_a_single_nucl_loc += 5;
 	compressed_ds_pool = ( struct Compressed_DS** ) malloc ( sizeof(struct Compressed_DS*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
-		compressed_ds_pool [ i ] = allocateMemoryCompressed_DS ();
+		compressed_ds_pool[i] = allocateMemoryCompressed_DS ();
 
 	write_to_file_col1 = ( char* ) malloc ( sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE );
 	write_to_file_col2 = ( char* ) malloc ( sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE );
 	write_to_file_col3 = ( char* ) malloc ( sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE );
 	encoded_string = ( char* ) malloc ( sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE );
-	write_to_file_col1 [ 0 ] = '\0';
-	write_to_file_col2 [ 0 ] = '\0';
-	write_to_file_col3 [ 0 ] = '\0';
+	write_to_file_col1[0] = '\0';
+	write_to_file_col2[0] = '\0';
+	write_to_file_col3[0] = '\0';
 
 	reference_id_quick_read = ( char* ) malloc ( sizeof(char) * 1000 );
 	samflag_quick_read = ( char* ) malloc ( sizeof(char) * 1000 );
 	prev_reference_name = ( char* ) malloc ( sizeof(char) * 1000 );
-	prev_reference_name [ 0 ] = '\0';
+	prev_reference_name[0] = '\0';
 	curr_reference_name = ( char* ) malloc ( sizeof(char) * 1000 );
-	curr_reference_name [ 0 ] = '\0';
+	curr_reference_name[0] = '\0';
 
 	curr_alignment = allocateMemorySam_Alignment ();
 	prev_alignment = allocateMemorySam_Alignment ();
@@ -185,7 +182,7 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	sam_alignment_instance_diagnostics = allocateMemorySam_Alignment ();
 	reference_info = ( struct Reference_Sequence_Info** ) malloc ( sizeof(struct Reference_Sequence_Info*) * MAX_REFERENCE_SEQUENCES );
 	for ( i = 0 ; i < MAX_REFERENCE_SEQUENCES ; i++ )
-		reference_info [ i ] = allocateMemoryReference_Sequence_Info ();
+		reference_info[i] = allocateMemoryReference_Sequence_Info ();
 
 	temp = ( char* ) malloc ( sizeof(char) * MAX_GENERAL_LEN );
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc ( sizeof(struct Whole_Genome_Sequence) );
@@ -194,7 +191,7 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	/*
 	 * Write the first line in output file
 	 */
-	temp [ 0 ] = '\0';
+	temp[0] = '\0';
 	sprintf ( str , "%lld" , flag_ignore_mismatches );
 	strcat ( temp , str );
 	strcat ( temp , " " );
@@ -219,13 +216,13 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	 */
 	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
 	{
-		if ( line [ 0 ] == '@' )
+		if ( line[0] == '@' )
 		{
-			if ( line [ 1 ] == 'S' && line [ 2 ] == 'Q' )
+			if ( line[1] == 'S' && line[2] == 'Q' )
 			{
 				//printf("\n Reference: %s %d", line, strlen(line));
 				//fflush(stdout);
-				strcpy ( reference_info [ number_of_reference_sequences ]->line , line );
+				strcpy ( reference_info[number_of_reference_sequences]->line , line );
 				number_of_reference_sequences++;
 			}
 		}
@@ -250,8 +247,8 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 				//Write the unmapped reads into file
 				fprintf ( fhw_unmapped , "%s" , curr_alignment->seq );
 				fprintf ( fhw_unmapped , "%s" , "\n" );
-				for ( i = 0 ; curr_alignment->qual [ i ] != '\0' ; i++ )
-					curr_alignment->qual [ i ] -= 90;
+				for ( i = 0 ; curr_alignment->qual[i] != '\0' ; i++ )
+					curr_alignment->qual[i] -= 90;
 				fprintf ( fhw_unmapped , "%s" , curr_alignment->qual );
 				fprintf ( fhw_unmapped , "%s" , "\n" );
 			}
@@ -267,14 +264,14 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 			//fflush(stdout);
 			previous_position = current_position;
 			strcpy ( prev_reference_name , curr_reference_name );
-			strcpy ( compressed_ds_pool [ compressed_ds_pool_index ]->icigar , curr_alignment->icigar );
-			compressed_ds_pool [ compressed_ds_pool_index ]->num_reads = 1;
-			compressed_ds_pool [ compressed_ds_pool_index ]->position = curr_alignment->start_position;
+			strcpy ( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
+			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
 			//printf("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
-			fprintf ( fhw_pass1 , "%s" , reference_info [ reference_sequence_index ]->line );
+			fprintf ( fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line );
 			reference_sequence_index++;
 		}
 
@@ -282,18 +279,19 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 		{
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
-			writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string );
+			writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
+			if ( max_commas < curr_commas ) max_commas = curr_commas;
 			compressed_ds_pool_index = 0;
 			previous_position = current_position;
 			strcpy ( prev_reference_name , curr_reference_name );
-			strcpy ( compressed_ds_pool [ compressed_ds_pool_index ]->icigar , curr_alignment->icigar );
-			compressed_ds_pool [ compressed_ds_pool_index ]->num_reads = 1;
-			compressed_ds_pool [ compressed_ds_pool_index ]->position = curr_alignment->start_position;
+			strcpy ( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
+			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
 			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
-			fprintf ( fhw_pass1 , "%s" , reference_info [ reference_sequence_index ]->line );
+			fprintf ( fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line );
 			reference_sequence_index++;
 		}
 		else // Same chromosome
@@ -305,18 +303,18 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 
 				for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 				{
-					if ( strcmp ( compressed_ds_pool [ i ]->icigar , curr_alignment->icigar ) == 0 )
+					if ( strcmp ( compressed_ds_pool[i]->icigar , curr_alignment->icigar ) == 0 )
 					{
-						compressed_ds_pool [ i ]->num_reads++;
+						compressed_ds_pool[i]->num_reads++;
 						//printf("\n3. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[i]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, i);
 						break;
 					}
 				}
 				if ( i == compressed_ds_pool_index ) // New icigar encountered
 				{
-					strcpy ( compressed_ds_pool [ compressed_ds_pool_index ]->icigar , curr_alignment->icigar );
-					compressed_ds_pool [ compressed_ds_pool_index ]->num_reads = 1;
-					compressed_ds_pool [ compressed_ds_pool_index ]->position = compressed_ds_pool [ 0 ]->position;
+					strcpy ( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
+					compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+					compressed_ds_pool[compressed_ds_pool_index]->position = compressed_ds_pool[0]->position;
 					//printf("\n4. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 					compressed_ds_pool_index++;
 				}
@@ -325,11 +323,12 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 			{
 				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
-				writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string );
+				writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
+				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				compressed_ds_pool_index = 0;
-				strcpy ( compressed_ds_pool [ compressed_ds_pool_index ]->icigar , curr_alignment->icigar );
-				compressed_ds_pool [ compressed_ds_pool_index ]->num_reads = 1;
-				compressed_ds_pool [ compressed_ds_pool_index ]->position = curr_alignment->start_position - previous_position;
+				strcpy ( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
+				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+				compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position - previous_position;
 				//printf("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 				compressed_ds_pool_index++;
 			}
@@ -339,24 +338,29 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 		reInitializeSamAlignmentInstance ( curr_alignment );
 	} while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 );
 	//Write final data to file
-	writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string );
-	/*printf("\n Execution complete");
-	 fflush(stdout);*/
-	//printf("\n");
+	writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
+	if ( max_commas < curr_commas ) max_commas = curr_commas;
+
+	sprintf ( temp , "%d" , NH_value );
+	strcat ( temp , "\n" );
+	fprintf ( fhw_fhw_name_of_file_with_max_commas , "%s" , temp );
+
 	fclose ( fhr );
 	fclose ( fhw_pass1 );
 	fclose ( fhw_unmapped );
+	fclose ( fhw_fhw_name_of_file_with_max_commas );
 }
 
-int main ( int argc, char *argv [ ] )
+int main ( int argc, char *argv[] )
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
-	char input_samfilename [ FILENAME_LENGTH ];
-	char output_abridgefilename [ FILENAME_LENGTH ];
-	char genome_filename [ FILENAME_LENGTH ];
-	char unmapped_filename [ FILENAME_LENGTH ];
+	char input_samfilename[FILENAME_LENGTH];
+	char output_abridgefilename[FILENAME_LENGTH];
+	char genome_filename[FILENAME_LENGTH];
+	char unmapped_filename[FILENAME_LENGTH];
+	char name_of_file_with_max_commas[FILENAME_LENGTH];
 	char *temp; //Required for strtoi
 
 	short int flag_ignore_soft_clippings;
@@ -371,21 +375,21 @@ int main ( int argc, char *argv [ ] )
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	strcpy ( genome_filename , argv [ 1 ] );
-	flag_ignore_soft_clippings = strtol ( argv [ 2 ] , &temp , 10 );
-	flag_ignore_mismatches = strtol ( argv [ 3 ] , &temp , 10 );
-	flag_ignore_quality_score = strtol ( argv [ 4 ] , &temp , 10 );
-	flag_ignore_unmapped_sequences = strtol ( argv [ 5 ] , &temp , 10 );
-	strcpy ( input_samfilename , argv [ 6 ] );
-	strcpy ( output_abridgefilename , argv [ 7 ] );
-	strcpy ( unmapped_filename , argv [ 8 ] );
-	run_diagnostics = strtol ( argv [ 9 ] , &temp , 10 );
-	max_input_reads_in_a_single_nucl_loc = strtol ( argv [ 10 ] , &temp , 10 );
+	strcpy ( genome_filename , argv[1] );
+	flag_ignore_soft_clippings = strtol ( argv[2] , &temp , 10 );
+	flag_ignore_mismatches = strtol ( argv[3] , &temp , 10 );
+	flag_ignore_quality_score = strtol ( argv[4] , &temp , 10 );
+	flag_ignore_unmapped_sequences = strtol ( argv[5] , &temp , 10 );
+	strcpy ( input_samfilename , argv[6] );
+	strcpy ( output_abridgefilename , argv[7] );
+	strcpy ( unmapped_filename , argv[8] );
+	run_diagnostics = strtol ( argv[9] , &temp , 10 );
+	max_input_reads_in_a_single_nucl_loc = strtol ( argv[10] , &temp , 10 );
 	/********************************************************************/
 
 	/*
 	 * If user requests no sequence information then everything else is also ignored
 	 */
-	readAlignmentsAndCompress ( input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc );
+	readAlignmentsAndCompress ( name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc );
 	return 0;
 }

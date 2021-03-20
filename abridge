@@ -282,6 +282,7 @@ def compressSamFile(options):
             pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
             unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
             name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
+            name_of_file_with_max_commas = f"{input_filename}.max_commas"
             
             max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
             if options.quiet == False:
@@ -302,6 +303,7 @@ def compressSamFile(options):
             else:
                 cmd += f" 0" # argv[9] - run diagnostics
             cmd += f" {max_input_reads_in_a_single_nucl_loc} " # argv[10] - max_input_reads_in_a_single_nucl_loc
+            cmd += f" {name_of_file_with_max_commas} " # argv[11] - name_of_file_with_max_commas
             cmd += f") "
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -325,9 +327,15 @@ def compressSamFile(options):
                 logging.info("Starting Pass2")
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
             pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
+            name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
+            name_of_file_with_max_commas = f"{input_filename}.max_commas"
+            
+            max_commas = int(open(name_of_file_with_max_commas,"r").read().strip())
+            if options.quiet == False:
+                logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
         
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"{compressSamFileSingleEndedPass2} {pass1_outputfilename} {pass2_outputfilename} {max_input_reads_in_a_single_nucl_loc}"
+            cmd += f"{compressSamFileSingleEndedPass2} {pass1_outputfilename} {pass2_outputfilename} {max_commas}"
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -438,12 +446,14 @@ def compressSamFile(options):
         unmapped_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".unmapped"
         pass2_index_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2.index"
         name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
+        name_of_file_with_max_commas = f"{input_filename}.max_commas"
             
         files_to_be_removed.append(pass1_outputfilename)
         files_to_be_removed.append(pass2_outputfilename)
         files_to_be_removed.append(unmapped_outputfilename)
         files_to_be_removed.append(pass2_index_outputfilename)
         files_to_be_removed.append(name_of_max_input_reads_file)
+        files_to_be_removed.append(name_of_file_with_max_commas)
     
     for file in files_to_be_removed:
         os.system("rm -f "+file)
