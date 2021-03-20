@@ -73,6 +73,7 @@ void findMaximumNumberOfReadsMappedToOneNucleotide ( char *input_samfilename, ch
 		//populateSamAlignmentInstance ( curr_alignment , split_line , number_of_fields , split_tags );
 
 		curr_position = strtol ( split_line [ 3 ] , &temp , 10 );
+		if ( curr_position == 0 ) continue;
 		if ( max_position == 0 )
 		{
 			max_position = curr_position;
