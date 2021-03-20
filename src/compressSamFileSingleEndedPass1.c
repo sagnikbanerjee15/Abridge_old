@@ -159,7 +159,7 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	for ( i = 0 ; i < ROWS ; i++ )
 		split_reference_info [ i ] = ( char* ) malloc ( sizeof(char) * COLS );
 
-	max_input_reads_in_a_single_nucl_loc+=5;
+	max_input_reads_in_a_single_nucl_loc += 5;
 	compressed_ds_pool = ( struct Compressed_DS** ) malloc ( sizeof(struct Compressed_DS*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		compressed_ds_pool [ i ] = allocateMemoryCompressed_DS ();
@@ -189,7 +189,7 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 
 	temp = ( char* ) malloc ( sizeof(char) * MAX_GENERAL_LEN );
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc ( sizeof(struct Whole_Genome_Sequence) );
-	return;
+
 	/********************************************************************/
 
 	/*
@@ -387,6 +387,6 @@ int main ( int argc, char *argv [ ] )
 	/*
 	 * If user requests no sequence information then everything else is also ignored
 	 */
-	readAlignmentsAndCompress ( input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics, max_input_reads_in_a_single_nucl_loc );
+	readAlignmentsAndCompress ( input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc );
 	return 0;
 }
