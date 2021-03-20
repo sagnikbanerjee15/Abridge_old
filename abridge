@@ -327,7 +327,7 @@ def compressSamFile(options):
             pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
         
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"{compressSamFileSingleEndedPass2} {pass1_outputfilename} {pass2_outputfilename}"
+            cmd += f"{compressSamFileSingleEndedPass2} {pass1_outputfilename} {pass2_outputfilename} {max_input_reads_in_a_single_nucl_loc}"
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
