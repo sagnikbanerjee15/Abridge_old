@@ -212,9 +212,9 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 			// New chromosome encountered;
 			splitByDelimiter ( line , '\t' , split_on_tab );
 			splitByDelimiter ( split_on_tab[1] , ':' , split_on_colon );
-			continue;
 			strcpy ( current_reference_sequence , split_on_colon[1] );
 			file_position = ftell ( fhr );
+			continue;
 
 			line_len = getline ( &line , &len , fhr );
 			num_lines_read++;
