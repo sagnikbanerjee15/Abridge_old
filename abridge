@@ -301,6 +301,7 @@ def compressSamFile(options):
                 cmd += f" 1" # argv[9] - run diagnostics
             else:
                 cmd += f" 0" # argv[9] - run diagnostics
+            cmd += f"{max_input_reads_in_a_single_nucl_loc}" # argv[10] - max_input_reads_in_a_single_nucl_loc
             cmd += f") "
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:

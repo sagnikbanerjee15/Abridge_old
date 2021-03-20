@@ -68,7 +68,7 @@ void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, i
 
 }
 
-void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics )
+void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc )
 {
 	/********************************************************************
 	 * Variable declaration
@@ -159,8 +159,9 @@ void readAlignmentsAndCompress ( char *input_samfilename, char *output_abridgefi
 	for ( i = 0 ; i < ROWS ; i++ )
 		split_reference_info [ i ] = ( char* ) malloc ( sizeof(char) * COLS );
 
-	compressed_ds_pool = ( struct Compressed_DS** ) malloc ( sizeof(struct Compressed_DS*) * MAX_POOL_SIZE );
-	for ( i = 0 ; i < MAX_POOL_SIZE ; i++ )
+	max_input_reads_in_a_single_nucl_loc+=5;
+	compressed_ds_pool = ( struct Compressed_DS** ) malloc ( sizeof(struct Compressed_DS*) * max_input_reads_in_a_single_nucl_loc );
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		compressed_ds_pool [ i ] = allocateMemoryCompressed_DS ();
 
 	write_to_file_col1 = ( char* ) malloc ( sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE );
@@ -364,6 +365,8 @@ int main ( int argc, char *argv [ ] )
 	short int flag_ignore_quality_score;
 	short int flag_ignore_unmapped_sequences;
 	short int run_diagnostics;
+
+	long long int max_input_reads_in_a_single_nucl_loc;
 	/********************************************************************/
 
 	/********************************************************************
@@ -378,11 +381,12 @@ int main ( int argc, char *argv [ ] )
 	strcpy ( output_abridgefilename , argv [ 7 ] );
 	strcpy ( unmapped_filename , argv [ 8 ] );
 	run_diagnostics = strtol ( argv [ 9 ] , &temp , 10 );
+	max_input_reads_in_a_single_nucl_loc = strtol ( argv [ 10 ] , &temp , 10 );
 	/********************************************************************/
 
 	/*
 	 * If user requests no sequence information then everything else is also ignored
 	 */
-	readAlignmentsAndCompress ( input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics );
+	readAlignmentsAndCompress ( input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics, max_input_reads_in_a_single_nucl_loc );
 	return 0;
 }
