@@ -199,10 +199,11 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 		//fflush(stdout);
 		if ( isCommaInLine ( split_on_tab[1] ) == 1 )
 		{
+			count_commas_in_line = 0;
 			for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
 				if ( split_on_tab[1][i] == ',' ) count_commas_in_line += 1;
-			printf("\n%d",count_commas_in_line);
-			fflush(stdout);
+			printf ( "\n%d" , count_commas_in_line );
+			fflush ( stdout );
 			splitByDelimiter ( split_on_tab[1] , ',' , split_icigars );
 			number_of_cigars = splitByDelimiter ( split_on_tab[2] , ',' , split_num_reads );
 			/*
