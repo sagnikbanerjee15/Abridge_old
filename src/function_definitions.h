@@ -235,6 +235,8 @@ int splitByDelimiter(char *line, char delimiter, char **new_string)
 		{
 			new_string[ctr][j] = '\0';
 			ctr++; //for next word
+			printf("\nctr %d",ctr);
+			fflush(stdout);
 			j = 0; //for next word, init index to 0
 		}
 		else if (line[i] == '\n') continue;
