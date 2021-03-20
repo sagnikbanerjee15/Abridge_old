@@ -364,6 +364,8 @@ int main ( int argc, char *argv[] )
 	max_input_reads_in_a_single_nucl_loc = strtol ( argv[3] , &temp , 10 );
 	/********************************************************************/
 
+	printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
+	fflush ( stdout );
 	findContinousClusters ( input_filename , output_filename , max_input_reads_in_a_single_nucl_loc );
 	return 0;
 }
