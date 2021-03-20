@@ -97,7 +97,7 @@ void reModeliCIGARS ( char **split_icigars, char **split_num_reads, int number_o
 
 }
 
-void compressSimilarAlignments ( char *input_filename, char *output_abridgefilename, long long int max_input_reads_in_a_single_nucl_loc)
+void compressSimilarAlignments ( char *input_filename, char *output_abridgefilename, long long int max_input_reads_in_a_single_nucl_loc )
 {
 	/********************************************************************
 	 * Variable declaration
@@ -109,6 +109,7 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 	int i;
 	int number_of_cigars;
 	int line_num = 0;
+	int count_commas_in_line = 0;
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -154,10 +155,10 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 	line_to_be_written_to_file = ( char* ) malloc ( sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE );
 	line_to_be_written_to_file[0] = '\0';
 
-	max_input_reads_in_a_single_nucl_loc+= 5;
+	max_input_reads_in_a_single_nucl_loc += 5;
 	//MIN_POOL_SIZE * 10 = MIN_POOL_SIZE * 10;
 
-	replacement_character = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc);
+	replacement_character = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc );
 	split_icigars = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		split_icigars[i] = ( char* ) malloc ( sizeof(char) * 10000 );
@@ -198,6 +199,10 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 		//fflush(stdout);
 		if ( isCommaInLine ( split_on_tab[1] ) == 1 )
 		{
+			for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
+				if ( split_on_tab[1][i] == ',' ) count_commas_in_line += 1;
+			printf("\n%d",count_commas_in_line);
+			fflush(stdout);
 			splitByDelimiter ( split_on_tab[1] , ',' , split_icigars );
 			number_of_cigars = splitByDelimiter ( split_on_tab[2] , ',' , split_num_reads );
 			/*
@@ -281,7 +286,7 @@ int main ( int argc, char *argv[] )
 	 ********************************************************************/
 	strcpy ( input_filename , argv[1] );
 	strcpy ( output_abridgefilename , argv[2] );
-	max_input_reads_in_a_single_nucl_loc  = strtol ( argv[10] , &temp , 10 );
+	max_input_reads_in_a_single_nucl_loc = strtol ( argv[10] , &temp , 10 );
 	/********************************************************************/
 
 	compressSimilarAlignments ( input_filename , output_abridgefilename , max_input_reads_in_a_single_nucl_loc );
