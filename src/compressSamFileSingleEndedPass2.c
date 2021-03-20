@@ -156,31 +156,31 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 	line_to_be_written_to_file[0] = '\0';
 
 	max_input_reads_in_a_single_nucl_loc += 5;
-	//MIN_POOL_SIZE * 10 = MIN_POOL_SIZE * 10;
+	//max_input_reads_in_a_single_nucl_loc= MIN_POOL_SIZE * 10;
 
 	replacement_character = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc );
 	split_icigars = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		split_icigars[i] = ( char* ) malloc ( sizeof(char) * 10000 );
 
-	split_icigars_cp = ( char** ) malloc ( sizeof(char*) * MIN_POOL_SIZE * 10 );
-	for ( i = 0 ; i < MIN_POOL_SIZE * 10 ; i++ )
+	split_icigars_cp = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_icigars_cp[i] = ( char* ) malloc ( sizeof(char) * 10000 );
 
-	split_icigars_final = ( char** ) malloc ( sizeof(char*) * MIN_POOL_SIZE * 10 );
-	for ( i = 0 ; i < MIN_POOL_SIZE * 10 ; i++ )
+	split_icigars_final = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_icigars_final[i] = ( char* ) malloc ( sizeof(char) * 10000 );
 
-	split_num_reads = ( char** ) malloc ( sizeof(char*) * MIN_POOL_SIZE * 10 );
-	for ( i = 0 ; i < MIN_POOL_SIZE * 10 ; i++ )
+	split_num_reads = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_num_reads[i] = ( char* ) malloc ( sizeof(char) * 25 );
 
-	split_num_reads_cp = ( char** ) malloc ( sizeof(char*) * MIN_POOL_SIZE * 10 );
-	for ( i = 0 ; i < MIN_POOL_SIZE * 10 ; i++ )
+	split_num_reads_cp = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_num_reads_cp[i] = ( char* ) malloc ( sizeof(char) * 25 );
 
-	split_num_reads_final = ( char** ) malloc ( sizeof(char*) * MIN_POOL_SIZE * 10 );
-	for ( i = 0 ; i < MIN_POOL_SIZE * 10 ; i++ )
+	split_num_reads_final = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
 		split_num_reads_final[i] = ( char* ) malloc ( sizeof(char) * 25 );
 
 	/********************************************************************/
@@ -202,10 +202,9 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 			count_commas_in_line = 0;
 			for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
 				if ( split_on_tab[1][i] == ',' ) count_commas_in_line += 1;
-			printf ( "\n%d" , count_commas_in_line );
-			fflush ( stdout );
+			//printf ( "\n%d" , count_commas_in_line );
+			//fflush ( stdout );
 			splitByDelimiter ( split_on_tab[1] , ',' , split_icigars );
-			continue;
 			number_of_cigars = splitByDelimiter ( split_on_tab[2] , ',' , split_num_reads );
 			/*
 			 if (number_of_cigars>=10)
@@ -288,7 +287,7 @@ int main ( int argc, char *argv[] )
 	 ********************************************************************/
 	strcpy ( input_filename , argv[1] );
 	strcpy ( output_abridgefilename , argv[2] );
-	max_input_reads_in_a_single_nucl_loc = strtol ( argv[10] , &temp , 10 );
+	max_input_reads_in_a_single_nucl_loc = strtol ( argv[3] , &temp , 10 );
 	/********************************************************************/
 
 	compressSimilarAlignments ( input_filename , output_abridgefilename , max_input_reads_in_a_single_nucl_loc );
