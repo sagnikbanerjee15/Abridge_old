@@ -153,8 +153,8 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 	for ( i = 0 ; i < 5 ; i++ )
 		split_on_colon[i] = ( char* ) malloc ( sizeof(char) * 1000 );
 
-	split_icigar_field = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
-	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
+	split_icigar_field = ( char** ) malloc ( sizeof(char*) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
+	for ( i = 0 ; i < MAX_ICIGAR_LENGTH_PASS1_COL2 ; i++ )
 		split_icigar_field[i] = ( char* ) malloc ( sizeof(char) * 10000 );
 
 	split_icigar_and_num_reads = ( char** ) malloc ( sizeof(char*) * 5 );
@@ -166,7 +166,6 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 	current_reference_sequence = ( char* ) malloc ( sizeof(char) * MAX_REFERENCE_SEQ_LENGTH );
 	temp = ( char* ) malloc ( sizeof(char) * MAX_GENERAL_LEN );
 	line_to_be_written_to_file[0] = '\0';
-	return;
 	/********************************************************************/
 
 	line_len_previous = -1;
