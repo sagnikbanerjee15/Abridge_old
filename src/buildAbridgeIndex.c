@@ -221,7 +221,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 
 			if ( number_of_fields == 1 )
 			{
-				continue;
+
 				start_position_of_read = 1;
 				number_of_fields = splitByDelimiter ( split_on_tab[0] , ',' , split_icigar_field );
 				/*
@@ -236,6 +236,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 			}
 			else
 			{
+				continue;
 				start_position_of_read = strtol ( split_on_tab[0] , &temp , 10 );
 				number_of_fields = splitByDelimiter ( split_on_tab[1] , ',' , split_icigar_field );
 				/*
