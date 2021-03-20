@@ -141,6 +141,7 @@ def validateCommandLineArguments(options):
     options.softwares["randomRetrievalSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalSingleEnded"
     options.softwares["mergeCompressedFilesSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/mergeCompressedFilesSingleEnded"
     options.softwares["addTagToSamFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/addTagToSamFile"
+    options.softwares["maxReadsMappedToSingleNucleotide"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsMappedToSingleNucleotide"
     
     if options.decompress==True:
         for file in options.inputabrfilenames:
@@ -224,6 +225,7 @@ def compressSamFile(options):
         ######################################################################################
         compressSamFileSingleEndedPass1 = options.softwares["compressSamFileSingleEndedPass1"]
         compressSamFileSingleEndedPass2 = options.softwares["compressSamFileSingleEndedPass2"]
+        maxReadsMappedToSingleNucleotide = options.softwares["maxReadsMappedToSingleNucleotide"]
         buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
         
         cmd=f"gcc {compressSamFileSingleEndedPass1}.c -o {compressSamFileSingleEndedPass1} -Ofast"
@@ -235,6 +237,10 @@ def compressSamFile(options):
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
         cmd=f"gcc {buildABRIDGEIndex}.c -o {buildABRIDGEIndex} -Ofast"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        cmd=f"gcc {maxReadsMappedToSingleNucleotide}.c -o {maxReadsMappedToSingleNucleotide} -Ofast"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
