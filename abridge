@@ -358,6 +358,10 @@ def compressSamFile(options):
             name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
             name_of_file_with_max_commas = f"{input_filename}.max_commas"
             
+            max_commas = int(open(name_of_file_with_max_commas,"r").read().strip())
+            if options.quiet == False:
+                logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
+            
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f"{buildABRIDGEIndex} {pass2_outputfilename} {pass2_index_outputfilename} {max_commas} "
             cmd += f") "   

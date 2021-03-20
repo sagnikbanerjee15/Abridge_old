@@ -144,8 +144,8 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 		printf ( "File cannot be created" );
 		exit ( 1 );
 	}
-	printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
-	fflush ( stdout );
+	//printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
+	//fflush ( stdout );
 
 	max_input_reads_in_a_single_nucl_loc += 5;
 	split_on_tab = ( char** ) malloc ( sizeof(char*) * 5 );
@@ -226,7 +226,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 
 				start_position_of_read = 1;
 				number_of_fields = splitByDelimiter ( split_on_tab[0] , ',' , split_icigar_field );
-				continue;
+				//continue;
 				/*
 				 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
@@ -253,7 +253,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 		}
 		else
 		{
-			continue;
+			//continue;
 			number_of_fields = splitByDelimiter ( line , '\t' , split_on_tab );
 			if ( number_of_fields == 1 )
 			{
@@ -364,8 +364,8 @@ int main ( int argc, char *argv[] )
 	max_input_reads_in_a_single_nucl_loc = strtol ( argv[3] , &temp , 10 );
 	/********************************************************************/
 
-	printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
-	fflush ( stdout );
+	//printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
+	//fflush ( stdout );
 	findContinousClusters ( input_filename , output_filename , max_input_reads_in_a_single_nucl_loc );
 	return 0;
 }
