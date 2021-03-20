@@ -15,6 +15,7 @@ abridge \
 
 (/usr/bin/time --verbose  \
 abridge \
+--keep_intermediate_error_files \
 --compress \
 --cpu $CPU \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
