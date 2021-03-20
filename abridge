@@ -355,9 +355,11 @@ def compressSamFile(options):
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
             pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
+            name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
+            name_of_file_with_max_commas = f"{input_filename}.max_commas"
             
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"{buildABRIDGEIndex} {pass2_outputfilename} {pass2_index_outputfilename}"
+            cmd += f"{buildABRIDGEIndex} {pass2_outputfilename} {pass2_index_outputfilename} {max_commas} "
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
