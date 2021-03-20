@@ -138,6 +138,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 		printf ( "%s File cannot be created" , unmapped_filename );
 		exit ( 1 );
 	}
+	fhw_name_of_file_with_max_commas = fopen ( name_of_file_with_max_commas , "w" );
 	if ( fhw_name_of_file_with_max_commas == NULL )
 	{
 		printf ( "%s File cannot be created" , name_of_file_with_max_commas );
