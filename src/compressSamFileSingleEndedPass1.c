@@ -341,14 +341,14 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas );
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
 
-	sprintf ( temp , "%d" , NH_value );
+	sprintf ( temp , "%d" , curr_commas );
 	strcat ( temp , "\n" );
-	fprintf ( fhw_fhw_name_of_file_with_max_commas , "%s" , temp );
+	fprintf ( fhw_name_of_file_with_max_commas , "%s" , temp );
 
 	fclose ( fhr );
 	fclose ( fhw_pass1 );
 	fclose ( fhw_unmapped );
-	fclose ( fhw_fhw_name_of_file_with_max_commas );
+	fclose ( fhw_name_of_file_with_max_commas );
 }
 
 int main ( int argc, char *argv[] )
