@@ -144,7 +144,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 		printf ( "File cannot be created" );
 		exit ( 1 );
 	}
-	printf ( "\n %d" , max_input_reads_in_a_single_nucl_loc );
+	printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
 	fflush ( stdout );
 
 	max_input_reads_in_a_single_nucl_loc += 5;
