@@ -214,13 +214,14 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 			splitByDelimiter ( split_on_tab[1] , ':' , split_on_colon );
 			strcpy ( current_reference_sequence , split_on_colon[1] );
 			file_position = ftell ( fhr );
-			continue;
 
 			line_len = getline ( &line , &len , fhr );
 			num_lines_read++;
 			number_of_fields = splitByDelimiter ( line , '\t' , split_on_tab );
+
 			if ( number_of_fields == 1 )
 			{
+				continue;
 				start_position_of_read = 1;
 				number_of_fields = splitByDelimiter ( split_on_tab[0] , ',' , split_icigar_field );
 				/*
