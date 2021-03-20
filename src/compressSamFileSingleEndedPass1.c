@@ -386,6 +386,7 @@ int main ( int argc, char *argv[] )
 	strcpy ( unmapped_filename , argv[8] );
 	run_diagnostics = strtol ( argv[9] , &temp , 10 );
 	max_input_reads_in_a_single_nucl_loc = strtol ( argv[10] , &temp , 10 );
+	name_of_file_with_max_commas = strcpy ( argv[11] );
 	/********************************************************************/
 
 	/*
