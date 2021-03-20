@@ -36,7 +36,7 @@ void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, i
 	write_to_file_col2[strlen ( write_to_file_col2 ) - 1] = '\0'; // Removing the last comma
 	write_to_file_col3[strlen ( write_to_file_col3 ) - 1] = '\0'; // Removing the last comma
 
-	*count = countNumberOfCharatersInString ( write_to_file_col2 , ',' );
+	//*count = countNumberOfCharatersInString ( write_to_file_col2 , ',' );
 	strcpy ( line_to_be_written_to_file , write_to_file_col1 );
 	strcat ( line_to_be_written_to_file , "\t" );
 	strcat ( line_to_be_written_to_file , write_to_file_col2 );
