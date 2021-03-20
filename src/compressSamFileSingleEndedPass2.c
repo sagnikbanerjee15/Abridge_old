@@ -173,15 +173,15 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 
 	split_num_reads = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
-		split_num_reads[i] = ( char* ) malloc ( sizeof(char) * 25 );
+		split_num_reads[i] = ( char* ) malloc ( sizeof(char) * 10 );
 
 	split_num_reads_cp = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
-		split_num_reads_cp[i] = ( char* ) malloc ( sizeof(char) * 25 );
+		split_num_reads_cp[i] = ( char* ) malloc ( sizeof(char) * 10 );
 
 	split_num_reads_final = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc; i++ )
-		split_num_reads_final[i] = ( char* ) malloc ( sizeof(char) * 25 );
+		split_num_reads_final[i] = ( char* ) malloc ( sizeof(char) * 10 );
 
 	/********************************************************************/
 	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
