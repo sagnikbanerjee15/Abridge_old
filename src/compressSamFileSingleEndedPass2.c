@@ -150,12 +150,12 @@ void compressSimilarAlignments ( char *input_filename, char *output_abridgefilen
 
 	split_on_tab = ( char** ) malloc ( sizeof(char*) * 5 );
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
+		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc * 10000);
 
 	line_to_be_written_to_file = ( char* ) malloc ( sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE );
 	line_to_be_written_to_file[0] = '\0';
 
-	max_input_reads_in_a_single_nucl_loc += 5;
+	max_input_reads_in_a_single_nucl_loc += 1;
 	//max_input_reads_in_a_single_nucl_loc= MIN_POOL_SIZE * 10;
 
 	replacement_character = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc );
