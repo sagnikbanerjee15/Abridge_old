@@ -30,14 +30,13 @@ void findMaximumNumberOfReadsMappedToOneNucleotide ( char *input_samfilename, ch
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags;
 
-	struct Sam_Alignment *curr_alignment;
+	//struct Sam_Alignment *curr_alignment;
 	/********************************************************************/
 
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	curr_alignment = allocateMemorySam_Alignment ();
-
+	//curr_alignment = allocateMemorySam_Alignment ();
 	fhr = fopen ( input_samfilename , "r" );
 	if ( fhr == NULL )
 	{
@@ -71,9 +70,10 @@ void findMaximumNumberOfReadsMappedToOneNucleotide ( char *input_samfilename, ch
 	do
 	{
 		number_of_fields = splitByDelimiter ( line , '\t' , split_line );
-		populateSamAlignmentInstance ( curr_alignment , split_line , number_of_fields , split_tags );
+		//populateSamAlignmentInstance ( curr_alignment , split_line , number_of_fields , split_tags );
 
-		curr_position = curr_alignment->start_position ;
+		curr_position = strtol ( line [ 3 ] , &temp , 10 );
+		;
 		if ( max_position == 0 )
 		{
 			max_position = curr_position;
@@ -86,18 +86,16 @@ void findMaximumNumberOfReadsMappedToOneNucleotide ( char *input_samfilename, ch
 		else
 		{
 			if ( prev_position == curr_position )
-			{
 				prev_value += 1;
-			}
 			else
 			{
 				if ( prev_value > max_value )
 				{
 					max_value = prev_value;
 					max_position = prev_position;
-					prev_position = curr_position;
-					prev_value = 1;
 				}
+				prev_position = curr_position;
+				prev_value = 1;
 			}
 		}
 

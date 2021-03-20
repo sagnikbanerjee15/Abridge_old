@@ -279,7 +279,8 @@ def compressSamFile(options):
             
             max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
             if options.quiet == False:
-                logging.info(f"{input_filename} max_input_reads_in_a_single_nucl_loc - {max_input_reads_in_a_single_nucl_loc}")
+                logging.info(f"{name_of_input_file_without_location} max_input_reads_in_a_single_nucl_loc = {max_input_reads_in_a_single_nucl_loc}")
+                
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f"{compressSamFileSingleEndedPass1}" # argv[0] - name of the program
             cmd += f" {options.genome}" # argv[1] - genome_filename
