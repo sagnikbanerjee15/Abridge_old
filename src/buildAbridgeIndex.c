@@ -179,7 +179,6 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 		}
 		if ( line[0] == '@' )
 		{
-			continue;
 			if ( start_position_of_cluster != -1 && end_position_of_cluster != -1 )
 			{
 				byte_number_end_cluster = ftell ( fhr ) - line_len;
@@ -212,6 +211,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 			}
 			// New chromosome encountered;
 			splitByDelimiter ( line , '\t' , split_on_tab );
+			continue;
 			splitByDelimiter ( split_on_tab[1] , ':' , split_on_colon );
 			strcpy ( current_reference_sequence , split_on_colon[1] );
 			file_position = ftell ( fhr );
