@@ -345,6 +345,7 @@ int main ( int argc, char *argv[] )
 	 ********************************************************************/
 	char input_filename[FILENAME_LENGTH];
 	char output_filename[FILENAME_LENGTH];
+	char *temp;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 	/********************************************************************/
