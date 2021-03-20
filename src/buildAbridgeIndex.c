@@ -148,7 +148,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 	max_input_reads_in_a_single_nucl_loc += 5;
 	split_on_tab = ( char** ) malloc ( sizeof(char*) * 5 );
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc * 10000 );
+		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
 	split_on_colon = ( char** ) malloc ( sizeof(char*) * 5 );
 	for ( i = 0 ; i < 5 ; i++ )
 		split_on_colon[i] = ( char* ) malloc ( sizeof(char) * 1000 );
