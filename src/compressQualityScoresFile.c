@@ -25,6 +25,8 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 
 	int i;
 	int max_len_sequence = 0;
+
+	long long int number_of_records_read = 0;
 	/********************************************************************/
 
 	/********************************************************************
@@ -56,6 +58,14 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 
 	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
 	{
+		number_of_records_read += 1;
+
+		if ( number_of_records_read % 1000000 == 0 )
+		{
+			printf ( "\nNumber of records read: %lld Million %s" , number_of_records_read / 1000000 );
+			fflush ( stdout );
+		}
+
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
 			if ( i > max_len_sequence ) max_len_sequence = i;
