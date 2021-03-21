@@ -177,8 +177,8 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 			{
 				if ( compressed_ds_pool_index > 25000 )
 				{
-					printf ( "\n%s %s" , modified_icigars[i] , modified_icigars[j] );
-					printf ( "\n%s %s" , compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar );
+					printf ( "\n%s %s %d" , modified_icigars[i] , modified_icigars[j] , strcmp ( modified_icigars[i] , modified_icigars[j] ) );
+					printf ( "\n%s %s %d" , compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar , strcmp ( compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar ) );
 				}
 				//strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[0] = findMatchCharacterIcigar ( compressed_ds_pool[j]->icigar );
