@@ -15,6 +15,7 @@ void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, i
 	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 
 	//printf("\nInside writeToFile compressed_ds_pool_total: %d", compressed_ds_pool_total);
+	line_to_be_written_to_file[0] = '\0';
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
 		if ( i == 0 )
@@ -22,25 +23,30 @@ void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, i
 			if ( compressed_ds_pool[i]->position != 1 )
 			{
 				sprintf( str , "%lld" , compressed_ds_pool[i]->position );
-				fprintf ( fhw_pass1 , "%s" , str );
-				fprintf ( fhw_pass1 , "%s" , "\t" );
+				//fprintf ( fhw_pass1 , "%s" , str );
+				//fprintf ( fhw_pass1 , "%s" , "\t" );
+				strcat( line_to_be_written_to_file , str );
+				strcat( line_to_be_written_to_file , "\t" );
 			}
 			else str[0] = '\0'; // empty string
 			//strcat( write_to_file_col1 , str );
 		}
-
-		fprintf ( fhw_pass1 , "%s" , compressed_ds_pool[i]->icigar );
-		fprintf ( fhw_pass1 , "%s" , "-" );
+		strcat( line_to_be_written_to_file , compressed_ds_pool[i]->icigar );
+		strcat( line_to_be_written_to_file , "-" );
+		//fprintf ( fhw_pass1 , "%s" , compressed_ds_pool[i]->icigar );
+		//fprintf ( fhw_pass1 , "%s" , "-" );
 		//strcat( write_to_file_col2 , compressed_ds_pool[i]->icigar );
 		//strcat( write_to_file_col2 , "-" );
 
 		sprintf( str , "%ld" , compressed_ds_pool[i]->num_reads );
-		fprintf ( fhw_pass1 , "%s" , str );
+		//fprintf ( fhw_pass1 , "%s" , str );
+		strcat( line_to_be_written_to_file , str );
 		//strcat( write_to_file_col3 , str );
 		if ( i != compressed_ds_pool_total - 1 )
-		strcat( write_to_file_col3 , "," );
+		strcat( line_to_be_written_to_file , "," );
 	}
-	fprintf ( fhw_pass1 , "%s" , "\n" );
+	strcat( line_to_be_written_to_file , "\n" );
+	fprintf ( fhw_pass1 , "%s" , line_to_be_written_to_file );
 
 	//*count = countNumberOfCharatersInString ( write_to_file_col2 , ',' );
 	*count = compressed_ds_pool_total;
