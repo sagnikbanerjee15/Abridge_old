@@ -20,41 +20,48 @@ void writeToFile ( FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, i
 		if ( i == 0 )
 		{
 			if ( compressed_ds_pool[i]->position != 1 )
+			{
 				sprintf( str , "%lld" , compressed_ds_pool[i]->position );
+				fprintf ( fhw_pass1 , "%s" , str );
+				fprintf ( fhw_pass1 , "%s" , "\t" );
+			}
 			else str[0] = '\0'; // empty string
-			strcat( write_to_file_col1 , str );
+			//strcat( write_to_file_col1 , str );
 		}
-		strcat( write_to_file_col2 , compressed_ds_pool[i]->icigar );
-		strcat( write_to_file_col2 , "," );
+
+		fprintf ( fhw_pass1 , "%s" , compressed_ds_pool[i]->icigar );
+		fprintf ( fhw_pass1 , "%s" , "-" );
+		//strcat( write_to_file_col2 , compressed_ds_pool[i]->icigar );
+		//strcat( write_to_file_col2 , "-" );
 
 		sprintf( str , "%ld" , compressed_ds_pool[i]->num_reads );
-		strcat( write_to_file_col3 , str );
+		fprintf ( fhw_pass1 , "%s" , str );
+		//strcat( write_to_file_col3 , str );
+		if ( i != compressed_ds_pool_total - 1 )
 		strcat( write_to_file_col3 , "," );
 	}
-
-	//write_to_file_col1[strlen(write_to_file_col1) - 1] = '\0'; // Removing the last comma
-	write_to_file_col2[strlen ( write_to_file_col2 ) - 1] = '\0'; // Removing the last comma
-	write_to_file_col3[strlen ( write_to_file_col3 ) - 1] = '\0'; // Removing the last comma
+	fprintf ( fhw_pass1 , "%s" , "\n" );
 
 	//*count = countNumberOfCharatersInString ( write_to_file_col2 , ',' );
 	*count = compressed_ds_pool_total;
-	strcpy( line_to_be_written_to_file , write_to_file_col1 );
-	strcat( line_to_be_written_to_file , "\t" );
-	strcat( line_to_be_written_to_file , write_to_file_col2 );
-	strcat( line_to_be_written_to_file , "\t" );
-	if ( compressed_ds_pool_total == 1 )
-	{
-		strcat( line_to_be_written_to_file , write_to_file_col3 );
-	}
-	else strcat( line_to_be_written_to_file , write_to_file_col3 );
+	/*strcpy( line_to_be_written_to_file , write_to_file_col1 );
+	 strcat( line_to_be_written_to_file , "\t" );
+	 strcat( line_to_be_written_to_file , write_to_file_col2 );
+	 strcat( line_to_be_written_to_file , "\t" );
+	 if ( compressed_ds_pool_total == 1 )
+	 {
+	 strcat( line_to_be_written_to_file , write_to_file_col3 );
+	 }
+	 else strcat( line_to_be_written_to_file , write_to_file_col3 );
 
-	strcat( line_to_be_written_to_file , "\n" );
-	fprintf ( fhw_pass1 , "%s" , line_to_be_written_to_file );
+	 strcat( line_to_be_written_to_file , "\n" );
+	 fprintf ( fhw_pass1 , "%s" , line_to_be_written_to_file );
 
-	// Reinitialize for next iteration
-	write_to_file_col1[0] = '\0';
-	write_to_file_col2[0] = '\0';
-	write_to_file_col3[0] = '\0';
+	 // Reinitialize for next iteration
+	 write_to_file_col1[0] = '\0';
+	 write_to_file_col2[0] = '\0';
+	 write_to_file_col3[0] = '\0';
+	 */
 }
 
 void prepareIcigarForComparison ( char *icigar1, char *icigar )
@@ -176,8 +183,8 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 			//icigar2 = modified_icigars[j];
 			if ( strcmp ( modified_icigars[i] , modified_icigars[j] ) == 0 )
 			{
-				printf ( "\n%s %s %d" , modified_icigars[i] , modified_icigars[j] , strcmp ( modified_icigars[i] , modified_icigars[j] ) );
-				printf ( "\n%s %s %d" , compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar , strcmp ( compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar ) );
+				//printf ( "\n%s %s %d" , modified_icigars[i] , modified_icigars[j] , strcmp ( modified_icigars[i] , modified_icigars[j] ) );
+				//printf ( "\n%s %s %d" , compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar , strcmp ( compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar ) );
 				//strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[0] = findMatchCharacterIcigar ( compressed_ds_pool[j]->icigar );
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[1] = '\0';
@@ -213,7 +220,6 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	FILE *fhw_name_of_file_with_max_commas;
 
 	char **qual_scores;
-//char **qual_scores_rearranged;
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags; // List of strings to store tag information
 	char **split_reference_info;
@@ -350,7 +356,6 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	modified_icigars = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		modified_icigars[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-//qual_scores_rearranged = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	/********************************************************************/
 
 	/*
