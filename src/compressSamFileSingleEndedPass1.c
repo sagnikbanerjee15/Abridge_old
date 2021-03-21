@@ -91,6 +91,7 @@ void prepareIcigarForComparison ( char *icigar1, char *icigar )
 				break;
 		}
 	}
+	icigar1[i] = '\0';
 }
 
 char findMatchCharacterIcigar ( char *icigar )
