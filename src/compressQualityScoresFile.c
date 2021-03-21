@@ -63,11 +63,16 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	{
 		number_of_records_read += 1;
 
-		if ( number_of_records_read % 1000000 == 0 )
-		{
-			printf ( "\nNumber of records read: %lld Million" , number_of_records_read / 1000000 );
-			fflush ( stdout );
-		}
+		/*
+		 if ( number_of_records_read % 1000000 == 0 )
+		 {
+		 printf ( "\nNumber of records read: %lld Million" , number_of_records_read / 1000000 );
+		 fflush ( stdout );
+		 }
+		 */
+
+		printf ( "\nLine number %lld" , number_of_records_read );
+		fflush ( stdout );
 
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
