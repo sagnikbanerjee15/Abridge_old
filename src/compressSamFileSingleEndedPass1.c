@@ -187,8 +187,8 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 			}
 		}
 	}
-	printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
-	if ( compressed_ds_pool_index > 50000 )
+	//printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
+	if ( compressed_ds_pool_index > 25000 )
 	{
 		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 		{
