@@ -326,7 +326,6 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		qual_scores[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
 	//qual_scores_rearranged = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
-	return;
 	/********************************************************************/
 
 	/*
