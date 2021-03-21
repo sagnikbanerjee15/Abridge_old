@@ -92,9 +92,6 @@ struct Compressed_DS* allocateMemoryCompressed_DS ()
 	int i;
 	s = ( struct Compressed_DS* ) malloc ( sizeof(struct Compressed_DS) );
 	s->icigar = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN * 2 );
-	/*s->qual = (char**) malloc(sizeof(char*) * MIN_POOL_SIZE);
-	 for (i = 0; i < MIN_POOL_SIZE; i++)
-	 s->qual[i] = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);*/
 	s->num_reads = 0;
 	s->position = 0;
 	return s;
@@ -215,7 +212,7 @@ long long int countNumberOfCharatersInString ( char *line, char needle )
 	int i;
 
 	for ( i = 0 ; line[i] != '\0' ; i++ )
-		if ( line[i] == needle ) count+=1;
+		if ( line[i] == needle ) count += 1;
 
 	return count;
 
@@ -273,7 +270,7 @@ int locateSamTags ( char *tag )
 	int i = 0;
 	/********************************************************************/
 
-	for ( i = 0 ; i < sizeof(sam_tags) / sizeof(sam_tags[0]) ; i++ )
+	for ( i = 0 ; i < sizeof ( sam_tags ) / sizeof ( sam_tags[0] ) ; i++ )
 	{
 		if ( strcmp ( sam_tags[i] , tag ) == 0 ) return i;
 	}

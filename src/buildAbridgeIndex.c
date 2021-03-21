@@ -185,26 +185,26 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 			{
 				byte_number_end_cluster = ftell ( fhr ) - line_len;
 				//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr));
-				strcpy ( line_to_be_written_to_file , current_reference_sequence );
-				strcat ( line_to_be_written_to_file , "\t" );
+				strcpy( line_to_be_written_to_file , current_reference_sequence );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%d" , start_position_of_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%d" , start_position_of_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%d" , end_position_of_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%d" , end_position_of_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%ld" , byte_number_start_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%ld" , byte_number_start_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%ld" , byte_number_end_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%ld" , byte_number_end_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				strcat ( line_to_be_written_to_file , "\n" );
+				strcat( line_to_be_written_to_file , "\n" );
 				fprintf ( fhw , "%s" , line_to_be_written_to_file );
 
 				file_position = -1;
@@ -214,7 +214,7 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 			// New chromosome encountered;
 			splitByDelimiter ( line , '\t' , split_on_tab );
 			splitByDelimiter ( split_on_tab[1] , ':' , split_on_colon );
-			strcpy ( current_reference_sequence , split_on_colon[1] );
+			strcpy( current_reference_sequence , split_on_colon[1] );
 			file_position = ftell ( fhr );
 
 			line_len = getline ( &line , &len , fhr );
@@ -276,26 +276,26 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 			{
 				byte_number_end_cluster = ftell ( fhr ) - line_len;
 				//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr));
-				strcpy ( line_to_be_written_to_file , current_reference_sequence );
-				strcat ( line_to_be_written_to_file , "\t" );
+				strcpy( line_to_be_written_to_file , current_reference_sequence );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%d" , start_position_of_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%d" , start_position_of_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%d" , end_position_of_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%d" , end_position_of_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%ld" , byte_number_start_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%ld" , byte_number_start_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				sprintf ( temp , "%ld" , byte_number_end_cluster );
-				strcat ( line_to_be_written_to_file , temp );
-				strcat ( line_to_be_written_to_file , "\t" );
+				sprintf( temp , "%ld" , byte_number_end_cluster );
+				strcat( line_to_be_written_to_file , temp );
+				strcat( line_to_be_written_to_file , "\t" );
 
-				strcat ( line_to_be_written_to_file , "\n" );
+				strcat( line_to_be_written_to_file , "\n" );
 				fprintf ( fhw , "%s" , line_to_be_written_to_file );
 
 				start_position_of_cluster = start_position_of_read;
@@ -317,26 +317,26 @@ void findContinousClusters ( char *input_filename, char *output_filename, long l
 	}
 	byte_number_end_cluster = ftell ( fhr ) - line_len - line_len_previous;
 	//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr));
-	strcpy ( line_to_be_written_to_file , current_reference_sequence );
-	strcat ( line_to_be_written_to_file , "\t" );
+	strcpy( line_to_be_written_to_file , current_reference_sequence );
+	strcat( line_to_be_written_to_file , "\t" );
 
-	sprintf ( temp , "%d" , start_position_of_cluster );
-	strcat ( line_to_be_written_to_file , temp );
-	strcat ( line_to_be_written_to_file , "\t" );
+	sprintf( temp , "%d" , start_position_of_cluster );
+	strcat( line_to_be_written_to_file , temp );
+	strcat( line_to_be_written_to_file , "\t" );
 
-	sprintf ( temp , "%d" , end_position_of_cluster );
-	strcat ( line_to_be_written_to_file , temp );
-	strcat ( line_to_be_written_to_file , "\t" );
+	sprintf( temp , "%d" , end_position_of_cluster );
+	strcat( line_to_be_written_to_file , temp );
+	strcat( line_to_be_written_to_file , "\t" );
 
-	sprintf ( temp , "%ld" , byte_number_start_cluster );
-	strcat ( line_to_be_written_to_file , temp );
-	strcat ( line_to_be_written_to_file , "\t" );
+	sprintf( temp , "%ld" , byte_number_start_cluster );
+	strcat( line_to_be_written_to_file , temp );
+	strcat( line_to_be_written_to_file , "\t" );
 
-	sprintf ( temp , "%ld" , byte_number_end_cluster );
-	strcat ( line_to_be_written_to_file , temp );
-	strcat ( line_to_be_written_to_file , "\t" );
+	sprintf( temp , "%ld" , byte_number_end_cluster );
+	strcat( line_to_be_written_to_file , temp );
+	strcat( line_to_be_written_to_file , "\t" );
 
-	strcat ( line_to_be_written_to_file , "\n" );
+	strcat( line_to_be_written_to_file , "\n" );
 	fprintf ( fhw , "%s" , line_to_be_written_to_file );
 
 	start_position_of_cluster = start_position_of_read;
@@ -359,8 +359,8 @@ int main ( int argc, char *argv[] )
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	strcpy ( input_filename , argv[1] );
-	strcpy ( output_filename , argv[2] );
+	strcpy( input_filename , argv[1] );
+	strcpy( output_filename , argv[2] );
 	max_input_reads_in_a_single_nucl_loc = strtol ( argv[3] , &temp , 10 );
 	/********************************************************************/
 
