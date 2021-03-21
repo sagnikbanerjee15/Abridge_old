@@ -187,7 +187,15 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 			}
 		}
 	}
+	printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
+	if ( compressed_ds_pool_index > 50000 )
+	{
+		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+		{
 
+		}
+		printf ( "\n==============================================================================================================================================================================================" );
+	}
 }
 
 void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc )
