@@ -59,10 +59,10 @@ void writeToFile ( short int flag_save_all_quality_scores, FILE *fhw_qual, FILE 
 					case 'O':
 					case 'Q':
 					case 'U':
-						for ( k = strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j][k] ) - 1 ;
+						for ( k = strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j] ) - 1 ;
 								k >= 0 ; k-- )
-							qual[strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j][k] ) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
-						qual[strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j][k] )] = '\0';
+							qual[strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j] ) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+						qual[strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j] )] = '\0';
 						break;
 				}
 				fprintf ( fhw_qual , "%s" , qual );
