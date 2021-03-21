@@ -130,7 +130,7 @@ char findMatchCharacterIcigar ( char *icigar )
 	return ' ';
 }
 
-void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index )
+void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char *modified_icigars )
 {
 	/********************************************************************
 	 * Variable declaration
@@ -150,13 +150,17 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 
 	/********************************************************************/
 	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+		prepareIcigarForComparison ( modified_icigars[i] , compressed_ds_pool[i]->icigar );
+
+	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 	{
 		if ( already_processed[i] == 1 ) continue;
 		already_processed[i] = 1;
-		prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar );
+		//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar );
 		/*
 		 * Copy the icigar entry into the rearranged pool
 		 */
+		icigar1 = modified_icigars[i];
 		strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[i]->num_reads;
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[i]->position;
@@ -165,7 +169,8 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 		for ( j = i + 1 ; j < compressed_ds_pool_index ; j++ )
 		{
 			if ( already_processed[j] == 1 ) continue;
-			prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
+			//prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
+			icigar2 = modified_icigars[j];
 			if ( strcmp ( icigar1 , icigar2 ) == 0 )
 			{
 				//strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
@@ -207,6 +212,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	char *write_to_file_col2;
 	char *write_to_file_col3;
 	char *encoded_string;
+	char **modified_icigars;
 	char str[100];
 
 	size_t len = 0;
@@ -325,6 +331,9 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	qual_scores = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		qual_scores[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
+	modified_icigars = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
+		modified_icigars[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
 	//qual_scores_rearranged = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	/********************************************************************/
 
@@ -421,7 +430,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 		{
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
-			reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index );
+			reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars );
 			writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
 			//printf ( "\n%lld %lld" , curr_commas , max_commas );
@@ -475,7 +484,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 			{
 				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
-				reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index );
+				reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars );
 				writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
@@ -498,7 +507,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	/*
 	 *Write final data to file
 	 */
-	reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index );
+	reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars );
 	writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
 	sprintf( temp , "%lld" , max_commas );
