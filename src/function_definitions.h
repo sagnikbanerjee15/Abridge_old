@@ -86,12 +86,13 @@ struct Pass3_Compression_Symbol_icigar_Mapping* allocateMemoryPass3_Compression_
 	return s;
 }
 
-struct Compressed_DS* allocateMemoryCompressed_DS ()
+struct Compressed_DS* allocateMemoryCompressed_DS ( long long int max_input_reads_in_a_single_nucl_loc )
 {
 	struct Compressed_DS *s;
 	int i;
 	s = ( struct Compressed_DS* ) malloc ( sizeof(struct Compressed_DS) );
-	s->icigar = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN * 2 );
+	s->icigar = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
+	s->pointers_to_qual_scores = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	s->num_reads = 0;
 	s->position = 0;
 	return s;
