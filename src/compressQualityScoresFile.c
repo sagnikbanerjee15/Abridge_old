@@ -23,10 +23,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	char str[1000];
 	char **lines_to_be_written_to_file;
 
-	int i;
+	int i , j , k;
 	int max_len_sequence = 0;
+	int *lines_to_be_written_to_file_index;
 
 	long long int number_of_records_read = 0;
+
 	/********************************************************************/
 
 	/********************************************************************
@@ -49,12 +51,15 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
 		qsRLE[i] = allocateMemoryQuality_Score_RLE ();
 
+	lines_to_be_written_to_file_index = ( int* ) malloc ( sizeof(int) * MAX_SEQ_LEN );
 	lines_to_be_written_to_file = ( char** ) malloc ( sizeof(char*) * MAX_SEQ_LEN );
 	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
 	{
 		lines_to_be_written_to_file[i] = ( char* ) malloc ( sizeof(char) * 100000 );
 		lines_to_be_written_to_file[i][0] = '\0';
+		lines_to_be_written_to_file_index[i] = 0;
 	}
+
 	printf ( "\nData Structures Allocated" );
 	fflush ( stdout );
 	/********************************************************************/
@@ -90,8 +95,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 			else
 			{
 				sprintf( str , "%lld" , qsRLE[i]->frequency );
-				strncat( str , &qsRLE[i]->score_character , 1 );
-				strcat( lines_to_be_written_to_file[i] , str );
+				for ( j = 0 ; str[j] != '\0' ; j++ )
+					lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
+				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
+				//strncat( str , &qsRLE[i]->score_character , 1 );
+				//strcat( lines_to_be_written_to_file[i] , str );
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = line[i];
@@ -101,8 +110,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
 		sprintf( str , "%lld" , qsRLE[i]->frequency );
-		strncat( str , &qsRLE[i]->score_character , 1 );
-		strcat( lines_to_be_written_to_file[i] , str );
+		for ( j = 0 ; str[j] != '\0' ; j++ )
+			lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
+		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
+		//strncat( str , &qsRLE[i]->score_character , 1 );
+		//strcat( lines_to_be_written_to_file[i] , str );
 		str[0] = '\0';
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
