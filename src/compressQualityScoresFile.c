@@ -59,7 +59,15 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	fflush ( stdout );
 	/********************************************************************/
 
-	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
+	line_len = getline ( &line , &len , fhr );
+	for ( i = 0 ; line[i] != '\0' ; i++ )
+	{
+		if ( i > max_len_sequence ) max_len_sequence = i;
+		qsRLE[i]->score_character = line[i];
+		qsRLE[i]->frequency++;
+	}
+
+	do
 	{
 		number_of_records_read += 1;
 
@@ -77,15 +85,8 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
 			if ( i > max_len_sequence ) max_len_sequence = i;
-			if ( qsRLE[i]->score_character == 'X' && qsRLE[i]->frequency == 0 )
-			{
-				qsRLE[i]->score_character = line[i];
+			if ( line[i] == qsRLE[i]->score_character )
 				qsRLE[i]->frequency++;
-			}
-			else if ( line[i] == qsRLE[i]->score_character )
-			{
-				qsRLE[i]->frequency++;
-			}
 			else
 			{
 				sprintf( str , "%lld" , qsRLE[i]->frequency );
@@ -96,7 +97,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 				qsRLE[i]->score_character = line[i];
 			}
 		}
-	}
+	} while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 );
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
 		sprintf( str , "%lld" , qsRLE[i]->frequency );
@@ -111,6 +112,9 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		fprintf ( fhw , "%s" , lines_to_be_written_to_file[i] );
 		fprintf ( fhw , "%s" , "\n" );
 	}
+
+	fclose ( fhr );
+	fclose ( fhw );
 }
 
 int main ( int argc, char *argv[] )
