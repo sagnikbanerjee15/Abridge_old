@@ -74,19 +74,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 
 	do
 	{
-		number_of_records_read += 1;
-
-		/*
-		 if ( number_of_records_read % 1000000 == 0 )
-		 {
-		 printf ( "\nNumber of records read: %lld Million" , number_of_records_read / 1000000 );
-		 fflush ( stdout );
-		 }
-		 */
-
-		printf ( "\nLine number %lld" , number_of_records_read );
-		fflush ( stdout );
-
+		//number_of_records_read += 1;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
 			//if ( i > max_len_sequence ) max_len_sequence = i;
@@ -94,9 +82,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 				qsRLE[i]->frequency++;
 			else
 			{
-				sprintf( str , "%lld" , qsRLE[i]->frequency );
-				for ( j = 0 ; str[j] != '\0' ; j++ )
-					lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+				if ( qsRLE[i]->frequency > 1 )
+				{
+					sprintf( str , "%lld" , qsRLE[i]->frequency );
+					for ( j = 0 ; str[j] != '\0' ; j++ )
+						lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+				}
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
 				//strncat( str , &qsRLE[i]->score_character , 1 );
@@ -109,9 +100,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	} while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 );
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
-		sprintf( str , "%lld" , qsRLE[i]->frequency );
-		for ( j = 0 ; str[j] != '\0' ; j++ )
-			lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+		if ( qsRLE[i]->frequency > 1 )
+		{
+			sprintf( str , "%lld" , qsRLE[i]->frequency );
+			for ( j = 0 ; str[j] != '\0' ; j++ )
+				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+		}
 		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
 		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
 		//strncat( str , &qsRLE[i]->score_character , 1 );
