@@ -482,7 +482,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_quality_scores, char *n
 					{
 						compressed_ds_pool[i]->num_reads++;
 						strcpy( qual_scores[quality_score_index] , curr_alignment->qual );
-						compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+						compressed_ds_pool[i]->pointers_to_qual_scores[compressed_ds_pool[i]->num_reads - 1] = qual_scores[quality_score_index];
 						quality_score_index++;
 						//printf("\n3. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[i]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, i);
 						break;
