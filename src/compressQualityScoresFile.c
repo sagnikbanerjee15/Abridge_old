@@ -84,7 +84,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
-			if ( i > max_len_sequence ) max_len_sequence = i;
+			//if ( i > max_len_sequence ) max_len_sequence = i;
 			if ( line[i] == qsRLE[i]->score_character )
 				qsRLE[i]->frequency++;
 			else
@@ -107,6 +107,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
 	}
+	max_len_sequence = 151;
 	for ( i = 0 ; i < max_len_sequence ; i++ )
 	{
 		fprintf ( fhw , "%s" , lines_to_be_written_to_file[i] );
