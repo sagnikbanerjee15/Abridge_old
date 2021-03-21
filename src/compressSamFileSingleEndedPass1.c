@@ -130,7 +130,7 @@ char findMatchCharacterIcigar ( char *icigar )
 	return ' ';
 }
 
-void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char *modified_icigars )
+void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **modified_icigars )
 {
 	/********************************************************************
 	 * Variable declaration
