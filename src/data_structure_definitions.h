@@ -88,7 +88,7 @@ struct Compressed_DS
 	 * Template to store the compressed icigars
 	 */
 	char *icigar;
-	char *pointers_to_qual_scores;
+	char **pointers_to_qual_scores;
 	long int num_reads;
 	long long int position;
 };

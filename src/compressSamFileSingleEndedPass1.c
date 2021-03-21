@@ -127,7 +127,7 @@ char findMatchCharacterIcigar ( char *icigar )
 				return 'U';
 		}
 	}
-	return '';
+	return ' ';
 }
 
 void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **qual_scores_rearranged, char **qual_scores )
@@ -192,7 +192,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	FILE *fhw_name_of_file_with_max_commas;
 
 	char **qual_scores;
-	char **qual_scores_rearranged;
+	//char **qual_scores_rearranged;
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags; // List of strings to store tag information
 	char **split_reference_info;
@@ -325,7 +325,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	qual_scores = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		qual_scores[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	qual_scores_rearranged = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
+	//qual_scores_rearranged = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	return;
 	/********************************************************************/
 
