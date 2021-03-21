@@ -86,6 +86,11 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 				}
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
+				if ( lines_to_be_written_to_file_index[i] != strlen ( lines_to_be_written_to_file[i] ) )
+				{
+					printf ( "\nPrblem %d %d %d" , i , lines_to_be_written_to_file_index[i] , strlen ( lines_to_be_written_to_file[i] ) );
+					exit ( 1 );
+				}
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = line[i];
@@ -106,6 +111,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
 	}
+
 	max_len_sequence = 151;
 	for ( i = 0 ; i < max_len_sequence ; i++ )
 	{
