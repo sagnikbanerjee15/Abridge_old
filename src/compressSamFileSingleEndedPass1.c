@@ -175,7 +175,7 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[1] = '\0';
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[j]->num_reads;
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[j]->position;
-				for ( k = 0 ; k < compressed_ds_pool[i]->num_reads ; k++ )
+				for ( k = 0 ; k < compressed_ds_pool[j]->num_reads ; k++ )
 					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] = compressed_ds_pool[j]->pointers_to_qual_scores[k];
 				compressed_ds_pool_rearranged_index++;
 				already_processed[j] = 1;
