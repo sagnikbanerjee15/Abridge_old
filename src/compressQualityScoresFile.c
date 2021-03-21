@@ -55,7 +55,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	lines_to_be_written_to_file = ( char** ) malloc ( sizeof(char*) * MAX_SEQ_LEN );
 	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
 	{
-		lines_to_be_written_to_file[i] = ( char* ) malloc ( sizeof(char) * 100000 );
+		lines_to_be_written_to_file[i] = ( char* ) malloc ( sizeof(char) * 10000000 );
 		lines_to_be_written_to_file[i][0] = '\0';
 		lines_to_be_written_to_file_index[i] = 0;
 	}
@@ -71,7 +71,6 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 
 	do
 	{
-		//number_of_records_read += 1;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
 			//if ( i > max_len_sequence ) max_len_sequence = i;
@@ -87,8 +86,6 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 				}
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
-				//strncat( str , &qsRLE[i]->score_character , 1 );
-				//strcat( lines_to_be_written_to_file[i] , str );
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = line[i];
@@ -105,8 +102,6 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		}
 		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
 		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
-		//strncat( str , &qsRLE[i]->score_character , 1 );
-		//strcat( lines_to_be_written_to_file[i] , str );
 		str[0] = '\0';
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
@@ -116,7 +111,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	{
 		fprintf ( fhw , "%s" , lines_to_be_written_to_file[i] );
 		fprintf ( fhw , "%s" , "\n" );
-		printf ( "\nPosition %d Length %d" , i , lines_to_be_written_to_file_index[i] );
+		printf ( "\nPosition %d Index position %d Length of string %d" , i , lines_to_be_written_to_file_index[i] , strlen ( lines_to_be_written_to_file[i] ) );
 	}
 
 	fclose ( fhr );
