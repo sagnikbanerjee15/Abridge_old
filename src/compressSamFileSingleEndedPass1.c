@@ -8,6 +8,43 @@
 
 int total_mapped_reads;
 
+char findMatchCharacterIcigar ( char *icigar )
+{
+	int i;
+
+	for ( i = 0 ; icigar[i] != '\0' ; i++ )
+	{
+		switch ( icigar[i] )
+		{
+			case 'B':
+				return 'B';
+			case 'E':
+				return 'E';
+			case 'F':
+				return 'F';
+			case 'H':
+				return 'H';
+			case 'J':
+				return 'J';
+			case 'K':
+				return 'K';
+			case 'L':
+				return 'L';
+			case 'O':
+				return 'O';
+			case 'P':
+				return 'P';
+			case 'Q':
+				return 'Q';
+			case 'R':
+				return 'R';
+			case 'U':
+				return 'U';
+		}
+	}
+	return ' ';
+}
+
 void writeToFile ( short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string, long long int *count, char **qual_Scores, int quality_score_index )
 {
 	int i , j , k;
@@ -111,43 +148,6 @@ void prepareIcigarForComparison ( char *icigar1, char *icigar )
 		}
 	}
 	icigar1[i] = '\0';
-}
-
-char findMatchCharacterIcigar ( char *icigar )
-{
-	int i;
-
-	for ( i = 0 ; icigar[i] != '\0' ; i++ )
-	{
-		switch ( icigar[i] )
-		{
-			case 'B':
-				return 'B';
-			case 'E':
-				return 'E';
-			case 'F':
-				return 'F';
-			case 'H':
-				return 'H';
-			case 'J':
-				return 'J';
-			case 'K':
-				return 'K';
-			case 'L':
-				return 'L';
-			case 'O':
-				return 'O';
-			case 'P':
-				return 'P';
-			case 'Q':
-				return 'Q';
-			case 'R':
-				return 'R';
-			case 'U':
-				return 'U';
-		}
-	}
-	return ' ';
 }
 
 void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **modified_icigars )
