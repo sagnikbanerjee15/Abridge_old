@@ -44,6 +44,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		printf ( "%s File cannot be created" , output_quality_score_filename );
 		exit ( 1 );
 	}
+
 	qsRLE = ( struct Quality_Score_RLE** ) malloc ( sizeof(struct Quality_Score_RLE*) * MAX_SEQ_LEN );
 	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
 		qsRLE[i] = ( struct Quality_Score_RLE* ) malloc ( sizeof(struct Quality_Score_RLE) );
@@ -54,6 +55,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		lines_to_be_written_to_file[i] = ( char* ) malloc ( sizeof(char) * 100000 );
 		lines_to_be_written_to_file[i][0] = '\0';
 	}
+	printf ( "\nData Structures prepped" );
 	/********************************************************************/
 
 	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
@@ -66,6 +68,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		 fflush ( stdout );
 		 }
 		 */
+		printf ( "\nLine number: %lld" , number_of_records_read );
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
 			if ( i > max_len_sequence ) max_len_sequence = i;
