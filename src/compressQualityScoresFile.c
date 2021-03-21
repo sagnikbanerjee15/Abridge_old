@@ -30,7 +30,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = open ( input_qualityscore_filename , "r" );
+	fhr = fopen ( input_qualityscore_filename , "r" );
 	if ( fhr == NULL )
 	{
 		printf ( "Error! File %s not found" , input_qualityscore_filename );
@@ -71,8 +71,8 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 			else
 			{
 				sprintf( str , "%lld" , qsRLE[i]->frequency );
-				strncat( str , qsRLE[i]->score_character );
-				strcat( lines_to_be_written_to_file[i] , str , 1 );
+				strncat( str , qsRLE[i]->score_character , 1 );
+				strcat( lines_to_be_written_to_file[i] , str );
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = line[i];
@@ -82,8 +82,8 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
 		sprintf( str , "%lld" , qsRLE[i]->frequency );
-		strncat( str , qsRLE[i]->score_character );
-		strcat( lines_to_be_written_to_file[i] , str , 1 );
+		strncat( str , qsRLE[i]->score_character , 1 );
+		strcat( lines_to_be_written_to_file[i] , str );
 		str[0] = '\0';
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
