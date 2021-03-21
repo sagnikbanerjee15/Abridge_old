@@ -405,12 +405,13 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 			//fflush(stdout);
 			previous_position = current_position;
 			strcpy( prev_reference_name , curr_reference_name );
+			strcpy( qual_scores[quality_score_index] , curr_alignment->qual );
 			strcpy( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
-			strcpy( qual_scores[quality_score_index] , curr_alignment->qual );
-			quality_score_index++;
 			//printf("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
+			quality_score_index++;
 			compressed_ds_pool_index++;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
@@ -465,6 +466,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 					compressed_ds_pool_index++;
 				}
 				strcpy( qual_scores[quality_score_index] , curr_alignment->qual );
+				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 				quality_score_index++;
 			}
 			else
@@ -477,10 +479,12 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
 				quality_score_index = 0;
+				strcpy( qual_scores[quality_score_index] , curr_alignment->qual );
 				strcpy( compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar );
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position - previous_position;
-				strcpy( qual_scores[quality_score_index] , curr_alignment->qual );
+
 				quality_score_index++;
 				//printf("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 				compressed_ds_pool_index++;
