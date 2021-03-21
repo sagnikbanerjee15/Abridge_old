@@ -59,9 +59,6 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		lines_to_be_written_to_file[i][0] = '\0';
 		lines_to_be_written_to_file_index[i] = 0;
 	}
-
-	printf ( "\nData Structures Allocated" );
-	fflush ( stdout );
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr );
@@ -119,6 +116,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	{
 		fprintf ( fhw , "%s" , lines_to_be_written_to_file[i] );
 		fprintf ( fhw , "%s" , "\n" );
+		printf ( "\nPosition %d Length %d" , i , lines_to_be_written_to_file_index[i] );
 	}
 
 	fclose ( fhr );
