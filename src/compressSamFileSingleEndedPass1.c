@@ -458,7 +458,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
 			reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars );
-			writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
+			writeToFile ( fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
 			//printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
@@ -512,7 +512,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
 				reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars );
-				writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
+				writeToFile ( fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
@@ -535,7 +535,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	 *Write final data to file
 	 */
 	reModeliCIGARS ( compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars );
-	writeToFile ( fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
+	writeToFile ( fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index );
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
 	sprintf( temp , "%lld" , max_commas );
 	strcat( temp , "\n" );
