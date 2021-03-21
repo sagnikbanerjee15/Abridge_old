@@ -340,8 +340,10 @@ void populateSamAlignmentInstance ( struct Sam_Alignment *dest, char **src, int 
 	dest->template_length = strtol ( src[8] , &temp , 10 );
 	strcpy ( dest->seq , src[9] );
 	strcpy ( dest->qual , src[10] );
-	for ( i = 0 ; dest->qual[i] != '\0' ; i++ )
-		dest->qual[i] += 90;
+	/*
+	 for ( i = 0 ; dest->qual[i] != '\0' ; i++ )
+	 dest->qual[i] += 90;
+	 */
 
 	// Assign SAM tags
 	for ( i = 11 ; i < number_of_fields ; i++ )
@@ -511,7 +513,8 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 			if ( flag_ignore_quality_score == 0 )
 			{
 				i++;
-				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
+				//sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
+				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index + 1] = '\0';
 			}
 			left_soft_clip_index++;
@@ -523,6 +526,7 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 			if ( flag_ignore_quality_score == 0 )
 			{
 				i++;
+				//sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index + 1] = '\0';
 			}
@@ -588,7 +592,8 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 					if ( flag_ignore_quality_score == 0 )
 					{
 						i++;
-						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
+						//sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
+						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
 						soft_clips_removed_qual_index++;
 					}
@@ -661,6 +666,7 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 						if ( flag_ignore_quality_score == 0 )
 						{
 							i++;
+							//sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
 							soft_clips_removed_qual_index++;
@@ -929,7 +935,10 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 		printf ( "\n%s" , seq );
 		printf ( "\n" );
 		for ( i = 0 ; soft_clips_removed_qual[i] != '\0' ; i++ )
-			printf ( "%c" , soft_clips_removed_qual[i] - 90 );
+		{
+			//printf ( "%c" , soft_clips_removed_qual[i] - 90 );
+			printf ( "%c" , soft_clips_removed_qual[i] );
+		}
 		printf ( "\n%s" , md_extended );
 	}
 	/*printf("\n%s %d", md_extended, md_extended_length);*/
