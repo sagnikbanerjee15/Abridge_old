@@ -99,30 +99,33 @@ char findMatchCharacterIcigar ( char *icigar )
 
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
 	{
-		case 'B':
-		return 'B';
-		case 'E':
-		return 'E';
-		case 'F':
-		return 'F';
-		case 'H':
-		return 'H';
-		case 'J':
-		return 'J';
-		case 'K':
-		return 'K';
-		case 'L':
-		return 'L';
-		case 'O':
-		return 'O';
-		case 'P':
-		return 'P';
-		case 'Q':
-		return 'Q';
-		case 'R':
-		return 'R';
-		case 'U':
-		return 'U';
+		switch ( icigar[i] )
+		{
+			case 'B':
+				return 'B';
+			case 'E':
+				return 'E';
+			case 'F':
+				return 'F';
+			case 'H':
+				return 'H';
+			case 'J':
+				return 'J';
+			case 'K':
+				return 'K';
+			case 'L':
+				return 'L';
+			case 'O':
+				return 'O';
+			case 'P':
+				return 'P';
+			case 'Q':
+				return 'Q';
+			case 'R':
+				return 'R';
+			case 'U':
+				return 'U';
+		}
 	}
 	return '';
 }
