@@ -175,6 +175,11 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 			//icigar2 = modified_icigars[j];
 			if ( strcmp ( modified_icigars[i] , modified_icigars[j] ) == 0 )
 			{
+				if ( compressed_ds_pool_index > 25000 )
+				{
+					printf ( "\n%s %s" , modified_icigars[i] , modified_icigars[j] );
+					printf ( "\n%s %s" , compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar );
+				}
 				//strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[0] = findMatchCharacterIcigar ( compressed_ds_pool[j]->icigar );
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[1] = '\0';
@@ -187,6 +192,7 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 			}
 		}
 	}
+	return;
 	//printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
 	if ( compressed_ds_pool_index > 25000 )
 	{
@@ -209,7 +215,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	FILE *fhw_name_of_file_with_max_commas;
 
 	char **qual_scores;
-	//char **qual_scores_rearranged;
+//char **qual_scores_rearranged;
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags; // List of strings to store tag information
 	char **split_reference_info;
@@ -346,7 +352,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	modified_icigars = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		modified_icigars[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	//qual_scores_rearranged = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
+//qual_scores_rearranged = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
 	/********************************************************************/
 
 	/*
