@@ -71,7 +71,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 			else
 			{
 				sprintf( str , "%lld" , qsRLE[i]->frequency );
-				strncat( str , qsRLE[i]->score_character , 1 );
+				strncat( str , &qsRLE[i]->score_character , 1 );
 				strcat( lines_to_be_written_to_file[i] , str );
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
@@ -82,7 +82,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
 		sprintf( str , "%lld" , qsRLE[i]->frequency );
-		strncat( str , qsRLE[i]->score_character , 1 );
+		strncat( str , &qsRLE[i]->score_character , 1 );
 		strcat( lines_to_be_written_to_file[i] , str );
 		str[0] = '\0';
 		qsRLE[i]->frequency = 0;
