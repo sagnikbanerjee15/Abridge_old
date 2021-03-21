@@ -55,7 +55,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	lines_to_be_written_to_file = ( char** ) malloc ( sizeof(char*) * MAX_SEQ_LEN );
 	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
 	{
-		lines_to_be_written_to_file[i] = ( char* ) malloc ( sizeof(char) * 10000000 );
+		lines_to_be_written_to_file[i] = ( char* ) malloc ( sizeof(char) * 50000000 );
 		lines_to_be_written_to_file[i][0] = '\0';
 		lines_to_be_written_to_file_index[i] = 0;
 	}
