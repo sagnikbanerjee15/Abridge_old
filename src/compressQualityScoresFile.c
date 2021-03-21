@@ -56,6 +56,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		lines_to_be_written_to_file[i][0] = '\0';
 	}
 	printf ( "\nData Structures Allocated" );
+	fflush ( stdout );
 	/********************************************************************/
 
 	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
