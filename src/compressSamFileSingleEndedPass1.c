@@ -287,7 +287,7 @@ void readAlignmentsAndCompress ( char *name_of_file_with_max_commas, char *input
 	for ( i = 0 ; i < ROWS ; i++ )
 		split_reference_info[i] = ( char* ) malloc ( sizeof(char) * COLS );
 
-	already_processed = ( char* ) malloc ( sizeof(char) * max_input_reads_in_a_single_nucl_loc );
+	already_processed = ( short* ) malloc ( sizeof(short) * max_input_reads_in_a_single_nucl_loc );
 	max_input_reads_in_a_single_nucl_loc += 5;
 	compressed_ds_pool = ( struct Compressed_DS** ) malloc ( sizeof(struct Compressed_DS*) * max_input_reads_in_a_single_nucl_loc );
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
