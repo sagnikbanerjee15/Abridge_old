@@ -138,8 +138,8 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 	int i , j , k;
 	int compressed_ds_pool_rearranged_index = 0;
 
-	char icigar1[MAX_SEQ_LEN];
-	char icigar2[MAX_SEQ_LEN];
+	//char icigar1[MAX_SEQ_LEN];
+	//char icigar2[MAX_SEQ_LEN];
 	/********************************************************************/
 
 	/********************************************************************
@@ -160,7 +160,7 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 		/*
 		 * Copy the icigar entry into the rearranged pool
 		 */
-		icigar1 = modified_icigars[i];
+		//icigar1 = modified_icigars[i];
 		strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[i]->num_reads;
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[i]->position;
@@ -170,8 +170,8 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 		{
 			if ( already_processed[j] == 1 ) continue;
 			//prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
-			icigar2 = modified_icigars[j];
-			if ( strcmp ( icigar1 , icigar2 ) == 0 )
+			//icigar2 = modified_icigars[j];
+			if ( strcmp ( modified_icigars[i] , modified_icigars[j] ) == 0 )
 			{
 				//strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[0] = findMatchCharacterIcigar ( compressed_ds_pool[j]->icigar );
