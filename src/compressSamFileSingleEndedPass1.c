@@ -10,8 +10,9 @@ int total_mapped_reads;
 
 void writeToFile ( short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string, long long int *count, char **qual_Scores, int quality_score_index )
 {
-	int i , j;
+	int i , j , k;
 	char str[1000];
+	char qual[MAX_SEQ_LEN];
 	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 
 	line_to_be_written_to_file[0] = '\0';
@@ -38,7 +39,33 @@ void writeToFile ( short int flag_save_all_quality_scores, FILE *fhw_qual, FILE 
 		{
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 			{
-				fprintf ( fhw_qual , "%s" , compressed_ds_pool[i]->pointers_to_qual_scores[j] );
+				switch ( findMatchCharacterIcigar ( compressed_ds_pool[i]->icigar ) )
+				{
+					case 'B':
+					case 'F':
+					case 'J':
+					case 'L':
+					case 'P':
+					case 'R':
+						for ( k = 0 ;
+								compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
+								k++ )
+							qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+						qual[k] = '\0';
+						break;
+					case 'E':
+					case 'H':
+					case 'K':
+					case 'O':
+					case 'Q':
+					case 'U':
+						for ( k = strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j][k] ) - 1 ;
+								k >= 0 ; k-- )
+							qual[strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j][k] ) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+						qual[strlen ( compressed_ds_pool[i]->pointers_to_qual_scores[j][k] )] = '\0';
+						break;
+				}
+				fprintf ( fhw_qual , "%s" , qual );
 				fprintf ( fhw_qual , "%s" , "\n" );
 			}
 		}

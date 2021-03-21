@@ -315,20 +315,6 @@ void populateSamAlignmentInstance ( struct Sam_Alignment *dest, char **src, int 
 	/********************************************************************/
 
 	// Assign the first 11 mandatory sam fields
-	/*
-	 dest->read_name = src[0];
-	 dest->samflag = strtol(src[1], &temp, 10);
-	 dest->reference_name = src[2];
-	 dest->start_position = strtol(src[3], &temp, 10);
-	 dest->mapping_quality_score = strtol(src[4], &temp, 10);
-	 dest->cigar = src[5];
-	 dest->reference_name_next_mate = src[6];
-	 dest->start_position_next = strtol(src[7], &temp, 10);
-	 dest->template_length = strtol(src[8], &temp, 10);
-	 dest->seq = src[9];
-	 dest->qual = src[10];
-	 */
-
 	strcpy ( dest->read_name , src[0] );
 	dest->samflag = strtol ( src[1] , &temp , 10 );
 	strcpy ( dest->reference_name , src[2] );
