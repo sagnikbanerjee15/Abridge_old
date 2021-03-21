@@ -192,7 +192,7 @@ void reModeliCIGARS ( struct Compressed_DS **compressed_ds_pool, struct Compress
 	{
 		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 		{
-			printf ( "\n %s %s" , compressed_ds_pool[i]->icigar , compressed_ds_pool_rearranged[i]->icigar );
+			printf ( "\n %s %d %s %d" , compressed_ds_pool[i]->icigar , compressed_ds_pool[i]->num_reads , compressed_ds_pool_rearranged[i]->icigar , compressed_ds_pool_rearranged[i]->num_reads );
 		}
 		printf ( "\n==============================================================================================================================================================================================" );
 	}
