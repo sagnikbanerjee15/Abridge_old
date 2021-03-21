@@ -132,6 +132,15 @@ def validateCommandLineArguments(options):
         options.error_directory = options.output_directory
     else:
         os.system(f"mkdir -p {options.error_directory}")
+        
+    if options.save_all_quality_scores == True:
+        options.ignore_quality_scores = True
+    
+    if options.save_all_quality_scores == False and options.adjust_quality_scores == True:
+        print("You must choose to save all quality scores to avail the option of adjusting quality score. Rerun with --save_all_quality_scores")
+        if options.quiet==False:
+            logging.info(f"You must choose to save all quality scores to avail the option of adjusting quality score. Rerun with --save_all_quality_scores")
+        sys.exit()
     
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
     options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
@@ -235,10 +244,6 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
-        cmd=f"gcc {compressSamFileSingleEndedPass2}.c -o {compressSamFileSingleEndedPass2} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
         cmd=f"gcc {buildABRIDGEIndex}.c -o {buildABRIDGEIndex} -Ofast"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
@@ -282,10 +287,10 @@ def compressSamFile(options):
                 logging.info(f"Starting Pass1 for {input_filename}")
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
-            pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
             unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
             name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
             name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
+            name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
             
             max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
             if options.quiet == False:
@@ -307,6 +312,15 @@ def compressSamFile(options):
                 cmd += f" 0" # argv[9] - run diagnostics
             cmd += f" {max_input_reads_in_a_single_nucl_loc} " # argv[10] - max_input_reads_in_a_single_nucl_loc
             cmd += f" {name_of_file_with_max_commas} " # argv[11] - name_of_file_with_max_commas
+            if options.save_all_quality_scores == True and options.adjust_quality_scores == True:
+                cmd += f" 1 1 "
+            elif options.save_all_quality_scores == True and options.adjust_quality_scores == False:
+                cmd += f" 1 0 "
+            elif options.save_all_quality_scores == False and options.adjust_quality_scores == True: # Should never happen
+                cmd += f" 0 1 "
+            elif options.save_all_quality_scores == False and options.adjust_quality_scores == False:
+                cmd += f" 0 0 "
+            cmd += f" {name_of_file_with_quality_scores} "
             cmd += f") "
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -319,7 +333,8 @@ def compressSamFile(options):
             all_commands.append([cmd,"dummy"])
             #os.system(cmd)
         pool.map(runCommand,all_commands)
-         
+        
+        """ 
         ######################################################################################
         # Pass2 run
         ######################################################################################
@@ -349,15 +364,15 @@ def compressSamFile(options):
                 logging.info(f"Running command - {cmd}") 
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
-        
+        """
         ######################################################################################
         # Index generation
         ######################################################################################
         all_commands = []
         for input_filename in options.inputsamfilenames:  
             name_of_input_file_without_location = input_filename.split("/")[-1] 
-            pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
-            pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
+            pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+            pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
             name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
             name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             
@@ -366,7 +381,7 @@ def compressSamFile(options):
                 logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
             
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"{buildABRIDGEIndex} {pass2_outputfilename} {pass2_index_outputfilename} {max_commas} "
+            cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {pass1_index_outputfilename} {max_commas} "
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -401,15 +416,15 @@ def compressSamFile(options):
     all_commands = []
     for input_filename in options.inputsamfilenames:
         name_of_input_file_without_location = input_filename.split("/")[-1] 
-        pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
-        pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
+        pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+        pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
         compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.7z"
         compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.br"
         
         if options.both == True or options.fast == False:
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_7z} {pass2_outputfilename} {pass2_index_outputfilename} {unmapped_outputfilename} {genome_sha512_filename}"
+            cmd += f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_7z} {pass1_outputfilename} {pass1_index_outputfilename} {unmapped_outputfilename} {genome_sha512_filename}"
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -442,19 +457,19 @@ def compressSamFile(options):
     all_commands = []
     for input_filename in options.inputsamfilenames:
         name_of_input_file_without_location = input_filename.split("/")[-1] 
-        pass2_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2"
-        pass2_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass2.index"
+        pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+        pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
         compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.7z"
         compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.br"
         
-        files_to_be_removed.append(f"{pass2_outputfilename}.br")
-        files_to_be_removed.append(f"{pass2_index_outputfilename}.br")
+        files_to_be_removed.append(f"{pass1_outputfilename}.br")
+        files_to_be_removed.append(f"{pass1_index_outputfilename}.br")
         files_to_be_removed.append(f"{unmapped_outputfilename}.br")
         
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f" tar -cf {compressed_abridged_filename_br} {pass2_outputfilename}.br {pass2_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename}"
+            cmd += f" tar -cf {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename}"
             cmd += f") "   
             cmd += f"1> /dev/null "
             cmd += f"2> /dev/null"
@@ -466,16 +481,16 @@ def compressSamFile(options):
     files_to_be_removed.append(genome_sha512_filename)
     for input_filename in options.inputsamfilenames:
         pass1_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass1"
-        pass2_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2"
+        #pass2_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2"
         unmapped_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".unmapped"
-        pass2_index_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass2.index"
+        pass1_index_outputfilename = options.output_directory + "/" + input_filename.split("/")[-1] + ".pass1.index"
         name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
         name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             
         files_to_be_removed.append(pass1_outputfilename)
-        files_to_be_removed.append(pass2_outputfilename)
+        #files_to_be_removed.append(pass2_outputfilename)
         files_to_be_removed.append(unmapped_outputfilename)
-        files_to_be_removed.append(pass2_index_outputfilename)
+        files_to_be_removed.append(pass1_index_outputfilename)
         files_to_be_removed.append(name_of_max_input_reads_file)
         files_to_be_removed.append(name_of_file_with_max_commas)
     
