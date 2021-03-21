@@ -209,6 +209,12 @@ struct Whole_Genome_Sequence
 	int number_of_reference_sequences;
 };
 
+struct Quality_Score_RLE
+{
+	char score_character;
+	long long int frequency;
+};
+
 int isCharacterInString ( char*, char );
 void splitCigar ( char*, int*, struct Cigar_Items* );
 long long int extractNHfromicigar ( char*, int );

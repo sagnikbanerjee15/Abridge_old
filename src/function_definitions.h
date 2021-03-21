@@ -63,6 +63,15 @@ struct Sam_Alignment* allocateMemorySam_Alignment ()
 	return s;
 }
 
+struct Quality_Score_RLE* allocateMemoryQuality_Score_RLE ()
+{
+	struct Quality_Score_RLE *s;
+	s = ( struct Quality_Score_RLE* ) malloc ( sizeof(struct Quality_Score_RLE) );
+	s->score_character = 'X';
+	s->frequency = 0;
+	return s;
+}
+
 void reInitializeSamAlignmentInstance ( struct Sam_Alignment *s )
 {
 	s->number_of_cigar_items = 0;
