@@ -38,7 +38,7 @@ void writeToFile ( short int flag_save_all_quality_scores, FILE *fhw_qual, FILE 
 		{
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 			{
-				//fprintf ( fhw_qual , "%s" , compressed_ds_pool[i]->pointers_to_qual_scores[j] );
+				fprintf ( fhw_qual , "%s" , compressed_ds_pool[i]->pointers_to_qual_scores[j] );
 				fprintf ( fhw_qual , "%s" , "\n" );
 			}
 		}
