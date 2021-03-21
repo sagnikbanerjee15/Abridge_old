@@ -393,10 +393,8 @@ void readAlignmentsAndCompress ( char *name_of_file_with_quality_scores, char *n
 	strcat( temp , " " );
 	sprintf( str , "%lld" , flag_ignore_quality_score );
 	strcat( temp , str );
-	strcat( temp , "\n" );
 	sprintf( str , "%lld" , flag_save_all_quality_scores );
 	strcat( temp , str );
-	strcat( temp , "\n" );
 	sprintf( str , "%lld" , flag_adjust_quality_scores );
 	strcat( temp , str );
 	strcat( temp , "\n" );
