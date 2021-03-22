@@ -103,6 +103,8 @@ void writeToFile ( short int flag_save_all_quality_scores, FILE *fhw_qual, FILE 
 						break;
 				}
 				fprintf ( fhw_qual , "%s" , qual );
+				fprintf ( fhw_qual , "%s" , "\t" );
+				fprintf ( fhw_qual , "%s" , compressed_ds_pool[i]->icigar );
 				fprintf ( fhw_qual , "%s" , "\n" );
 			}
 		}
