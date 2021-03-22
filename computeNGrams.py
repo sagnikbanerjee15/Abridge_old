@@ -12,7 +12,7 @@ for line_number,line in enumerate(fhr):
     bigram = dict(find_ngrams(line.strip(), 2))
     trigram = dict(find_ngrams(line.strip(), 3))
     conversion_table = {}
-    starting_ASCII_code_for_single_character_replacement = 74
+    starting_ASCII_code_for_single_character_replacement = 75
     for key in trigram:
         #print(key,trigram[key])
         if trigram[key]>1000:
