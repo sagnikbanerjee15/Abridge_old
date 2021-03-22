@@ -6,16 +6,17 @@ def find_ngrams(input_list, n):
     return sorted(res.items(),key=lambda item: (-item[1], item[0])) 
 
 input_filename = "/90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.qual.rle.line3"
-output_filename = "/90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.qual.rle.line3.bigramcompression"
+output_filename = "/90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.qual.rle.line3.quadgramcompression"
 fhr=open(input_filename,"r")
 for line_number,line in enumerate(fhr):
     bigram = dict(find_ngrams(line.strip(), 2))
     trigram = dict(find_ngrams(line.strip(), 3))
+    quadgram = dict(find_ngrams(line.strip(), 4))
     conversion_table = {}
     starting_ASCII_code_for_single_character_replacement = 75
-    for key in bigram:
+    for key in quadgram:
         #print(key,trigram[key])
-        if bigram[key]>1000:
+        if quadgram[key]>1000:
             line = line.replace(key,chr(starting_ASCII_code_for_single_character_replacement))
             conversion_table[chr(starting_ASCII_code_for_single_character_replacement)]=key
             starting_ASCII_code_for_single_character_replacement+=1
