@@ -10,7 +10,7 @@ fhr=open(input_filename,"r")
 for line_number,line in enumerate(fhr):
     bigram = dict(find_ngrams(line.strip(), 2))
     trigram = dict(find_ngrams(line.strip(), 3))
-    for key,value in trigram:
+    for key,value in trigram.iteritems():
         print(key,value)
     """
     print(f"Unigram {line_number+1}")
