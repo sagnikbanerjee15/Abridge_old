@@ -14,12 +14,13 @@ for line_number,line in enumerate(fhr):
     conversion_table = {}
     starting_ASCII_code_for_single_character_replacement = 74
     for key in trigram:
-        print(key,trigram[key])
+        #print(key,trigram[key])
         if trigram[key]>1000:
             line = line.replace(key,chr(starting_ASCII_code_for_single_character_replacement))
             conversion_table[chr(starting_ASCII_code_for_single_character_replacement)]=key
             starting_ASCII_code_for_single_character_replacement+=1
     fhw = open(output_filename,"w")
+    fhw.write(str(conversion_table)+"\t")
     fhw.write(line)
     fhw.close()
     """
