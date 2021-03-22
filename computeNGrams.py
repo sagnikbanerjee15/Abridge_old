@@ -2,7 +2,8 @@ from collections import Counter
 import pprint
 
 def find_ngrams(input_list, n):
-    return sorted(Counter(input_list[idx : idx + n] for idx in range(len(input_list) - 1)) )
+    res = Counter(input_list[idx : idx + n] for idx in range(len(input_list) - 1))
+    return sorted(res.items(),key=lambda item: (-item[1], item[0])) 
   
 
 
