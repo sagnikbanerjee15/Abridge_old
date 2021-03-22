@@ -19,4 +19,7 @@ for line_number,line in enumerate(fhr):
     print(f"Trigram {line_number+1}")
     print(str(dict(find_ngrams(line.strip(), 3))))
     print("="*100)
+    print(f"Tetragram {line_number+1}")
+    print(str(dict(find_ngrams(line.strip(), 4))))
+    print("="*100)
 fhr.close()
