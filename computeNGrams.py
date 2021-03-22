@@ -15,7 +15,7 @@ for line_number,line in enumerate(fhr):
     starting_ASCII_code_for_single_character_replacement = 75
     for key in bigram:
         #print(key,trigram[key])
-        if trigram[key]>1000:
+        if bigram[key]>1000:
             line = line.replace(key,chr(starting_ASCII_code_for_single_character_replacement))
             conversion_table[chr(starting_ASCII_code_for_single_character_replacement)]=key
             starting_ASCII_code_for_single_character_replacement+=1
