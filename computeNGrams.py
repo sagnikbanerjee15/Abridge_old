@@ -7,7 +7,7 @@ def find_ngrams(input_list, n):
   
 
 
-input_filename = "/90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.qual.rle.line1"
+input_filename = "/90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.qual.rle.line3"
 fhr=open(input_filename,"r")
 for line_number,line in enumerate(fhr):
     print(f"Unigram {line_number+1}")
