@@ -69,6 +69,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		qsRLE[i]->frequency++;
 	}
 
+	line_len = getline ( &line , &len , fhr );
 	do
 	{
 		for ( i = 0 ; line[i] != '\0' ; i++ )
