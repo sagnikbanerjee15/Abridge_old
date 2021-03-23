@@ -112,10 +112,10 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	for ( i = 0 ; i < 3 ; i++ )
 		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
 	change_indicator = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
+	return;
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr );
-	return;
 	splitByDelimiter ( line , '\t' , split_on_tab );
 	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
