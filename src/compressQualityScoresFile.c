@@ -48,6 +48,8 @@ void expandMDString ( char *icigar, char *change_indicator )
 					change_indicator[change_indicator_index++ ] = '1';
 			}
 		}
+		else if ( isCharacterInString ( insert_characters , icigar[i] ) || isCharacterInString ( mismatch_characters , icigar[i] ) )
+			change_indicator[change_indicator_index++ ] = '0';
 	}
 	change_indicator[change_indicator_index++ ] = '\0';
 }
