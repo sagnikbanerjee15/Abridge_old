@@ -28,7 +28,7 @@ void expandMDString ( char *icigar, char *change_indicator )
 	{
 		if ( isCharacterInString ( "atgcn" , icigar[i] ) )
 		{
-			change_indicator[change_indicator_index++ ] = "0";
+			change_indicator[change_indicator_index++ ] = '0';
 		}
 		else if ( isdigit ( icigar[i] ) != 0 )
 		{
@@ -43,9 +43,9 @@ void expandMDString ( char *icigar, char *change_indicator )
 			{
 				if ( icigar[i] == 'I' )
 					while ( num-- )
-						change_indicator[change_indicator_index++ ] = "0";
+						change_indicator[change_indicator_index++ ] = '0';
 				else while ( num-- )
-					change_indicator[change_indicator_index++ ] = "1";
+					change_indicator[change_indicator_index++ ] = '1';
 			}
 		}
 	}
