@@ -140,7 +140,8 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
 			//if ( i > max_len_sequence ) max_len_sequence = i;
-			if ( split_on_tab[0][i] == qsRLE[i]->score_character || change_indicator[i] == 1 )
+			//printf ( "\ni=%d split_on_tab[0][i]=%c qsRLE[i]->score_character=%c " , i , split_on_tab[0][i] , qsRLE[i]->score_character );
+			if ( split_on_tab[0][i] == qsRLE[i]->score_character || change_indicator[i] == '1' )
 				qsRLE[i]->frequency++;
 			else
 			{
