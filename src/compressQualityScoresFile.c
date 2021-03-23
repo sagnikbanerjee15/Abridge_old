@@ -115,6 +115,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr );
+	return;
 	splitByDelimiter ( line , '\t' , split_on_tab );
 	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
@@ -122,7 +123,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		qsRLE[i]->score_character = split_on_tab[0][i];
 		qsRLE[i]->frequency++;
 	}
-	return;
+
 	line_len = getline ( &line , &len , fhr );
 	do
 	{
