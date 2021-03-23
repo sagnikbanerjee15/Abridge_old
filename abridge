@@ -518,10 +518,11 @@ def compressSamFile(options):
         files_to_be_removed.append(f"{unmapped_outputfilename}.br")
         files_to_be_removed.append(name_of_file_with_quality_scores)
         files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle")
+        files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle.br")
         
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f" tar -cf {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename}"
+            cmd += f" tar -cf {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename} {name_of_file_with_quality_scores}.rle.br"
             cmd += f") "   
             cmd += f"1> /dev/null "
             cmd += f"2> /dev/null"
