@@ -123,8 +123,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	{
 		//if ( i > max_len_sequence ) max_len_sequence = i;
 		qsRLE[i]->score_character = split_on_tab[0][i];
-		qsRLE[i]->frequency++;
+		qsRLE[i]->frequency = 1;
 	}
+
+	expandMDString ( split_on_tab[1] , change_indicator );
+	printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
+	fflush ( stdout );
 
 	line_len = getline ( &line , &len , fhr );
 	do
