@@ -122,7 +122,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		qsRLE[i]->score_character = split_on_tab[0][i];
 		qsRLE[i]->frequency++;
 	}
-
+	return;
 	line_len = getline ( &line , &len , fhr );
 	do
 	{
