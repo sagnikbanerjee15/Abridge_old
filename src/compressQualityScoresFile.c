@@ -6,6 +6,51 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
+void expandMDString ( char *icigar, int *change_indicator )
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	int i;
+	int num;
+	int change_indicator_index = 0;
+
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+
+	/********************************************************************/
+	extractNHfromicigar ( icigar , strlen ( icigar ) );
+	num = 0;
+	for ( i = 0 ; icigar[i] != '\0' ; i++ )
+	{
+		if ( isCharacterInString ( "atgcn" , icigar[i] ) )
+		{
+			change_indicator[change_indicator_index++ ] = 0;
+		}
+		else if ( isidigit ( icigar[i] ) != 0 )
+		{
+			num = icigar[i] - 48;
+			i++;
+			while ( isdigit ( icigar[i] ) != 0 )
+			{
+				num = num * 10 + icigar[i] - 48;
+				i++;
+			}
+			if ( icigar[i] != 'N' && icigar[i] != 'D' )
+			{
+				if ( icigar[i] == 'I' )
+					while ( num-- )
+						change_indicator[change_indicator_index++ ] = 0;
+				else while ( num-- )
+					change_indicator[change_indicator_index++ ] = 1;
+			}
+		}
+	}
+}
+
 void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_quality_score_filename, short int adjust_quality_scores )
 {
 	/********************************************************************
@@ -19,13 +64,15 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	size_t len = 0;
 	ssize_t line_len;
 
-	char *line;
 	char str[1000];
+	char *line;
 	char **lines_to_be_written_to_file;
+	char **split_on_tab;
 
 	int i , j , k;
 	int max_len_sequence = 0;
 	int *lines_to_be_written_to_file_index;
+	int *change_indicator;
 
 	long long int number_of_records_read = 0;
 
@@ -59,12 +106,18 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		lines_to_be_written_to_file[i][0] = '\0';
 		lines_to_be_written_to_file_index[i] = 0;
 	}
+
+	split_on_tab = ( char** ) malloc ( sizeof(char*) * 2 );
+	for ( i = 0 ; i < 2 ; i++ )
+		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
+	change_indicator = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr );
-	for ( i = 0 ; line[i] != '\0' ; i++ )
+	splitByDelimiter ( line , '\t' , split_on_tab );
+	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
-		if ( i > max_len_sequence ) max_len_sequence = i;
+		//if ( i > max_len_sequence ) max_len_sequence = i;
 		qsRLE[i]->score_character = line[i];
 		qsRLE[i]->frequency++;
 	}
@@ -72,10 +125,13 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	line_len = getline ( &line , &len , fhr );
 	do
 	{
-		for ( i = 0 ; line[i] != '\0' ; i++ )
+		splitByDelimiter ( line , '\t' , split_on_tab );
+		expandMDString ( split_on_tab[1] , change_indicator );
+		printf ( "\n%s\n%s" , split_on_tab[0] , change_indicator );
+		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
 			//if ( i > max_len_sequence ) max_len_sequence = i;
-			if ( line[i] == qsRLE[i]->score_character )
+			if ( split_on_tab[0][i] == qsRLE[i]->score_character )
 				qsRLE[i]->frequency++;
 			else
 			{
@@ -87,11 +143,6 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 				}
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
-				/*if ( lines_to_be_written_to_file_index[i] != strlen ( lines_to_be_written_to_file[i] ) )
-				 {
-				 printf ( "\nPrblem %d %d %d" , i , lines_to_be_written_to_file_index[i] , strlen ( lines_to_be_written_to_file[i] ) );
-				 exit ( 1 );
-				 }*/
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = line[i];
