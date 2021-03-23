@@ -107,12 +107,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 		lines_to_be_written_to_file[i][0] = '\0';
 		lines_to_be_written_to_file_index[i] = 0;
 	}
-
+	return;
 	split_on_tab = ( char** ) malloc ( sizeof(char*) * 3 );
 	for ( i = 0 ; i < 3 ; i++ )
 		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
 	change_indicator = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	return;
+
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr );
