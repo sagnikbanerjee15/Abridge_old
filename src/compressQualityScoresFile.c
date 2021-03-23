@@ -110,7 +110,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	split_on_tab = ( char** ) malloc ( sizeof(char*) * 2 );
 	for ( i = 0 ; i < 2 ; i++ )
 		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	change_indicator = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
+	change_indicator = ( int* ) malloc ( sizeof(int) * MAX_SEQ_LEN );
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr );
