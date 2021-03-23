@@ -6,7 +6,7 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void expandMDString ( char *icigar, int *change_indicator )
+void expandMDString ( char *icigar, char *change_indicator )
 {
 	/********************************************************************
 	 * Variable declaration
@@ -28,7 +28,7 @@ void expandMDString ( char *icigar, int *change_indicator )
 	{
 		if ( isCharacterInString ( "atgcn" , icigar[i] ) )
 		{
-			change_indicator[change_indicator_index++ ] = 0;
+			change_indicator[change_indicator_index++ ] = "0";
 		}
 		else if ( isdigit ( icigar[i] ) != 0 )
 		{
@@ -43,12 +43,13 @@ void expandMDString ( char *icigar, int *change_indicator )
 			{
 				if ( icigar[i] == 'I' )
 					while ( num-- )
-						change_indicator[change_indicator_index++ ] = 0;
+						change_indicator[change_indicator_index++ ] = "0";
 				else while ( num-- )
-					change_indicator[change_indicator_index++ ] = 1;
+					change_indicator[change_indicator_index++ ] = "1";
 			}
 		}
 	}
+	change_indicator[change_indicator_index++ ] = '\0';
 }
 
 void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_quality_score_filename, short int adjust_quality_scores )
@@ -68,11 +69,11 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	char *line;
 	char **lines_to_be_written_to_file;
 	char **split_on_tab;
+	char *change_indicator;
 
 	int i , j , k;
 	int max_len_sequence = 0;
 	int *lines_to_be_written_to_file_index;
-	int *change_indicator;
 
 	long long int number_of_records_read = 0;
 
@@ -110,7 +111,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	split_on_tab = ( char** ) malloc ( sizeof(char*) * 2 );
 	for ( i = 0 ; i < 2 ; i++ )
 		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	change_indicator = ( int* ) malloc ( sizeof(int) * MAX_SEQ_LEN );
+	change_indicator = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr );
