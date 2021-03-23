@@ -119,7 +119,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
 		//if ( i > max_len_sequence ) max_len_sequence = i;
-		qsRLE[i]->score_character = line[i];
+		qsRLE[i]->score_character = split_on_tab[0][i];
 		qsRLE[i]->frequency++;
 	}
 
@@ -147,12 +147,12 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
-				qsRLE[i]->score_character = line[i];
+				qsRLE[i]->score_character = split_on_tab[0][i];
 			}
 		}
 	} while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 );
 
-	for ( i = 0 ; line[i] != '\0' ; i++ )
+	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
 		if ( qsRLE[i]->frequency > 1 )
 		{
