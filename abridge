@@ -136,7 +136,7 @@ def validateCommandLineArguments(options):
     if options.save_all_quality_scores == True:
         options.ignore_quality_scores = True
     
-    if options.save_all_quality_scores == False and options.adjust_quality_scores == True:
+    if options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
         print("You must choose to save all quality scores to avail the option of adjusting quality score. Rerun with --save_all_quality_scores")
         if options.quiet==False:
             logging.info(f"You must choose to save all quality scores to avail the option of adjusting quality score. Rerun with --save_all_quality_scores")
@@ -318,14 +318,14 @@ def compressSamFile(options):
                 cmd += f" 0" # argv[9] - run diagnostics
             cmd += f" {max_input_reads_in_a_single_nucl_loc} " # argv[10] - max_input_reads_in_a_single_nucl_loc
             cmd += f" {name_of_file_with_max_commas} " # argv[11] - name_of_file_with_max_commas
-            if options.save_all_quality_scores == True and options.adjust_quality_scores == True:
-                cmd += f" 1 1 " # argv[12] and argv[13]
-            elif options.save_all_quality_scores == True and options.adjust_quality_scores == False:
+            if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
                 cmd += f" 1 0 " # argv[12] and argv[13]
-            elif options.save_all_quality_scores == False and options.adjust_quality_scores == True: # Should never happen
-                cmd += f" 0 1 " # argv[12] and argv[13]
-            elif options.save_all_quality_scores == False and options.adjust_quality_scores == False:
+            elif options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
+                cmd += f" 1 1 " # argv[12] and argv[13]
+            elif options.save_all_quality_scores == False and options.save_exact_quality_scores == True: # Should never happen
                 cmd += f" 0 0 " # argv[12] and argv[13]
+            elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
+                cmd += f" 0 1 " # argv[12] and argv[13]
             cmd += f" {name_of_file_with_quality_scores} " # argv[14]
             cmd += f") "
             cmd += f"1> /dev/null "
