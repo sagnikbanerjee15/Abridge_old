@@ -3,7 +3,6 @@
 # include <string.h>
 # include <stdlib.h>
 # include <ctype.h>
-# include <stdbool.h>
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
@@ -31,7 +30,7 @@ void expandMDString ( char *icigar, int *change_indicator )
 		{
 			change_indicator[change_indicator_index++ ] = 0;
 		}
-		else if ( isidigit ( icigar[i] ) != 0 )
+		else if ( isdigit ( icigar[i] ) != 0 )
 		{
 			num = icigar[i] - 48;
 			i++;
