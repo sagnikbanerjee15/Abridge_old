@@ -3,6 +3,7 @@
 # include <string.h>
 # include <stdlib.h>
 # include <ctype.h>
+# include <stdbool.h>
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
