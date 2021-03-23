@@ -131,8 +131,8 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 	{
 		splitByDelimiter ( line , '\t' , split_on_tab );
 		expandMDString ( split_on_tab[1] , change_indicator );
-		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
-		//fflush ( stdout );
+		printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
+		fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
 			//if ( i > max_len_sequence ) max_len_sequence = i;
