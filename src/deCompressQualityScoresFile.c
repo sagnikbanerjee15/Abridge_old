@@ -26,7 +26,6 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	int checker_flag;
 	int *quality_score_position_index;
 	int *quality_score_position_max;
-	int line_number = 0;
 
 	char *line;
 	char *quality_score_of_read;
@@ -99,12 +98,11 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			}
 		}
 		rle_quality_scores_index++;
-		quality_score_position_max[line_number] = number_of_quality_scores_in_current_position_index;
-		line_number++;
+		quality_score_position_max[rle_quality_scores_index] = number_of_quality_scores_in_current_position_index;
 	}
 	max_read_length = rle_quality_scores_index;
 	quality_score_of_read = ( char* ) malloc ( sizeof(char) * max_read_length );
-	return;
+
 	/*
 	 * Calculate sum of each position
 	 */
