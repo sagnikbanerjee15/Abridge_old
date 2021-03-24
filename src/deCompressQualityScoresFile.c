@@ -79,23 +79,24 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			/*
 			 * Check if the first element is a character or not
 			 */
-			if ( isdigit ( line[i] ) == 0 )
-			{
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = 1;
-				number_of_quality_scores_in_current_position_index++;
-				//quality_score_position_max[i]++;
-			}
-			else
+			if ( line[i] >= 48 && line[i] <= 57 )
 			{
 				num = 0;
-				while ( isdigit ( line[i] ) != 0 )
+				while ( line[i] >= 48 && line[i] <= 57 )
 				{
 					num = num * 10 + line[i] - 48;
 					i++;
 				}
 				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
 				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = num;
+				number_of_quality_scores_in_current_position_index++;
+				//quality_score_position_max[i]++;
+
+			}
+			else
+			{
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = 1;
 				number_of_quality_scores_in_current_position_index++;
 				//quality_score_position_max[i]++;
 			}
