@@ -113,6 +113,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 		}
 		quality_score_of_read[i] = '\0';
 		printf ( "\n%s" , quality_score_of_read );
+		fflush ( stdout );
 		if ( checker_flag == 0 ) break;
 	}
 
