@@ -79,6 +79,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			/*
 			 * Check if the first element is a character or not
 			 */
+			printf ( "Inside" );
 			if ( line[i] >= 48 && line[i] <= 57 )
 			{
 				num = 0;
