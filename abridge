@@ -136,12 +136,10 @@ def validateCommandLineArguments(options):
     if options.save_all_quality_scores == True:
         options.ignore_quality_scores = True
     
-    if options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
-        print("You must choose to save all quality scores to avail the option of adjusting quality score. Rerun with --save_all_quality_scores")
-        if options.quiet==False:
-            logging.info(f"You must choose to save all quality scores to avail the option of adjusting quality score. Rerun with --save_all_quality_scores")
-        sys.exit()
     
+    if options.save_exact_quality_scores == True:
+        options.save_all_quality_scores = True
+         
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
     options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
     options.softwares["compressSamFileSingleEndedPass2"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass2"
