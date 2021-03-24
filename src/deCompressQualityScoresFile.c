@@ -104,7 +104,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	}
 	max_read_length = rle_quality_scores_index;
 	quality_score_of_read = ( char* ) malloc ( sizeof(char) * max_read_length );
-
+	return;
 	/*
 	 * Calculate sum of each position
 	 */
