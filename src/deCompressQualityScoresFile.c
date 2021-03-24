@@ -78,7 +78,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			else
 			{
 				num = 0;
-				while ( isidigit ( line[i] ) != 0 )
+				while ( isdigit ( line[i] ) != 0 )
 				{
 					num = num * 10 + line[i] - 48;
 					i++;
