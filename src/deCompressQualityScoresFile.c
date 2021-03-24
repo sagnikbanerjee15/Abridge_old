@@ -71,7 +71,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 		}
 		printf ( "\n%d %d" , rle_quality_scores_index , number_of_quality_scores_in_current_position );
 		fflush ( stdout );
-		rle_quality_scores[rle_quality_scores_index] = ( struct RLE_Quality_Scores* ) malloc ( sizeof(struct RLE_Quality_Scores) * number_of_quality_scores_in_current_position );
+		rle_quality_scores[rle_quality_scores_index] = ( struct RLE_Quality_Scores* ) malloc ( sizeof(struct RLE_Quality_Scores) * ( number_of_quality_scores_in_current_position + 10 ) );
 		//number_of_quality_scores_in_current_position_index = 0;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
