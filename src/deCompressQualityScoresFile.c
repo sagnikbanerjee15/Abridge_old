@@ -23,8 +23,11 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	int rle_quality_scores_index = 0;
 	int number_of_quality_scores_in_current_position = 0;
 	int number_of_quality_scores_in_current_position_index = 0;
+	int checker_flag;
+	int *quality_score_position_index;
 
 	char *line;
+	char *quality_score_of_read;
 
 	struct RLE_Quality_Scores **rle_quality_scores;
 
@@ -87,7 +90,34 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 		}
 		rle_quality_scores_index++;
 	}
-	max_read_length++;
+	max_read_length = rle_quality_scores_index;
+	quality_score_position_index = ( int* ) malloc ( sizeof(int) * max_read_length );
+	quality_score_of_read = ( char* ) malloc ( sizeof(char) * max_read_length );
+
+	for ( i = 0 ; i < max_read_length ; i++ )
+		quality_score_position_index[i] = 0;
+
+	/*
+	 * Start constructing the quality scores
+	 */
+	while ( 1 )
+	{
+		checker_flag = 0;
+		for ( i = 0 ; i < max_read_length ; i++ )
+		{
+			quality_score_of_read[i] = rle_quality_scores[i][quality_score_position_index[i]]->quality_score;
+			rle_quality_scores[i][quality_score_position_index[i]]->frequency--;
+			if ( rle_quality_scores[i][quality_score_position_index[i]]->frequency == 0 )
+				quality_score_position_index[i]++;
+			checker_flag += rle_quality_scores[i][quality_score_position_index[i]]->frequency;
+		}
+		quality_score_of_read[i] = '\0';
+		printf ( "\n%s" , quality_score_of_read );
+		if ( checker_flag == 0 ) break;
+	}
+
+	fclose ( fhr );
+	fclose ( fhw );
 }
 
 int main ( int argc, char *argv[] )
