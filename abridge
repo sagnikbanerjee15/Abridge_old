@@ -748,9 +748,11 @@ def decompressSamFile(options):
         print(output_sam_filename)
         """
         files_to_be_removed.extend([name_of_input_file_without_location,
-                                    pass2_filename,
-                                    pass2_index_filename,
-                                    unmapped_outputfilename])
+                                    pass1_filename,
+                                    pass1_index_filename,
+                                    unmapped_outputfilename,
+                                    name_of_file_with_quality_scores,
+                                    f"{name_of_file_with_quality_scores}.rle"])
     pool.map(runCommand,all_commands)
     
     ######################################################################################
