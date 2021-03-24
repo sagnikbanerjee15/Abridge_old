@@ -18,9 +18,11 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	ssize_t line_len;
 
 	int i;
+	int num;
 	int max_read_length;
 	int rle_quality_scores_index = 0;
 	int number_of_quality_scores_in_current_position = 0;
+	int number_of_quality_scores_in_current_position_index = 0;
 
 	char *line;
 
@@ -48,13 +50,44 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 
 	/********************************************************************/
 
+	max_read_length = 0;
 	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
 	{
+		number_of_quality_scores_in_current_position = 0;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
-
+			if ( isdigit ( line[i] ) == 0 )
+				number_of_quality_scores_in_current_position++;
 		}
+		rle_quality_scores[rle_quality_scores_index] = ( struct RLE_Quality_Scores* ) malloc ( sizeof(struct RLE_Quality_Scores) * number_of_quality_scores_in_current_position );
+		number_of_quality_scores_in_current_position_index = 0;
+		for ( i = 0 ; line[i] != '\0' ; i++ )
+		{
+			/*
+			 * Check if the first element is a character or not
+			 */
+			if ( isdigit ( line[0] ) == 0 )
+			{
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->quality_score = line[0] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->frequency = 1;
+				number_of_quality_scores_in_current_position_index++;
+			}
+			else
+			{
+				num = 0;
+				while ( isidigit ( line[i] ) != 0 )
+				{
+					num = num * 10 + line[i] - 48;
+					i++;
+				}
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->quality_score = line[i] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->frequency = num;
+				number_of_quality_scores_in_current_position_index++;
+			}
+		}
+		rle_quality_scores_index++;
 	}
+	max_read_length++;
 }
 
 int main ( int argc, char *argv[] )

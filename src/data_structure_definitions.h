@@ -192,7 +192,7 @@ struct Sam_Alignment
 
 struct RLE_Quality_Scores
 {
-	long long int value;
+	long long int frequency;
 	char quality_score;
 };
 
