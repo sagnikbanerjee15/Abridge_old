@@ -83,8 +83,8 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 					num = num * 10 + line[i] - 48;
 					i++;
 				}
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->quality_score = line[i] - 30;
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->frequency = num;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = num;
 				number_of_quality_scores_in_current_position_index++;
 			}
 		}
@@ -105,11 +105,11 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 		checker_flag = 0;
 		for ( i = 0 ; i < max_read_length ; i++ )
 		{
-			quality_score_of_read[i] = rle_quality_scores[i][quality_score_position_index[i]]->quality_score;
-			rle_quality_scores[i][quality_score_position_index[i]]->frequency--;
-			if ( rle_quality_scores[i][quality_score_position_index[i]]->frequency == 0 )
+			quality_score_of_read[i] = rle_quality_scores[i][quality_score_position_index[i]].quality_score;
+			rle_quality_scores[i][quality_score_position_index[i]].frequency--;
+			if ( rle_quality_scores[i][quality_score_position_index[i]].frequency == 0 )
 				quality_score_position_index[i]++;
-			checker_flag += rle_quality_scores[i][quality_score_position_index[i]]->frequency;
+			checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
 		}
 		quality_score_of_read[i] = '\0';
 		printf ( "\n%s" , quality_score_of_read );
