@@ -26,6 +26,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	int checker_flag;
 	int *quality_score_position_index;
 	int *quality_score_position_max;
+	int line_number = 0;
 
 	char *line;
 	char *quality_score_of_read;
@@ -78,10 +79,10 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			 */
 			if ( isdigit ( line[0] ) == 0 )
 			{
-				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].quality_score = line[0] - 30;
-				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].frequency = 1;
-				//number_of_quality_scores_in_current_position_index++;
-				quality_score_position_max[i]++;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[0] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = 1;
+				number_of_quality_scores_in_current_position_index++;
+				//quality_score_position_max[i]++;
 			}
 			else
 			{
@@ -91,16 +92,17 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 					num = num * 10 + line[i] - 48;
 					i++;
 				}
-				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].quality_score = line[i] - 30;
-				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].frequency = num;
-				//number_of_quality_scores_in_current_position_index++;
-				quality_score_position_max[i]++;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = num;
+				number_of_quality_scores_in_current_position_index++;
+				//quality_score_position_max[i]++;
 			}
 		}
 		rle_quality_scores_index++;
+		quality_score_position_max[line_number] = number_of_quality_scores_in_current_position_index;
+		line_number++;
 	}
 	max_read_length = rle_quality_scores_index;
-
 	quality_score_of_read = ( char* ) malloc ( sizeof(char) * max_read_length );
 
 	/*
