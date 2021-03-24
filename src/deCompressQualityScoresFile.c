@@ -105,13 +105,13 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 		quality_score_position_max[rle_quality_scores_index] = number_of_quality_scores_in_current_position_index;
 		printf ( "\n%d quality_score_position_max %d i=%d" , rle_quality_scores_index , quality_score_position_max[rle_quality_scores_index] , i );
 		fflush ( stdout );
-		rle_quality_scores_index++;
 		num = 0;
-
 		for ( j = 0 ; j < quality_score_position_max[i] ; j++ )
 			num += rle_quality_scores[rle_quality_scores_index][j].frequency;
 		printf ( "\nSum Position %d %lld" , rle_quality_scores_index , num );
 		fflush ( stdout );
+
+		rle_quality_scores_index++;
 	}
 	return;
 	max_read_length = rle_quality_scores_index;
