@@ -17,7 +17,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	size_t len = 0;
 	ssize_t line_len;
 
-	int i;
+	int i , j , k;
 	int num;
 	int max_read_length;
 	int rle_quality_scores_index = 0;
@@ -25,6 +25,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	int number_of_quality_scores_in_current_position_index = 0;
 	int checker_flag;
 	int *quality_score_position_index;
+	int *quality_score_position_max;
 
 	char *line;
 	char *quality_score_of_read;
@@ -50,7 +51,13 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 	}
 
 	rle_quality_scores = ( struct RLE_Quality_Scores** ) malloc ( sizeof(struct RLE_Quality_Scores*) * MAX_SEQ_LEN );
-
+	quality_score_position_max = ( int* ) malloc ( sizeof(int) * MAX_SEQ_LEN );
+	quality_score_position_index = ( int* ) malloc ( sizeof(int) * MAX_SEQ_LEN );
+	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
+	{
+		quality_score_position_index[i] = 0;
+		quality_score_position_max[i] = 0;
+	}
 	/********************************************************************/
 
 	max_read_length = 0;
@@ -63,7 +70,7 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 				number_of_quality_scores_in_current_position++;
 		}
 		rle_quality_scores[rle_quality_scores_index] = ( struct RLE_Quality_Scores* ) malloc ( sizeof(struct RLE_Quality_Scores) * number_of_quality_scores_in_current_position );
-		number_of_quality_scores_in_current_position_index = 0;
+		//number_of_quality_scores_in_current_position_index = 0;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
 			/*
@@ -71,9 +78,10 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			 */
 			if ( isdigit ( line[0] ) == 0 )
 			{
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[0] - 30;
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = 1;
-				number_of_quality_scores_in_current_position_index++;
+				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].quality_score = line[0] - 30;
+				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].frequency = 1;
+				//number_of_quality_scores_in_current_position_index++;
+				quality_score_position_max[i]++;
 			}
 			else
 			{
@@ -83,20 +91,28 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 					num = num * 10 + line[i] - 48;
 					i++;
 				}
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = num;
-				number_of_quality_scores_in_current_position_index++;
+				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].quality_score = line[i] - 30;
+				rle_quality_scores[rle_quality_scores_index][quality_score_position_max[i]].frequency = num;
+				//number_of_quality_scores_in_current_position_index++;
+				quality_score_position_max[i]++;
 			}
 		}
 		rle_quality_scores_index++;
 	}
 	max_read_length = rle_quality_scores_index;
-	quality_score_position_index = ( int* ) malloc ( sizeof(int) * max_read_length );
+
 	quality_score_of_read = ( char* ) malloc ( sizeof(char) * max_read_length );
 
+	/*
+	 * Calculate sum of each position
+	 */
 	for ( i = 0 ; i < max_read_length ; i++ )
-		quality_score_position_index[i] = 0;
-
+	{
+		long long int num = 0;
+		for ( j = 0 ; j < quality_score_position_max[i] ; j++ )
+			num += rle_quality_scores[i][j].frequency;
+		printf ( "\nSum Position %d %lld" , i , num );
+	}
 	/*
 	 * Start constructing the quality scores
 	 */
@@ -112,8 +128,10 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
 		}
 		quality_score_of_read[i] = '\0';
-		printf ( "\n%s" , quality_score_of_read );
-		fflush ( stdout );
+		//printf ( "\n%s" , quality_score_of_read );
+		//fflush ( stdout );
+		fprintf ( fhw , "%s" , quality_score_of_read );
+		fprintf ( fhw , "%s" , "\n" );
 		if ( checker_flag == 0 ) break;
 	}
 
