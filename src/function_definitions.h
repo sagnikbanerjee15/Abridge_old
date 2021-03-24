@@ -157,9 +157,9 @@ struct Chromosome_Starting_Byte* allocateMemoryChromosome_Starting_Byte ()
 	int i;
 
 	s = ( struct Chromosome_Starting_Byte* ) malloc ( sizeof(struct Chromosome_Starting_Byte) );
-	s->name = ( char** ) malloc ( sizeof(char*) * MAX_NUMBER_OF_CHROMOSOMES );
-	s->start_byte_in_pass2_file = ( long int* ) malloc ( sizeof(long int) * MAX_NUMBER_OF_CHROMOSOMES );
-	for ( i = 0 ; i < MAX_NUMBER_OF_CHROMOSOMES ; i++ )
+	s->name = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
+	s->start_byte_in_pass2_file = ( long int* ) malloc ( sizeof(long int) * MAX_REFERENCE_SEQUENCES );
+	for ( i = 0 ; i < MAX_REFERENCE_SEQUENCES ; i++ )
 		s->name[i] = ( char* ) malloc ( sizeof(char) * 1000 );
 	s->number_of_chromosomes = 0;
 	return s;
@@ -171,10 +171,10 @@ struct Chromosome_Info* allocateMemoryChromosome_Info ()
 	int i;
 
 	s = ( struct Chromosome_Info* ) malloc ( sizeof(struct Chromosome_Info) );
-	s->length = ( long long int* ) malloc ( sizeof(long long int) * MAX_NUMBER_OF_CHROMOSOMES );
+	s->length = ( long long int* ) malloc ( sizeof(long long int) * MAX_REFERENCE_SEQUENCES );
 	s->number_of_chromosomes = 0;
-	s->name = ( char** ) malloc ( sizeof(char*) * MAX_NUMBER_OF_CHROMOSOMES );
-	for ( i = 0 ; i < MAX_NUMBER_OF_CHROMOSOMES ; i++ )
+	s->name = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
+	for ( i = 0 ; i < MAX_REFERENCE_SEQUENCES ; i++ )
 		s->name[i] = ( char* ) malloc ( sizeof(char) * 1000 );
 	return s;
 }

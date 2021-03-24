@@ -19,7 +19,7 @@
 # define MAX_CIGAR_FREQ_SIZE 1000000
 # define MAX_ICIGAR_LENGTH 100000
 # define MAX_ICIGAR_LENGTH_PASS1_COL2 10000000
-# define MAX_REFERENCE_SEQUENCES 10000
+# define MAX_REFERENCE_SEQUENCES 300000
 # define MAX_SYMBOLS_FOR_PASS3_COMPRESSION 44
 # define MAX_SYMBOLIC_ICIGAR_LENGTH 3
 # define MAX_REFERENCE_SEQ_LENGTH 1000
@@ -27,7 +27,6 @@
 # define MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE 1073741824
 # define MAX_REFERENCE_SEQ_LEN 1000000000
 # define MAX_FILES_FOR_MERGING 1000
-# define MAX_NUMBER_OF_CHROMOSOMES 25000
 
 char *sam_tags[] =
 { "NH" , "HI" , "AS" , "nM" , "NM" , "MD" , "jM" , "jI" , "XS" , "RG" , "XT" , "XM" , "AM" , "X0" , "X1" , "XO" , "XG" };
@@ -189,6 +188,12 @@ struct Sam_Alignment
 	char *selected_qual;
 	int soft_clips_removed_seq_len;
 
+};
+
+struct RLE_Quality_Scores
+{
+	long long int value;
+	char quality_score;
 };
 
 struct Abridge_Index

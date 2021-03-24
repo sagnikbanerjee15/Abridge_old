@@ -151,7 +151,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 					for ( j = 0 ; str[j] != '\0' ; j++ )
 						lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
 				}
-				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
+				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
@@ -168,7 +168,7 @@ void performColumnWiseRLE ( char *input_qualityscore_filename, char *output_qual
 			for ( j = 0 ; str[j] != '\0' ; j++ )
 				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
 		}
-		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character;
+		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
 		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
 		str[0] = '\0';
 		qsRLE[i]->frequency = 0;
