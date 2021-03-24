@@ -71,8 +71,8 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			 */
 			if ( isdigit ( line[0] ) == 0 )
 			{
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->quality_score = line[0] - 30;
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index]->frequency = 1;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[0] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = 1;
 				number_of_quality_scores_in_current_position_index++;
 			}
 			else
