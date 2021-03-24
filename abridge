@@ -155,6 +155,7 @@ def validateCommandLineArguments(options):
     options.softwares["addTagToSamFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/addTagToSamFile"
     options.softwares["maxReadsMappedToSingleNucleotide"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsMappedToSingleNucleotide"
     options.softwares["compressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressQualityScoresFile"
+    options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
     
     if options.decompress==True:
         for file in options.inputabrfilenames:
@@ -237,7 +238,6 @@ def compressSamFile(options):
         # Compiling programs - will be removed during final version
         ######################################################################################
         compressSamFileSingleEndedPass1 = options.softwares["compressSamFileSingleEndedPass1"]
-        compressSamFileSingleEndedPass2 = options.softwares["compressSamFileSingleEndedPass2"]
         maxReadsMappedToSingleNucleotide = options.softwares["maxReadsMappedToSingleNucleotide"]
         buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
         compressQualityScoresFile = options.softwares["compressQualityScoresFile"]
@@ -522,7 +522,7 @@ def compressSamFile(options):
         
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f" tar -cf {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename} {name_of_file_with_quality_scores}.rle.br"
+            cmd += f" tar cf {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename} {name_of_file_with_quality_scores}.rle.br"
             cmd += f") "   
             cmd += f"1> /dev/null "
             cmd += f"2> /dev/null"
@@ -699,10 +699,16 @@ def decompressSamFile(options):
         os.system(cmd)
     
     decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
+    deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
     ######################################################################################
     # Compiling programs - will be removed during final version
     ######################################################################################
     cmd=f"gcc {decompressSamFileSingleEnded}.c -o {decompressSamFileSingleEnded} -Ofast"
+    if options.quiet == False:
+        logging.info(f"Running command - {cmd}")
+    os.system(cmd)
+    
+    cmd=f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
     if options.quiet == False:
         logging.info(f"Running command - {cmd}")
     os.system(cmd)
@@ -715,18 +721,25 @@ def decompressSamFile(options):
     files_to_be_removed = []
     all_commands = []
     for input_filename in options.inputabrfilenames:
-        input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
-        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+        name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
+        pass1_filename = options.output_directory + "/" + input_filename_without_extension + ".pass1"
+        pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
         compressed_abridged_filename = input_filename
         output_sam_filename = options.output_directory + "/" + input_filename_without_extension + ".decompressed.sam"
+        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
         
-        cmd=f"7za e {input_filename} -y"
-        cmd+=f" -o{options.output_directory}"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        all_commands.append([cmd,"dummy"])
+        if input_filename[-3:]==".7z":
+            cmd=f"7za e {input_filename} -y"
+            cmd+=f" -o {options.output_directory}"
+            if options.quiet == False:
+                logging.info(f"Running command - {cmd}")
+            all_commands.append([cmd,"dummy"])
+        elif input_filename[-3:]==".br":
+            cmd = f"tar -xf {input_filename} -C {options.output_directory} "
+            if options.quiet == False:
+                logging.info(f"Running command - {cmd}")
+            all_commands.append([cmd,"dummy"])
         #os.system(cmd)
         """
         print(input_filename_without_extension)
@@ -742,14 +755,41 @@ def decompressSamFile(options):
                                     unmapped_outputfilename])
     pool.map(runCommand,all_commands)
     
+    ######################################################################################
+    # Convert RLE back to quality scores
+    ######################################################################################
     all_commands = []
     for input_filename in options.inputabrfilenames:
-        input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
-        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+        name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
+        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
+        compressed_abridged_filename = input_filename
+        
+        cmd  = f"(/usr/bin/time --verbose "
+        cmd += f" {deCompressQualityScoresFile} "
+        cmd += f" {name_of_file_with_quality_scores}.rle "
+        cmd += f" {name_of_file_with_quality_scores} "
+        cmd += f") "
+        cmd += f"1> /dev/null "
+        if options.keep_intermediate_error_files == True:
+            cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_RLE_decompress.error"
+        else:
+            cmd += f"2> /dev/null"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        all_commands.append([cmd,"dummy"])
+    pool.map(runCommand,all_commands)
+    
+    return
+    all_commands = []
+    for input_filename in options.inputabrfilenames:
+        input_filename_without_extension = input_filename.split("/")[-1][:-11]
+        pass1_filename = options.output_directory + "/" + input_filename_without_extension + ".pass1"
+        pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
         compressed_abridged_filename = input_filename
         output_sam_filename = options.output_directory + "/" + input_filename_without_extension + ".decompressed.sam"
+        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
+        compressed_abridged_filename = input_filename
     
         cmd =f" {decompressSamFileSingleEnded} " # argv[0] - Name of the program
         cmd+=f" {pass2_index_filename} "# argv[1] - Abridge index, pass2_index_outputfilename

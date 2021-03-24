@@ -39,6 +39,16 @@ abridge \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
 
+(/usr/bin/time --verbose  \
+abridge \
+--decompress \
+--cpu $CPU \
+--genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.abridge.7z \
+--output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
+1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
+2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
+
 
 Abridge Merge
 =============
