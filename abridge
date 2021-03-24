@@ -725,7 +725,7 @@ def decompressSamFile(options):
         unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
         name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
         compressed_abridged_filename = input_filename
-        output_sam_filename = options.output_directory + "/" + input_filename_without_extension + ".decompressed.sam"
+        output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
         
         if input_filename[-3:]==".7z":
             cmd=f"7za e {input_filename} -y"
