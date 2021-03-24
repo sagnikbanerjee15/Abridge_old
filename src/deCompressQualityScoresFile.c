@@ -69,8 +69,10 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 			if ( isdigit ( line[i] ) == 0 )
 				number_of_quality_scores_in_current_position++;
 		}
-		printf ( "\n%d %d" , rle_quality_scores_index , number_of_quality_scores_in_current_position );
-		fflush ( stdout );
+		/*
+		 printf ( "\n%d %d" , rle_quality_scores_index , number_of_quality_scores_in_current_position );
+		 fflush ( stdout );
+		 */
 		rle_quality_scores[rle_quality_scores_index] = ( struct RLE_Quality_Scores* ) malloc ( sizeof(struct RLE_Quality_Scores) * ( number_of_quality_scores_in_current_position + 10 ) );
 
 		number_of_quality_scores_in_current_position_index = 0;
@@ -103,31 +105,27 @@ void convertRLEtoQualValues ( char *input_qualityscore_filename, char *output_qu
 		}
 
 		quality_score_position_max[rle_quality_scores_index] = number_of_quality_scores_in_current_position_index;
-		printf ( "\n%d quality_score_position_max %d i=%d" , rle_quality_scores_index , quality_score_position_max[rle_quality_scores_index] , i );
-		fflush ( stdout );
+		/*
+		 printf ( "\n%d quality_score_position_max %d i=%d" , rle_quality_scores_index , quality_score_position_max[rle_quality_scores_index] , i );
+		 fflush ( stdout );
+		 */
 		num = 0;
 		for ( j = 0 ; j < quality_score_position_max[rle_quality_scores_index] ;
 				j++ )
 			num += rle_quality_scores[rle_quality_scores_index][j].frequency;
-		printf ( "\nSum Position %d %lld" , rle_quality_scores_index , num );
-		fflush ( stdout );
-
+		/*
+		 *
+		 *
+		 * Calculate sum of each position
+		 printf ( "\nSum Position %d %lld" , rle_quality_scores_index , num );
+		 fflush ( stdout );
+		 */
 		rle_quality_scores_index++;
 	}
-	return;
+
 	max_read_length = rle_quality_scores_index;
 	quality_score_of_read = ( char* ) malloc ( sizeof(char) * max_read_length );
 
-	/*
-	 * Calculate sum of each position
-	 */
-	for ( i = 0 ; i < max_read_length ; i++ )
-	{
-		long long int num = 0;
-		for ( j = 0 ; j < quality_score_position_max[i] ; j++ )
-			num += rle_quality_scores[i][j].frequency;
-		printf ( "\nSum Position %d %lld" , i , num );
-	}
 	/*
 	 * Start constructing the quality scores
 	 */
