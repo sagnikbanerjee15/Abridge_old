@@ -729,7 +729,7 @@ def decompressSamFile(options):
         
         if input_filename[-3:]==".7z":
             cmd=f"7za e {input_filename} -y"
-            cmd+=f" -o {options.output_directory}"
+            cmd+=f" -C {options.output_directory}"
             if options.quiet == False:
                 logging.info(f"Running command - {cmd}")
             all_commands.append([cmd,"dummy"])
