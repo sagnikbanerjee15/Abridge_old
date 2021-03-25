@@ -95,8 +95,8 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	for ( i = 0 ; i < ROWS ; i++ )
 		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS);
 
-	split_on_dash = ( char** ) malloc (sizeof(char*) * 5);
-	for ( i = 0 ; i < 5 ; i++ )
+	split_on_dash = ( char** ) malloc (sizeof(char*) * ROWS);
+	for ( i = 0 ; i < ROWS ; i++ )
 		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS);
 
 	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS * 10);
