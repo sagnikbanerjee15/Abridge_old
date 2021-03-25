@@ -9,13 +9,14 @@
 
 long long int total_mapped_reads = 0;
 
-void decompressFile(char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass2_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information)
+void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass2_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
 	FILE *fhr;
 	FILE *fhw;
+	FILE *fhr_qual;
 
 	struct Abridge_Index *abridge_index;
 	struct Sam_Alignment *sam_alignment;
@@ -65,66 +66,72 @@ void decompressFile(char *abridge_index_filename, char *genome_filename, char *o
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen(pass2_filename, "rb");
-	if (fhr == NULL)
+	fhr = fopen (pass2_filename , "rb");
+	if ( fhr == NULL )
 	{
-		printf("Error! File not found");
-		exit(1);
+		printf ("Error! File not found");
+		exit (1);
 	}
-	fhw = fopen(output_sam_filename, "w");
-	if (fhw == NULL)
+	fhr_qual = fopen (name_of_file_with_quality_scores , "r");
+	if ( fhr_qual == NULL )
 	{
-		printf("Error! File cannot be opened for writing");
-		exit(1);
+		printf ("Error! File not found");
+		exit (1);
+	}
+	fhw = fopen (output_sam_filename , "w");
+	if ( fhw == NULL )
+	{
+		printf ("Error! File cannot be opened for writing");
+		exit (1);
 	}
 
-	split_on_newline = (char**) malloc(sizeof(char*) * ROWS * 10);
-	for (i = 0; i < ROWS * 10; i++)
-		split_on_newline[i] = (char*) malloc(sizeof(char) * COLS * 10);
+	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS * 10);
+	for ( i = 0 ; i < ROWS * 10 ; i++ )
+		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
 
-	split_on_tab = (char**) malloc(sizeof(char*) * ROWS);
-	for (i = 0; i < ROWS; i++)
-		split_on_tab[i] = (char*) malloc(sizeof(char) * COLS);
+	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS);
+	for ( i = 0 ; i < ROWS ; i++ )
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS);
 
-	split_on_dash = (char**) malloc(sizeof(char*) * ROWS);
-	for (i = 0; i < ROWS; i++)
-		split_on_dash[i] = (char*) malloc(sizeof(char) * COLS);
+	split_on_dash = ( char** ) malloc (sizeof(char*) * ROWS);
+	for ( i = 0 ; i < ROWS ; i++ )
+		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS);
 
-	split_on_comma = (char**) malloc(sizeof(char*) * ROWS * 10);
-	for (i = 0; i < ROWS * 10; i++)
-		split_on_comma[i] = (char*) malloc(sizeof(char) * COLS * 10);
+	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS * 10);
+	for ( i = 0 ; i < ROWS * 10 ; i++ )
+		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
 
-	split_on_delimiter = (char**) malloc(sizeof(char*) * ROWS);
-	for (i = 0; i < ROWS; i++)
-		split_on_delimiter[i] = (char*) malloc(sizeof(char) * COLS);
+	split_on_delimiter = ( char** ) malloc (sizeof(char*) * ROWS);
+	for ( i = 0 ; i < ROWS ; i++ )
+		split_on_delimiter[i] = ( char* ) malloc (sizeof(char) * COLS);
 
-	output_prefix_without_path = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
-	sequence_portions_from_reference = (char**) malloc(sizeof(char*) * MAX_POOL_SIZE);
-	fasta_file_with_expressed_portions = (char*) malloc(sizeof(char) * FILENAME_LENGTH);
+	output_prefix_without_path = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	sequence_portions_from_reference = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
+	fasta_file_with_expressed_portions = ( char* ) malloc (sizeof(char) * FILENAME_LENGTH);
 
-	buffer = (char*) malloc(sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
-	abridge_index = allocateMemoryAbridge_Index();
-	sam_alignment = allocateMemorySam_Alignment();
-	whole_genome = (struct Whole_Genome_Sequence*) malloc(sizeof(struct Whole_Genome_Sequence));
-	sam_alignment_instance = allocateMemorySam_Alignment();
+	buffer = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
+	abridge_index = allocateMemoryAbridge_Index ();
+	sam_alignment = allocateMemorySam_Alignment ();
+	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
+	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Emptry string
 
 	/********************************************************************/
 
-	readAbridgeIndex(abridge_index, abridge_index_filename, split_on_newline, &flag_ignore_mismatches, &flag_ignore_soft_clippings, &flag_ignore_unmapped_sequences, &flag_ignore_quality_score);
-	readInTheEntireGenome(genome_filename, whole_genome);
-	writeSequenceHeaders(fhw, genome_filename);
+	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score);
+	readInTheEntireGenome (genome_filename , whole_genome);
+	writeSequenceHeaders (fhw , genome_filename);
 
-	for (i = 0; i < abridge_index->number_of_items; i++)
+	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
 
 		//printf("\nFile pointer at %ld", ftell(fhr));
 		//printf("\nEntry in index file %s %d %d", abridge_index->chromosome[i], abridge_index->start_byte[i], abridge_index->end_byte[i]);
-		fseek_ret_val = fseek(fhr, abridge_index->start_byte[i], SEEK_SET);
+		fseek_ret_val = fseek (fhr , abridge_index->start_byte[i] , SEEK_SET);
 		//printf("\nFile pointer moved to %ld", ftell(fhr));
 		//continue;
 		buffer[0] = '\0';
-		fread_ret_val = fread(buffer, 1, abridge_index->end_byte[i] - abridge_index->start_byte[i], fhr);
+		fread_ret_val = fread (buffer , 1 , abridge_index->end_byte[i] - abridge_index->start_byte[i] , fhr);
 		//printf("\n fread_ret_val %d fseek_ret_val %d diff %lld", fread_ret_val, fseek_ret_val, MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE - fread_ret_val);
 		//fflush(stdout);
 		buffer[fread_ret_val] = '\0';
@@ -136,85 +143,85 @@ void decompressFile(char *abridge_index_filename, char *genome_filename, char *o
 		 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		 fflush(stdout);
 		 */
-		number_of_entries_in_cluster = splitByDelimiter(buffer, '\n', split_on_newline);
-		if (i % 1000 == 0)
+		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
+		if ( i % 1000 == 0 )
 		{
 			//printf("\n%d record processed, Number of lines in cluster %d", i, number_of_entries_in_cluster);
 			//fflush(stdout);
 		}
 		number_of_entries_in_cluster--; //Last line is always empty
-		convertToAlignment(sam_alignment_instance, sam_alignment_pool_index, whole_genome, split_on_newline, sam_alignment, i, abridge_index, number_of_entries_in_cluster, split_on_tab, split_on_dash, split_on_comma, default_quality_value, flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, flag_ignore_sequence_information, &read_number, &total_mapped_reads, read_prefix, from, to, fhw);
+		convertToAlignment (sam_alignment_instance , sam_alignment_pool_index , whole_genome , split_on_newline , sam_alignment , i , abridge_index , number_of_entries_in_cluster , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , from , to , fhw , fhr_qual);
 		//if (i == 10) break;
 	}
 
 	/*
 	 * Write all unmapped reads to samfile
 	 */
-	fhr = fopen(unmapped_filename, "r");
-	if (fhr == NULL)
+	fhr = fopen (unmapped_filename , "r");
+	if ( fhr == NULL )
 	{
-		printf("Error! File not found");
-		exit(1);
+		printf ("Error! File not found");
+		exit (1);
 	}
 	line_number = 1;
-	free(buffer);
+	free (buffer);
 	buffer = NULL;
-	while ((line_len = getline(&buffer, &len, fhr)) != -1)
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
-		strcpy(sam_alignment->seq, buffer);
-		line_len = getline(&buffer, &len, fhr);
-		strcpy(sam_alignment->qual, buffer);
+		strcpy(sam_alignment->seq , buffer);
+		line_len = getline ( &buffer , &len , fhr);
+		strcpy(sam_alignment->qual , buffer);
 
 		line_to_be_written_to_file[0] = '\0';
-		strcat(line_to_be_written_to_file, "unmapped_");
-		sprintf(temp, "%d", line_number);
-		strcat(line_to_be_written_to_file, temp);
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "unmapped_");
+		sprintf(temp , "%d" , line_number);
+		strcat(line_to_be_written_to_file , temp);
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "4");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "4");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "*");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "*");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "0");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "0");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file , "0");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "*");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "*");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "*");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "*");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "0");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "0");
 
-		strcat(line_to_be_written_to_file, "\t");
-		sam_alignment->seq[strlen(sam_alignment->seq) - 1] = '\0';
-		strcat(line_to_be_written_to_file, sam_alignment->seq);
+		strcat(line_to_be_written_to_file , "\t");
+		sam_alignment->seq[strlen (sam_alignment->seq) - 1] = '\0';
+		strcat(line_to_be_written_to_file , sam_alignment->seq);
 
-		strcat(line_to_be_written_to_file, "\t");
-		sam_alignment->qual[strlen(sam_alignment->qual) - 1] = '\0';
-		strcat(line_to_be_written_to_file, sam_alignment->qual);
+		strcat(line_to_be_written_to_file , "\t");
+		sam_alignment->qual[strlen (sam_alignment->qual) - 1] = '\0';
+		strcat(line_to_be_written_to_file , sam_alignment->qual);
 
-		strcat(line_to_be_written_to_file, "\tNH:i:0\tHI:i:0\tnM:i:1\tuT:A:1");
+		strcat(line_to_be_written_to_file , "\tNH:i:0\tHI:i:0\tnM:i:1\tuT:A:1");
 
-		strcat(line_to_be_written_to_file, "\n");
-		fprintf(fhw, "%s", line_to_be_written_to_file);
+		strcat(line_to_be_written_to_file , "\n");
+		fprintf (fhw , "%s" , line_to_be_written_to_file);
 
 		line_number++;
 	}
 
-	fclose(fhw);
-	fclose(fhr);
+	fclose (fhw);
+	fclose (fhr);
 }
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	/********************************************************************
 	 * Variable declaration
@@ -224,6 +231,7 @@ int main(int argc, char *argv[])
 	char pass2_filename[FILENAME_LENGTH];
 	char output_sam_filename[FILENAME_LENGTH];
 	char genome_prefix[FILENAME_LENGTH];
+	char name_of_file_with_quality_scores[FILENAME_LENGTH];
 	char default_quality_value[10];
 	char unmapped_filename[FILENAME_LENGTH];
 	char *temp; //Required for strtoi
@@ -234,17 +242,18 @@ int main(int argc, char *argv[])
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	strcpy(abridge_index_filename, argv[1]);
-	strcpy(genome_filename, argv[2]);
-	strcpy(output_sam_filename, argv[3]);
-	strcpy(pass2_filename, argv[4]);
-	strcpy(genome_prefix, argv[5]);
-	strcpy(default_quality_value, argv[6]);
-	flag_ignore_sequence_information = strtol(argv[7], &temp, 10);
-	strcpy(unmapped_filename, argv[8]);
+	strcpy(abridge_index_filename , argv[1]);
+	strcpy(genome_filename , argv[2]);
+	strcpy(output_sam_filename , argv[3]);
+	strcpy(pass2_filename , argv[4]);
+	strcpy(genome_prefix , argv[5]);
+	strcpy(default_quality_value , argv[6]);
+	flag_ignore_sequence_information = strtol (argv[7] , &temp , 10);
+	strcpy(unmapped_filename , argv[8]);
+	strcpy(name_of_file_with_quality_scores , argv[9]);
 	/********************************************************************/
 
-	decompressFile(abridge_index_filename, genome_filename, output_sam_filename, pass2_filename, genome_prefix, unmapped_filename, default_quality_value, flag_ignore_sequence_information);
+	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass2_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
 	//printf("\nTotal mapped reads %lld", total_mapped_reads);
 	//printf("\n");
 	return 0;

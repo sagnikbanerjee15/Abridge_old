@@ -11,42 +11,42 @@ struct Sam_Alignment* allocateMemorySam_Alignment ()
 	struct Sam_Alignment *s;
 	int i;
 	/********************************************************************/
-	s = ( struct Sam_Alignment* ) malloc ( sizeof(struct Sam_Alignment) );
+	s = ( struct Sam_Alignment* ) malloc (sizeof(struct Sam_Alignment));
 
-	s->read_name = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->reference_name = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->cigar = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->reference_name_next_mate = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->seq = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->qual = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->soft_clippings.left = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->soft_clippings.right = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->soft_clippings.left_qual = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->soft_clippings.right_qual = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->cigar_items = ( struct Cigar_Items* ) malloc ( sizeof(struct Cigar_Items) * MAX_CIGAR_ITEMS );
+	s->read_name = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->reference_name = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->cigar = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->reference_name_next_mate = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->seq = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->qual = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clippings.left = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clippings.right = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clippings.left_qual = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clippings.right_qual = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->cigar_items = ( struct Cigar_Items* ) malloc (sizeof(struct Cigar_Items) * MAX_CIGAR_ITEMS);
 	s->number_of_cigar_items = 0;
 	s->number_of_tag_items = 0;
 
 	for ( i = 0 ; i < 50 ; i++ )
 	{
-		s->tags[i].name = ( char* ) malloc ( sizeof(char) * MAX_TAG_LENGTH );
-		s->tags[i].val = ( char* ) malloc ( sizeof(char) * MAX_TAG_LENGTH );
-		s->tags[i].type = ( char* ) malloc ( sizeof(char) * MAX_TAG_LENGTH );
+		s->tags[i].name = ( char* ) malloc (sizeof(char) * MAX_TAG_LENGTH);
+		s->tags[i].val = ( char* ) malloc (sizeof(char) * MAX_TAG_LENGTH);
+		s->tags[i].type = ( char* ) malloc (sizeof(char) * MAX_TAG_LENGTH);
 		s->tags[i].name[0] = '\0';
 		s->tags[i].val[0] = '\0';
 		s->tags[i].type[0] = '\0';
 	}
 
-	s->cigar_extended = ( char* ) malloc ( sizeof(char) * ( MAX_SEQ_LEN * 2 ) );
-	s->md_extended = ( char* ) malloc ( sizeof(char) * ( MAX_SEQ_LEN * 2 ) );
-	s->icigar = ( char* ) malloc ( sizeof(char) * ( MAX_SEQ_LEN * 2 ) );
-	s->splices = ( char** ) malloc ( sizeof(char*) * 100 );
+	s->cigar_extended = ( char* ) malloc (sizeof(char) * ( MAX_SEQ_LEN * 2 ));
+	s->md_extended = ( char* ) malloc (sizeof(char) * ( MAX_SEQ_LEN * 2 ));
+	s->icigar = ( char* ) malloc (sizeof(char) * ( MAX_SEQ_LEN * 2 ));
+	s->splices = ( char** ) malloc (sizeof(char*) * 100);
 	for ( i = 0 ; i < 100 ; i++ )
-		s->splices[i] = ( char* ) malloc ( sizeof(char) * 50 );
-	s->soft_clips_removed_seq = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->soft_clips_removed_qual = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->selected_qual = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->temp = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
+		s->splices[i] = ( char* ) malloc (sizeof(char) * 50);
+	s->soft_clips_removed_seq = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->soft_clips_removed_qual = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->selected_qual = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->temp = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 
 	s->temp[0] = '\0';
 	s->cigar_extended[0] = '\0';
@@ -66,13 +66,13 @@ struct Sam_Alignment* allocateMemorySam_Alignment ()
 struct Quality_Score_RLE* allocateMemoryQuality_Score_RLE ()
 {
 	struct Quality_Score_RLE *s;
-	s = ( struct Quality_Score_RLE* ) malloc ( sizeof(struct Quality_Score_RLE) );
+	s = ( struct Quality_Score_RLE* ) malloc (sizeof(struct Quality_Score_RLE));
 	s->score_character = 'X';
 	s->frequency = 0;
 	return s;
 }
 
-void reInitializeSamAlignmentInstance ( struct Sam_Alignment *s )
+void reInitializeSamAlignmentInstance (struct Sam_Alignment *s)
 {
 	s->number_of_cigar_items = 0;
 	s->number_of_tag_items = 0;
@@ -89,19 +89,19 @@ void reInitializeSamAlignmentInstance ( struct Sam_Alignment *s )
 struct Pass3_Compression_Symbol_icigar_Mapping* allocateMemoryPass3_Compression_Symbol_icigar_Mapping ()
 {
 	struct Pass3_Compression_Symbol_icigar_Mapping *s;
-	s = ( struct Pass3_Compression_Symbol_icigar_Mapping* ) malloc ( sizeof(struct Pass3_Compression_Symbol_icigar_Mapping) );
-	s->icigar = ( char* ) malloc ( sizeof(char) * MAX_ICIGAR_LENGTH );
-	s->symbolic_icigar = ( char* ) malloc ( sizeof(char) * MAX_SYMBOLIC_ICIGAR_LENGTH );
+	s = ( struct Pass3_Compression_Symbol_icigar_Mapping* ) malloc (sizeof(struct Pass3_Compression_Symbol_icigar_Mapping));
+	s->icigar = ( char* ) malloc (sizeof(char) * MAX_ICIGAR_LENGTH);
+	s->symbolic_icigar = ( char* ) malloc (sizeof(char) * MAX_SYMBOLIC_ICIGAR_LENGTH);
 	return s;
 }
 
-struct Compressed_DS* allocateMemoryCompressed_DS ( long long int max_input_reads_in_a_single_nucl_loc )
+struct Compressed_DS* allocateMemoryCompressed_DS (long long int max_input_reads_in_a_single_nucl_loc)
 {
 	struct Compressed_DS *s;
 	int i;
-	s = ( struct Compressed_DS* ) malloc ( sizeof(struct Compressed_DS) );
-	s->icigar = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
-	s->pointers_to_qual_scores = ( char** ) malloc ( sizeof(char*) * max_input_reads_in_a_single_nucl_loc );
+	s = ( struct Compressed_DS* ) malloc (sizeof(struct Compressed_DS));
+	s->icigar = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->pointers_to_qual_scores = ( char** ) malloc (sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	s->num_reads = 0;
 	s->position = 0;
 	return s;
@@ -110,19 +110,19 @@ struct Compressed_DS* allocateMemoryCompressed_DS ( long long int max_input_read
 struct Pass1_Compressed_DS* allocateMemoryPass1_Compressed_DS ()
 {
 	struct Pass1_Compressed_DS *s;
-	s = ( struct Pass1_Compressed_DS* ) malloc ( sizeof(struct Pass1_Compressed_DS) );
-	s->col1 = ( char* ) malloc ( sizeof(char) * ( MAX_SEQ_LEN * 2 ) );
-	s->col2 = ( char* ) malloc ( sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
-	s->col3 = ( char* ) malloc ( sizeof(char) * ( MAX_SEQ_LEN * 2 ) );
+	s = ( struct Pass1_Compressed_DS* ) malloc (sizeof(struct Pass1_Compressed_DS));
+	s->col1 = ( char* ) malloc (sizeof(char) * ( MAX_SEQ_LEN * 2 ));
+	s->col2 = ( char* ) malloc (sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
+	s->col3 = ( char* ) malloc (sizeof(char) * ( MAX_SEQ_LEN * 2 ));
 	return s;
 }
 
 struct Pass2_Compressed_DS* allocateMemoryPass2_Compressed_DS ()
 {
 	struct Pass2_Compressed_DS *s;
-	s = ( struct Pass2_Compressed_DS* ) malloc ( sizeof(struct Pass2_Compressed_DS) );
-	s->col1 = ( char* ) malloc ( sizeof(char) * ( MAX_SEQ_LEN * 2 ) );
-	s->col2 = ( char* ) malloc ( sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
+	s = ( struct Pass2_Compressed_DS* ) malloc (sizeof(struct Pass2_Compressed_DS));
+	s->col1 = ( char* ) malloc (sizeof(char) * ( MAX_SEQ_LEN * 2 ));
+	s->col2 = ( char* ) malloc (sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 	s->position = 0;
 	return s;
 }
@@ -133,17 +133,17 @@ struct Merged_Compressed_DS* allocateMemoryMerged_Compressed_DS ()
 	int i;
 	int j;
 
-	s = ( struct Merged_Compressed_DS* ) malloc ( sizeof(struct Merged_Compressed_DS) );
-	s->col1 = ( char* ) malloc ( sizeof(char) * ( MAX_SEQ_LEN * 2 ) );
-	s->col2 = ( char* ) malloc ( sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2 );
+	s = ( struct Merged_Compressed_DS* ) malloc (sizeof(struct Merged_Compressed_DS));
+	s->col1 = ( char* ) malloc (sizeof(char) * ( MAX_SEQ_LEN * 2 ));
+	s->col2 = ( char* ) malloc (sizeof(char) * MAX_ICIGAR_LENGTH_PASS1_COL2);
 	s->position = 0;
-	s->icigars = ( char** ) malloc ( sizeof(char*) * MAX_UNIQUE_CIGARS );
+	s->icigars = ( char** ) malloc (sizeof(char*) * MAX_UNIQUE_CIGARS);
 	for ( i = 0 ; i < MAX_UNIQUE_CIGARS ; i++ )
-		s->icigars[i] = ( char* ) malloc ( sizeof(char) * 1000 );
-	s->number_of_reads = ( int** ) malloc ( sizeof(int*) * MAX_UNIQUE_CIGARS );
+		s->icigars[i] = ( char* ) malloc (sizeof(char) * 1000);
+	s->number_of_reads = ( int** ) malloc (sizeof(int*) * MAX_UNIQUE_CIGARS);
 	for ( i = 0 ; i < MAX_UNIQUE_CIGARS ; i++ )
 	{
-		s->number_of_reads[i] = ( int* ) malloc ( sizeof(int) * MAX_FILES_FOR_MERGING );
+		s->number_of_reads[i] = ( int* ) malloc (sizeof(int) * MAX_FILES_FOR_MERGING);
 		for ( j = 0 ; j < MAX_FILES_FOR_MERGING ; j++ )
 			s->number_of_reads[i][j] = 0;
 	}
@@ -156,11 +156,11 @@ struct Chromosome_Starting_Byte* allocateMemoryChromosome_Starting_Byte ()
 	struct Chromosome_Starting_Byte *s;
 	int i;
 
-	s = ( struct Chromosome_Starting_Byte* ) malloc ( sizeof(struct Chromosome_Starting_Byte) );
-	s->name = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
-	s->start_byte_in_pass2_file = ( long int* ) malloc ( sizeof(long int) * MAX_REFERENCE_SEQUENCES );
+	s = ( struct Chromosome_Starting_Byte* ) malloc (sizeof(struct Chromosome_Starting_Byte));
+	s->name = ( char** ) malloc (sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	s->start_byte_in_pass2_file = ( long int* ) malloc (sizeof(long int) * MAX_REFERENCE_SEQUENCES);
 	for ( i = 0 ; i < MAX_REFERENCE_SEQUENCES ; i++ )
-		s->name[i] = ( char* ) malloc ( sizeof(char) * 1000 );
+		s->name[i] = ( char* ) malloc (sizeof(char) * 1000);
 	s->number_of_chromosomes = 0;
 	return s;
 }
@@ -170,20 +170,20 @@ struct Chromosome_Info* allocateMemoryChromosome_Info ()
 	struct Chromosome_Info *s;
 	int i;
 
-	s = ( struct Chromosome_Info* ) malloc ( sizeof(struct Chromosome_Info) );
-	s->length = ( long long int* ) malloc ( sizeof(long long int) * MAX_REFERENCE_SEQUENCES );
+	s = ( struct Chromosome_Info* ) malloc (sizeof(struct Chromosome_Info));
+	s->length = ( long long int* ) malloc (sizeof(long long int) * MAX_REFERENCE_SEQUENCES);
 	s->number_of_chromosomes = 0;
-	s->name = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
+	s->name = ( char** ) malloc (sizeof(char*) * MAX_REFERENCE_SEQUENCES);
 	for ( i = 0 ; i < MAX_REFERENCE_SEQUENCES ; i++ )
-		s->name[i] = ( char* ) malloc ( sizeof(char) * 1000 );
+		s->name[i] = ( char* ) malloc (sizeof(char) * 1000);
 	return s;
 }
 
 struct Cigar_Frequency* allocateMemoryCigar_Frequency ()
 {
 	struct Cigar_Frequency *s;
-	s = ( struct Cigar_Frequency* ) malloc ( sizeof(struct Cigar_Frequency) );
-	s->cigar = ( char* ) malloc ( sizeof(char) * MAX_CIGAR_LENGTH );
+	s = ( struct Cigar_Frequency* ) malloc (sizeof(struct Cigar_Frequency));
+	s->cigar = ( char* ) malloc (sizeof(char) * MAX_CIGAR_LENGTH);
 	s->freq = 0;
 	return s;
 }
@@ -191,8 +191,8 @@ struct Cigar_Frequency* allocateMemoryCigar_Frequency ()
 struct Reference_Sequence_Info* allocateMemoryReference_Sequence_Info ()
 {
 	struct Reference_Sequence_Info *s;
-	s = ( struct Reference_Sequence_Info* ) malloc ( sizeof(struct Reference_Sequence_Info) );
-	s->line = ( char* ) malloc ( sizeof(char) * MAX_SEQ_LEN );
+	s = ( struct Reference_Sequence_Info* ) malloc (sizeof(struct Reference_Sequence_Info));
+	s->line = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	return s;
 }
 
@@ -200,19 +200,19 @@ struct Abridge_Index* allocateMemoryAbridge_Index ()
 {
 	int i;
 	struct Abridge_Index *s;
-	s = ( struct Abridge_Index* ) malloc ( sizeof(struct Abridge_Index) );
-	s->chromosome = ( char** ) malloc ( sizeof(char*) * MAX_POOL_SIZE );
+	s = ( struct Abridge_Index* ) malloc (sizeof(struct Abridge_Index));
+	s->chromosome = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
 	for ( i = 0 ; i < MAX_POOL_SIZE ; i++ )
-		s->chromosome[i] = ( char* ) malloc ( sizeof(char) * MAX_REFERENCE_SEQ_LENGTH );
-	s->start = ( long long int* ) malloc ( sizeof(long long int) * MAX_POOL_SIZE );
-	s->end = ( long long int* ) malloc ( sizeof(long long int) * MAX_POOL_SIZE );
-	s->start_byte = ( long long int* ) malloc ( sizeof(long long int) * MAX_POOL_SIZE );
-	s->end_byte = ( long long int* ) malloc ( sizeof(long long int) * MAX_POOL_SIZE );
+		s->chromosome[i] = ( char* ) malloc (sizeof(char) * MAX_REFERENCE_SEQ_LENGTH);
+	s->start = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
+	s->end = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
+	s->start_byte = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
+	s->end_byte = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
 	s->number_of_items = 0;
 	return s;
 }
 
-long long int countNumberOfCharatersInString ( char *line, char needle )
+long long int countNumberOfCharatersInString (char *line, char needle)
 {
 	/********************************************************************
 	 * Variable declarations
@@ -228,7 +228,7 @@ long long int countNumberOfCharatersInString ( char *line, char needle )
 
 }
 
-int isCommaInLine ( char *line )
+int isCommaInLine (char *line)
 {
 	int i;
 
@@ -238,7 +238,7 @@ int isCommaInLine ( char *line )
 	return 0;
 }
 
-int splitByDelimiter ( char *line, char delimiter, char **new_string )
+int splitByDelimiter (char *line, char delimiter, char **new_string)
 {
 	/*********************************************************************
 	 * Splits a string one a requested character and
@@ -248,7 +248,7 @@ int splitByDelimiter ( char *line, char delimiter, char **new_string )
 	/********************************************************************
 	 * Variable declarations
 	 ********************************************************************/
-	int i = 0 , j = 0 , ctr = 0;
+	int i = 0, j = 0, ctr = 0;
 	/********************************************************************/
 
 	for ( i = 0 ; line[i] != '\0' ; i++ )
@@ -272,7 +272,7 @@ int splitByDelimiter ( char *line, char delimiter, char **new_string )
 	return ctr + 1;
 }
 
-int locateSamTags ( char *tag )
+int locateSamTags (char *tag)
 {
 	/********************************************************************
 	 * Variable declarations
@@ -282,39 +282,39 @@ int locateSamTags ( char *tag )
 
 	for ( i = 0 ; i < sizeof ( sam_tags ) / sizeof ( sam_tags[0] ) ; i++ )
 	{
-		if ( strcmp ( sam_tags[i] , tag ) == 0 ) return i;
+		if ( strcmp (sam_tags[i] , tag) == 0 ) return i;
 	}
 	return -1;
 
 }
 
-void freeSamAlignmentInstance ( struct Sam_Alignment *s )
+void freeSamAlignmentInstance (struct Sam_Alignment *s)
 {
 	int i;
 	for ( i = 0 ; i < 100 ; i++ )
 	{
-		free ( s->tags[i].name );
-		free ( s->tags[i].type );
-		free ( s->tags[i].val );
+		free (s->tags[i].name);
+		free (s->tags[i].type);
+		free (s->tags[i].val);
 	}
-	free ( s->read_name );
-	free ( s->reference_name );
-	free ( s->reference_name_next_mate );
-	free ( s->cigar );
-	free ( s->seq );
-	free ( s->qual );
-	free ( s->soft_clippings.left );
-	free ( s->soft_clippings.right );
-	free ( s->cigar_items );
-	free ( s->cigar_extended );
-	free ( s->md_extended );
-	free ( s->icigar );
+	free (s->read_name);
+	free (s->reference_name);
+	free (s->reference_name_next_mate);
+	free (s->cigar);
+	free (s->seq);
+	free (s->qual);
+	free (s->soft_clippings.left);
+	free (s->soft_clippings.right);
+	free (s->cigar_items);
+	free (s->cigar_extended);
+	free (s->md_extended);
+	free (s->icigar);
 	for ( i = 0 ; i < ROWS ; i++ )
-		free ( s->splices[i] );
-	free ( s->temp );
+		free (s->splices[i]);
+	free (s->temp);
 }
 
-void populateSamAlignmentInstance ( struct Sam_Alignment *dest, char **src, int number_of_fields, char **split_tags )
+void populateSamAlignmentInstance (struct Sam_Alignment *dest, char **src, int number_of_fields, char **split_tags)
 {
 	/********************************************************************
 	 * Variable declarations
@@ -324,17 +324,17 @@ void populateSamAlignmentInstance ( struct Sam_Alignment *dest, char **src, int 
 	/********************************************************************/
 
 	// Assign the first 11 mandatory sam fields
-	strcpy ( dest->read_name , src[0] );
-	dest->samflag = strtol ( src[1] , &temp , 10 );
-	strcpy ( dest->reference_name , src[2] );
-	dest->start_position = strtol ( src[3] , &temp , 10 );
-	dest->mapping_quality_score = strtol ( src[4] , &temp , 10 );
-	strcpy ( dest->cigar , src[5] );
-	strcpy ( dest->reference_name_next_mate , src[6] );
-	dest->start_position_next = strtol ( src[7] , &temp , 10 );
-	dest->template_length = strtol ( src[8] , &temp , 10 );
-	strcpy ( dest->seq , src[9] );
-	strcpy ( dest->qual , src[10] );
+	strcpy (dest->read_name , src[0]);
+	dest->samflag = strtol (src[1] , &temp , 10);
+	strcpy (dest->reference_name , src[2]);
+	dest->start_position = strtol (src[3] , &temp , 10);
+	dest->mapping_quality_score = strtol (src[4] , &temp , 10);
+	strcpy (dest->cigar , src[5]);
+	strcpy (dest->reference_name_next_mate , src[6]);
+	dest->start_position_next = strtol (src[7] , &temp , 10);
+	dest->template_length = strtol (src[8] , &temp , 10);
+	strcpy (dest->seq , src[9]);
+	strcpy (dest->qual , src[10]);
 	for ( i = 0 ; dest->qual[i] != '\0' ; i++ )
 		dest->qual[i] += 90;
 
@@ -343,79 +343,79 @@ void populateSamAlignmentInstance ( struct Sam_Alignment *dest, char **src, int 
 	{
 		//printf("%s\n",src[i]);
 		//fflush ( stdout );
-		splitByDelimiter ( src[i] , ':' , split_tags );
+		splitByDelimiter (src[i] , ':' , split_tags);
 		//sam_tag_index = locateSamTags(split_tags[0]);
 		//dest->tags[i - 11].name = sam_tags[sam_tag_index];
 		if ( i == number_of_fields - 1 )
-			split_tags[2][strlen ( split_tags[2] )] = '\0';
-		strcpy ( dest->tags[i - 11].name , split_tags[0] );
-		strcpy ( dest->tags[i - 11].type , split_tags[1] );
-		strcpy ( dest->tags[i - 11].val , split_tags[2] );
+			split_tags[2][strlen (split_tags[2])] = '\0';
+		strcpy (dest->tags[i - 11].name , split_tags[0]);
+		strcpy (dest->tags[i - 11].type , split_tags[1]);
+		strcpy (dest->tags[i - 11].val , split_tags[2]);
 		//printf("\n Tags %s Parts of the tag %s %s %s ", src[i], split_tags[0], split_tags[1], split_tags[2]);
 	}
-	dest->read_seq_len = strlen ( dest->seq );
+	dest->read_seq_len = strlen (dest->seq);
 	dest->number_of_tag_items = number_of_fields - 11;
 }
 
-void printSamAlignmentInstance ( struct Sam_Alignment *s, short int print_everything )
+void printSamAlignmentInstance (struct Sam_Alignment *s, short int print_everything)
 {
 	int i;
-	printf ( "\n" );
-	printf ( "^^^^^^^^^^^^^^^^^SAM ALIGNMENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" );
-	printf ( "\n" );
-	printf ( "Read name: %s" , s->read_name );
-	printf ( "\n" );
-	printf ( "SamFlag: %d" , s->samflag );
-	printf ( "\n" );
-	printf ( "Reference name: %s" , s->reference_name );
-	printf ( "\n" );
-	printf ( "Start position: %lld" , s->start_position );
-	printf ( "\n" );
-	printf ( "Mapping quality score: %d" , s->mapping_quality_score );
-	printf ( "\n" );
-	printf ( "CIGAR: %s" , s->cigar );
-	printf ( "\n" );
-	printf ( "iCIGAR: %s" , s->icigar );
-	printf ( "\n" );
-	printf ( "Reference name next mate: %s" , s->reference_name_next_mate );
-	printf ( "\n" );
-	printf ( "Start position next: %lld" , s->start_position_next );
-	printf ( "\n" );
-	printf ( "Template length: %d" , s->template_length );
-	printf ( "\n" );
-	printf ( "Seq:  %s %d " , s->seq , strlen ( s->seq ) );
-	printf ( "\n" );
-	printf ( "Qual: %s" , s->qual );
-	printf ( "\n" );
+	printf ("\n");
+	printf ("^^^^^^^^^^^^^^^^^SAM ALIGNMENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+	printf ("\n");
+	printf ("Read name: %s" , s->read_name);
+	printf ("\n");
+	printf ("SamFlag: %d" , s->samflag);
+	printf ("\n");
+	printf ("Reference name: %s" , s->reference_name);
+	printf ("\n");
+	printf ("Start position: %lld" , s->start_position);
+	printf ("\n");
+	printf ("Mapping quality score: %d" , s->mapping_quality_score);
+	printf ("\n");
+	printf ("CIGAR: %s" , s->cigar);
+	printf ("\n");
+	printf ("iCIGAR: %s" , s->icigar);
+	printf ("\n");
+	printf ("Reference name next mate: %s" , s->reference_name_next_mate);
+	printf ("\n");
+	printf ("Start position next: %lld" , s->start_position_next);
+	printf ("\n");
+	printf ("Template length: %d" , s->template_length);
+	printf ("\n");
+	printf ("Seq:  %s %d " , s->seq , strlen (s->seq));
+	printf ("\n");
+	printf ("Qual: %s" , s->qual);
+	printf ("\n");
 	for ( i = 0 ; i < s->number_of_tag_items ; i++ )
 	{
-		printf ( "Tag item %s Tag value %s" , s->tags[i].name , s->tags[i].val );
-		printf ( "\n" );
+		printf ("Tag item %s Tag value %s" , s->tags[i].name , s->tags[i].val);
+		printf ("\n");
 	}
 
 	if ( print_everything == 1 )
 	{
-		printf ( "Left Soft clipped portion" );
-		printf ( "\n" );
-		printf ( "%s" , s->soft_clippings.left );
-		printf ( "\n" );
-		printf ( "Right Soft clipped portion" );
-		printf ( "\n" );
-		printf ( "%s" , s->soft_clippings.right );
-		printf ( "\n" );
-		printf ( "MD_extended: " );
-		printf ( "\n" );
-		printf ( "CIGAR_extended: " );
-		printf ( "\n" );
-		printf ( "soft clip removed sequence: " );
-		printf ( "\n" );
-		printf ( "\n%s\n%s\n%s" , s->md_extended , s->cigar_extended , s->soft_clips_removed_seq );
-		printf ( "\n" );
+		printf ("Left Soft clipped portion");
+		printf ("\n");
+		printf ("%s" , s->soft_clippings.left);
+		printf ("\n");
+		printf ("Right Soft clipped portion");
+		printf ("\n");
+		printf ("%s" , s->soft_clippings.right);
+		printf ("\n");
+		printf ("MD_extended: ");
+		printf ("\n");
+		printf ("CIGAR_extended: ");
+		printf ("\n");
+		printf ("soft clip removed sequence: ");
+		printf ("\n");
+		printf ("\n%s\n%s\n%s" , s->md_extended , s->cigar_extended , s->soft_clips_removed_seq);
+		printf ("\n");
 	}
-	printf ( "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n" );
+	printf ("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
 
-int isSequenceSoftClipped ( char *cigar )
+int isSequenceSoftClipped (char *cigar)
 {
 	int i;
 	for ( i = 0 ; cigar[i] != '\0' ; i++ )
@@ -423,7 +423,7 @@ int isSequenceSoftClipped ( char *cigar )
 	return 0;
 }
 
-void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value )
+void convertIcigarToCigarandMD (int cluster_index, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value)
 {
 	/*
 	 * Coverts the iCIGAR into CIGAR and MD
@@ -457,18 +457,18 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 	char temp[100];
 	char cigar_temp[MAX_SEQ_LEN];
 
-	icigar_length = strlen ( sam_alignment_instance->icigar );
-	NH_value = extractNHfromicigar ( sam_alignment_instance->icigar , icigar_length );
+	icigar_length = strlen (sam_alignment_instance->icigar);
+	NH_value = extractNHfromicigar (sam_alignment_instance->icigar , icigar_length);
 
 	XS[1] = '\0';
-	samformatflag = findSamFormatFlag ( sam_alignment_instance->icigar , icigar_length , XS );
+	samformatflag = findSamFormatFlag (sam_alignment_instance->icigar , icigar_length , XS);
 	sam_alignment_instance->samflag = samformatflag;
 	/*
 	 * Construct the Cigar string, MD string, Soft Clips, etc.
 	 */
-	splitCigar ( sam_alignment_instance->icigar , &icigar_items_instance_index , cigar_items_instance );
+	splitCigar (sam_alignment_instance->icigar , &icigar_items_instance_index , cigar_items_instance);
 
-	strcpy ( sam_alignment_instance->reference_name , chromosome );
+	strcpy (sam_alignment_instance->reference_name , chromosome);
 	sam_alignment_instance->cigar[0] = '\0';
 	sam_alignment_instance->temp[0] = '\0';
 	sam_alignment_instance->soft_clippings.left[0] = '\0';
@@ -480,18 +480,18 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 	soft_clips_removed_qual_index = 0;
 	soft_clips_removed_seq_index = 0;
 
-	strcpy ( sam_alignment_instance->tags[0].name , "NH" );
-	strcpy ( sam_alignment_instance->tags[0].type , "i" );
-	sprintf ( temp , "%d" , NH_value );
-	strcpy ( sam_alignment_instance->tags[0].val , temp );
+	strcpy (sam_alignment_instance->tags[0].name , "NH");
+	strcpy (sam_alignment_instance->tags[0].type , "i");
+	sprintf (temp , "%d" , NH_value);
+	strcpy (sam_alignment_instance->tags[0].val , temp);
 
-	strcpy ( sam_alignment_instance->tags[1].name , "XS" );
-	strcpy ( sam_alignment_instance->tags[1].type , "." );
-	strcpy ( sam_alignment_instance->tags[1].val , XS );
+	strcpy (sam_alignment_instance->tags[1].name , "XS");
+	strcpy (sam_alignment_instance->tags[1].type , ".");
+	strcpy (sam_alignment_instance->tags[1].val , XS);
 
-	strcpy ( sam_alignment_instance->tags[2].name , "MD" );
-	strcpy ( sam_alignment_instance->tags[2].type , "Z" );
-	strcpy ( sam_alignment_instance->tags[2].val , "dummy" );
+	strcpy (sam_alignment_instance->tags[2].name , "MD");
+	strcpy (sam_alignment_instance->tags[2].type , "Z");
+	strcpy (sam_alignment_instance->tags[2].val , "dummy");
 
 	sam_alignment_instance->number_of_tag_items = 3;
 	sam_alignment_instance->md_extended[0] = '\0';
@@ -499,7 +499,7 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 
 	for ( i = 0 ; i < icigar_items_instance_index ; i++ )
 	{
-		if ( processing_left_soft_clip == 1 && isCharacterInString ( "atgcn" , cigar_items_instance[i].def ) )
+		if ( processing_left_soft_clip == 1 && isCharacterInString ("atgcn" , cigar_items_instance[i].def) )
 		{
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] = '\0';
@@ -511,7 +511,7 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 			}
 			left_soft_clip_index++;
 		}
-		else if ( processing_left_soft_clip == 0 && isCharacterInString ( "atgcn" , cigar_items_instance[i].def ) )
+		else if ( processing_left_soft_clip == 0 && isCharacterInString ("atgcn" , cigar_items_instance[i].def) )
 		{
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index + 1] = '\0';
@@ -529,33 +529,33 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 			processing_left_soft_clip = 0;
 			if ( left_soft_clip_index > 0 ) //There were some left soft clips
 			{
-				sprintf ( temp , "%d" , left_soft_clip_index );
-				strcat ( sam_alignment_instance->cigar , temp );
-				strcat ( sam_alignment_instance->cigar , "S" );
+				sprintf (temp , "%d" , left_soft_clip_index);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "S");
 				num = 0;
 				left_soft_clip_index = 0;
 			}
 			if ( cigar_items_instance[i].def == 'N' )
 			{
-				sprintf ( temp , "%d" , cigar_items_instance[i].len );
-				strcat ( sam_alignment_instance->cigar , temp );
-				strcat ( sam_alignment_instance->cigar , "N" );
+				sprintf (temp , "%d" , cigar_items_instance[i].len);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "N");
 				num = 0;
 			}
 			else if ( cigar_items_instance[i].def == 'D' )
 			{
-				sprintf ( temp , "%d" , cigar_items_instance[i].len );
-				strcat ( sam_alignment_instance->cigar , temp );
-				strcat ( sam_alignment_instance->cigar , "D" );
+				sprintf (temp , "%d" , cigar_items_instance[i].len);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "D");
 				num = 0;
 
 				for ( j = 0 ; j < cigar_items_instance[i].len ; j++ )
 					sam_alignment_instance->md_extended[MD_extended_index++ ] = '-';
 			}
-			else if ( isCharacterInString ( insert_characters , cigar_items_instance[i].def ) )
+			else if ( isCharacterInString (insert_characters , cigar_items_instance[i].def) )
 			{
 				num = 0;
-				while ( i < icigar_items_instance_index && isCharacterInString ( insert_characters , cigar_items_instance[i].def ) )
+				while ( i < icigar_items_instance_index && isCharacterInString (insert_characters , cigar_items_instance[i].def) )
 				{
 					switch ( cigar_items_instance[i].def )
 					{
@@ -591,19 +591,19 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 					i++;
 				}
 				i--;
-				sprintf ( temp , "%d" , num );
-				strcat ( sam_alignment_instance->cigar , temp );
-				strcat ( sam_alignment_instance->cigar , "I" );
+				sprintf (temp , "%d" , num);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "I");
 				num = 0;
 
 			}
 			// Merging consecutive matches and mismatches
-			if ( isCharacterInString ( "BEFHJKLOPQRU" , cigar_items_instance[i].def ) || isCharacterInString ( mismatch_characters , cigar_items_instance[i].def ) )
+			if ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
 			{
 				num = 0;
-				while ( i < icigar_items_instance_index && ( isCharacterInString ( "BEFHJKLOPQRU" , cigar_items_instance[i].def ) || isCharacterInString ( mismatch_characters , cigar_items_instance[i].def ) ) )
+				while ( i < icigar_items_instance_index && ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) ) )
 				{
-					if ( isCharacterInString ( "BEFHJKLOPQRU" , cigar_items_instance[i].def ) )
+					if ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) )
 					{
 						for ( j = 0 ; j < cigar_items_instance[i].len ; j++ )
 						{
@@ -625,9 +625,9 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 						}
 						num += cigar_items_instance[i].len;
 					}
-					else if ( isCharacterInString ( mismatch_characters , cigar_items_instance[i].def ) )
+					else if ( isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
 					{
-						if ( isCharacterInString ( mismatch_characters , cigar_items_instance[i].def ) )
+						if ( isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
 						{
 							switch ( cigar_items_instance[i].def )
 							{
@@ -666,36 +666,36 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 					flag = 1;
 				}
 				i--;
-				sprintf ( temp , "%d" , num );
-				strcat ( sam_alignment_instance->cigar , temp );
-				strcat ( sam_alignment_instance->cigar , "M" );
+				sprintf (temp , "%d" , num);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "M");
 				num = 0;
 			}
 		}
 	}
 	if ( right_soft_clip_index > 0 ) //There were some right soft clips
 	{
-		sprintf ( temp , "%d" , right_soft_clip_index );
-		strcat ( sam_alignment_instance->cigar , temp );
-		strcat ( sam_alignment_instance->cigar , "S" );
+		sprintf (temp , "%d" , right_soft_clip_index);
+		strcat (sam_alignment_instance->cigar , temp);
+		strcat (sam_alignment_instance->cigar , "S");
 		num = 0;
 	}
 	sam_alignment_instance->md_extended[MD_extended_index++ ] = '\0';
 
-	strcpy ( sam_alignment_instance->seq , sam_alignment_instance->soft_clippings.left );
-	strcat ( sam_alignment_instance->seq , sam_alignment_instance->soft_clips_removed_seq );
-	strcat ( sam_alignment_instance->seq , sam_alignment_instance->soft_clippings.right );
+	strcpy (sam_alignment_instance->seq , sam_alignment_instance->soft_clippings.left);
+	strcat (sam_alignment_instance->seq , sam_alignment_instance->soft_clips_removed_seq);
+	strcat (sam_alignment_instance->seq , sam_alignment_instance->soft_clippings.right);
 
-	strcpy ( sam_alignment_instance->qual , sam_alignment_instance->soft_clippings.left_qual );
-	strcat ( sam_alignment_instance->qual , sam_alignment_instance->soft_clips_removed_qual );
-	strcat ( sam_alignment_instance->qual , sam_alignment_instance->soft_clippings.right_qual );
+	strcpy (sam_alignment_instance->qual , sam_alignment_instance->soft_clippings.left_qual);
+	strcat (sam_alignment_instance->qual , sam_alignment_instance->soft_clips_removed_qual);
+	strcat (sam_alignment_instance->qual , sam_alignment_instance->soft_clippings.right_qual);
 
-	splitCigar ( sam_alignment_instance->cigar , &sam_alignment_instance->number_of_cigar_items , sam_alignment_instance->cigar_items );
+	splitCigar (sam_alignment_instance->cigar , &sam_alignment_instance->number_of_cigar_items , sam_alignment_instance->cigar_items);
 	if ( flag_ignore_sequence_information == 0 )
-		generateReadSequenceAndMDString ( sam_alignment_instance , whole_genome , cluster_index );
+		generateReadSequenceAndMDString (sam_alignment_instance , whole_genome , cluster_index);
 	else
 	{
-		splitCigar ( sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance );
+		splitCigar (sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance);
 		int length_of_read = 0;
 		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
 			if ( cigar_items_instance[cigar_items_instance_index].def == 'M' )
@@ -710,12 +710,12 @@ void convertIcigarToCigarandMD ( int cluster_index, struct Whole_Genome_Sequence
 	}
 }
 
-void extractSubString ( char *str, char *substr, int start_index, int end_index )
+void extractSubString (char *str, char *substr, int start_index, int end_index)
 {
 	/********************************************************************
 	 * Variable declarations
 	 ********************************************************************/
-	int length = strlen ( str );
+	int length = strlen (str);
 	int i;
 	int j = 0;
 
@@ -731,19 +731,19 @@ void extractSubString ( char *str, char *substr, int start_index, int end_index 
 
 }
 
-void splitCigar ( char *cigar, int *num_of_types, struct Cigar_Items *cigar_items_instance )
+void splitCigar (char *cigar, int *num_of_types, struct Cigar_Items *cigar_items_instance)
 {
 	/********************************************************************
 	 * Variable declarations
 	 ********************************************************************/
 
-	int i , j = 0;
+	int i, j = 0;
 	int current_length = 0;
 	/********************************************************************/
 
 	for ( i = 0 ; cigar[i] != '\0' ; i++ )
 	{
-		if ( isdigit ( cigar[i] ) != 0 ) //cigar[i] is a digit
+		if ( isdigit (cigar[i]) != 0 ) //cigar[i] is a digit
 		{
 			current_length = current_length * 10 + cigar[i] - 48;
 		}
@@ -758,7 +758,7 @@ void splitCigar ( char *cigar, int *num_of_types, struct Cigar_Items *cigar_item
 	*num_of_types = j;
 }
 
-int isCharacterInString ( char *str, char character )
+int isCharacterInString (char *str, char character)
 {
 	int i;
 	for ( i = 0 ; str[i] != '\0' ; i++ )
@@ -766,7 +766,7 @@ int isCharacterInString ( char *str, char character )
 	return 0;
 }
 
-int isNumber ( char *str )
+int isNumber (char *str)
 {
 	int i;
 	for ( i = 0 ; str[i] != '\0' ; i++ )
@@ -774,7 +774,7 @@ int isNumber ( char *str )
 	return 1;
 }
 
-void insertCharacterInString ( char *str, int *str_length, char ins, int loc, int number_of_insertions_to_be_made )
+void insertCharacterInString (char *str, int *str_length, char ins, int loc, int number_of_insertions_to_be_made)
 {
 	/*
 	 * Inserts a character. Assumes that a large
@@ -787,7 +787,7 @@ void insertCharacterInString ( char *str, int *str_length, char ins, int loc, in
 		str[i++ ] = ins;
 }
 
-void replaceNucleotidesInSeqWithInsertSymbols ( char *seq, int *seq_length, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items )
+void replaceNucleotidesInSeqWithInsertSymbols (char *seq, int *seq_length, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items)
 {
 	int i;
 	int j;
@@ -828,7 +828,7 @@ void replaceNucleotidesInSeqWithInsertSymbols ( char *seq, int *seq_length, stru
 	}
 }
 
-void convertRegularCIGARToStringRepresentation ( struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar_extended )
+void convertRegularCIGARToStringRepresentation (struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar_extended)
 {
 	int i;
 	int j;
@@ -851,7 +851,7 @@ void convertRegularCIGARToStringRepresentation ( struct Cigar_Items *cigar_items
 	cigar_extended[cigar_extended_index++ ] = '\0';
 }
 
-void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_clips_removed_qual, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices, short int flag_ignore_quality_score, short int flag_ignore_mismatches )
+void designIntegratedCIGAR (char *md, char *seq, int *seq_length, char *soft_clips_removed_qual, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices, short int flag_ignore_quality_score, short int flag_ignore_mismatches)
 {
 	int i;
 	int num;
@@ -868,9 +868,9 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 	md_extended_index = 0;
 	i = 0;
 	num = 0;
-	replaceNucleotidesInSeqWithInsertSymbols ( seq , seq_length , cigar_items_instance , number_of_cigar_items );
-	convertRegularCIGARToStringRepresentation ( cigar_items_instance , number_of_cigar_items , cigar_extended );
-	soft_clips_removed_qual_len = strlen ( soft_clips_removed_qual );
+	replaceNucleotidesInSeqWithInsertSymbols (seq , seq_length , cigar_items_instance , number_of_cigar_items);
+	convertRegularCIGARToStringRepresentation (cigar_items_instance , number_of_cigar_items , cigar_extended);
+	soft_clips_removed_qual_len = strlen (soft_clips_removed_qual);
 
 	/*
 	 * Expand the md string
@@ -878,7 +878,7 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 	i = 0;
 	while ( md[i] != '\0' )
 	{
-		if ( isdigit ( md[i] ) != 0 ) // md[i] is a digit
+		if ( isdigit (md[i]) != 0 ) // md[i] is a digit
 			num = num * 10 + md[i] - 48;
 		else if ( md[i] == '^' )
 		{
@@ -886,7 +886,7 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 				md_extended[md_extended_index++ ] = '=';
 			num = 0;
 			i += 1;
-			while ( isdigit ( md[i] ) == 0 ) // Iterate till you pick up all the deletions and ignore them for now
+			while ( isdigit (md[i]) == 0 ) // Iterate till you pick up all the deletions and ignore them for now
 				i += 1;
 			i -= 1;
 		}
@@ -912,20 +912,20 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 	{
 		if ( seq[i] >= 33 && seq[i] <= 37 )
 		{
-			insertCharacterInString ( md_extended , &md_extended_length , seq[i] , i , 1 );
+			insertCharacterInString (md_extended , &md_extended_length , seq[i] , i , 1);
 			j = -1;
 		}
 	}
 
-	if ( strlen ( seq ) != strlen ( md_extended ) )
+	if ( strlen (seq) != strlen (md_extended) )
 	{
-		printf ( "\nInside here" );
-		printf ( "\nLengths do not match %d %d %d %s" , strlen ( soft_clips_removed_qual ) , strlen ( md_extended ) , strlen ( seq ) , cigar );
-		printf ( "\n%s" , seq );
-		printf ( "\n" );
+		printf ("\nInside here");
+		printf ("\nLengths do not match %d %d %d %s" , strlen (soft_clips_removed_qual) , strlen (md_extended) , strlen (seq) , cigar);
+		printf ("\n%s" , seq);
+		printf ("\n");
 		for ( i = 0 ; soft_clips_removed_qual[i] != '\0' ; i++ )
-			printf ( "%c" , soft_clips_removed_qual[i] - 90 );
-		printf ( "\n%s" , md_extended );
+			printf ("%c" , soft_clips_removed_qual[i] - 90);
+		printf ("\n%s" , md_extended);
 	}
 	/*printf("\n%s %d", md_extended, md_extended_length);*/
 
@@ -977,16 +977,16 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 				break;
 			case 'N':
 				//md_extended[md_extended_index] = splice_number_index++ + 48;
-				insertCharacterInString ( md_extended , &md_extended_length , splice_number_index++ + 48 , md_extended_index , 1 );
-				insertCharacterInString ( soft_clips_removed_qual , &soft_clips_removed_qual_len , 'X' , md_extended_index , 1 );
+				insertCharacterInString (md_extended , &md_extended_length , splice_number_index++ + 48 , md_extended_index , 1);
+				insertCharacterInString (soft_clips_removed_qual , &soft_clips_removed_qual_len , 'X' , md_extended_index , 1);
 				md_extended_index += 1;
 				break;
 			case 'I':
 				md_extended_index += cigar_items_instance[i].len;
 				break;
 			case 'D':
-				insertCharacterInString ( md_extended , &md_extended_length , '-' , md_extended_index , cigar_items_instance[i].len );
-				insertCharacterInString ( soft_clips_removed_qual , &soft_clips_removed_qual_len , '-' , md_extended_index , cigar_items_instance[i].len );
+				insertCharacterInString (md_extended , &md_extended_length , '-' , md_extended_index , cigar_items_instance[i].len);
+				insertCharacterInString (soft_clips_removed_qual , &soft_clips_removed_qual_len , '-' , md_extended_index , cigar_items_instance[i].len);
 				md_extended_index += cigar_items_instance[i].len;
 				break;
 		}
@@ -1004,9 +1004,9 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 	{
 		if ( cigar_items_instance[i].def == 'N' )
 		{
-			sprintf ( temp_convert_int_to_string , "%d" , cigar_items_instance[i].len );
-			strcpy ( splices[splices_index] , temp_convert_int_to_string );
-			strcat ( splices[splices_index] , "N" );
+			sprintf (temp_convert_int_to_string , "%d" , cigar_items_instance[i].len);
+			strcpy (splices[splices_index] , temp_convert_int_to_string);
+			strcat (splices[splices_index] , "N");
 			splices_index++;
 		}
 	}
@@ -1023,11 +1023,11 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 			num++;
 		else
 		{
-			sprintf ( temp_convert_int_to_string , "%d" , num );
+			sprintf (temp_convert_int_to_string , "%d" , num);
 			if ( num > 0 )
 			{
-				strcat ( icigar , temp_convert_int_to_string );
-				strcat ( icigar , "M" );
+				strcat (icigar , temp_convert_int_to_string);
+				strcat (icigar , "M");
 			}
 			num = 0;
 			if ( ( md_extended[i] >= 33 && md_extended[i] <= 37 ) || ( md_extended[i] >= 38 && md_extended[i] <= 42 ) ) // Either a mismatch or an insertion
@@ -1040,7 +1040,7 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 					temp_convert_int_to_string[2] = '\0';
 				}
 				else temp_convert_int_to_string[1] = '\0';
-				strcat ( icigar , temp_convert_int_to_string );
+				strcat (icigar , temp_convert_int_to_string);
 			}
 			else if ( md_extended[i] >= '0' && md_extended[i] <= '9' )
 			{
@@ -1053,7 +1053,7 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 					num++;
 				}
 				num = 0;
-				strcat ( icigar , splices[intron_splice_index] );
+				strcat (icigar , splices[intron_splice_index]);
 				i--;
 			}
 			else if ( md_extended[i] == '-' ) // Deletion
@@ -1064,19 +1064,19 @@ void designIntegratedCIGAR ( char *md, char *seq, int *seq_length, char *soft_cl
 					i++;
 				}
 				i--;
-				sprintf ( temp_convert_int_to_string , "%d" , num );
-				strcat ( icigar , temp_convert_int_to_string );
-				strcat ( icigar , "D" );
+				sprintf (temp_convert_int_to_string , "%d" , num);
+				strcat (icigar , temp_convert_int_to_string);
+				strcat (icigar , "D");
 				num = 0;
 			}
 		}
 	}
-	sprintf ( temp_convert_int_to_string , "%d" , num );
-	strcat ( icigar , temp_convert_int_to_string );
-	strcat ( icigar , "M" );
+	sprintf (temp_convert_int_to_string , "%d" , num);
+	strcat (icigar , temp_convert_int_to_string);
+	strcat (icigar , "M");
 }
 
-int isAlignmentPerfect ( char *cigar, struct Sam_Tags *tags, int MD_tag_index, int NM_tag_index, int nM_tag_index )
+int isAlignmentPerfect (char *cigar, struct Sam_Tags *tags, int MD_tag_index, int NM_tag_index, int nM_tag_index)
 {
 	int i;
 	if ( NM_tag_index != -1 && nM_tag_index != -1 )
@@ -1102,7 +1102,7 @@ int isAlignmentPerfect ( char *cigar, struct Sam_Tags *tags, int MD_tag_index, i
 	return 1;
 }
 
-void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics )
+void generateIntegratedCigar (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics)
 {
 	/*
 	 * Creates the integrated cigar
@@ -1128,7 +1128,7 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 	char dummy;
 	/********************************************************************/
 
-	splitCigar ( curr_alignment->cigar , &curr_alignment->number_of_cigar_items , curr_alignment->cigar_items );
+	splitCigar (curr_alignment->cigar , &curr_alignment->number_of_cigar_items , curr_alignment->cigar_items);
 
 	for ( i = 0 ; i < curr_alignment->number_of_cigar_items ; i++ )
 	{
@@ -1141,13 +1141,13 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 	/*
 	 * Process each alignment to extract soft clipped portion of reads
 	 */
-	if ( isSequenceSoftClipped ( curr_alignment->cigar ) == 1 )
+	if ( isSequenceSoftClipped (curr_alignment->cigar) == 1 )
 	{
 		if ( curr_alignment->cigar_items[0].def == 'S' )
 		{
 			left_soft_clip_point = curr_alignment->cigar_items[0].len;
-			extractSubString ( curr_alignment->seq , curr_alignment->soft_clippings.left , 0 , left_soft_clip_point - 1 );
-			extractSubString ( curr_alignment->qual , curr_alignment->soft_clippings.left_qual , 0 , left_soft_clip_point - 1 );
+			extractSubString (curr_alignment->seq , curr_alignment->soft_clippings.left , 0 , left_soft_clip_point - 1);
+			extractSubString (curr_alignment->qual , curr_alignment->soft_clippings.left_qual , 0 , left_soft_clip_point - 1);
 			curr_alignment->soft_clips_removed_seq_len = curr_alignment->read_seq_len - curr_alignment->cigar_items[0].len;
 			for ( i = 0 ; i <= left_soft_clip_point - 1 ; i++ )
 				curr_alignment->soft_clippings.left[i] =
@@ -1156,8 +1156,8 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 		if ( curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S' )
 		{
 			right_soft_clip_point = curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len;
-			extractSubString ( curr_alignment->seq , curr_alignment->soft_clippings.right , curr_alignment->read_seq_len - right_soft_clip_point , curr_alignment->read_seq_len - 1 );
-			extractSubString ( curr_alignment->qual , curr_alignment->soft_clippings.right_qual , curr_alignment->read_seq_len - right_soft_clip_point , curr_alignment->read_seq_len - 1 );
+			extractSubString (curr_alignment->seq , curr_alignment->soft_clippings.right , curr_alignment->read_seq_len - right_soft_clip_point , curr_alignment->read_seq_len - 1);
+			extractSubString (curr_alignment->qual , curr_alignment->soft_clippings.right_qual , curr_alignment->read_seq_len - right_soft_clip_point , curr_alignment->read_seq_len - 1);
 			curr_alignment->soft_clips_removed_seq_len = curr_alignment->read_seq_len - curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len;
 			for ( i = 0 ; i <= right_soft_clip_point ; i++ )
 				curr_alignment->soft_clippings.right[i] =
@@ -1181,9 +1181,9 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 	}
 	else
 	{
-		strcpy ( curr_alignment->soft_clips_removed_seq , curr_alignment->seq );
-		strcpy ( curr_alignment->soft_clips_removed_qual , curr_alignment->qual );
-		curr_alignment->soft_clips_removed_seq_len = strlen ( curr_alignment->soft_clips_removed_seq );
+		strcpy (curr_alignment->soft_clips_removed_seq , curr_alignment->seq);
+		strcpy (curr_alignment->soft_clips_removed_qual , curr_alignment->qual);
+		curr_alignment->soft_clips_removed_seq_len = strlen (curr_alignment->soft_clips_removed_seq);
 	}
 
 	/*
@@ -1196,61 +1196,61 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 	MD_tag_index = -1;
 	for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
 	{
-		if ( strcmp ( curr_alignment->tags[i].name , "MD" ) == 0 )
+		if ( strcmp (curr_alignment->tags[i].name , "MD") == 0 )
 			MD_tag_index = i;
-		if ( strcmp ( curr_alignment->tags[i].name , "XS" ) == 0 )
+		if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
 			XS_tag_index = i;
-		if ( strcmp ( curr_alignment->tags[i].name , "NH" ) == 0 )
+		if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 			NH_tag_index = i;
-		if ( strcmp ( curr_alignment->tags[i].name , "NM" ) == 0 )
+		if ( strcmp (curr_alignment->tags[i].name , "NM") == 0 )
 			NM_tag_index = i;
-		if ( strcmp ( curr_alignment->tags[i].name , "nM" ) == 0 )
+		if ( strcmp (curr_alignment->tags[i].name , "nM") == 0 )
 			nM_tag_index = i;
 	}
 
-	perfect_alignment_indicator = isAlignmentPerfect ( curr_alignment->cigar , curr_alignment->tags , MD_tag_index , NM_tag_index , nM_tag_index );
+	perfect_alignment_indicator = isAlignmentPerfect (curr_alignment->cigar , curr_alignment->tags , MD_tag_index , NM_tag_index , nM_tag_index);
 
 	if ( perfect_alignment_indicator == 0 )
-		designIntegratedCIGAR ( curr_alignment->tags[MD_tag_index].val , curr_alignment->soft_clips_removed_seq , &curr_alignment->soft_clips_removed_seq_len , curr_alignment->soft_clips_removed_qual , curr_alignment->cigar_items , curr_alignment->number_of_cigar_items , curr_alignment->cigar , curr_alignment->cigar_extended , curr_alignment->md_extended , curr_alignment->icigar , curr_alignment->splices , flag_ignore_quality_score , flag_ignore_mismatches );
+		designIntegratedCIGAR (curr_alignment->tags[MD_tag_index].val , curr_alignment->soft_clips_removed_seq , &curr_alignment->soft_clips_removed_seq_len , curr_alignment->soft_clips_removed_qual , curr_alignment->cigar_items , curr_alignment->number_of_cigar_items , curr_alignment->cigar , curr_alignment->cigar_extended , curr_alignment->md_extended , curr_alignment->icigar , curr_alignment->splices , flag_ignore_quality_score , flag_ignore_mismatches);
 	else
 	{
 		if ( curr_alignment->cigar_items[0].def == 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S' )
 		{
-			strcpy ( curr_alignment->icigar , "" );
+			strcpy (curr_alignment->icigar , "");
 			for ( i = 1 ; i < curr_alignment->number_of_cigar_items - 1 ; i++ )
 			{
-				sprintf ( str , "%d" , curr_alignment->cigar_items[i].len );
-				strcat ( curr_alignment->icigar , str );
+				sprintf (str , "%d" , curr_alignment->cigar_items[i].len);
+				strcat (curr_alignment->icigar , str);
 				temp_str[0] = curr_alignment->cigar_items[i].def;
 				temp_str[1] = '\0';
-				strcat ( curr_alignment->icigar , temp_str );
+				strcat (curr_alignment->icigar , temp_str);
 			}
 		}
 		else if ( curr_alignment->cigar_items[0].def != 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S' )
 		{
-			strcpy ( curr_alignment->icigar , "" );
+			strcpy (curr_alignment->icigar , "");
 			for ( i = 0 ; i < curr_alignment->number_of_cigar_items - 1 ; i++ )
 			{
-				sprintf ( str , "%d" , curr_alignment->cigar_items[i].len );
-				strcat ( curr_alignment->icigar , str );
+				sprintf (str , "%d" , curr_alignment->cigar_items[i].len);
+				strcat (curr_alignment->icigar , str);
 				temp_str[0] = curr_alignment->cigar_items[i].def;
 				temp_str[1] = '\0';
-				strcat ( curr_alignment->icigar , temp_str );
+				strcat (curr_alignment->icigar , temp_str);
 			}
 		}
 		else if ( curr_alignment->cigar_items[0].def == 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def != 'S' )
 		{
-			strcpy ( curr_alignment->icigar , "" );
+			strcpy (curr_alignment->icigar , "");
 			for ( i = 1 ; i < curr_alignment->number_of_cigar_items ; i++ )
 			{
-				sprintf ( str , "%d" , curr_alignment->cigar_items[i].len );
-				strcat ( curr_alignment->icigar , str );
+				sprintf (str , "%d" , curr_alignment->cigar_items[i].len);
+				strcat (curr_alignment->icigar , str);
 				temp_str[0] = curr_alignment->cigar_items[i].def;
 				temp_str[1] = '\0';
-				strcat ( curr_alignment->icigar , temp_str );
+				strcat (curr_alignment->icigar , temp_str);
 			}
 		}
-		else strcpy ( curr_alignment->icigar , curr_alignment->cigar );
+		else strcpy (curr_alignment->icigar , curr_alignment->cigar);
 		//printf("\nPartial icigar %s left soft clip %d right soft clip %d", curr_alignment->icigar, left_soft_clip_point, right_soft_clip_point);
 	}
 
@@ -1274,17 +1274,17 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 				}
 				curr_alignment->temp[j] = '\0';
 			}
-			else strcpy ( curr_alignment->temp , curr_alignment->soft_clippings.left );
-			strcat ( curr_alignment->temp , curr_alignment->icigar );
+			else strcpy (curr_alignment->temp , curr_alignment->soft_clippings.left);
+			strcat (curr_alignment->temp , curr_alignment->icigar);
 		}
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point != 0 )
 		{
-			strcpy ( curr_alignment->temp , curr_alignment->icigar );
+			strcpy (curr_alignment->temp , curr_alignment->icigar);
 			if ( flag_ignore_quality_score == 1 )
-				strcat ( curr_alignment->temp , curr_alignment->soft_clippings.right );
+				strcat (curr_alignment->temp , curr_alignment->soft_clippings.right);
 			else
 			{
-				int j = strlen ( curr_alignment->temp );
+				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
 						curr_alignment->soft_clippings.right_qual[i] != '\0' ;
 						i++ )
@@ -1309,13 +1309,13 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 				}
 				curr_alignment->temp[j] = '\0';
 			}
-			else strcpy ( curr_alignment->temp , curr_alignment->soft_clippings.left );
-			strcat ( curr_alignment->temp , curr_alignment->icigar );
+			else strcpy (curr_alignment->temp , curr_alignment->soft_clippings.left);
+			strcat (curr_alignment->temp , curr_alignment->icigar);
 			if ( flag_ignore_quality_score == 1 )
-				strcat ( curr_alignment->temp , curr_alignment->soft_clippings.right );
+				strcat (curr_alignment->temp , curr_alignment->soft_clippings.right);
 			else
 			{
-				int j = strlen ( curr_alignment->temp );
+				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
 						curr_alignment->soft_clippings.right_qual[i] != '\0' ;
 						i++ )
@@ -1328,22 +1328,22 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 		}
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point == 0 )
 		{
-			strcpy ( curr_alignment->temp , curr_alignment->icigar );
+			strcpy (curr_alignment->temp , curr_alignment->icigar);
 		}
 	}
 	else // DO ignore soft clippings
 	{
-		strcpy ( curr_alignment->temp , curr_alignment->icigar );
+		strcpy (curr_alignment->temp , curr_alignment->icigar);
 	}
 
-	strcpy ( curr_alignment->icigar , curr_alignment->temp );
+	strcpy (curr_alignment->icigar , curr_alignment->temp);
 
 	/*
 	 * Add NH tag
 	 */
 	/*if (XS_tag_index != -1) strcat(curr_alignment->icigar, curr_alignment->tags[XS_tag_index].val);*/
 	if ( NH_tag_index != -1 )
-		strcat ( curr_alignment->icigar , curr_alignment->tags[NH_tag_index].val );
+		strcat (curr_alignment->icigar , curr_alignment->tags[NH_tag_index].val);
 
 	/*
 	 * Change the iCIGAR representation to reflect the samformatflag and XS tag
@@ -1365,7 +1365,7 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 				M_replacement_character = 'H';
 				break;
 		}
-		for ( i = 0 ; i < strlen ( curr_alignment->icigar ) ; i++ )
+		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
 			if ( curr_alignment->icigar[i] == 'M' )
 				curr_alignment->icigar[i] = M_replacement_character;
 	}
@@ -1391,7 +1391,7 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 		}
 		else
 		{
-			if ( strcmp ( curr_alignment->tags[XS_tag_index].val , "+" ) == 0 )
+			if ( strcmp (curr_alignment->tags[XS_tag_index].val , "+") == 0 )
 			{
 				switch ( curr_alignment->samflag )
 				{
@@ -1409,7 +1409,7 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 						break;
 				}
 			}
-			else if ( strcmp ( curr_alignment->tags[XS_tag_index].val , "-" ) == 0 )
+			else if ( strcmp (curr_alignment->tags[XS_tag_index].val , "-") == 0 )
 			{
 				switch ( curr_alignment->samflag )
 				{
@@ -1429,7 +1429,7 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 			}
 
 		}
-		for ( i = 0 ; i < strlen ( curr_alignment->icigar ) ; i++ )
+		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
 			if ( curr_alignment->icigar[i] == 'M' )
 				curr_alignment->icigar[i] = M_replacement_character;
 	}
@@ -1441,9 +1441,9 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 	if ( run_diagnostics == 1 )
 	{
 		dummy = 'Z';
-		strcpy ( sam_alignment_instance_diagnostics->icigar , curr_alignment->icigar );
+		strcpy (sam_alignment_instance_diagnostics->icigar , curr_alignment->icigar);
 		sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
-		convertIcigarToCigarandMD ( 0 , whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy );
+		convertIcigarToCigarandMD (0 , whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy);
 		/************************************************************************
 		 * Remove this section later
 		 *************************************************************************/
@@ -1457,33 +1457,33 @@ void generateIntegratedCigar ( struct Sam_Alignment *curr_alignment, short int f
 		/************************************************************************/
 
 		flag = 0;
-		if ( strcmp ( sam_alignment_instance_diagnostics->cigar , curr_alignment->cigar ) != 0 )
+		if ( strcmp (sam_alignment_instance_diagnostics->cigar , curr_alignment->cigar) != 0 )
 		{
-			printf ( "\nCIGAR Mismatch" );
+			printf ("\nCIGAR Mismatch");
 			flag = 1;
 		}
-		if ( strcmp ( sam_alignment_instance_diagnostics->seq , curr_alignment->seq ) != 0 )
+		if ( strcmp (sam_alignment_instance_diagnostics->seq , curr_alignment->seq) != 0 )
 		{
-			printf ( "\nSEQ Mismatch" );
+			printf ("\nSEQ Mismatch");
 			flag = 1;
 		}
-		if ( strcmp ( sam_alignment_instance_diagnostics->tags[2].val , curr_alignment->tags[MD_tag_index].val ) != 0 )
+		if ( strcmp (sam_alignment_instance_diagnostics->tags[2].val , curr_alignment->tags[MD_tag_index].val) != 0 )
 		{
-			printf ( "\nMD Mismatch" );
+			printf ("\nMD Mismatch");
 			flag = 1;
 		}
 
 		if ( flag )
 		{
-			printf ( "\nRecord Number : %lld" , number_of_records_read );
-			printSamAlignmentInstance ( curr_alignment , 1 );
-			printSamAlignmentInstance ( sam_alignment_instance_diagnostics , 1 );
-			exit ( 1 );
+			printf ("\nRecord Number : %lld" , number_of_records_read);
+			printSamAlignmentInstance (curr_alignment , 1);
+			printSamAlignmentInstance (sam_alignment_instance_diagnostics , 1);
+			exit (1);
 		}
 	}
 }
 
-void initializePass3_Compression_Symbol_icigar_MappingPool ( struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping )
+void initializePass3_Compression_Symbol_icigar_MappingPool (struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping)
 {
 	int i;
 	int j;
@@ -1506,18 +1506,18 @@ void initializePass3_Compression_Symbol_icigar_MappingPool ( struct Pass3_Compre
 	 */
 }
 
-void assignicigarsToSymbols ( struct Cigar_Frequency **cigar_freq_pool, int cigar_freq_pool_index, struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping )
+void assignicigarsToSymbols (struct Cigar_Frequency **cigar_freq_pool, int cigar_freq_pool_index, struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping)
 {
 	int i;
 	for ( i = 0 ; i < cigar_freq_pool_index ; i++ )
-		strcpy ( symbol_icigar_mapping[i]->icigar , cigar_freq_pool[i]->cigar );
+		strcpy (symbol_icigar_mapping[i]->icigar , cigar_freq_pool[i]->cigar);
 	/*
 	 for (i = 0; i < cigar_freq_pool_index; i++)
 	 printf("\n icigar: %s symbol: %s", symbol_icigar_mapping[i]->icigar, symbol_icigar_mapping[i]->symbolic_icigar);
 	 */
 }
 
-void readInTheEntireGenome ( char *genome_filename, struct Whole_Genome_Sequence *whole_genome )
+void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome)
 {
 	FILE *fhr;
 	char *buffer = NULL;
@@ -1527,25 +1527,25 @@ void readInTheEntireGenome ( char *genome_filename, struct Whole_Genome_Sequence
 	int j;
 
 	//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
-	fhr = fopen ( genome_filename , "rb" );
+	fhr = fopen (genome_filename , "rb");
 	if ( fhr == NULL )
 	{
-		printf ( "Error! File not found" );
-		exit ( 1 );
+		printf ("Error! File not found");
+		exit (1);
 	}
 
-	whole_genome->nucleotides = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
-	whole_genome->reference_sequence_name = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
-	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc ( sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES );
+	whole_genome->nucleotides = ( char** ) malloc (sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	whole_genome->reference_sequence_name = ( char** ) malloc (sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES);
 	whole_genome->number_of_reference_sequences = 0;
 
-	while ( ( line_len = getline ( &buffer , &len , fhr ) ) != -1 )
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		//printf("\n%lld", strlen(buffer));
-		if ( strlen ( buffer ) <= 1 ) continue;
+		if ( strlen (buffer) <= 1 ) continue;
 		if ( buffer[0] == '>' )
 		{
-			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc ( sizeof(char) * ( len + 1 ) );
+			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( len + 1 ));
 			j = 0;
 			for ( i = 1 ; buffer[i] != 32 ; i++ )
 				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences][j++ ] = buffer[i];
@@ -1553,9 +1553,9 @@ void readInTheEntireGenome ( char *genome_filename, struct Whole_Genome_Sequence
 		}
 		else
 		{
-			whole_genome->nucleotides[whole_genome->number_of_reference_sequences] = ( char* ) malloc ( sizeof(char) * ( len + 1 ) );
-			strcpy ( whole_genome->nucleotides[whole_genome->number_of_reference_sequences] , buffer );
-			whole_genome->reference_sequence_length[whole_genome->number_of_reference_sequences] = strlen ( buffer );
+			whole_genome->nucleotides[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( len + 1 ));
+			strcpy (whole_genome->nucleotides[whole_genome->number_of_reference_sequences] , buffer);
+			whole_genome->reference_sequence_length[whole_genome->number_of_reference_sequences] = strlen (buffer);
 			whole_genome->number_of_reference_sequences++;
 		}
 
@@ -1566,16 +1566,16 @@ void readInTheEntireGenome ( char *genome_filename, struct Whole_Genome_Sequence
 	 for (i = 0; i < whole_genome->number_of_reference_sequences; i++)
 	 printf("\n %d %s %lld %lld", i + 1, whole_genome->reference_sequence_name[i], strlen(whole_genome->nucleotides[i]), whole_genome->reference_sequence_length[i]);
 	 */
-	fclose ( fhr );
+	fclose (fhr);
 }
 
-void reverseComplement ( char *seq, char *rev_seq )
+void reverseComplement (char *seq, char *rev_seq)
 {
 	int i;
 	int j;
 
 	j = 0;
-	for ( i = strlen ( seq ) - 1 ; i >= 0 ; i-- )
+	for ( i = strlen (seq) - 1 ; i >= 0 ; i-- )
 	{
 		switch ( seq[i] )
 		{
@@ -1599,7 +1599,7 @@ void reverseComplement ( char *seq, char *rev_seq )
 	rev_seq[j++ ] = '\0';
 }
 
-void readInGenomeSequenceSingleChromosome ( struct Whole_Genome_Sequence *single_genome_sequence, char *chromosome, char *genome_filename, struct Abridge_Index *genome_index )
+void readInGenomeSequenceSingleChromosome (struct Whole_Genome_Sequence *single_genome_sequence, char *chromosome, char *genome_filename, struct Abridge_Index *genome_index)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -1620,46 +1620,46 @@ void readInGenomeSequenceSingleChromosome ( struct Whole_Genome_Sequence *single
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen ( genome_filename , "rb" );
+	fhr = fopen (genome_filename , "rb");
 	if ( fhr == NULL )
 	{
-		printf ( "Error! File not found" );
-		exit ( 1 );
+		printf ("Error! File not found");
+		exit (1);
 	}
 	/********************************************************************/
 
-	buffer = ( char* ) malloc ( sizeof(char) * MAX_REFERENCE_SEQ_LEN );
-	single_genome_sequence->nucleotides = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
-	single_genome_sequence->reference_sequence_name = ( char** ) malloc ( sizeof(char*) * MAX_REFERENCE_SEQUENCES );
-	single_genome_sequence->reference_sequence_length = ( unsigned long long int* ) malloc ( sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES );
+	buffer = ( char* ) malloc (sizeof(char) * MAX_REFERENCE_SEQ_LEN);
+	single_genome_sequence->nucleotides = ( char** ) malloc (sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	single_genome_sequence->reference_sequence_name = ( char** ) malloc (sizeof(char*) * MAX_REFERENCE_SEQUENCES);
+	single_genome_sequence->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES);
 	single_genome_sequence->number_of_reference_sequences = 1;
 
 	for ( i = 0 ; i < genome_index->number_of_items ; i++ )
-		if ( strcmp ( chromosome , genome_index->chromosome[i] ) == 0 ) break;
+		if ( strcmp (chromosome , genome_index->chromosome[i]) == 0 ) break;
 
-	fseek_ret_val = fseek ( fhr , genome_index->start_byte[i] , SEEK_SET );
-	fread_ret_val = fread ( buffer , 1 , genome_index->end_byte[i] - genome_index->start_byte[i] , fhr );
+	fseek_ret_val = fseek (fhr , genome_index->start_byte[i] , SEEK_SET);
+	fread_ret_val = fread (buffer , 1 , genome_index->end_byte[i] - genome_index->start_byte[i] , fhr);
 	if ( buffer == NULL )
-		printf ( "\nBuffer is null chromosome number %d" , i );
+		printf ("\nBuffer is null chromosome number %d" , i);
 	//printf("\nReading from %lld Num bytes read %lld fseek_ret_val %lld fread_ret_val %lld ferror %lld feof %lld Genome filename %s\n", genome_index->start_byte[i], genome_index->end_byte[i] - genome_index->start_byte[i], fseek_ret_val, fread_ret_val, ferror(fhr), feof(fhr), genome_filename);
 	//fflush (stdout);
 	buffer[genome_index->end_byte[i] - genome_index->start_byte[i] + 1] = '\0';
-	single_genome_sequence->reference_sequence_name[0] = ( char* ) malloc ( sizeof(char) * ( 100 ) );
-	strcpy ( single_genome_sequence->reference_sequence_name[0] , chromosome );
-	single_genome_sequence->nucleotides[0] = ( char* ) malloc ( sizeof(char) * strlen ( buffer ) );
-	strcpy ( single_genome_sequence->nucleotides[0] , buffer );
+	single_genome_sequence->reference_sequence_name[0] = ( char* ) malloc (sizeof(char) * ( 100 ));
+	strcpy (single_genome_sequence->reference_sequence_name[0] , chromosome);
+	single_genome_sequence->nucleotides[0] = ( char* ) malloc (sizeof(char) * strlen (buffer));
+	strcpy (single_genome_sequence->nucleotides[0] , buffer);
 	single_genome_sequence->reference_sequence_length[0] = genome_index->end_byte[i] - genome_index->start_byte[i];
-	fclose ( fhr );
+	fclose (fhr);
 }
 
-void findReadClusterFromAbridgeIndex ( struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index )
+void findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
 	int i;
-	long long int start1 , start2;
-	long long int end1 , end2;
+	long long int start1, start2;
+	long long int end1, end2;
 	bool condition1;
 	bool condition2;
 	bool condition3;
@@ -1675,7 +1675,7 @@ void findReadClusterFromAbridgeIndex ( struct Abridge_Index *abridge_index, char
 	/********************************************************************/
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
-		if ( strcmp ( chromosome , abridge_index->chromosome[i] ) == 0 )
+		if ( strcmp (chromosome , abridge_index->chromosome[i]) == 0 )
 		{
 			start2 = abridge_index->start[i];
 			end2 = abridge_index->end[i];
@@ -1697,7 +1697,7 @@ void findReadClusterFromAbridgeIndex ( struct Abridge_Index *abridge_index, char
 
 }
 
-void readGenomeIndex ( struct Abridge_Index *genome_index, char *genome_index_filename, char **split_line )
+void readGenomeIndex (struct Abridge_Index *genome_index, char *genome_index_filename, char **split_line)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -1718,27 +1718,27 @@ void readGenomeIndex ( struct Abridge_Index *genome_index, char *genome_index_fi
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen ( genome_index_filename , "r" );
+	fhr = fopen (genome_index_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ( "Error! File not found" );
-		exit ( 1 );
+		printf ("Error! File not found");
+		exit (1);
 	}
 	/********************************************************************/
 
 	genome_index->number_of_items = 0;
-	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
+	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
 		line_num++;
-		splitByDelimiter ( line , '\t' , split_line );
-		strcpy ( genome_index->chromosome[genome_index->number_of_items] , split_line[0] );
-		genome_index->start_byte[genome_index->number_of_items] = strtol ( split_line[2] , &temp , 10 );
-		genome_index->end_byte[genome_index->number_of_items] = genome_index->start_byte[genome_index->number_of_items] + strtol ( split_line[3] , &temp , 10 );
+		splitByDelimiter (line , '\t' , split_line);
+		strcpy (genome_index->chromosome[genome_index->number_of_items] , split_line[0]);
+		genome_index->start_byte[genome_index->number_of_items] = strtol (split_line[2] , &temp , 10);
+		genome_index->end_byte[genome_index->number_of_items] = genome_index->start_byte[genome_index->number_of_items] + strtol (split_line[3] , &temp , 10);
 		genome_index->number_of_items++;
 	}
 }
 
-void readAbridgeIndex ( struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score )
+void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -1758,39 +1758,39 @@ void readAbridgeIndex ( struct Abridge_Index *abridge_index, char *abridge_index
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen ( abridge_index_filename , "r" );
+	fhr = fopen (abridge_index_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ( "Error! File not found" );
-		exit ( 1 );
+		printf ("Error! File not found");
+		exit (1);
 	}
 	/********************************************************************/
-	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
+	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
 		line_num++;
-		splitByDelimiter ( line , '\t' , split_line );
+		splitByDelimiter (line , '\t' , split_line);
 		if ( line_num == 1 )
 		{
-			*flag_ignore_mismatches = strtol ( split_line[0] , &temp , 10 );
-			*flag_ignore_soft_clippings = strtol ( split_line[1] , &temp , 10 );
-			*flag_ignore_unmapped_sequences = strtol ( split_line[2] , &temp , 10 );
-			*flag_ignore_quality_score = strtol ( split_line[3] , &temp , 10 );
+			*flag_ignore_mismatches = strtol (split_line[0] , &temp , 10);
+			*flag_ignore_soft_clippings = strtol (split_line[1] , &temp , 10);
+			*flag_ignore_unmapped_sequences = strtol (split_line[2] , &temp , 10);
+			*flag_ignore_quality_score = strtol (split_line[3] , &temp , 10);
 			continue;
 		}
 		//printf("\n%d %s", abridge_index->number_of_items, split_line[0]);
 		//fflush(stdout);
-		strcpy ( abridge_index->chromosome[abridge_index->number_of_items] , split_line[0] );
-		abridge_index->start[abridge_index->number_of_items] = strtol ( split_line[1] , &temp , 10 );
-		abridge_index->end[abridge_index->number_of_items] = strtol ( split_line[2] , &temp , 10 );
-		abridge_index->start_byte[abridge_index->number_of_items] = strtol ( split_line[3] , &temp , 10 );
-		abridge_index->end_byte[abridge_index->number_of_items] = strtol ( split_line[4] , &temp , 10 );
+		strcpy (abridge_index->chromosome[abridge_index->number_of_items] , split_line[0]);
+		abridge_index->start[abridge_index->number_of_items] = strtol (split_line[1] , &temp , 10);
+		abridge_index->end[abridge_index->number_of_items] = strtol (split_line[2] , &temp , 10);
+		abridge_index->start_byte[abridge_index->number_of_items] = strtol (split_line[3] , &temp , 10);
+		abridge_index->end_byte[abridge_index->number_of_items] = strtol (split_line[4] , &temp , 10);
 		abridge_index->number_of_items++;
 		//printf("\n %lld", MAX_POOL_SIZE - abridge_index->number_of_items);
 	}
-	fclose ( fhr );
+	fclose (fhr);
 }
 
-int maxClusterSize ( struct Abridge_Index *abridge_index )
+int maxClusterSize (struct Abridge_Index *abridge_index)
 {
 	long long int i;
 	long long int max_cluster_size = -1;
@@ -1801,7 +1801,7 @@ int maxClusterSize ( struct Abridge_Index *abridge_index )
 
 }
 
-void loadSequencesFromFile ( char **sequences, char *filename )
+void loadSequencesFromFile (char **sequences, char *filename)
 {
 	FILE *fhr;
 	long long int num_sequence = 0;
@@ -1809,18 +1809,18 @@ void loadSequencesFromFile ( char **sequences, char *filename )
 	ssize_t line_len;
 	char *line = NULL; // for reading each line
 
-	fhr = fopen ( filename , "rb" );
+	fhr = fopen (filename , "rb");
 	if ( fhr == NULL )
 	{
-		printf ( "Error! File not found" );
-		exit ( 1 );
+		printf ("Error! File not found");
+		exit (1);
 	}
-	while ( ( line_len = getline ( &line , &len , fhr ) ) != -1 )
-		if ( line[0] != '>' ) strcpy ( sequences[num_sequence++ ] , line );
+	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
+		if ( line[0] != '>' ) strcpy (sequences[num_sequence++ ] , line);
 
 }
 
-long long int reverseInteger ( long long int val )
+long long int reverseInteger (long long int val)
 {
 	long long int temp = 0;
 	while ( val )
@@ -1831,7 +1831,7 @@ long long int reverseInteger ( long long int val )
 	return temp;
 }
 
-long long int extractNHfromicigar ( char *icigar, int icigar_length )
+long long int extractNHfromicigar (char *icigar, int icigar_length)
 {
 	char nh_val_string[15];
 	char nh_val_string_rev[15];
@@ -1844,7 +1844,7 @@ long long int extractNHfromicigar ( char *icigar, int icigar_length )
 	j = 0;
 	for ( i = icigar_length - 1 ; i >= 0 ; i-- )
 	{
-		if ( isdigit ( icigar[i] ) == 0 ) break;
+		if ( isdigit (icigar[i]) == 0 ) break;
 		//nh_val = nh_val * 10 + icigar[i] - 48;
 		nh_val_string[j++ ] = icigar[i];
 	}
@@ -1855,18 +1855,18 @@ long long int extractNHfromicigar ( char *icigar, int icigar_length )
 	for ( i = 0 ; i < j ; i++ )
 		nh_val_string_rev[i] = nh_val_string[k-- ];
 	nh_val_string_rev[j] = '\0';
-	nh_val = strtol ( nh_val_string_rev , &t , 10 );
+	nh_val = strtol (nh_val_string_rev , &t , 10);
 	return nh_val;
 }
 
-void replaceCharacterInString ( char *str, char ch_to_be_replaced, char replace_with, int str_length )
+void replaceCharacterInString (char *str, char ch_to_be_replaced, char replace_with, int str_length)
 {
 	int i;
 	for ( i = 0 ; i < str_length ; i++ )
 		if ( str[i] == ch_to_be_replaced ) str[i] = replace_with;
 }
 
-int findSamFormatFlag ( char *icigar, int icigar_length, char *XS )
+int findSamFormatFlag (char *icigar, int icigar_length, char *XS)
 {
 	int i;
 	int samformatflag;
@@ -1940,7 +1940,7 @@ int findSamFormatFlag ( char *icigar, int icigar_length, char *XS )
 	return samformatflag;
 }
 
-void generateReadSequenceAndMDString ( struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, int cluster_index )
+void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, int cluster_index)
 {
 	int i;
 	int j;
@@ -1965,11 +1965,11 @@ void generateReadSequenceAndMDString ( struct Sam_Alignment *sam_alignment_insta
 	for ( chromosome_index = 0 ;
 			chromosome_index < whole_genome->number_of_reference_sequences ;
 			chromosome_index++ )
-		if ( strcmp ( sam_alignment_instance->reference_name , whole_genome->reference_sequence_name[chromosome_index] ) == 0 )
+		if ( strcmp (sam_alignment_instance->reference_name , whole_genome->reference_sequence_name[chromosome_index]) == 0 )
 			break;
 
 	if ( chromosome_index == whole_genome->number_of_reference_sequences )
-		printf ( "\n Chromosome not found %s" , sam_alignment_instance->reference_name );
+		printf ("\n Chromosome not found %s" , sam_alignment_instance->reference_name);
 
 	/*
 	 * Construct Sequence from CIGAR
@@ -2029,12 +2029,12 @@ void generateReadSequenceAndMDString ( struct Sam_Alignment *sam_alignment_insta
 		if ( sam_alignment_instance->seq[i] == '-' )
 			sam_alignment_instance->seq[i] = read_from_genome[i];
 
-	strcpy ( sam_alignment_instance->cigar_extended , read_from_genome_including_deletions );
-	if ( strlen ( sam_alignment_instance->md_extended ) != strlen ( read_from_genome_including_deletions ) )
+	strcpy (sam_alignment_instance->cigar_extended , read_from_genome_including_deletions);
+	if ( strlen (sam_alignment_instance->md_extended) != strlen (read_from_genome_including_deletions) )
 	{
-		printf ( "\nLengths do not match" );
-		printf ( "\n%s\n%s" , sam_alignment_instance->md_extended , read_from_genome_including_deletions );
-		exit ( 1 );
+		printf ("\nLengths do not match");
+		printf ("\n%s\n%s" , sam_alignment_instance->md_extended , read_from_genome_including_deletions);
+		exit (1);
 	}
 //return;
 	/*
@@ -2051,12 +2051,12 @@ void generateReadSequenceAndMDString ( struct Sam_Alignment *sam_alignment_insta
 		{
 			if ( num > 0 )
 			{
-				sprintf ( temp , "%d" , num );
-				strcat ( sam_alignment_instance->tags[2].val , temp );
+				sprintf (temp , "%d" , num);
+				strcat (sam_alignment_instance->tags[2].val , temp);
 			}
 			num = 0;
 
-			strcat ( sam_alignment_instance->tags[2].val , "^" );
+			strcat (sam_alignment_instance->tags[2].val , "^");
 			temp_index = 0;
 			while ( sam_alignment_instance->md_extended[i] == '-' )
 			{
@@ -2064,101 +2064,113 @@ void generateReadSequenceAndMDString ( struct Sam_Alignment *sam_alignment_insta
 				i++;
 			}
 			temp[temp_index++ ] = '\0';
-			strcat ( sam_alignment_instance->tags[2].val , temp );
+			strcat (sam_alignment_instance->tags[2].val , temp);
 			i--;
 		}
 		else if ( sam_alignment_instance->md_extended[i] >= 38 && sam_alignment_instance->md_extended[i] <= 42 ) // Mismatches
 		{
-			sprintf ( temp , "%d" , num );
-			strcat ( sam_alignment_instance->tags[2].val , temp );
+			sprintf (temp , "%d" , num);
+			strcat (sam_alignment_instance->tags[2].val , temp);
 			num = 0;
 			temp[0] = read_from_genome_including_deletions[i];
 			temp[1] = '\0';
-			strcat ( sam_alignment_instance->tags[2].val , temp );
+			strcat (sam_alignment_instance->tags[2].val , temp);
 		}
 	}
 	if ( num > 0 )
 	{
-		sprintf ( temp , "%d" , num );
-		strcat ( sam_alignment_instance->tags[2].val , temp );
+		sprintf (temp , "%d" , num);
+		strcat (sam_alignment_instance->tags[2].val , temp);
 	}
 //printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
 //printf("\n%s\n%s\n%s", sam_alignment_instance->soft_clips_removed_seq, read_from_genome_including_deletions, read_from_genome);
 //printf("\n");
 }
 
-void writeAlignmentToFile ( struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw )
+void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual)
 {
 	int i;
+
 	char line_to_be_written_to_file[MAX_GENERAL_LEN];
 	char temp[100];
+	char *buffer;
+
+	size_t len = 0;
+	ssize_t line_len;
+
 	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
-		strcat ( line_to_be_written_to_file , read_prefix );
-		strcat ( line_to_be_written_to_file , sam_alignment->read_name );
-		sprintf ( temp , "%d" , i + 1 );
-		strcat ( line_to_be_written_to_file , "_" );
-		strcat ( line_to_be_written_to_file , temp );
-		strcat ( line_to_be_written_to_file , "\t" );
+		strcat (line_to_be_written_to_file , read_prefix);
+		strcat (line_to_be_written_to_file , sam_alignment->read_name);
+		sprintf (temp , "%d" , i + 1);
+		strcat (line_to_be_written_to_file , "_");
+		strcat (line_to_be_written_to_file , temp);
+		strcat (line_to_be_written_to_file , "\t");
 
-		sprintf ( temp , "%d" , sam_alignment->samflag );
-		strcat ( line_to_be_written_to_file , temp );
+		sprintf (temp , "%d" , sam_alignment->samflag);
+		strcat (line_to_be_written_to_file , temp);
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , sam_alignment->reference_name );
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , sam_alignment->reference_name);
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		sprintf ( temp , "%d" , sam_alignment->start_position );
-		strcat ( line_to_be_written_to_file , temp );
+		strcat (line_to_be_written_to_file , "\t");
+		sprintf (temp , "%d" , sam_alignment->start_position);
+		strcat (line_to_be_written_to_file , temp);
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , "255" );
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , "255");
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , sam_alignment->cigar );
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , sam_alignment->cigar);
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , "*" );
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , "*");
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , "0" );
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , "0");
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , "0" );
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , "0");
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , sam_alignment->seq );
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , sam_alignment->seq);
 
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , sam_alignment->qual );
-
-		strcat ( line_to_be_written_to_file , "\t" );
-		//Tags
-		strcat ( line_to_be_written_to_file , "NH:i:" );
-		strcat ( line_to_be_written_to_file , sam_alignment->tags[0].val );
-		strcat ( line_to_be_written_to_file , "\t" );
-
-		if ( strcmp ( sam_alignment->tags[1].val , "." ) != 0 )
+		strcat (line_to_be_written_to_file , "\t");
+		if ( ( line_len = getline ( &buffer , &len , fhr_qual) ) != -1 )
 		{
-			strcat ( line_to_be_written_to_file , "XS:A:" );
-			strcat ( line_to_be_written_to_file , sam_alignment->tags[1].val );
-			strcat ( line_to_be_written_to_file , "\t" );
+			buffer[strlen (buffer) - 1] = '\0';
+			strcat (line_to_be_written_to_file , buffer);
+		}
+		else
+		strcat (line_to_be_written_to_file , sam_alignment->qual);
+
+		strcat (line_to_be_written_to_file , "\t");
+		//Tags
+		strcat (line_to_be_written_to_file , "NH:i:");
+		strcat (line_to_be_written_to_file , sam_alignment->tags[0].val);
+		strcat (line_to_be_written_to_file , "\t");
+
+		if ( strcmp (sam_alignment->tags[1].val , ".") != 0 )
+		{
+			strcat (line_to_be_written_to_file , "XS:A:");
+			strcat (line_to_be_written_to_file , sam_alignment->tags[1].val);
+			strcat (line_to_be_written_to_file , "\t");
 		}
 
 		if ( flag_ignore_sequence_information == 0 )
 		{
-			strcat ( line_to_be_written_to_file , "MD:Z:" );
-			strcat ( line_to_be_written_to_file , sam_alignment->tags[2].val );
-			strcat ( line_to_be_written_to_file , "\t" );
+			strcat (line_to_be_written_to_file , "MD:Z:");
+			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
+			strcat (line_to_be_written_to_file , "\t");
 		}
 
-		strcat ( line_to_be_written_to_file , "\n" );
-		fprintf ( fhw , "%s" , line_to_be_written_to_file );
+		strcat (line_to_be_written_to_file , "\n");
+		fprintf (fhw , "%s" , line_to_be_written_to_file);
 	}
 }
 
-void convertToAlignment ( struct Sam_Alignment *sam_alignment_instance, int sam_alignment_pool_index, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw )
+void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, int sam_alignment_pool_index, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw, FILE *fhr_qual)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2180,18 +2192,18 @@ void convertToAlignment ( struct Sam_Alignment *sam_alignment_instance, int sam_
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	distinct_icigars_in_a_line = ( char* ) malloc ( sizeof(char) * MAX_GENERAL_LEN );
+	distinct_icigars_in_a_line = ( char* ) malloc (sizeof(char) * MAX_GENERAL_LEN);
 
 	/********************************************************************/
 	for ( i = 0 ; i < number_of_entries_in_cluster ; i++ )
 	{
 		//printf("\nProcessing this line %s", split_on_newline[i]);
-		number_of_columns = splitByDelimiter ( split_on_newline[i] , '\t' , split_on_tab );
+		number_of_columns = splitByDelimiter (split_on_newline[i] , '\t' , split_on_tab);
 		//printf("\nNumber of columns %d", number_of_columns);
 
 		if ( number_of_columns == 1 )
 		{
-			strcpy ( distinct_icigars_in_a_line , split_on_tab[0] );
+			strcpy (distinct_icigars_in_a_line , split_on_tab[0]);
 			if ( i == 0 )
 				start_position = 1;
 			else start_position++;
@@ -2200,51 +2212,51 @@ void convertToAlignment ( struct Sam_Alignment *sam_alignment_instance, int sam_
 		{
 			if ( i == 0 )
 				start_position = abridge_index->start[cluster_index];
-			else start_position += strtol ( split_on_tab[0] , &temp , 10 );
-			strcpy ( distinct_icigars_in_a_line , split_on_tab[1] );
+			else start_position += strtol (split_on_tab[0] , &temp , 10);
+			strcpy (distinct_icigars_in_a_line , split_on_tab[1]);
 		}
 		else
 		{
 			// Should never enter here
-			printf ( "\nTrouble" );
+			printf ("\nTrouble");
 		}
-		number_of_distinct_cigars_in_a_line = splitByDelimiter ( distinct_icigars_in_a_line , ',' , split_on_comma );
+		number_of_distinct_cigars_in_a_line = splitByDelimiter (distinct_icigars_in_a_line , ',' , split_on_comma);
 		sam_alignment_pool_index = 0;
 		for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 		{
 			//printf("\n %d-%d", i, j);
 			//fflush(stdout);
-			splitByDelimiter ( split_on_comma[j] , '-' , split_on_dash );
-			number_of_repititions_of_the_same_reads = strtol ( split_on_dash[1] , &temp , 10 );
+			splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
+			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 			if ( from != -1 && to != -1 )
 				if ( ! ( start_position >= from && start_position <= to ) )
 					continue;
 			sam_alignment_instance->start_position = start_position;
-			if ( split_on_dash[0][1] == '-' && isalpha ( split_on_dash[0][0] ) != 0 )
+			if ( split_on_dash[0][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 			{
 				// Use the same cigar
-				sprintf ( temp , "%d" , *read_number );
+				sprintf (temp , "%d" , *read_number);
 				( *read_number )++;
-				strcpy ( sam_alignment_instance->read_name , temp );
+				strcpy (sam_alignment_instance->read_name , temp);
 			}
 			else
 			{
 				//printf("\nSplit_on_dash %s %d sam_alignment_pool_index %d ", split_on_dash[0], strlen(split_on_dash[0]), sam_alignment_pool_index);
-				strcpy ( sam_alignment_instance->icigar , split_on_dash[0] );
+				strcpy (sam_alignment_instance->icigar , split_on_dash[0]);
 				//printf("\nsam_alignment_pool[i]->icigar %s %d Original_icigar %s %d", sam_alignment_pool[sam_alignment_pool_index]->icigar, strlen(sam_alignment_pool[sam_alignment_pool_index]->icigar), split_on_dash[0], strlen(split_on_dash[0]));
-				convertIcigarToCigarandMD ( cluster_index , whole_genome , sam_alignment_instance , abridge_index->chromosome[cluster_index] , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value );
-				sprintf ( temp , "%d" , *read_number );
+				convertIcigarToCigarandMD (cluster_index , whole_genome , sam_alignment_instance , abridge_index->chromosome[cluster_index] , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
+				sprintf (temp , "%d" , *read_number);
 				( *read_number )++;
-				strcpy ( sam_alignment_instance->read_name , temp );
+				strcpy (sam_alignment_instance->read_name , temp);
 			}
-			writeAlignmentToFile ( sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw );
+			writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual);
 			( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 			sam_alignment_pool_index++;
 		}
 	}
 }
 
-void writeSequenceHeaders ( FILE *fhw, char *genome_filename )
+void writeSequenceHeaders (FILE *fhw, char *genome_filename)
 {
 	FILE *fhr;
 
@@ -2259,43 +2271,43 @@ void writeSequenceHeaders ( FILE *fhw, char *genome_filename )
 
 	int i;
 
-	strcpy ( faidx_filename , genome_filename );
-	strcat ( faidx_filename , ".fai" );
+	strcpy (faidx_filename , genome_filename);
+	strcat (faidx_filename , ".fai");
 
-	fhr = fopen ( faidx_filename , "r" );
+	fhr = fopen (faidx_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ( "Error! File not found" );
-		exit ( 1 );
+		printf ("Error! File not found");
+		exit (1);
 	}
 
-	split_on_tab = ( char** ) malloc ( sizeof(char*) * ROWS );
+	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS);
 	for ( i = 0 ; i < ROWS ; i++ )
-		split_on_tab[i] = ( char* ) malloc ( sizeof(char) * COLS );
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS);
 
-	strcpy ( line_to_be_written_to_file , "@HD" );
-	strcat ( line_to_be_written_to_file , "\t" );
-	strcat ( line_to_be_written_to_file , "VN:1.4" );
-	strcat ( line_to_be_written_to_file , "\t" );
-	strcat ( line_to_be_written_to_file , "SO:coordinate" );
-	strcat ( line_to_be_written_to_file , "\n" );
-	fprintf ( fhw , "%s" , line_to_be_written_to_file );
-	while ( ( line_len = getline ( &buffer , &len , fhr ) ) != -1 )
+	strcpy (line_to_be_written_to_file , "@HD");
+	strcat (line_to_be_written_to_file , "\t");
+	strcat (line_to_be_written_to_file , "VN:1.4");
+	strcat (line_to_be_written_to_file , "\t");
+	strcat (line_to_be_written_to_file , "SO:coordinate");
+	strcat (line_to_be_written_to_file , "\n");
+	fprintf (fhw , "%s" , line_to_be_written_to_file);
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
-		splitByDelimiter ( buffer , '\t' , split_on_tab );
-		strcpy ( line_to_be_written_to_file , "@SQ" );
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , "SN:" );
-		strcat ( line_to_be_written_to_file , split_on_tab[0] );
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , "LN:" );
-		strcat ( line_to_be_written_to_file , split_on_tab[1] );
-		strcat ( line_to_be_written_to_file , "\t" );
-		strcat ( line_to_be_written_to_file , "\n" );
-		fprintf ( fhw , "%s" , line_to_be_written_to_file );
+		splitByDelimiter (buffer , '\t' , split_on_tab);
+		strcpy (line_to_be_written_to_file , "@SQ");
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , "SN:");
+		strcat (line_to_be_written_to_file , split_on_tab[0]);
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , "LN:");
+		strcat (line_to_be_written_to_file , split_on_tab[1]);
+		strcat (line_to_be_written_to_file , "\t");
+		strcat (line_to_be_written_to_file , "\n");
+		fprintf (fhw , "%s" , line_to_be_written_to_file);
 	}
 
-	fclose ( fhr );
+	fclose (fhr);
 }
 
 #endif /* ABRIDGE_SRC_FUNCTIONS_DEFINITIONS_H_ */
