@@ -21,7 +21,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	struct Abridge_Index *abridge_index;
 	struct Sam_Alignment *sam_alignment;
 
-	int i;
+	int i, j;
 	int sam_alignment_pool_index;
 	int fread_ret_val;
 	int fseek_ret_val;
@@ -40,6 +40,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	unsigned long long int read_number = 1;
 	unsigned long long int from = -1;
 	unsigned long long int to = -1;
+	unsigned long long int number_of_newlines = 0;
 	int number_of_entries_in_cluster;
 	int number_of_elements_after_split_on_delimiter;
 
@@ -142,6 +143,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		 fflush(stdout);
 		 */
+		for ( j = 0 ; buffer[j] != '\0' ; j++ )
+			if ( buffer[j] == '\n' )
+				number_of_newlines += 1;
+		printf ("\nLine num %d Number of newlines %d" , i , number_of_newlines);
+		fflush (stdout);
 		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
 		continue;
 		if ( i % 1000 == 0 )
