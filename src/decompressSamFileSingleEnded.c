@@ -150,7 +150,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			//fflush(stdout);
 		}
 		number_of_entries_in_cluster--; //Last line is always empty
-		//convertToAlignment (sam_alignment_instance , sam_alignment_pool_index , whole_genome , split_on_newline , sam_alignment , i , abridge_index , number_of_entries_in_cluster , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , from , to , fhw , fhr_qual);
+		convertToAlignment (sam_alignment_instance , sam_alignment_pool_index , whole_genome , split_on_newline , sam_alignment , i , abridge_index , number_of_entries_in_cluster , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , from , to , fhw , fhr_qual);
 		//if (i == 10) break;
 	}
 
@@ -252,7 +252,7 @@ int main (int argc, char *argv[])
 	strcpy(unmapped_filename , argv[8]);
 	strcpy(name_of_file_with_quality_scores , argv[9]);
 	/********************************************************************/
-
+	return 0;
 	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass2_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
 	//printf("\nTotal mapped reads %lld", total_mapped_reads);
 	//printf("\n");
