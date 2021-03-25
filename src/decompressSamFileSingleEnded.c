@@ -146,6 +146,15 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		for ( j = 0 ; buffer[j] != '\0' ; j++ )
 			if ( buffer[j] == '\n' )
 				number_of_newlines += 1;
+		if ( number_of_newlines > ROWS * 10 )
+		{
+			for ( j = 0 ; j < ROWS * 10 ; j++ )
+				free (split_on_newline[j]);
+			free (split_on_newline);
+			split_on_newline = ( char** ) malloc (sizeof(char*) * number_of_newlines);
+			for ( i = 0 ; i < number_of_newlines ; i++ )
+				split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
+		}
 		printf ("\nLine num %d Number of newlines %d" , i , number_of_newlines);
 		fflush (stdout);
 		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
