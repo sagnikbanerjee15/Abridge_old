@@ -158,7 +158,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		printf ("\nLine num %d Number of newlines %d" , i , number_of_newlines);
 		fflush (stdout);
 		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
-		continue;
 		if ( i % 1000 == 0 )
 		{
 			//printf("\n%d record processed, Number of lines in cluster %d", i, number_of_entries_in_cluster);
