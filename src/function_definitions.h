@@ -2170,7 +2170,7 @@ void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_i
 	}
 }
 
-void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, int sam_alignment_pool_index, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw, FILE *fhr_qual)
+void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw, FILE *fhr_qual)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2221,7 +2221,6 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, int sam_a
 			printf ("\nTrouble");
 		}
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (distinct_icigars_in_a_line , ',' , split_on_comma);
-		sam_alignment_pool_index = 0;
 		for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 		{
 			//printf("\n %d-%d", i, j);
@@ -2251,7 +2250,6 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, int sam_a
 			}
 			writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual);
 			( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
-			sam_alignment_pool_index++;
 		}
 	}
 }
