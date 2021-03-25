@@ -41,7 +41,8 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	unsigned long long int from = -1;
 	unsigned long long int to = -1;
 	unsigned long long int number_of_newlines = 0;
-	unsigned long long int number_of_commas = 0;
+	unsigned long long int number_of_commas_in_each_line = 0;
+	unsigned long long int max_number_of_commas = 0;
 	int number_of_entries_in_cluster;
 	int number_of_elements_after_split_on_delimiter;
 
@@ -145,13 +146,17 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		 fflush(stdout);
 		 */
 		number_of_newlines = 0;
-		number_of_commas = 0;
 		for ( j = 0 ; buffer[j] != '\0' ; j++ )
 		{
 			if ( buffer[j] == '\n' )
+			{
 				number_of_newlines += 1;
+				if ( max_number_of_commas < number_of_commas_in_each_line )
+					max_number_of_commas = number_of_commas_in_each_line;
+				number_of_commas_in_each_line = 0;
+			}
 			else if ( buffer[j] == ',' )
-				number_of_commas += 1;
+				number_of_commas_in_each_line += 1;
 		}
 		if ( number_of_newlines > ROWS * 10 )
 		{
@@ -163,7 +168,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			for ( j = 0 ; j < number_of_newlines ; j++ )
 				split_on_newline[j] = ( char* ) malloc (sizeof(char) * COLS * 10);
 		}
-		printf ("\nLine num %d Number of newlines %d Number of commas %d" , i , number_of_newlines , number_of_commas);
+		printf ("\nLine num %d Number of newlines %d Number of commas %d" , i , number_of_newlines , max_number_of_commas);
 		fflush (stdout);
 		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
 		if ( i % 1000 == 0 )
