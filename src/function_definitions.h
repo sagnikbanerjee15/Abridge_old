@@ -1538,7 +1538,7 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 	whole_genome->reference_sequence_name = ( char** ) malloc (sizeof(char*) * MAX_REFERENCE_SEQUENCES);
 	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES);
 	whole_genome->number_of_reference_sequences = 0;
-
+	return;
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		//printf("\n%lld", strlen(buffer));
