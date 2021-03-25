@@ -2220,8 +2220,8 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 			// Should never enter here
 			printf ("\nTrouble");
 		}
-		continue;
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (distinct_icigars_in_a_line , ',' , split_on_comma);
+		continue;
 		for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 		{
 			//printf("\n %d-%d", i, j);
