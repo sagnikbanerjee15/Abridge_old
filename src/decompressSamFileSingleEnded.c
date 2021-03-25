@@ -145,7 +145,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		 fflush(stdout);
 		 */
 		number_of_newlines = 0;
-		number_of_commas = 0
+		number_of_commas = 0;
 		for ( j = 0 ; buffer[j] != '\0' ; j++ )
 		{
 			if ( buffer[j] == '\n' )
