@@ -786,10 +786,10 @@ def decompressSamFile(options):
         output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
     
         cmd =f" {decompressSamFileSingleEnded} " # argv[0] - Name of the program
-        cmd+=f" {pass2_index_filename} "# argv[1] - Abridge index, pass2_index_outputfilename
+        cmd+=f" {pass1_index_outputfilename} "# argv[1] - Abridge index, pass1_index_outputfilename
         cmd+=f" {options.genome} "# argv[2] - genome file
         cmd+=f" {output_sam_filename} "# argv[3] - decompressed SAM filename
-        cmd+=f" {pass2_filename} "# argv[4] - Name of the pass2 filename
+        cmd+=f" {pass1_outputfilename} "# argv[4] - Name of the pass1 filename
         cmd+=f" dummy "# argv[5] - Dummy
         cmd+=f" {options.quality} "# argv[6] - Quality of reads
         cmd+=f" {options.ignore_sequence}" #argv[7] - Whether or not to produce sequences from genome file
