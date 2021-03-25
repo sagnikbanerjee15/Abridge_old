@@ -128,6 +128,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		//printf("\nFile pointer at %ld", ftell(fhr));
 		//printf("\nEntry in index file %s %d %d", abridge_index->chromosome[i], abridge_index->start_byte[i], abridge_index->end_byte[i]);
 		fseek_ret_val = fseek (fhr , abridge_index->start_byte[i] , SEEK_SET);
+		continue;
 		//printf("\nFile pointer moved to %ld", ftell(fhr));
 		//continue;
 		buffer[0] = '\0';
