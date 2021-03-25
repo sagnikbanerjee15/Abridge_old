@@ -2197,7 +2197,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 	/********************************************************************/
 	for ( i = 0 ; i < number_of_entries_in_cluster ; i++ )
 	{
-		//printf ("\nProcessing this line %s" , split_on_newline[i]);
+		printf ("\nProcessing this line %s" , split_on_newline[i]);
 		number_of_columns = splitByDelimiter (split_on_newline[i] , '\t' , split_on_tab);
 		//printf("\nNumber of columns %d", number_of_columns);
 
