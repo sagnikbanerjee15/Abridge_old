@@ -745,7 +745,7 @@ def decompressSamFile(options):
                                     unmapped_outputfilename,
                                     name_of_file_with_quality_scores,
                                     f"{name_of_file_with_quality_scores}.rle"])
-    #pool.map(runCommand,all_commands)
+    pool.map(runCommand,all_commands)
     
     ######################################################################################
     # Convert RLE back to quality scores
