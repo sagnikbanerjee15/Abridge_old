@@ -155,6 +155,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		}
 		if ( number_of_newlines > ROWS * 10 )
 		{
+			number_of_newlines += 10;
 			for ( j = 0 ; j < ROWS * 10 ; j++ )
 				free (split_on_newline[j]);
 			free (split_on_newline);
