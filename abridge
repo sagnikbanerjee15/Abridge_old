@@ -155,6 +155,11 @@ def validateCommandLineArguments(options):
     options.softwares["compressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressQualityScoresFile"
     options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
     
+    cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.genome}.temp"
+    os.system(cmd)
+    cmd = f"mv {options.genome}.temp {options.genome}"
+    os.system(cmd)
+    
     if options.decompress==True:
         for file in options.inputabrfilenames:
             if file[-11:]!=".abridge.7z" and file[-11:]!=".abridge.br":
