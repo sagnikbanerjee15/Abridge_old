@@ -119,8 +119,8 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	/********************************************************************/
 
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score);
-	return;
 	readInTheEntireGenome (genome_filename , whole_genome);
+	return;
 	writeSequenceHeaders (fhw , genome_filename);
 	return;
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
