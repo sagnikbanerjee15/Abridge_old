@@ -131,7 +131,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		//printf("\nFile pointer moved to %ld", ftell(fhr));
 		buffer[0] = '\0';
 		fread_ret_val = fread (buffer , 1 , abridge_index->end_byte[i] - abridge_index->start_byte[i] , fhr);
-		continue;
 		//printf("\n fread_ret_val %d fseek_ret_val %d diff %lld", fread_ret_val, fseek_ret_val, MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE - fread_ret_val);
 		//fflush(stdout);
 		buffer[fread_ret_val] = '\0';
@@ -144,6 +143,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		 fflush(stdout);
 		 */
 		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
+		continue;
 		if ( i % 1000 == 0 )
 		{
 			//printf("\n%d record processed, Number of lines in cluster %d", i, number_of_entries_in_cluster);
