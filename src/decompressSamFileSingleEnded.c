@@ -143,6 +143,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		 fflush(stdout);
 		 */
+		number_of_newlines = 0;
 		for ( j = 0 ; buffer[j] != '\0' ; j++ )
 			if ( buffer[j] == '\n' )
 				number_of_newlines += 1;
