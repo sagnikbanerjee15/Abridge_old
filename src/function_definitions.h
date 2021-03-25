@@ -2221,7 +2221,6 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 			printf ("\nTrouble");
 		}
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (distinct_icigars_in_a_line , ',' , split_on_comma);
-		continue;
 		for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 		{
 			//printf("\n %d-%d", i, j);
@@ -2244,12 +2243,12 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 				//printf("\nSplit_on_dash %s %d sam_alignment_pool_index %d ", split_on_dash[0], strlen(split_on_dash[0]), sam_alignment_pool_index);
 				strcpy (sam_alignment_instance->icigar , split_on_dash[0]);
 				//printf("\nsam_alignment_pool[i]->icigar %s %d Original_icigar %s %d", sam_alignment_pool[sam_alignment_pool_index]->icigar, strlen(sam_alignment_pool[sam_alignment_pool_index]->icigar), split_on_dash[0], strlen(split_on_dash[0]));
-				convertIcigarToCigarandMD (cluster_index , whole_genome , sam_alignment_instance , abridge_index->chromosome[cluster_index] , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
+				//convertIcigarToCigarandMD (cluster_index , whole_genome , sam_alignment_instance , abridge_index->chromosome[cluster_index] , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
 				sprintf (temp , "%d" , *read_number);
 				( *read_number )++;
 				strcpy (sam_alignment_instance->read_name , temp);
 			}
-			writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual);
+			//writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual);
 			( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 		}
 	}
