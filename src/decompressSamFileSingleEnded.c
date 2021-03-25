@@ -168,7 +168,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		convertToAlignment (sam_alignment_instance , sam_alignment_pool_index , whole_genome , split_on_newline , sam_alignment , i , abridge_index , number_of_entries_in_cluster , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , from , to , fhw , fhr_qual);
 		//if (i == 10) break;
 	}
-	return;
 
 	/*
 	 * Write all unmapped reads to samfile
