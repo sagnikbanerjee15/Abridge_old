@@ -115,7 +115,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
 	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
-
+	return;
 	/********************************************************************/
 
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score);
@@ -252,7 +252,7 @@ int main (int argc, char *argv[])
 	strcpy(unmapped_filename , argv[8]);
 	strcpy(name_of_file_with_quality_scores , argv[9]);
 	/********************************************************************/
-	return 0;
+
 	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass2_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
 	//printf("\nTotal mapped reads %lld", total_mapped_reads);
 	//printf("\n");
