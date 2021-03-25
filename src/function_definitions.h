@@ -2197,7 +2197,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 	/********************************************************************/
 	for ( i = 0 ; i < number_of_entries_in_cluster ; i++ )
 	{
-		printf ("\nProcessing this line %s" , split_on_newline[i]);
+		//printf ("\nProcessing this line %s" , split_on_newline[i]);
 		number_of_columns = splitByDelimiter (split_on_newline[i] , '\t' , split_on_tab);
 		//printf("\nNumber of columns %d", number_of_columns);
 
@@ -2225,6 +2225,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 		{
 			//printf("\n %d-%d", i, j);
 			//fflush(stdout);
+			printf ("\nICIGAR: %s" , split_on_comma[j]);
 			splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 			if ( from != -1 && to != -1 )
