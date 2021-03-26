@@ -135,7 +135,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
 		//if ( i != 1178 ) continue;
-
+		printf ("\ni=%d %d" , i , abridge_index->number_of_items);
 		//printf("\nFile pointer at %ld", ftell(fhr));
 		//printf("\nEntry in index file %s %d %d", abridge_index->chromosome[i], abridge_index->start_byte[i], abridge_index->end_byte[i]);
 		fseek_ret_val = fseek (fhr , abridge_index->start_byte[i] , SEEK_SET);
