@@ -870,11 +870,10 @@ def main():
     
     if options.quiet == False:
         configureLogger(options)
-    logging.info(options)
+    #logging.info(options)
     
     validateCommandLineArguments(options)
-    logging.info(options)
-    return
+    #logging.info(options)
     
     if options.quiet == False:
         logging.info("Logger has been configured")
