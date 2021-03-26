@@ -35,7 +35,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	short int flag_ignore_unmapped_sequences;
 	short int flag_ignore_quality_score;
 
-	long long int max_cluster_size;
+	unsigned long long int max_cluster_size;
 	unsigned long long int line_num = 0;
 	unsigned long long int read_number = 1;
 	unsigned long long int from = -1;
@@ -43,14 +43,25 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	unsigned long long int number_of_newlines = 0;
 	unsigned long long int number_of_commas_in_each_line = 0;
 	unsigned long long int max_number_of_commas = 0;
+	unsigned long long int max_length_of_newline = 0;
+	unsigned long long int length_of_newline = 0;
+
 	int number_of_entries_in_cluster;
 	int number_of_elements_after_split_on_delimiter;
+	int BUFFER_SIZE = 8 * 100 * 1024 * 1024; // 100 MB
+	int ROWS_split_on_newline = ROWS * 10; //10,000
+	int COLS_split_on_newline = COLS * 1000; //1,000,000
+	int ROWS_split_on_tab = ROWS * 10; //10,000
+	int COLS_split_on_tab = COLS * 1000; //1,000,000
+	int ROWS_split_on_dash = ROWS * 10; //10,000
+	int COLS_split_on_dash = COLS; //1000
+	int ROWS_split_on_comma = ROWS * 10; //10,000
+	int COLS_split_on_comma = COLS * 1000; //1,000,000
 
 	char **split_on_newline;
 	char **split_on_tab;
 	char **split_on_dash;
 	char **split_on_comma;
-	char **split_on_delimiter;
 	char *buffer;
 	char **sequence_portions_from_reference;
 	char *fasta_file_with_expressed_portions;
@@ -88,31 +99,27 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		exit (1);
 	}
 
-	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS * 10);
-	for ( i = 0 ; i < ROWS * 10 ; i++ )
-		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
+	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
+	for ( i = 0 ; i < ROWS_split_on_newline ; i++ )
+		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
 
-	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS);
+	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tab);
+	for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
 
-	split_on_dash = ( char** ) malloc (sizeof(char*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS);
+	split_on_dash = ( char** ) malloc (sizeof(char*) * ROWS_split_on_dash);
+	for ( i = 0 ; i < ROWS_split_on_dash ; i++ )
+		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_dash);
 
-	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS * 10);
-	for ( i = 0 ; i < ROWS * 10 ; i++ )
-		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
-
-	split_on_delimiter = ( char** ) malloc (sizeof(char*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		split_on_delimiter[i] = ( char* ) malloc (sizeof(char) * COLS);
+	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 
 	output_prefix_without_path = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	sequence_portions_from_reference = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
 	fasta_file_with_expressed_portions = ( char* ) malloc (sizeof(char) * FILENAME_LENGTH);
 
-	buffer = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
+	buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
 	abridge_index = allocateMemoryAbridge_Index ();
 	sam_alignment = allocateMemorySam_Alignment ();
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
@@ -133,6 +140,12 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		//printf("\nEntry in index file %s %d %d", abridge_index->chromosome[i], abridge_index->start_byte[i], abridge_index->end_byte[i]);
 		fseek_ret_val = fseek (fhr , abridge_index->start_byte[i] , SEEK_SET);
 		//printf("\nFile pointer moved to %ld", ftell(fhr));
+		if ( BUFFER_SIZE < abridge_index->end_byte[i] - abridge_index->start_byte[i] )
+		{
+			free (buffer);
+			BUFFER_SIZE = abridge_index->end_byte[i] - abridge_index->start_byte[i] + 100;
+			buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
+		}
 		buffer[0] = '\0';
 		fread_ret_val = fread (buffer , 1 , abridge_index->end_byte[i] - abridge_index->start_byte[i] , fhr);
 		//printf("\n fread_ret_val %d fseek_ret_val %d diff %lld", fread_ret_val, fseek_ret_val, MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE - fread_ret_val);
@@ -150,6 +163,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		number_of_newlines = 0;
 		max_number_of_commas = 0;
 		number_of_commas_in_each_line = 0;
+
 		for ( j = 0 ; buffer[j] != '\0' ; j++ )
 		{
 			if ( buffer[j] == '\n' )
@@ -162,15 +176,25 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			else if ( buffer[j] == ',' )
 				number_of_commas_in_each_line += 1;
 		}
-		if ( number_of_newlines > ROWS * 10 )
+		if ( max_number_of_commas > ROWS_split_on_comma )
 		{
-			number_of_newlines += 10;
-			for ( j = 0 ; j < ROWS * 10 ; j++ )
+			for ( j = 0 ; j < ROWS_split_on_comma ; j++ )
+				free (split_on_comma[j]);
+			free (split_on_comma);
+			ROWS_split_on_comma = max_number_of_commas + 100;
+			split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+				split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+		}
+		if ( number_of_newlines > ROWS_split_on_newline )
+		{
+			for ( j = 0 ; j < ROWS_split_on_newline ; j++ )
 				free (split_on_newline[j]);
 			free (split_on_newline);
-			split_on_newline = ( char** ) malloc (sizeof(char*) * number_of_newlines);
-			for ( j = 0 ; j < number_of_newlines ; j++ )
-				split_on_newline[j] = ( char* ) malloc (sizeof(char) * COLS * 10);
+			ROWS_split_on_newline = number_of_newlines + 100;
+			split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
+			for ( i = 0 ; i < ROWS_split_on_newline ; i++ )
+				split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
 		}
 		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
 		if ( i % 1000 == 0 )
