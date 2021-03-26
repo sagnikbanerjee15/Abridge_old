@@ -768,7 +768,7 @@ def decompressSamFile(options):
             all_commands.append([cmd,"dummy"])
     pool.map(runCommand,all_commands)
             
-    """
+    
     ######################################################################################
     # Convert RLE back to quality scores
     ######################################################################################
@@ -796,7 +796,7 @@ def decompressSamFile(options):
             logging.info(f"Running command - {cmd}")
         all_commands.append([cmd,"dummy"])
     pool.map(runCommand,all_commands)
-    """
+    
     all_commands = []
     for input_filename in options.inputabrfilenames:
         name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
