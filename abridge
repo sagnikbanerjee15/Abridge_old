@@ -872,8 +872,9 @@ def main():
         configureLogger(options)
     logging.info(options)
     
-    return
     validateCommandLineArguments(options)
+    logging.info(options)
+    return
     
     if options.quiet == False:
         logging.info("Logger has been configured")
