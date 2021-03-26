@@ -867,6 +867,7 @@ def main():
     if len(commandLineArg)==1:
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
+    print(options)
     
     validateCommandLineArguments(options)
     
