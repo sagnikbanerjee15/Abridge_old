@@ -158,11 +158,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		 fflush(stdout);
 		 */
-		if ( i == abridge_index->number_of_items - 1 )
-		{
-			printf ("\nBuffer content %s" , buffer);
-			fflush (stdout);
-		}
+		/*if ( i == abridge_index->number_of_items - 1 )
+		 {
+		 printf ("\nBuffer content %s" , buffer);
+		 fflush (stdout);
+		 }*/
 		number_of_newlines = 0;
 		max_number_of_commas = 0;
 		number_of_commas_in_each_line = 0;
