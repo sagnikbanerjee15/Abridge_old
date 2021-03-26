@@ -51,7 +51,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	int BUFFER_SIZE = 8 * 100 * 1024 * 1024; // 100 MB
 	int ROWS_split_on_newline = ROWS * 10; //10,000
 	int COLS_split_on_newline = COLS * 1000; //1,000,000
-	int ROWS_split_on_tab = ROWS * 10; //10,000
+	int ROWS_split_on_tab = 10; //10
 	int COLS_split_on_tab = COLS * 1000; //1,000,000
 	int ROWS_split_on_dash = ROWS * 10; //10,000
 	int COLS_split_on_dash = COLS; //1000
@@ -183,8 +183,8 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			free (split_on_comma);
 			ROWS_split_on_comma = max_number_of_commas + 100;
 			split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
-			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
-				split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+			for ( j = 0 ; j < ROWS_split_on_comma ; j++ )
+				split_on_comma[j] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 		}
 		if ( number_of_newlines > ROWS_split_on_newline )
 		{
@@ -193,8 +193,8 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			free (split_on_newline);
 			ROWS_split_on_newline = number_of_newlines + 100;
 			split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
-			for ( i = 0 ; i < ROWS_split_on_newline ; i++ )
-				split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
+			for ( j = 0 ; j < ROWS_split_on_newline ; j++ )
+				split_on_newline[j] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
 		}
 		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
 		if ( i % 1000 == 0 )
