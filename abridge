@@ -449,7 +449,7 @@ def compressSamFile(options):
     os.system(cmd)
     open(genome_sha512_filename,"w").write(open(f"{genome_sha512_filename}.temp","r").read().strip().split()[0])
     os.system(f"rm {genome_sha512_filename}.temp")
-    
+    return
     ######################################################################################
     # Compress files
     ######################################################################################
