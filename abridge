@@ -872,6 +872,7 @@ def main():
         configureLogger(options)
     logging.info(options)
     
+    return
     validateCommandLineArguments(options)
     
     if options.quiet == False:
