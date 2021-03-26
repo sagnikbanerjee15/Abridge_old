@@ -868,12 +868,12 @@ def main():
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
     
-    validateCommandLineArguments(options)
-    
     if options.quiet == False:
         configureLogger(options)
-    
     logging.info(options)
+    
+    validateCommandLineArguments(options)
+    
     if options.quiet == False:
         logging.info("Logger has been configured")
     if options.quiet == False:
