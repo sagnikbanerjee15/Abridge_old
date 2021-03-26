@@ -34,6 +34,8 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	short int flag_ignore_soft_clippings;
 	short int flag_ignore_unmapped_sequences;
 	short int flag_ignore_quality_score;
+	short int flag_save_all_quality_scores;
+	short int flag_adjust_quality_scores;
 
 	unsigned long long int max_cluster_size;
 	unsigned long long int line_num = 0;
@@ -128,7 +130,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 
 	/********************************************************************/
 
-	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score);
+	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_adjust_quality_scores);
 	readInTheEntireGenome (genome_filename , whole_genome);
 	writeSequenceHeaders (fhw , genome_filename);
 

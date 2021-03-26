@@ -1741,7 +1741,7 @@ void readGenomeIndex (struct Abridge_Index *genome_index, char *genome_index_fil
 	}
 }
 
-void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score)
+void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score, short int *flag_save_all_quality_scores, short int *flag_adjust_quality_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -1778,6 +1778,8 @@ void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_
 			*flag_ignore_soft_clippings = strtol (split_line[1] , &temp , 10);
 			*flag_ignore_unmapped_sequences = strtol (split_line[2] , &temp , 10);
 			*flag_ignore_quality_score = strtol (split_line[3] , &temp , 10);
+			*flag_save_all_quality_scores = strtol (split_line[4] , &temp , 10);
+			*flag_adjust_quality_scores = strtol (split_line[5] , &temp , 10);
 			continue;
 		}
 		//printf("\n%d %s", abridge_index->number_of_items, split_line[0]);
@@ -2090,7 +2092,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 //printf("\n");
 }
 
-void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual)
+void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores)
 {
 	int i;
 
@@ -2140,7 +2142,7 @@ void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_i
 		strcat (line_to_be_written_to_file , sam_alignment->seq);
 
 		strcat (line_to_be_written_to_file , "\t");
-		if ( ( line_len = getline ( &buffer , &len , fhr_qual) ) != -1 )
+		if ( flag_save_all_quality_scores == 1 && ( line_len = getline ( &buffer , &len , fhr_qual) ) != -1 )
 		{
 			buffer[strlen (buffer) - 1] = '\0';
 			strcat (line_to_be_written_to_file , buffer);
@@ -2173,7 +2175,7 @@ void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_i
 	}
 }
 
-void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw, FILE *fhr_qual)
+void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int flag_adjust_quality_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2254,7 +2256,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 				( *read_number )++;
 				strcpy (sam_alignment_instance->read_name , temp);
 			}
-			writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual);
+			writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores);
 			( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 		}
 	}

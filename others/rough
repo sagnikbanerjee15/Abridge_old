@@ -10,7 +10,7 @@ abridge \
 --keep_intermediate_error_files \
 --fast \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam \
+--inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711356_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711357_SE.sam \
 --output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.error &
@@ -23,7 +23,7 @@ abridge \
 --fast \
 --save_all_quality_scores \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam \
+--inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam \
 --output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.error &
@@ -36,8 +36,8 @@ abridge \
 --decompress \
 --cpu $CPU \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam \
---output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests) \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711356_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711357_SE.sam.abridge.br \
+--output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
 
@@ -47,7 +47,7 @@ abridge \
 --cpu $CPU \
 --keep_intermediate_error_files \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.abridge.br \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.br \
 --output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
@@ -60,7 +60,7 @@ abridge \
 --merge \
 --cpu $CPU \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_0_SE_Aligned.sortedByCoord.out.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.abridge \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_SE.sam.abridge /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge \
 -o /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/) \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.error &
@@ -76,6 +76,6 @@ gcc /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/buildAbridgeIndex.c -o /90day
 /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/buildAbridgeIndex /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711355_SE.sam.pass2 /90daydata/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/0/SRR13711355_SE.sam.pass2.index
 
 
-(/usr/bin/time --verbose /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass1 /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa 0 0  0  0  /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam  /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.pass1  /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.unmapped  0 86123 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.max_commas ) 1> /dev/null 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam_compress_pass1.error
-(/usr/bin/time --verbose /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass2 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.pass1 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.pass2 86123 28000) 1> /dev/null 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam_compress_pass2.error
-(/usr/bin/time --verbose /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/buildAbridgeIndex /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.pass2 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam.pass2.index 28000) 1> /dev/null 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_0_SE_Aligned.sortedByCoord.out.sam_prep_abridge_index.error
+(/usr/bin/time --verbose /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass1 /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa 0 0  0  0  /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam  /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.pass1  /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.unmapped  0 86123 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.max_commas ) 1> /dev/null 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam_compress_pass1.error
+(/usr/bin/time --verbose /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass2 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.pass1 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.pass2 86123 28000) 1> /dev/null 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam_compress_pass2.error
+(/usr/bin/time --verbose /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/buildAbridgeIndex /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.pass2 /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.pass2.index 28000) 1> /dev/null 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam_prep_abridge_index.error
