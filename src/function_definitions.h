@@ -1554,6 +1554,9 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 		else
 		{
 			whole_genome->nucleotides[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( len + 1 ));
+			for ( i = 0 ; buffer[i] != '\0' ; i++ )
+				if ( buffer[i] >= 90 && buffer[i] <= 122 )
+					buffer[i] -= 32;
 			strcpy (whole_genome->nucleotides[whole_genome->number_of_reference_sequences] , buffer);
 			whole_genome->reference_sequence_length[whole_genome->number_of_reference_sequences] = strlen (buffer);
 			whole_genome->number_of_reference_sequences++;
@@ -2197,7 +2200,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 	/********************************************************************/
 	for ( i = 0 ; i < number_of_entries_in_cluster ; i++ )
 	{
-		printf ("\ni=%d Processing this line %s" , i , split_on_newline[i]);
+		//printf ("\ni=%d Processing this line %s" , i , split_on_newline[i]);
 		number_of_columns = splitByDelimiter (split_on_newline[i] , '\t' , split_on_tab);
 		//printf("\nNumber of columns %d", number_of_columns);
 
@@ -2226,7 +2229,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 		{
 			//printf("\n %d-%d", i, j);
 			//fflush(stdout);
-			printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d ICIGAR: %s" , j , number_of_distinct_cigars_in_a_line , split_on_comma[j]);
+			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d ICIGAR: %s" , j , number_of_distinct_cigars_in_a_line , split_on_comma[j]);
 			splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 			if ( from != -1 && to != -1 )
@@ -2244,8 +2247,8 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 			{
 				//printf("\nSplit_on_dash %s %d sam_alignment_pool_index %d ", split_on_dash[0], strlen(split_on_dash[0]), sam_alignment_pool_index);
 				strcpy (sam_alignment_instance->icigar , split_on_dash[0]);
-				printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
-				fflush (stdout);
+				//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
+				//fflush (stdout);
 				convertIcigarToCigarandMD (cluster_index , whole_genome , sam_alignment_instance , abridge_index->chromosome[cluster_index] , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
 				sprintf (temp , "%d" , *read_number);
 				( *read_number )++;
