@@ -113,10 +113,7 @@ def validateCommandLineArguments(options):
                 if options.quiet==False:
                     logging.info(f"The input file {file} needs to be in sam format. Exiting...")
                 sys.exit()
-        
-    options.logfilename = options.output_directory+"/progress.log"
-    os.system("mkdir -p "+options.output_directory)
-    #options.output_directory = "/".join(options.outputfilenameprefix.split("/")[:-1])
+    
     options.files_for_removal = []
     options.softwares = {}
     abridge_location = subprocess.run(['which', 'abridge'], stdout=subprocess.PIPE).stdout.decode('utf-8').split()[-1]
@@ -867,6 +864,9 @@ def main():
     if len(commandLineArg)==1:
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
+    
+    options.logfilename = options.output_directory+"/progress.log"
+    os.system("mkdir -p "+options.output_directory)
     
     if options.quiet == False:
         configureLogger(options)
