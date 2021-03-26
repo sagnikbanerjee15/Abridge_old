@@ -325,7 +325,7 @@ def compressSamFile(options):
                 cmd += f" 1 0 " # argv[12] and argv[13]
             elif options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
                 cmd += f" 1 1 " # argv[12] and argv[13]
-            elif options.save_all_quality_scores == False and options.save_exact_quality_scores == True: # Should never happen
+            elif options.save_all_quality_scores == False and options.save_exact_quality_scores == True: 
                 cmd += f" 0 0 " # argv[12] and argv[13]
             elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
                 cmd += f" 0 1 " # argv[12] and argv[13]
