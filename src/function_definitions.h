@@ -694,7 +694,7 @@ void convertIcigarToCigarandMD (struct Whole_Genome_Sequence *whole_genome, stru
 
 	splitCigar (sam_alignment_instance->cigar , &sam_alignment_instance->number_of_cigar_items , sam_alignment_instance->cigar_items);
 	if ( flag_ignore_sequence_information == 0 )
-		generateReadSequenceAndMDString (sam_alignment_instance , whole_genome , cluster_index);
+		generateReadSequenceAndMDString (sam_alignment_instance , whole_genome);
 	else
 	{
 		splitCigar (sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance);
