@@ -155,8 +155,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		line_num++;
-		printf ("\nLinenum=%d" , line_num);
-		fflush (stdout);
 		if ( buffer[0] == '@' )
 		{
 			splitByDelimiter (buffer , '\t' , split_on_tab);
