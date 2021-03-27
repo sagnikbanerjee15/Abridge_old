@@ -1445,7 +1445,7 @@ void generateIntegratedCigar (struct Sam_Alignment *curr_alignment, short int fl
 		dummy = 'Z';
 		strcpy (sam_alignment_instance_diagnostics->icigar , curr_alignment->icigar);
 		sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
-		convertIcigarToCigarandMD (0 , whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy);
+		convertIcigarToCigarandMD (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy);
 		/************************************************************************
 		 * Remove this section later
 		 *************************************************************************/
