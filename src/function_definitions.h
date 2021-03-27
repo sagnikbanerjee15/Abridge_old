@@ -2620,6 +2620,14 @@ void convertToAlignment (
 				if ( ! ( start_position >= from && start_position <= to ) )
 					continue;
 			sam_alignment_instance->start_position = start_position;
+			if ( sam_alignment_instance->start_position == 27381 && strcmp (
+					sam_alignment_instance->reference_name ,
+					"1") == 0 )
+			{
+				printf (
+						"\nWeird Location cigar %s" ,
+						sam_alignment_instance->icigar);
+			}
 			if ( split_on_dash[0][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 			{
 				// Use the same cigar
