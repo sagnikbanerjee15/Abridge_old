@@ -48,7 +48,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	unsigned long long int max_number_of_commas = 0;
 	unsigned long long int max_length_of_newline = 0;
 	unsigned long long int length_of_newline = 0;
-	unsigned long long int prev_position = 0;
 	unsigned long long int curr_position = 0;
 
 	int number_of_entries_in_cluster;
@@ -74,11 +73,10 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	char *md;
 	char *output_prefix_without_path;
 	char *current_chromosome;
-	char *prev_chromosome;
+	char *convert_to_int_temp;
 	char line_to_be_written_to_file[MAX_GENERAL_LEN];
 	char temp[100];
 	char read_prefix[10];
-	char *convert_to_int_temp;
 
 	struct Sam_Alignment **sam_alignment_pool;
 	struct Sam_Alignment *sam_alignment_instance;
@@ -196,7 +194,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		if ( number_of_columns == 1 )
 			curr_position++;
 		else curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
-		//convertToAlignment (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome);
+		convertToAlignment (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome);
 	}
 
 	/*
