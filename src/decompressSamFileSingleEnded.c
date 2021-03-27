@@ -166,6 +166,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			splitByDelimiter (buffer , '\t' , split_on_tab);
 			curr_position = strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 			curr_position--;
+			continue;
 		}
 		number_of_commas_in_each_line = 0;
 		for ( i = 0 ; buffer[i] != '\0' ; i++ )
