@@ -143,6 +143,15 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 
 	line_num = 0;
 	line_len = getline ( &buffer , &len , fhr);
+	splitByDelimiter (buffer , '\t' , split_on_tab);
+
+	flag_ignore_mismatches = strtol (split_on_tab[0] , &convert_to_int_temp , 10);
+	flag_ignore_soft_clippings = strtol (split_on_tab[1] , &convert_to_int_temp , 10);
+	flag_ignore_unmapped_sequences = strtol (split_on_tab[2] , &convert_to_int_temp , 10);
+	flag_ignore_quality_score = strtol (split_on_tab[3] , &convert_to_int_temp , 10);
+	flag_save_all_quality_scores = strtol (split_on_tab[4] , &convert_to_int_temp , 10);
+	flag_save_exact_quality_scores = strtol (split_on_tab[5] , &convert_to_int_temp , 10);
+
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		if ( buffer[0] == '@' )

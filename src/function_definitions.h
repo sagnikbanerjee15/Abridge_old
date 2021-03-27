@@ -2261,7 +2261,6 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename)
 	char temp[100];
 	char faidx_filename[1000];
 	char *buffer = NULL;
-	char **split_on_tab;
 	char line_to_be_written_to_file[10000];
 
 	size_t len = 0;
@@ -2279,10 +2278,6 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename)
 		exit (1);
 	}
 
-	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS);
-
 	strcpy (line_to_be_written_to_file , "@HD");
 	strcat (line_to_be_written_to_file , "\t");
 	strcat (line_to_be_written_to_file , "VN:1.4");
@@ -2290,20 +2285,6 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename)
 	strcat (line_to_be_written_to_file , "SO:coordinate");
 	strcat (line_to_be_written_to_file , "\n");
 	fprintf (fhw , "%s" , line_to_be_written_to_file);
-	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
-	{
-		splitByDelimiter (buffer , '\t' , split_on_tab);
-		strcpy (line_to_be_written_to_file , "@SQ");
-		strcat (line_to_be_written_to_file , "\t");
-		strcat (line_to_be_written_to_file , "SN:");
-		strcat (line_to_be_written_to_file , split_on_tab[0]);
-		strcat (line_to_be_written_to_file , "\t");
-		strcat (line_to_be_written_to_file , "LN:");
-		strcat (line_to_be_written_to_file , split_on_tab[1]);
-		strcat (line_to_be_written_to_file , "\t");
-		strcat (line_to_be_written_to_file , "\n");
-		fprintf (fhw , "%s" , line_to_be_written_to_file);
-	}
 
 	fclose (fhr);
 }
