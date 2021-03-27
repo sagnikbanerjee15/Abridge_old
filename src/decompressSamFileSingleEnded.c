@@ -186,6 +186,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 
 			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
 				free (split_on_comma[i]);
+			free (split_on_comma);
 			ROWS_split_on_comma = line_len / max_number_of_commas + 10;
 			split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
 			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
