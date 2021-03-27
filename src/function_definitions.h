@@ -2070,6 +2070,7 @@ void readAbridgeIndex (
 		splitByDelimiter (line , '\t' , split_line);
 		if ( line_num == 1 )
 		{
+			printf ("\n First line %s" , line);
 			*flag_ignore_mismatches = strtol (split_line[0] , &temp , 10);
 			*flag_ignore_soft_clippings = strtol (split_line[1] , &temp , 10);
 			*flag_ignore_unmapped_sequences = strtol (
