@@ -2546,8 +2546,7 @@ void convertToAlignment (
 		unsigned long long int to,
 		FILE *fhw,
 		FILE *fhr_qual,
-		short int flag_save_all_quality_scores,
-		short int flag_save_exact_quality_scores)
+		short int flag_save_all_quality_scores)
 {
 	/********************************************************************
 	 * Variable declaration

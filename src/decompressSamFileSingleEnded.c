@@ -9,7 +9,16 @@
 
 long long int total_mapped_reads = 0;
 
-void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass2_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information)
+void decompressFile (
+		char *name_of_file_with_quality_scores,
+		char *abridge_index_filename,
+		char *genome_filename,
+		char *output_sam_filename,
+		char *pass2_filename,
+		char *genome_prefix,
+		char *unmapped_filename,
+		char *default_quality_value,
+		short int flag_ignore_sequence_information)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -101,9 +110,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		exit (1);
 	}
 
-	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
+	split_on_newline = ( char** ) malloc (
+			sizeof(char*) * ROWS_split_on_newline);
 	for ( i = 0 ; i < ROWS_split_on_newline ; i++ )
-		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
+		split_on_newline[i] = ( char* ) malloc (
+				sizeof(char) * COLS_split_on_newline);
 
 	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tab);
 	for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
@@ -115,22 +126,35 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 
 	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
 	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
-		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+		split_on_comma[i] = ( char* ) malloc (
+				sizeof(char) * COLS_split_on_comma);
 
 	output_prefix_without_path = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
-	sequence_portions_from_reference = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
-	fasta_file_with_expressed_portions = ( char* ) malloc (sizeof(char) * FILENAME_LENGTH);
+	sequence_portions_from_reference = ( char** ) malloc (
+			sizeof(char*) * MAX_POOL_SIZE);
+	fasta_file_with_expressed_portions = ( char* ) malloc (
+			sizeof(char) * FILENAME_LENGTH);
 
 	buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
 	abridge_index = allocateMemoryAbridge_Index ();
 	sam_alignment = allocateMemorySam_Alignment ();
-	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
+	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (
+			sizeof(struct Whole_Genome_Sequence));
 	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
 
 	/********************************************************************/
 
-	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
+	readAbridgeIndex (
+			abridge_index ,
+			abridge_index_filename ,
+			split_on_newline ,
+			&flag_ignore_mismatches ,
+			&flag_ignore_soft_clippings ,
+			&flag_ignore_unmapped_sequences ,
+			&flag_ignore_quality_score ,
+			&flag_save_all_quality_scores ,
+			&flag_save_exact_quality_scores);
 	readInTheEntireGenome (genome_filename , whole_genome);
 	writeSequenceHeaders (fhw , genome_filename);
 
@@ -148,7 +172,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
 		}
 		buffer[0] = '\0';
-		fread_ret_val = fread (buffer , 1 , abridge_index->end_byte[i] - abridge_index->start_byte[i] , fhr);
+		fread_ret_val = fread (
+				buffer ,
+				1 ,
+				abridge_index->end_byte[i] - abridge_index->start_byte[i] ,
+				fhr);
 		//printf("\n fread_ret_val %d fseek_ret_val %d diff %lld", fread_ret_val, fseek_ret_val, MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE - fread_ret_val);
 		//fflush(stdout);
 		buffer[fread_ret_val] = '\0';
@@ -187,9 +215,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 				free (split_on_comma[j]);
 			free (split_on_comma);
 			ROWS_split_on_comma = max_number_of_commas + 100;
-			split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+			split_on_comma = ( char** ) malloc (
+					sizeof(char*) * ROWS_split_on_comma);
 			for ( j = 0 ; j < ROWS_split_on_comma ; j++ )
-				split_on_comma[j] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+				split_on_comma[j] = ( char* ) malloc (
+						sizeof(char) * COLS_split_on_comma);
 		}
 		if ( number_of_newlines > ROWS_split_on_newline )
 		{
@@ -197,11 +227,16 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 				free (split_on_newline[j]);
 			free (split_on_newline);
 			ROWS_split_on_newline = number_of_newlines + 100;
-			split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
+			split_on_newline = ( char** ) malloc (
+					sizeof(char*) * ROWS_split_on_newline);
 			for ( j = 0 ; j < ROWS_split_on_newline ; j++ )
-				split_on_newline[j] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
+				split_on_newline[j] = ( char* ) malloc (
+						sizeof(char) * COLS_split_on_newline);
 		}
-		number_of_entries_in_cluster = splitByDelimiter (buffer , '\n' , split_on_newline);
+		number_of_entries_in_cluster = splitByDelimiter (
+				buffer ,
+				'\n' ,
+				split_on_newline);
 		if ( i % 1000 == 0 )
 		{
 			//printf("\n%d record processed, Number of lines in cluster %d", i, number_of_entries_in_cluster);
@@ -210,7 +245,31 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		number_of_entries_in_cluster--; //Last line is always empty
 		//printf ("\nLine num %d Number of newlines %d Number of commas %d number_of_entries_in_cluster %d" , i , number_of_newlines , max_number_of_commas , number_of_entries_in_cluster);
 		//fflush (stdout);
-		convertToAlignment (sam_alignment_instance , whole_genome , split_on_newline , sam_alignment , i , abridge_index , number_of_entries_in_cluster , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , from , to , fhw , fhr_qual , flag_save_all_quality_scores , flag_save_exact_quality_scores);
+		convertToAlignment (
+				sam_alignment_instance ,
+				whole_genome ,
+				split_on_newline ,
+				sam_alignment ,
+				i ,
+				abridge_index ,
+				number_of_entries_in_cluster ,
+				split_on_tab ,
+				split_on_dash ,
+				split_on_comma ,
+				default_quality_value ,
+				flag_ignore_mismatches ,
+				flag_ignore_soft_clippings ,
+				flag_ignore_unmapped_sequences ,
+				flag_ignore_quality_score ,
+				flag_ignore_sequence_information ,
+				&read_number ,
+				&total_mapped_reads ,
+				read_prefix ,
+				from ,
+				to ,
+				fhw ,
+				fhr_qual ,
+				flag_save_all_quality_scores);
 		//if (i == 10) break;
 	}
 
@@ -313,7 +372,16 @@ int main (int argc, char *argv[])
 	strcpy(name_of_file_with_quality_scores , argv[9]);
 	/********************************************************************/
 
-	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass2_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
+	decompressFile (
+			name_of_file_with_quality_scores ,
+			abridge_index_filename ,
+			genome_filename ,
+			output_sam_filename ,
+			pass2_filename ,
+			genome_prefix ,
+			unmapped_filename ,
+			default_quality_value ,
+			flag_ignore_sequence_information);
 	//printf("\nTotal mapped reads %lld", total_mapped_reads);
 	//printf("\n");
 	return 0;
