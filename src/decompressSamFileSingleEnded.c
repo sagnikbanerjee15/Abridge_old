@@ -173,16 +173,23 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			max_number_of_commas = number_of_commas_in_each_line;
 
 		//printf ("\nline_len %d len %d" , line_len , len);
-		if ( line_len > COLS_split_on_tab || max_number_of_commas > ROWS_split_on_comma )
+		if ( line_len > COLS_split_on_tab )
 		{
-			printf ("\nB--> line_len %d COLS_split_on_tab %d max_number_of_commas %d ROWS_split_on_comma %d" , line_len , COLS_split_on_tab , max_number_of_commas , ROWS_split_on_comma);
+			printf ("\nB--> line_len %d COLS_split_on_tab %d" , line_len , COLS_split_on_tab);
 			fflush (stdout);
 			for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
 				free (split_on_tab[i]);
 			COLS_split_on_tab = line_len + 100;
 			for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
 				split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
+			printf ("\nA--> line_len %d COLS_split_on_tab %d" , line_len , COLS_split_on_tab);
+			fflush (stdout);
 
+		}
+		if ( max_number_of_commas > ROWS_split_on_comma )
+		{
+			printf ("\nB--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
+			fflush (stdout);
 			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
 				free (split_on_comma[i]);
 			free (split_on_comma);
@@ -190,9 +197,8 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
 			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
 				split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
-			printf ("\nA--> line_len %d COLS_split_on_tab %d max_number_of_commas %d ROWS_split_on_comma %d" , line_len , COLS_split_on_tab , max_number_of_commas , ROWS_split_on_comma);
+			printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
 			fflush (stdout);
-
 		}
 		number_of_columns = splitByDelimiter (buffer , '\t' , split_on_tab);
 		if ( number_of_columns == 1 )
