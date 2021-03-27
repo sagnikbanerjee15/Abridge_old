@@ -9,7 +9,7 @@
 
 long long int total_mapped_reads = 0;
 
-void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass2_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information)
+void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass1_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -88,7 +88,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen (pass2_filename , "r");
+	fhr = fopen (pass1_filename , "r");
 	if ( fhr == NULL )
 	{
 		printf ("Error! File not found");
@@ -195,6 +195,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		if ( number_of_columns == 1 )
 			curr_position++;
 		else curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
+		printf ("\n%s %d" , current_chromosome , curr_position);
 		convertToAlignment (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome);
 	}
 
@@ -272,7 +273,7 @@ int main (int argc, char *argv[])
 	 ********************************************************************/
 	char abridge_index_filename[FILENAME_LENGTH];
 	char genome_filename[FILENAME_LENGTH];
-	char pass2_filename[FILENAME_LENGTH];
+	char pass1_filename[FILENAME_LENGTH];
 	char output_sam_filename[FILENAME_LENGTH];
 	char genome_prefix[FILENAME_LENGTH];
 	char name_of_file_with_quality_scores[FILENAME_LENGTH];
@@ -289,7 +290,7 @@ int main (int argc, char *argv[])
 	strcpy(abridge_index_filename , argv[1]);
 	strcpy(genome_filename , argv[2]);
 	strcpy(output_sam_filename , argv[3]);
-	strcpy(pass2_filename , argv[4]);
+	strcpy(pass1_filename , argv[4]);
 	strcpy(genome_prefix , argv[5]);
 	strcpy(default_quality_value , argv[6]);
 	flag_ignore_sequence_information = strtol (argv[7] , &temp , 10);
@@ -297,7 +298,7 @@ int main (int argc, char *argv[])
 	strcpy(name_of_file_with_quality_scores , argv[9]);
 	/********************************************************************/
 
-	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass2_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
+	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass1_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
 //printf("\nTotal mapped reads %lld", total_mapped_reads);
 //printf("\n");
 	return 0;
