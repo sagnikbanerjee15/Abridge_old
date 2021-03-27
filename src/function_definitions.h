@@ -425,7 +425,7 @@ int isSequenceSoftClipped (char *cigar)
 	return 0;
 }
 
-void convertIcigarToCigarandMD (int cluster_index, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value)
+void convertIcigarToCigarandMD (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value)
 {
 	/*
 	 * Coverts the iCIGAR into CIGAR and MD
@@ -1946,7 +1946,7 @@ int findSamFormatFlag (char *icigar, int icigar_length, char *XS)
 	return samformatflag;
 }
 
-void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, int cluster_index)
+void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome)
 {
 	int i;
 	int j;
@@ -2179,18 +2179,16 @@ void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_i
 	}
 }
 
-void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_newline, struct Sam_Alignment *sam_alignment, int cluster_index, struct Abridge_Index *abridge_index, int number_of_entries_in_cluster, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, unsigned long long int from, unsigned long long int to, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores)
+void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
-	long long int start_position;
 
-	int number_of_columns;
 	int number_of_distinct_cigars_in_a_line;
 	int number_of_repititions_of_the_same_reads;
 	int samformatflag;
-	int i;
+
 	int j;
 
 	char *temp; //Useless
@@ -2201,87 +2199,58 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	distinct_icigars_in_a_line = ( char* ) malloc (sizeof(char) * MAX_GENERAL_LEN);
 
 	/********************************************************************/
-	for ( i = 0 ; i < number_of_entries_in_cluster ; i++ )
-	{
-		//printf ("\ni=%d Processing this line %s" , i , split_on_newline[i]);
-		number_of_columns = splitByDelimiter (split_on_newline[i] , '\t' , split_on_tab);
-		//printf("\nNumber of columns %d", number_of_columns);
 
-		if ( number_of_columns == 1 )
+	if ( number_of_columns == 1 )
+		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
+	else if ( number_of_columns == 2 )
+		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
+
+	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
+	{
+		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
+		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+		sam_alignment_instance->start_position = curr_position;
+
+		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 		{
-			strcpy (distinct_icigars_in_a_line , split_on_tab[0]);
-			if ( i == 0 )
-				start_position = 1;
-			else start_position++;
-		}
-		else if ( number_of_columns == 2 )
-		{
-			if ( i == 0 )
-				start_position = abridge_index->start[cluster_index];
-			else start_position += strtol (split_on_tab[0] , &temp , 10);
-			strcpy (distinct_icigars_in_a_line , split_on_tab[1]);
+			// Use the same cigar
+			sprintf (temp , "%d" , *read_number);
+			( *read_number )++;
+			strcpy (sam_alignment_instance->read_name , temp);
+			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
+			 {
+			 printf ("\nSame iCIGAR");
+			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
+			 printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
+			 printf ("\nMD String: %s" , sam_alignment_instance->tags[2].val);
+			 printf ("\n==============================================================================================================================");
+			 fflush (stdout);
+			 }*/
 		}
 		else
 		{
-			// Should never enter here
-			printf ("\nTrouble");
+			strcpy (sam_alignment_instance->icigar , split_on_dash[0]);
+			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
+			//fflush (stdout);
+			convertIcigarToCigarandMD (whole_genome , sam_alignment_instance , chromosome , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
+			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
+			 {
+			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
+			 printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
+			 printf ("\nMD String: %s" , sam_alignment_instance->tags[2].val);
+			 printf ("\n split_on_dash[0] %s split_on_dash[1] %s" , split_on_dash[0] , split_on_dash[1]);
+			 printf ("\nsplit_on_dash[0][1] == '-' %d isalpha (split_on_dash[0][0])  %d" , split_on_dash[0][1] == '-' , isalpha (split_on_dash[0][0]));
+			 printf ("\n==============================================================================================================================");
+			 fflush (stdout);
+			 }*/
+			sprintf (temp , "%d" , *read_number);
+			( *read_number )++;
+			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		number_of_distinct_cigars_in_a_line = splitByDelimiter (distinct_icigars_in_a_line , ',' , split_on_comma);
-		sam_alignment_instance->icigar[0] = '\0';
-		for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
-		{
-			//printf("\n %d-%d", i, j);
-			//fflush(stdout);
-			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d ICIGAR: %s" , j , number_of_distinct_cigars_in_a_line , split_on_comma[j]);
-			splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
-			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
-			if ( from != -1 && to != -1 )
-				if ( ! ( start_position >= from && start_position <= to ) )
-					continue;
-			sam_alignment_instance->start_position = start_position;
-			if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
-			{
-				// Use the same cigar
-				sprintf (temp , "%d" , *read_number);
-				( *read_number )++;
-				strcpy (sam_alignment_instance->read_name , temp);
-				/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
-				 {
-				 printf ("\nSame iCIGAR");
-				 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
-				 printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
-				 printf ("\nMD String: %s" , sam_alignment_instance->tags[2].val);
-				 printf ("\n==============================================================================================================================");
-				 fflush (stdout);
-				 }*/
-			}
-			else
-			{
-				//printf("\nSplit_on_dash %s %d sam_alignment_pool_index %d ", split_on_dash[0], strlen(split_on_dash[0]), sam_alignment_pool_index);
-				strcpy (sam_alignment_instance->icigar , split_on_dash[0]);
-				//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
-				//fflush (stdout);
-				convertIcigarToCigarandMD (cluster_index , whole_genome , sam_alignment_instance , abridge_index->chromosome[cluster_index] , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
-				/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
-				 {
-				 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
-				 printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
-				 printf ("\nMD String: %s" , sam_alignment_instance->tags[2].val);
-				 printf ("\n split_on_dash[0] %s split_on_dash[1] %s" , split_on_dash[0] , split_on_dash[1]);
-				 printf ("\nsplit_on_dash[0][1] == '-' %d isalpha (split_on_dash[0][0])  %d" , split_on_dash[0][1] == '-' , isalpha (split_on_dash[0][0]));
-				 printf ("\n==============================================================================================================================");
-				 fflush (stdout);
-				 }*/
-				sprintf (temp , "%d" , *read_number);
-				( *read_number )++;
-				strcpy (sam_alignment_instance->read_name , temp);
-			}
-			writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores);
-			( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
-		}
+		writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores);
+		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
 
