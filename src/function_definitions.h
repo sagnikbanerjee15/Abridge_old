@@ -2242,7 +2242,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 				if ( ! ( start_position >= from && start_position <= to ) )
 					continue;
 			sam_alignment_instance->start_position = start_position;
-			if ( split_on_dash[0][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
+			if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 			{
 				// Use the same cigar
 				sprintf (temp , "%d" , *read_number);
@@ -2270,6 +2270,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 					printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
 					printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
 					printf ("\nMD String: %s" , sam_alignment_instance->tags[2].val);
+					printf ("\n split_on_dash[0] %s split_on_dash[1] %s" , split_on_dash[0] , split_on_dash[1]);
 					printf ("\nsplit_on_dash[0][1] == '-' %d isalpha (split_on_dash[0][0])  %d" , split_on_dash[0][1] == '-' , isalpha (split_on_dash[0][0]));
 					printf ("\n==============================================================================================================================");
 					fflush (stdout);
