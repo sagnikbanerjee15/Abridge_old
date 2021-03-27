@@ -2208,6 +2208,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; j++ )
 			if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 		printf ("\n%d" , number_of_commas);
+		fflush (stdout);
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
 	}
 	else if ( number_of_columns == 2 )
@@ -2216,6 +2217,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; j++ )
 			if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 		printf ("\n%d" , number_of_commas);
+		fflush (stdout);
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 	}
 	fflush (stdout);
