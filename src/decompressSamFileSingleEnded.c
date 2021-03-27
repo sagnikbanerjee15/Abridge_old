@@ -172,6 +172,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		if ( max_number_of_commas < number_of_commas_in_each_line )
 			max_number_of_commas = number_of_commas_in_each_line;
 
+		printf ("\nline_len %d len %d" , line_len , len);
 		if ( line_len > COLS_split_on_tab || max_number_of_commas > ROWS_split_on_comma )
 		{
 			for ( i = 0 ; i < COLS_split_on_tab ; i++ )
