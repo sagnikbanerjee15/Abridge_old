@@ -56,7 +56,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	int BUFFER_SIZE = 8 * 100 * 1024 * 1024; // 100 MB
 	//int ROWS_split_on_newline = ROWS * 10; //10,000
 	//int COLS_split_on_newline = COLS * 1000; //1,000,000
-	int ROWS_split_on_tab = 5; //5
+	int ROWS_split_on_tab = 10; //10
 	int COLS_split_on_tab = COLS * 10; //100,000
 	int ROWS_split_on_dash = 5; //5
 	int COLS_split_on_dash = MAX_SEQ_LEN * 3; //3,000
