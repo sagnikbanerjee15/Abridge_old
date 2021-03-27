@@ -51,16 +51,16 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	int number_of_entries_in_cluster;
 	int number_of_elements_after_split_on_delimiter;
 	int BUFFER_SIZE = 8 * 100 * 1024 * 1024; // 100 MB
-	int ROWS_split_on_newline = ROWS * 10; //10,000
-	int COLS_split_on_newline = COLS * 1000; //1,000,000
-	int ROWS_split_on_tab = 10; //10
+	//int ROWS_split_on_newline = ROWS * 10; //10,000
+	//int COLS_split_on_newline = COLS * 1000; //1,000,000
+	int ROWS_split_on_tab = 5; //5
 	int COLS_split_on_tab = COLS * 1000; //1,000,000
-	int ROWS_split_on_dash = ROWS * 10; //10,000
-	int COLS_split_on_dash = COLS; //1000
+	int ROWS_split_on_dash = 5; //5
+	int COLS_split_on_dash = COLS * 1000; //1,000,000
 	int ROWS_split_on_comma = ROWS * 10; //10,000
-	int COLS_split_on_comma = COLS * 1000; //1,000,000
+	int COLS_split_on_comma = MAX_SEQ_LEN * 3; //3,000
 
-	char **split_on_newline;
+	//char **split_on_newline;
 	char **split_on_tab;
 	char **split_on_dash;
 	char **split_on_comma;
@@ -82,7 +82,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen (pass2_filename , "rb");
+	fhr = fopen (pass2_filename , "r");
 	if ( fhr == NULL )
 	{
 		printf ("Error! File not found");
@@ -101,10 +101,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		exit (1);
 	}
 
-	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
-	for ( i = 0 ; i < ROWS_split_on_newline ; i++ )
-		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
-
+	/*
+	 split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
+	 for ( i = 0 ; i < ROWS_split_on_newline ; i++ )
+	 split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
+	 */
 	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tab);
 	for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
 		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
@@ -131,7 +132,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	return;
 	/********************************************************************/
 
-	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
+	//readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 	readInTheEntireGenome (genome_filename , whole_genome);
 	writeSequenceHeaders (fhw , genome_filename);
 
