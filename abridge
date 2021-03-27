@@ -132,9 +132,8 @@ def validateCommandLineArguments(options):
         
     if options.save_all_quality_scores == True:
         options.ignore_quality_scores = True
-    
-    
-    if options.save_exact_quality_scores == True:
+        
+    if options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
         options.save_all_quality_scores = True
          
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
@@ -870,7 +869,7 @@ def main():
     
     if options.quiet == False:
         configureLogger(options)
-    #logging.info(options)
+    logging.info(options)
     
     validateCommandLineArguments(options)
     #logging.info(options)
