@@ -179,7 +179,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			fflush (stdout);
 			for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
 				free (split_on_tab[i]);
-			return;
 			COLS_split_on_tab = line_len + 100;
 			for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
 				split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
