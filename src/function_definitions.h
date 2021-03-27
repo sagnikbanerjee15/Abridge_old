@@ -385,7 +385,9 @@ void printSamAlignmentInstance (struct Sam_Alignment *s, short int print_everyth
 	printf ("\n");
 	printf ("Seq:  %s %d " , s->seq , strlen (s->seq));
 	printf ("\n");
-	printf ("Qual: %s" , s->qual);
+	printf ("Qual: %s");
+	for ( i = 0 ; s->qual[i] != '\0' ; i++ )
+		printf ("%c" , s->qual[i] - 90);
 	printf ("\n");
 	for ( i = 0 ; i < s->number_of_tag_items ; i++ )
 	{
@@ -1469,7 +1471,7 @@ void generateIntegratedCigar (struct Sam_Alignment *curr_alignment, short int fl
 		}
 		if ( strcmp (sam_alignment_instance_diagnostics->tags[2].val , curr_alignment->tags[MD_tag_index].val) != 0 )
 		{
-			printf ("\nMD Mismatch");
+			printf ("\nMD Mismatch Actual: %s Deciphered: %s" , curr_alignment->tags[MD_tag_index].val , sam_alignment_instance_diagnostics->tags[2].val);
 			flag = 1;
 		}
 
