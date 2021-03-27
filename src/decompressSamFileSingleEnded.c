@@ -128,6 +128,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
 
+	return;
 	/********************************************************************/
 
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
