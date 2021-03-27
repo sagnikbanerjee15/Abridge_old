@@ -151,7 +151,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	flag_ignore_quality_score = strtol (split_on_tab[3] , &convert_to_int_temp , 10);
 	flag_save_all_quality_scores = strtol (split_on_tab[4] , &convert_to_int_temp , 10);
 	flag_save_exact_quality_scores = strtol (split_on_tab[5] , &convert_to_int_temp , 10);
-	return;
+
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		if ( buffer[0] == '@' )
