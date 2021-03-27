@@ -22,6 +22,7 @@ abridge \
 --cpu $CPU \
 --fast \
 --save_all_quality_scores \
+--run_diagnostics \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
 --inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam \
 --output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
