@@ -163,6 +163,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			{
 				line_len = getline ( &buffer , &len , fhr);
 			} while ( buffer[0] == '@' );
+			continue;
 			splitByDelimiter (buffer , '\t' , split_on_tab);
 			curr_position = strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 			curr_position--;
