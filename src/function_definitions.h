@@ -2252,7 +2252,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 		 strcpy (sam_alignment_instance->read_name , temp);
 		 }*/
 		//writeAlignmentToFile (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores);
-		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
+		//( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
 
