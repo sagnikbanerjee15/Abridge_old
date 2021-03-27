@@ -2084,6 +2084,10 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			strcat (sam_alignment_instance->tags[2].val , temp);
 		}
 	}
+
+	for ( i = 0 ; sam_alignment_instance->tags[2].val[i] != '\0' ; i++ )
+		if ( sam_alignment_instance->tags[2].val[i] >= 'A' && sam_alignment_instance->tags[2].val[i] <= 'Z' && ( sam_alignment_instance->tags[2].val[i] != 'A' || sam_alignment_instance->tags[2].val[i] != 'T' || sam_alignment_instance->tags[2].val[i] != 'G' || sam_alignment_instance->tags[2].val[i] != 'C' ) )
+			sam_alignment_instance->tags[2].val[i] = 'N';
 	if ( num > 0 )
 	{
 		sprintf (temp , "%d" , num);
