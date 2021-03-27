@@ -2181,6 +2181,8 @@ void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_i
 
 void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome)
 {
+	printf ("\nInside convertToAlignment");
+	fflush (stdout);
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
