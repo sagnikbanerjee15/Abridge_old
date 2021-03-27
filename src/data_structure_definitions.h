@@ -220,10 +220,10 @@ struct Quality_Score_RLE
 	long long int frequency;
 };
 
-int isCharacterInString ( char*, char );
-void splitCigar ( char*, int*, struct Cigar_Items* );
-long long int extractNHfromicigar ( char*, int );
-void generateReadSequenceAndMDString ( struct Sam_Alignment*, struct Whole_Genome_Sequence*, int );
-int findSamFormatFlag ( char*, int, char* );
+int isCharacterInString (char*, char);
+void splitCigar (char*, int*, struct Cigar_Items*);
+long long int extractNHfromicigar (char*, int);
+void generateReadSequenceAndMDString (struct Sam_Alignment*, struct Whole_Genome_Sequence*);
+int findSamFormatFlag (char*, int, char*);
 
 #endif /* _ABRIDGE_SRC_DATA_STRUCTURE_DEFINITIONS_H_ */
