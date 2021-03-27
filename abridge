@@ -328,7 +328,7 @@ def compressSamFile(options):
                 cmd += f" 0 1 " # argv[12] and argv[13]
             cmd += f" {name_of_file_with_quality_scores} " # argv[14]
             cmd += f") "
-            cmd += f"1> /dev/null "
+            #cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
                 cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_compress_pass1.error"
             else:
