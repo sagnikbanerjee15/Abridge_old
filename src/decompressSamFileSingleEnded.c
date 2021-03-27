@@ -62,7 +62,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	int COLS_split_on_dash = MAX_SEQ_LEN * 3; //3,000
 	int ROWS_split_on_comma = ROWS * 10; //10,000
 	int COLS_split_on_comma = MAX_SEQ_LEN * 3; //3,000
-	int *convert_to_int_temp;
 
 	//char **split_on_newline;
 	char **split_on_tab;
@@ -79,6 +78,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	char line_to_be_written_to_file[MAX_GENERAL_LEN];
 	char temp[100];
 	char read_prefix[10];
+	char *convert_to_int_temp;
 
 	struct Sam_Alignment **sam_alignment_pool;
 	struct Sam_Alignment *sam_alignment_instance;
