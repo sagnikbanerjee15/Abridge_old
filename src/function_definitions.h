@@ -2245,6 +2245,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 			if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			{
 				printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
+				printf ("\n split_on_comma[j] = %s" , split_on_comma[j]);
 				fflush (stdout);
 			}
 			if ( split_on_dash[0][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
