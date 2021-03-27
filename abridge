@@ -318,13 +318,13 @@ def compressSamFile(options):
             cmd += f" {max_input_reads_in_a_single_nucl_loc} " # argv[10] - max_input_reads_in_a_single_nucl_loc
             cmd += f" {name_of_file_with_max_commas} " # argv[11] - name_of_file_with_max_commas
             if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-                cmd += f" 1 0 " # argv[12] and argv[13]
-            elif options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
                 cmd += f" 1 1 " # argv[12] and argv[13]
+            elif options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
+                cmd += f" 1 0 " # argv[12] and argv[13]
             elif options.save_all_quality_scores == False and options.save_exact_quality_scores == True: 
-                cmd += f" 0 0 " # argv[12] and argv[13]
-            elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
                 cmd += f" 0 1 " # argv[12] and argv[13]
+            elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
+                cmd += f" 0 0 " # argv[12] and argv[13]
             cmd += f" {name_of_file_with_quality_scores} " # argv[14]
             cmd += f") "
             #cmd += f"1> /dev/null "
@@ -871,7 +871,6 @@ def main():
         configureLogger(options)
     logging.info(options)
     
-    return
     validateCommandLineArguments(options)
     #logging.info(options)
     

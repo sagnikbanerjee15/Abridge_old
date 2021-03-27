@@ -54,7 +54,7 @@ void expandMDString (char *icigar, char *change_indicator)
 	change_indicator[change_indicator_index++ ] = '\0';
 }
 
-void performColumnWiseRLE (char *input_qualityscore_filename, char *output_quality_score_filename, short int adjust_quality_scores)
+void performColumnWiseRLE (char *input_qualityscore_filename, char *output_quality_score_filename, short int save_exact_quality_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -143,7 +143,7 @@ void performColumnWiseRLE (char *input_qualityscore_filename, char *output_quali
 		{
 			if ( i > max_len_sequence ) max_len_sequence = i;
 			//printf ( "\ni=%d split_on_tab[0][i]=%c qsRLE[i]->score_character=%c " , i , split_on_tab[0][i] , qsRLE[i]->score_character );
-			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( adjust_quality_scores && change_indicator[i] == '1' ) )
+			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
 				qsRLE[i]->frequency++;
 			else
 			{
@@ -202,7 +202,7 @@ int main (int argc, char *argv[])
 	char input_qualityscore_filename[FILENAME_LENGTH];
 	char output_quality_score_filename[FILENAME_LENGTH];
 
-	short int adjust_quality_scores;
+	short int save_exact_quality_scores;
 	/********************************************************************/
 
 	/********************************************************************
@@ -210,8 +210,8 @@ int main (int argc, char *argv[])
 	 ********************************************************************/
 	strcpy(input_qualityscore_filename , argv[1]);
 	strcpy(output_quality_score_filename , argv[2]);
-	adjust_quality_scores = strtol (argv[3] , &temp , 10);
+	save_exact_quality_scores = strtol (argv[3] , &temp , 10);
 	/********************************************************************/
 
-	performColumnWiseRLE (input_qualityscore_filename , output_quality_score_filename , adjust_quality_scores);
+	performColumnWiseRLE (input_qualityscore_filename , output_quality_score_filename , save_exact_quality_scores);
 }
