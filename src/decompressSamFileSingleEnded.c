@@ -156,7 +156,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	{
 		if ( buffer[0] == '@' )
 		{
-			fprintf (fhw , "%s" , buffer);
 			splitByDelimiter (buffer , '\t' , split_on_tab);
 			splitByDelimiter (split_on_tab[1] , ':' , split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
 			strcpy(current_chromosome , split_on_dash[1]);
@@ -165,7 +164,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 				line_len = getline ( &buffer , &len , fhr);
 			} while ( buffer[0] == '@' );
 			splitByDelimiter (buffer , '\t' , split_on_tab);
-			curr_position = sprintf(temp , "%d" , split_on_tab[0]);
+			curr_position = strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 			curr_position--;
 		}
 		number_of_commas_in_each_line = 0;
