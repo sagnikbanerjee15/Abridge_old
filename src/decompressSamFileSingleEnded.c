@@ -180,18 +180,17 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			for ( i = 0 ; i < COLS_split_on_tab ; i++ )
 				free (split_on_tab[i]);
 			COLS_split_on_tab = line_len + 100;
-			split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tab);
 			for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
 				split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
-			/*
-			 for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
-			 free (split_on_comma[i]);
-			 free (split_on_comma);
-			 ROWS_split_on_comma = line_len / max_number_of_commas + 10;
-			 split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
-			 for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
-			 split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
-			 */
+
+			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+				free (split_on_comma[i]);
+			free (split_on_comma);
+			ROWS_split_on_comma = line_len / max_number_of_commas + 10;
+			split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+				split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+
 		}
 		number_of_columns = splitByDelimiter (buffer , '\t' , split_on_tab);
 		if ( number_of_columns == 1 )
