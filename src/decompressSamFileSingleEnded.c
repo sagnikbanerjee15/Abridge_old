@@ -127,6 +127,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	output_prefix_without_path = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	sequence_portions_from_reference = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
 	fasta_file_with_expressed_portions = ( char* ) malloc (sizeof(char) * FILENAME_LENGTH);
+	current_chromosome = ( char* ) malloc (sizeof(char) * 100);
 
 	//buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
 	abridge_index = allocateMemoryAbridge_Index ();
