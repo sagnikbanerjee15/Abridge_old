@@ -2207,7 +2207,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 	if ( number_of_columns == 1 )
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
-		for ( i = 0 ; split_on_tab[0][i] != '\0' ; j++ )
+		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 			if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 		printf ("\nnumber_of_commas%d" , number_of_commas);
 		fflush (stdout);
@@ -2216,7 +2216,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 	else if ( number_of_columns == 2 )
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
-		for ( i = 0 ; split_on_tab[1][i] != '\0' ; j++ )
+		for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
 			if ( split_on_tab[1][i] == ',' ) number_of_commas++;
 		printf ("\nnumber_of_commas=%d" , number_of_commas);
 		fflush (stdout);
