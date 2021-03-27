@@ -178,6 +178,7 @@ void performColumnWiseRLE (char *input_qualityscore_filename, char *output_quali
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
 	}
+	max_len_sequence++;
 	for ( i = 0 ; i < max_len_sequence ; i++ )
 		printf ("\nMAX LEN %d %d" , i , count_max_reads_each_position[i]);
 
@@ -188,7 +189,6 @@ void performColumnWiseRLE (char *input_qualityscore_filename, char *output_quali
 		fprintf (fhw , "%s" , "\n");
 		printf ("\nPosition %d Index position %d Length of string %d" , i , lines_to_be_written_to_file_index[i] , strlen (lines_to_be_written_to_file[i]));
 	}
-
 	fclose (fhr);
 	fclose (fhw);
 }
