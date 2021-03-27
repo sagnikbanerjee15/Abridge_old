@@ -871,6 +871,7 @@ def main():
         configureLogger(options)
     logging.info(options)
     
+    return
     validateCommandLineArguments(options)
     #logging.info(options)
     
