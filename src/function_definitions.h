@@ -1519,6 +1519,60 @@ void assignicigarsToSymbols (struct Cigar_Frequency **cigar_freq_pool, int cigar
 	 */
 }
 
+void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome, char *chromosome)
+{
+	FILE *fhr;
+	char *buffer = NULL;
+	size_t len = 0;
+	ssize_t line_len;
+	int i;
+	int j;
+
+	//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
+	fhr = fopen (genome_filename , "r");
+	if ( fhr == NULL )
+	{
+		printf ("Error! File not found");
+		exit (1);
+	}
+
+	whole_genome->nucleotides = ( char** ) malloc (sizeof(char*) * 1);
+	whole_genome->reference_sequence_name = ( char** ) malloc (sizeof(char*) * 1);
+	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * 1);
+	whole_genome->number_of_reference_sequences = 0;
+
+	printf ("\n Loading chromosome %s" , chromosome);
+	fflush (stdout);
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
+	{
+		//printf(“\n%lld”, strlen(buffer));
+		if ( strlen (buffer) <= 1 ) continue;
+		if ( buffer[0] == '>' )
+		{
+			for ( i = 1 ; buffer[i] != 32 ; i++ )
+				buffer[i - 1] = buffer[i];
+			buffer[i - 1] = '\0';
+			if ( strcmp (buffer , chromosome) == 0 )
+			{
+				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( line_len + 1 ));
+				strcpy (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] , buffer);
+				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences][j++ ] = '\0';
+				line_len = getline ( &buffer , &len , fhr);
+
+				whole_genome->nucleotides[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( line_len + 1 ));
+				for ( i = 0 ; buffer[i] != '\0' ; i++ )
+					if ( buffer[i] >= 90 && buffer[i] <= 122 ) buffer[i] -= 32;
+				strcpy (whole_genome->nucleotides[whole_genome->number_of_reference_sequences] , buffer);
+				whole_genome->reference_sequence_length[whole_genome->number_of_reference_sequences] = strlen (buffer);
+				whole_genome->number_of_reference_sequences++;
+				break;
+			}
+		}
+
+	}
+	fclose (fhr);
+}
+
 void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome)
 {
 	FILE *fhr;

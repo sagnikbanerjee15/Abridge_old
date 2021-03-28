@@ -133,14 +133,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
 	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
-	readInTheEntireGenome (genome_filename , whole_genome);
-	return;
 	/********************************************************************/
 
 	//readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 	writeSequenceHeaders (fhw , genome_filename);
-	readInTheEntireGenome (genome_filename , whole_genome);
-	printf ("\nSize of entire genome %lu" , sizeof ( whole_genome ));
+	//readInTheEntireGenome (genome_filename , whole_genome);
 
 	line_num = 0;
 	line_len = getline ( &buffer , &len , fhr);
@@ -167,7 +164,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 				line_len = getline ( &buffer , &len , fhr);
 			} while ( buffer[0] == '@' );
 			curr_position = 0;
-
+			readInEachChromosome (genome_filename , whole_genome , current_chromosome);
 		}
 		number_of_commas_in_each_line = 0;
 		for ( i = 0 ; buffer[i] != '\0' ; i++ )
