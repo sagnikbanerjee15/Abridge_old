@@ -159,12 +159,12 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			splitByDelimiter (buffer , '\t' , split_on_tab);
 			splitByDelimiter (split_on_tab[1] , ':' , split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
 			strcpy(current_chromosome , split_on_dash[1]);
+			readInEachChromosome (genome_filename , whole_genome , current_chromosome);
 			do
 			{
 				line_len = getline ( &buffer , &len , fhr);
 			} while ( buffer[0] == '@' );
 			curr_position = 0;
-			readInEachChromosome (genome_filename , whole_genome , current_chromosome);
 		}
 		number_of_commas_in_each_line = 0;
 		for ( i = 0 ; buffer[i] != '\0' ; i++ )
