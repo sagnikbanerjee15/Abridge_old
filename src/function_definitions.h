@@ -1541,6 +1541,8 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * MAX_REFERENCE_SEQUENCES);
 	whole_genome->number_of_reference_sequences = 0;
 
+	printf ("\n Loading chromosome %d" , chromosome);
+	fflush (stdout);
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		//printf("\n%lld", strlen(buffer));
