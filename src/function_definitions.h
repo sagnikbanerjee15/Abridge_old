@@ -1541,8 +1541,8 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * 1);
 	whole_genome->number_of_reference_sequences = 0;
 
-	printf ("\n Loading chromosome %s" , chromosome);
-	fflush (stdout);
+	//printf ("\n Loading chromosome %s" , chromosome);
+	//fflush (stdout);
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		//printf(“\n%lld”, strlen(buffer));
@@ -1554,8 +1554,8 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 			buffer[i - 1] = '\0';
 			if ( strcmp (buffer , chromosome) == 0 )
 			{
-				printf ("\n Found chromosome %s" , chromosome);
-				fflush (stdout);
+				//printf ("\n Found chromosome %s" , chromosome);
+				//fflush (stdout);
 				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( line_len + 1 ));
 				strcpy (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] , buffer);
 				line_len = getline ( &buffer , &len , fhr);
@@ -1572,8 +1572,10 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 
 	}
 	fclose (fhr);
-	for ( i = 0 ; i < whole_genome->number_of_reference_sequences ; i++ )
-		printf ("\nChromosome in whole genome %s" , whole_genome->reference_sequence_name[i]);
+	/*
+	 for ( i = 0 ; i < whole_genome->number_of_reference_sequences ; i++ )
+	 printf ("\nChromosome in whole genome %s" , whole_genome->reference_sequence_name[i]);
+	 */
 }
 
 void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome)
