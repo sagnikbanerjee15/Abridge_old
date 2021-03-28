@@ -133,7 +133,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
 	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
-
+	return;
 	/********************************************************************/
 
 	//readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
@@ -161,8 +161,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			splitByDelimiter (buffer , '\t' , split_on_tab);
 			splitByDelimiter (split_on_tab[1] , ':' , split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
 			strcpy(current_chromosome , split_on_dash[1]);
-			printf ("\nCurrent chromosome %s" , current_chromosome);
-			fflush (stdout);
 			do
 			{
 				line_len = getline ( &buffer , &len , fhr);
