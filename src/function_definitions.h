@@ -1550,7 +1550,7 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 		if ( buffer[0] == '>' )
 		{
 			for ( i = 1 ; buffer[i] != 32 ; i++ )
-				;
+				buffer[i - 1] = buffer[i];
 			buffer[i] = '\0';
 			if ( strcmp (buffer , chromosome) != 0 )
 			{
