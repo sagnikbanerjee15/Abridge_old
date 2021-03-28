@@ -1541,6 +1541,11 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * 1);
 	whole_genome->number_of_reference_sequences = 0;
 
+	if ( whole_genome->number_of_reference_sequences == 1 )
+	{
+		free (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences]);
+		free (whole_genome->nucleotides[whole_genome->number_of_reference_sequences]);
+	}
 	whole_genome->number_of_reference_sequences = 0;
 	//printf ("\n Loading chromosome %s" , chromosome);
 	//fflush (stdout);
