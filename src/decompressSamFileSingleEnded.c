@@ -131,6 +131,12 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	abridge_index = allocateMemoryAbridge_Index ();
 	sam_alignment = allocateMemorySam_Alignment ();
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
+
+	whole_genome->number_of_reference_sequences = 0;
+	whole_genome->nucleotides = ( char** ) malloc (sizeof(char*) * 1);
+	whole_genome->reference_sequence_name = ( char** ) malloc (sizeof(char*) * 1);
+	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * 1);
+
 	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
 	/********************************************************************/
