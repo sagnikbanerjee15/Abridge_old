@@ -133,6 +133,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
 	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
+	readInTheEntireGenome (genome_filename , whole_genome);
 	return;
 	/********************************************************************/
 
