@@ -1540,7 +1540,7 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 	if ( whole_genome->number_of_reference_sequences == 1 )
 	{
 		int total = strlen (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences - 1]) + strlen (whole_genome->nucleotides[whole_genome->number_of_reference_sequences - 1]);
-		printf ("\nFreeing %f KBytes" , float(total)/float(1024));
+		printf ("\nFreeing %f KBytes" , ( float ) total / ( float ) 1024);
 		free (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences - 1]);
 		free (whole_genome->nucleotides[whole_genome->number_of_reference_sequences - 1]);
 	}
