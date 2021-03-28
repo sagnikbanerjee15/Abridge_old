@@ -1559,15 +1559,13 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 				line_len = getline ( &buffer , &len , fhr);
 				continue;
 			}
-			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( len + 1 ));
-			j = 0;
-			for ( i = 1 ; buffer[i] != 32 ; i++ )
-				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences][j++ ] = buffer[i];
+			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( line_len + 1 ));
+			strcpy (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] , buffer);
 			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences][j++ ] = '\0';
 		}
 		else
 		{
-			whole_genome->nucleotides[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( len + 1 ));
+			whole_genome->nucleotides[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( line_len + 1 ));
 			for ( i = 0 ; buffer[i] != '\0' ; i++ )
 				if ( buffer[i] >= 90 && buffer[i] <= 122 ) buffer[i] -= 32;
 			strcpy (whole_genome->nucleotides[whole_genome->number_of_reference_sequences] , buffer);
@@ -2219,8 +2217,8 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 		int max_number_of_commas = 0, number_of_commas = 0;
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 			if ( split_on_tab[0][i] == ',' ) number_of_commas++;
-		printf ("\nnumber_of_commas=%d" , number_of_commas);
-		fflush (stdout);
+		//printf ("\nnumber_of_commas=%d" , number_of_commas);
+		//fflush (stdout);
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
 	}
 	else if ( number_of_columns == 2 )
@@ -2228,12 +2226,11 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 		int max_number_of_commas = 0, number_of_commas = 0;
 		for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
 			if ( split_on_tab[1][i] == ',' ) number_of_commas++;
-		printf ("\nnumber_of_commas=%d" , number_of_commas);
-		fflush (stdout);
+		//printf ("\nnumber_of_commas=%d" , number_of_commas);
+		//fflush (stdout);
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 	}
-	fflush (stdout);
-	//return;
+
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
