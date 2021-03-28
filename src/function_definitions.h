@@ -1519,7 +1519,7 @@ void assignicigarsToSymbols (struct Cigar_Frequency **cigar_freq_pool, int cigar
 	 */
 }
 
-void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome)
+void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome, char *chromosome)
 {
 	FILE *fhr;
 	char *buffer = NULL;
@@ -1547,6 +1547,14 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 		if ( strlen (buffer) <= 1 ) continue;
 		if ( buffer[0] == '>' )
 		{
+			for ( i = 1 ; buffer[i] != 32 ; i++ )
+				;
+			buffer[i] = '\0';
+			if ( strmcp (buffer , chromosome) != 0 )
+			{
+				line_len = getline ( &buffer , &len , fhr);
+				continue;
+			}
 			whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( len + 1 ));
 			j = 0;
 			for ( i = 1 ; buffer[i] != 32 ; i++ )
