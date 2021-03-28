@@ -1571,6 +1571,8 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 
 	}
 	fclose (fhr);
+	for ( i = 0 ; i < whole_genome->number_of_reference_sequences ; i++ )
+		printf ("\nChromosome in whole genome %s" , whole_genome->reference_sequence_name[i]);
 }
 
 void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome)
