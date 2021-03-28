@@ -141,10 +141,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	read_prefix[0] = '\0'; // Empty string
 	/********************************************************************/
 
-	//readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 	writeSequenceHeaders (fhw , genome_filename);
-	//readInTheEntireGenome (genome_filename , whole_genome);
-
 	line_num = 0;
 	line_len = getline ( &buffer , &len , fhr);
 	splitByDelimiter (buffer , '\t' , split_on_tab);
@@ -313,7 +310,5 @@ int main (int argc, char *argv[])
 	/********************************************************************/
 
 	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass1_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
-//printf("\nTotal mapped reads %lld", total_mapped_reads);
-//printf("\n");
 	return 0;
 }
