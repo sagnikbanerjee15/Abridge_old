@@ -1554,6 +1554,7 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 			buffer[i] = '\0';
 			if ( strcmp (buffer , chromosome) != 0 )
 			{
+				printf ("\n Trying to find %s but got %s" , chromosome , buffer);
 				line_len = getline ( &buffer , &len , fhr);
 				continue;
 			}
