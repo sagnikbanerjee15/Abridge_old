@@ -70,7 +70,7 @@ Abridge random access
 (/usr/bin/time --verbose  \
 abridge \
 --random \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.7z \
 --positions 1:5000-7000 \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
 --output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress \
