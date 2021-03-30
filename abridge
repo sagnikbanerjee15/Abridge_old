@@ -882,6 +882,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     cmd+=f" {options.quality}" #argv[9[
     cmd+=f" {options.ignore_sequence}" #argv[10]
     cmd+=f" {options.read_prefix}" #argv[11]
+    cmd+=f" {name_of_file_with_quality_scores}" #argv[12]
     print(cmd)
     #os.system(cmd)
     

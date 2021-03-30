@@ -204,6 +204,8 @@ struct Abridge_Index
 	long long int *start_byte;
 	long long int *end_byte;
 	long long int number_of_items;
+	long long int *start_byte_qual;
+	long long int *end_byte_qual;
 };
 
 struct Whole_Genome_Sequence
