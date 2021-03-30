@@ -97,7 +97,7 @@ int main (int argc, char *argv[])
 		printf ("Error! File not found");
 		exit (1);
 	}
-	fhr_qual = open (name_of_file_with_quality_scores , "rb");
+	fhr_qual = fopen (name_of_file_with_quality_scores , "rb");
 	if ( fhr_qual == NULL )
 	{
 		printf ("Error! File not found");
