@@ -194,7 +194,7 @@ int main (int argc, char *argv[])
 		 printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		 fflush(stdout);
 		 */
-		curr_position = abridge_index->start;
+		curr_position = abridge_index->start[i];
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
