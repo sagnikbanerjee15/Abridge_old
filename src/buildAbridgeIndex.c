@@ -112,8 +112,9 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 	long long int end_position_of_read;
 	long long int num_lines_read = 0;
 	long long int byte_number_start_cluster = -1;
-	long long int byte_number_start_cluster_qual = -1;
 	long long int byte_number_end_cluster = -1;
+	long long int byte_number_start_cluster_qual = -1;
+	long long int byte_number_end_cluster_qual = -1;
 	long int file_position;
 
 	size_t len = 0;
@@ -253,6 +254,13 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 					number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
 				}
 				printf ("\n1. Number of reads in each line %d" , number_of_reads_per_line_in_pass1_file);
+				/*
+				 * Advancing the file pointer of quality
+				 */
+				while ( number_of_reads_per_line_in_pass1_file-- )
+					getline ( &line , &len , fhr_qual);
+				byte_number_end_cluster_qual = ftell (fhr_qual);
+
 				//printf("\n Trouble %s", line);
 			}
 			else
@@ -275,6 +283,12 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 					number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
 				}
 				printf ("\n2. Number of reads in each line %d" , number_of_reads_per_line_in_pass1_file);
+				/*
+				 * Advancing the file pointer of quality
+				 */
+				while ( number_of_reads_per_line_in_pass1_file-- )
+					getline ( &line , &len , fhr_qual);
+				byte_number_end_cluster_qual = ftell (fhr_qual);
 			}
 		}
 		else
@@ -298,6 +312,12 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
 			}
 			printf ("\n3. Number of reads in each line %d" , number_of_reads_per_line_in_pass1_file);
+			/*
+			 * Advancing the file pointer of quality
+			 */
+			while ( number_of_reads_per_line_in_pass1_file-- )
+				getline ( &line , &len , fhr_qual);
+			byte_number_end_cluster_qual = ftell (fhr_qual);
 			/*
 			 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 			 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
@@ -326,6 +346,16 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				sprintf(temp , "%ld" , byte_number_end_cluster);
 				strcat(line_to_be_written_to_file , temp);
 				strcat(line_to_be_written_to_file , "\t");
+				/*
+				 * Writing the positions of quality scores
+				 */
+				sprintf(temp , "%ld" , byte_number_start_cluster_qual);
+				strcat(line_to_be_written_to_file , temp);
+				strcat(line_to_be_written_to_file , "\t");
+
+				sprintf(temp , "%ld" , byte_number_end_cluster_qual);
+				strcat(line_to_be_written_to_file , temp);
+				strcat(line_to_be_written_to_file , "\t");
 
 				strcat(line_to_be_written_to_file , "\n");
 				fprintf (fhw , "%s" , line_to_be_written_to_file);
@@ -335,6 +365,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				file_position = ftell (fhr_pass1) - line_len;
 
 				byte_number_start_cluster = ftell (fhr_pass1) - line_len;
+				byte_number_start_cluster_qual = byte_number_end_cluster_qual;
 
 			}
 			else if ( end_position_of_read > end_position_of_cluster )
@@ -369,6 +400,16 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 	strcat(line_to_be_written_to_file , temp);
 	strcat(line_to_be_written_to_file , "\t");
 
+	/*
+	 * Writing the positions of quality scores
+	 */
+	sprintf(temp , "%ld" , byte_number_start_cluster_qual);
+	strcat(line_to_be_written_to_file , temp);
+	strcat(line_to_be_written_to_file , "\t");
+
+	sprintf(temp , "%ld" , byte_number_end_cluster_qual);
+	strcat(line_to_be_written_to_file , temp);
+	strcat(line_to_be_written_to_file , "\t");
 	strcat(line_to_be_written_to_file , "\n");
 	fprintf (fhw , "%s" , line_to_be_written_to_file);
 
