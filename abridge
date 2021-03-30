@@ -463,8 +463,8 @@ def compressSamFile(options):
         pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
         name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
-        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge"
-        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge"
+        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.7z"
+        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.br"
         
         if options.both == True or options.fast == False:
             cmd  = f"(/usr/bin/time --verbose "
@@ -487,8 +487,8 @@ def compressSamFile(options):
         pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
         name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
-        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge"
-        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge"
+        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.7z"
+        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.br"
                 
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
@@ -515,8 +515,8 @@ def compressSamFile(options):
         pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
         pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
-        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge"
-        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge"
+        compressed_abridged_filename_7z = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.7z"
+        compressed_abridged_filename_br = options.output_directory + "/" + name_of_input_file_without_location + ".abridge.br"
         name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
         
         files_to_be_removed.append(f"{pass1_outputfilename}.br")
