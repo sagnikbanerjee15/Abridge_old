@@ -167,6 +167,7 @@ int main (int argc, char *argv[])
 		buffer_for_pass1[fread_ret_val] = '\0';
 		number_of_entries_in_cluster = splitByDelimiter (buffer_for_pass1 , '\n' , split_on_newline);
 		number_of_entries_in_cluster--; //Last line is always empty
+		continue;
 
 		free (buffer_for_qual);
 		buffer_for_qual = ( char* ) malloc (sizeof(char) * ( abridge_index->end_byte_qual[i] - abridge_index->start_byte_qual[i] ));
