@@ -142,7 +142,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 		exit (1);
 	}
 	fhr_qual = fopen (input_qual_filename , "r");
-	if ( fhr_qual )
+	if ( fhr_qual == NULL )
 	{
 		printf ("Error! %s not found" , input_qual_filename);
 		exit (1);
