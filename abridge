@@ -884,8 +884,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     cmd+=f" {options.ignore_sequence}" #argv[10]
     cmd+=f" {options.read_prefix}" #argv[11]
     cmd+=f" {name_of_file_with_quality_scores}" #argv[12]
-    print(cmd)
-    #os.system(cmd)
+    os.system(cmd)
     
 def main():
     commandLineArg=sys.argv
@@ -997,7 +996,7 @@ def main():
         else:
             sortPositions(options.positions)
         """
-        os.system(f"rm -f {options.inputfilename[0][:-3]}.headers")
+        os.system(f"rm -f {options.output_directory}/{name_of_input_file_without_location}.headers")
         
     cleanUp(options)
     if options.quiet == False:
