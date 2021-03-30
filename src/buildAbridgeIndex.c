@@ -89,7 +89,7 @@ void findFarthestMapping (long long int *start, long long int *end, char **split
 	}
 }
 
-void findContinousClusters (char *input_filename, char *output_filename, long long int max_input_reads_in_a_single_nucl_loc)
+void findContinousClusters (char *input_pass1_filename, char *input_qual_filename, char *output_filename, long long int max_input_reads_in_a_single_nucl_loc)
 {
 	/*
 	 *
@@ -98,11 +98,13 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
-	FILE *fhr;
+	FILE *fhr_pass1;
+	FILE *fhr_qual;
 	FILE *fhw;
 
 	int i;
 	int number_of_fields;
+	int number_of_reads_per_line_in_pass1_file = 0;
 
 	long long int start_position_of_cluster = -1;
 	long long int end_position_of_cluster = -1;
@@ -110,6 +112,7 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 	long long int end_position_of_read;
 	long long int num_lines_read = 0;
 	long long int byte_number_start_cluster = -1;
+	long long int byte_number_start_cluster_qual = -1;
 	long long int byte_number_end_cluster = -1;
 	long int file_position;
 
@@ -132,16 +135,24 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen (input_filename , "r");
-	if ( fhr == NULL )
+	fhr_pass1 = fopen (input_pass1_filename , "r");
+	if ( fhr_pass1 == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! %s not found" , input_pass1_filename);
 		exit (1);
 	}
+	fhr_qual = fopen (input_qual_filename , "r");
+	if ( fhr_qual )
+	{
+		printf ("Error! %s not found" , input_qual_filename);
+		exit (1);
+	}
+	byte_number_start_cluster_qual = ftell (fhr_qual);
+
 	fhw = fopen (output_filename , "w");
 	if ( fhw == NULL )
 	{
-		printf ("File cannot be created");
+		printf ("File %s cannot be created" , output_filename);
 		exit (1);
 	}
 	//printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
@@ -171,7 +182,7 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 	/********************************************************************/
 
 	line_len_previous = -1;
-	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
+	while ( ( line_len = getline ( &line , &len , fhr_pass1) ) != -1 )
 	{
 		num_lines_read++;
 		if ( num_lines_read == 1 )
@@ -183,8 +194,8 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 		{
 			if ( start_position_of_cluster != -1 && end_position_of_cluster != -1 )
 			{
-				byte_number_end_cluster = ftell (fhr) - line_len;
-				//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr));
+				byte_number_end_cluster = ftell (fhr_pass1) - line_len;
+				//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr_pass1));
 				strcpy(line_to_be_written_to_file , current_reference_sequence);
 				strcat(line_to_be_written_to_file , "\t");
 
@@ -208,16 +219,15 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 				fprintf (fhw , "%s" , line_to_be_written_to_file);
 
 				file_position = -1;
-
-				byte_number_start_cluster = ftell (fhr) - line_len;
+				byte_number_start_cluster = ftell (fhr_pass1) - line_len;
 			}
 			// New chromosome encountered;
 			splitByDelimiter (line , '\t' , split_on_tab);
 			splitByDelimiter (split_on_tab[1] , ':' , split_on_colon);
 			strcpy(current_reference_sequence , split_on_colon[1]);
-			file_position = ftell (fhr);
+			file_position = ftell (fhr_pass1);
 
-			line_len = getline ( &line , &len , fhr);
+			line_len = getline ( &line , &len , fhr_pass1);
 			num_lines_read++;
 			number_of_fields = splitByDelimiter (line , '\t' , split_on_tab);
 
@@ -235,6 +245,14 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
 				byte_number_start_cluster = file_position;
+
+				number_of_reads_per_line_in_pass1_file = 0;
+				for ( i = 0 ; i < number_of_fields ; i++ )
+				{
+					splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads);
+					number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
+				}
+				printf ("\n1. Number of reads in each line %d" , number_of_reads_per_line_in_pass1_file);
 				//printf("\n Trouble %s", line);
 			}
 			else
@@ -249,6 +267,14 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
 				byte_number_start_cluster = file_position;
+
+				number_of_reads_per_line_in_pass1_file = 0;
+				for ( i = 0 ; i < number_of_fields ; i++ )
+				{
+					splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads);
+					number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
+				}
+				printf ("\n2. Number of reads in each line %d" , number_of_reads_per_line_in_pass1_file);
 			}
 		}
 		else
@@ -265,7 +291,13 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 				start_position_of_read += strtol (split_on_tab[0] , &temp , 10);
 				number_of_fields = splitByDelimiter (split_on_tab[1] , ',' , split_icigar_field);
 			}
-
+			number_of_reads_per_line_in_pass1_file = 0;
+			for ( i = 0 ; i < number_of_fields ; i++ )
+			{
+				splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads);
+				number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
+			}
+			printf ("\n3. Number of reads in each line %d" , number_of_reads_per_line_in_pass1_file);
 			/*
 			 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 			 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
@@ -274,8 +306,8 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 			// New cluster is found
 			if ( start_position_of_read > end_position_of_cluster )
 			{
-				byte_number_end_cluster = ftell (fhr) - line_len;
-				//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr));
+				byte_number_end_cluster = ftell (fhr_pass1) - line_len;
+				//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr_pass1));
 				strcpy(line_to_be_written_to_file , current_reference_sequence);
 				strcat(line_to_be_written_to_file , "\t");
 
@@ -300,9 +332,9 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
-				file_position = ftell (fhr) - line_len;
+				file_position = ftell (fhr_pass1) - line_len;
 
-				byte_number_start_cluster = ftell (fhr) - line_len;
+				byte_number_start_cluster = ftell (fhr_pass1) - line_len;
 
 			}
 			else if ( end_position_of_read > end_position_of_cluster )
@@ -315,9 +347,9 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 		//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nLine read from file:%s", line);
 
 	}
-	//byte_number_end_cluster = ftell ( fhr ) - line_len - line_len_previous;
-	byte_number_end_cluster = ftell (fhr);
-	//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr));
+	//byte_number_end_cluster = ftell ( fhr_pass1 ) - line_len - line_len_previous;
+	byte_number_end_cluster = ftell (fhr_pass1);
+	//printf("\n%s\t%lld\t%lld\t%ld", current_reference_sequence, start_position_of_cluster, end_position_of_cluster, ftell(fhr_pass1));
 	strcpy(line_to_be_written_to_file , current_reference_sequence);
 	strcat(line_to_be_written_to_file , "\t");
 
@@ -342,7 +374,7 @@ void findContinousClusters (char *input_filename, char *output_filename, long lo
 
 	start_position_of_cluster = start_position_of_read;
 	end_position_of_cluster = end_position_of_read;
-	file_position = ftell (fhr) - line_len;
+	file_position = ftell (fhr_pass1) - line_len;
 }
 
 int main (int argc, char *argv[])
@@ -350,7 +382,8 @@ int main (int argc, char *argv[])
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
-	char input_filename[FILENAME_LENGTH];
+	char input_pass1_filename[FILENAME_LENGTH];
+	char input_qual_filename[FILENAME_LENGTH];
 	char output_filename[FILENAME_LENGTH];
 	char *temp;
 
@@ -360,13 +393,14 @@ int main (int argc, char *argv[])
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	strcpy(input_filename , argv[1]);
-	strcpy(output_filename , argv[2]);
+	strcpy(input_pass1_filename , argv[1]);
+	strcpy(input_qual_filename , argv[2]);
+	strcpy(output_filename , argv[3]);
 	max_input_reads_in_a_single_nucl_loc = strtol (argv[3] , &temp , 10);
 	/********************************************************************/
 
 	//printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
 	//fflush ( stdout );
-	findContinousClusters (input_filename , output_filename , max_input_reads_in_a_single_nucl_loc);
+	findContinousClusters (input_pass1_filename , input_qual_filename , output_filename , max_input_reads_in_a_single_nucl_loc);
 	return 0;
 }
