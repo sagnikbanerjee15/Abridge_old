@@ -208,6 +208,8 @@ struct Abridge_Index* allocateMemoryAbridge_Index ()
 	s->end = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
 	s->start_byte = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
 	s->end_byte = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
+	s->start_byte_qual = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
+	s->end_byte_qual = ( long long int* ) malloc (sizeof(long long int) * MAX_POOL_SIZE);
 	s->number_of_items = 0;
 	return s;
 }
