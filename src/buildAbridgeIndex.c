@@ -396,7 +396,7 @@ int main (int argc, char *argv[])
 	strcpy(input_pass1_filename , argv[1]);
 	strcpy(input_qual_filename , argv[2]);
 	strcpy(output_filename , argv[3]);
-	max_input_reads_in_a_single_nucl_loc = strtol (argv[3] , &temp , 10);
+	max_input_reads_in_a_single_nucl_loc = strtol (argv[4] , &temp , 10);
 	/********************************************************************/
 
 	//printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
