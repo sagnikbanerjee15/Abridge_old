@@ -784,7 +784,7 @@ def decompressSamFile(options):
         cmd += f" {name_of_file_with_quality_scores}.rle "
         cmd += f" {name_of_file_with_quality_scores} "
         cmd += f") "
-        #cmd += f"1> /dev/null "
+        cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
             cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_RLE_decompress.error"
         else:
@@ -818,7 +818,7 @@ def decompressSamFile(options):
         cmd += f" {unmapped_outputfilename}" #argv[8] - Name of file with unmapped reads
         cmd += f" {name_of_file_with_quality_scores} " #argv[9] - Name of file with quality scores
         cmd += f") "   
-        #cmd += f"1> /dev/null "
+        cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
             cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_decompress.error"
         else:
