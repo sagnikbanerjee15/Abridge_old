@@ -59,6 +59,7 @@ int main (int argc, char *argv[])
 	int number_of_distinct_cigars_in_a_line;
 	int number_of_repititions_of_the_same_reads;
 	int qual_pool_iterator;
+	int total_quals;
 
 	unsigned long long int read_number = 1;
 	unsigned long long int from = -1;
@@ -184,7 +185,7 @@ int main (int argc, char *argv[])
 		for ( i = 0 ; i < split_on_newline_qual_ROWS ; i++ )
 			split_on_newline_qual[i] = ( char* ) malloc (sizeof(char) * split_on_newline_qual_COLS);
 
-		splitByDelimiter (buffer_for_qual , '\n' , split_on_newline_qual);
+		total_quals = splitByDelimiter (buffer_for_qual , '\n' , split_on_newline_qual);
 		qual_pool_iterator = 0;
 		/*
 		 printf("\nfread_ret_val %d", fread_ret_val);
@@ -277,6 +278,11 @@ int main (int argc, char *argv[])
 					printf ("%s" , sam_alignment->seq);
 					printf ("\t");
 
+					if ( qual_pool_iterator >= total_quals )
+					{
+						printf ("\nQUAL SCORE ERROR");
+						exit (2);
+					}
 					if ( flag_save_all_quality_scores == 1 )
 						printf ("%s" , buffer_for_qual[qual_pool_iterator++ ]);
 					else printf ("%s" , sam_alignment->qual);
@@ -293,6 +299,7 @@ int main (int argc, char *argv[])
 					printf ("MD:Z:%s" , sam_alignment->tags[2].val);
 
 					printf ("\n");
+					fflush (stdout);
 				}
 			}
 		}
