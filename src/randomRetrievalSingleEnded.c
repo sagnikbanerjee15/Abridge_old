@@ -143,7 +143,7 @@ int main (int argc, char *argv[])
 	sam_alignment = allocateMemorySam_Alignment ();
 
 	/****************************************************************************************************************************************/
-
+	return 0;
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 	readGenomeIndex (genome_index , genome_index_filename , split_on_newline);
 	readInGenomeSequenceSingleChromosome (single_genome_sequence , chromosome , genome_filename , genome_index);
@@ -167,7 +167,6 @@ int main (int argc, char *argv[])
 		buffer_for_pass1[fread_ret_val] = '\0';
 		number_of_entries_in_cluster = splitByDelimiter (buffer_for_pass1 , '\n' , split_on_newline);
 		number_of_entries_in_cluster--; //Last line is always empty
-		continue;
 
 		free (buffer_for_qual);
 		buffer_for_qual = ( char* ) malloc (sizeof(char) * ( abridge_index->end_byte_qual[i] - abridge_index->start_byte_qual[i] ));
