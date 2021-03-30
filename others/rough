@@ -65,6 +65,17 @@ abridge \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.error &
 
+Abridge random access
+=====================
+(/usr/bin/time --verbose  \
+abridge \
+--random \
+--inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge \
+--positions 1:5000-7000 \
+) \
+1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_random.output \
+2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_random.error &
+
 
 
 gcc /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass1.c -o /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/compressSamFileSingleEndedPass1 -Ofast
