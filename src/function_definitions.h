@@ -1853,8 +1853,8 @@ void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_
 		abridge_index->end[abridge_index->number_of_items] = strtol (split_line[2] , &temp , 10);
 		abridge_index->start_byte[abridge_index->number_of_items] = strtol (split_line[3] , &temp , 10);
 		abridge_index->end_byte[abridge_index->number_of_items] = strtol (split_line[4] , &temp , 10);
-		abridge_index->start_byte_qual = strtol (split_line[5] , &temp , 10);
-		abridge_index->end_byte_qual = strtol (split_line[6] , &temp , 10);
+		abridge_index->start_byte_qual[abridge_index->number_of_items] = strtol (split_line[5] , &temp , 10);
+		abridge_index->end_byte_qual[abridge_index->number_of_items] = strtol (split_line[6] , &temp , 10);
 		abridge_index->number_of_items++;
 		//printf("\n %lld", MAX_POOL_SIZE - abridge_index->number_of_items);
 	}
