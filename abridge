@@ -765,8 +765,7 @@ def decompressSamFile(options):
             cmd = f"brotli -d -k -f {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br"
             all_commands.append([cmd,"dummy"])
     pool.map(runCommand,all_commands)
-            
-    
+
     ######################################################################################
     # Convert RLE back to quality scores
     ######################################################################################
@@ -833,17 +832,8 @@ def decompressSamFile(options):
     for file in files_to_be_removed:
         os.system("rm -f "+file)
     """
-def retrieveAlignmentsRandomly(chromosome,start,end,options):
-    """
-    cmd=f"7za e {options.inputfilename[0]} -y"
-    if options.quiet == False:
-        logging.info(f"Running command - {cmd}")
-    os.system(cmd)
-    """
     
-    abridge_index_filename = f"{options.inputfilename[0][:-2]}index"
-    genome_filename = options.genome
-    genome_index_filename = options.genome+".fai"
+def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
     randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"] 
     ######################################################################################
@@ -853,20 +843,47 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     os.system(cmd)
     ######################################################################################
     
-    cmd=f" {randomRetrievalSingleEnded} " #argv[0]
-    cmd+=f" {abridge_index_filename} " #argv[1]
+    genome_filename = options.genome
+    genome_index_filename = options.genome+".fai"
+    
+    input_filename = options.inputabrfilenames[0]
+    name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
+    pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+    pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
+    unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
+    compressed_abridged_filename = input_filename
+    output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
+    outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "_" + options.positions.replace(":","_") + ".sam"
+    files_to_be_removed = []
+    
+    cmd  = f"(/usr/bin/time --verbose "
+    cmd += f" {deCompressQualityScoresFile} "
+    cmd += f" {name_of_file_with_quality_scores}.rle "
+    cmd += f" {name_of_file_with_quality_scores} "
+    cmd += f") "
+    cmd += f"1> /dev/null "
+    if options.keep_intermediate_error_files == True:
+        cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_RLE_decompress.error"
+    else:
+        cmd += f"2> /dev/null"
+    os.system(cmd)
+    files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
+    
+    cmd =f" {randomRetrievalSingleEnded} " #argv[0]
+    cmd+=f" {pass1_index_outputfilename} " #argv[1]
     cmd+=f" {genome_filename} " #argv[2]
     cmd+=f" {genome_index_filename} " #argv[3]
     cmd+=f" {chromosome} " #argv[4]
-    cmd+=f" {options.inputfilename[0][:-3]}  " #argv[5]
+    cmd+=f" {input_filename}  " #argv[5]
     cmd+=f" {start} " #argv[6]
     cmd+=f" {end} " #argv[7]
-    cmd+=f" {options.outputfilename}" #argv[8]
+    cmd+=f" {outputfilename}" #argv[8]
     cmd+=f" {options.quality}" #argv[9[
     cmd+=f" {options.ignore_sequence}" #argv[10]
     cmd+=f" {options.read_prefix}" #argv[11]
     print(cmd)
-    os.system(cmd)
+    #os.system(cmd)
     
 def main():
     commandLineArg=sys.argv
