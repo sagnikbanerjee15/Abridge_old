@@ -120,9 +120,16 @@ def validateCommandLineArguments(options):
     if options.header==True:
         options.quiet = True
     
-
     if options.random==True and options.positions==None:
         print("You need to enter at least one location from where reads will be retrieved")
+        sys.exit()
+        
+    if options.random == True and len(options.inputabrfilenames)!=1:
+        print("")
+        sys.exit()
+        
+    if options.random == True and options.inputsamfilenames is not None:
+        print("")
         sys.exit()
         
     if options.error_directory == None:
@@ -921,12 +928,11 @@ def main():
             logging.info(f"mergeAbridgeData() execution is complete")
         
     if options.random==True:
-        """
-        cmd=f"7za e {options.inputfilename[0]} -y"
+        cmd=f"7za e {options.inputabrfilenames[0]} -y"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
-        """
+        
         cmd=f"cat {options.inputfilename[0][:-3]}|grep ^@ > {options.inputfilename[0][:-3]}.headers"
         os.system(cmd)
         chromosome_to_length = {}
