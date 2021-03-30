@@ -836,6 +836,7 @@ def decompressSamFile(options):
 def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
     randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"] 
+    deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
     ######################################################################################
     # Compiling programs - will be removed during final version
     ######################################################################################
