@@ -264,14 +264,14 @@ int main (int argc, char *argv[])
 					printf ("%s_" , sam_alignment->read_name);
 					printf ("%d" , number_of_repititions_of_the_same_reads);
 					printf ("\t");
-					printf ("\nWritten upto here");
-					fflush (stdout);
 
 					printf ("%d" , sam_alignment->samflag);
 					printf ("\t");
 
 					printf ("%s" , sam_alignment->reference_name);
 					printf ("\t");
+					printf ("\nWritten upto here");
+					fflush (stdout);
 
 					printf ("%d" , sam_alignment->start_position);
 					printf ("\t");
