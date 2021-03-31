@@ -291,8 +291,7 @@ int main (int argc, char *argv[])
 
 					printf ("%s" , sam_alignment->seq);
 					printf ("\t");
-					printf ("\nWritten upto here");
-					fflush (stdout);
+
 					if ( qual_pool_iterator >= total_quals )
 					{
 						printf ("\nQUAL SCORE ERROR");
@@ -302,7 +301,8 @@ int main (int argc, char *argv[])
 						printf ("%s" , buffer_for_qual[qual_pool_iterator++ ]);
 					else printf ("%s" , sam_alignment->qual);
 					printf ("\t");
-
+					printf ("\nWritten upto here");
+					fflush (stdout);
 					printf ("NH:i:%s" , sam_alignment->tags[0].val);
 					printf ("\t");
 
