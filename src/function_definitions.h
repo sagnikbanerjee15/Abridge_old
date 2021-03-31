@@ -2177,14 +2177,14 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 		if ( sam_alignment_instance->tags[2].val[i] >= 'A' && sam_alignment_instance->tags[2].val[i] <= 'Z' && sam_alignment_instance->tags[2].val[i] != 'A' && sam_alignment_instance->tags[2].val[i] != 'T' && sam_alignment_instance->tags[2].val[i] != 'G' && sam_alignment_instance->tags[2].val[i] != 'C' )
 			sam_alignment_instance->tags[2].val[i] = 'N';
 
-	printf ("\nIamhere");
-	fflush (stdout);
-
 	if ( num > 0 )
 	{
 		sprintf (temp , "%d" , num);
 		strcat (sam_alignment_instance->tags[2].val , temp);
 	}
+
+	printf ("\generateReadSequenceAndMDStringCompleted");
+	fflush (stdout);
 	/*
 	 printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
 	 printf("\n%s\n%s\n%s", sam_alignment_instance->soft_clips_removed_seq, read_from_genome_including_deletions, read_from_genome);
