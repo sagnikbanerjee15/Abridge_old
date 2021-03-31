@@ -240,6 +240,7 @@ int main (int argc, char *argv[])
 				}
 				else
 				{
+					strcpy(sam_alignment->read_name , temp);
 					strcpy(sam_alignment->icigar , split_on_dash[0]);
 					printSamAlignmentInstance (sam_alignment , 1);
 					return 0;
