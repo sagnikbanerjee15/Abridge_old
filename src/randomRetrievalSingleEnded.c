@@ -241,6 +241,8 @@ int main (int argc, char *argv[])
 				else
 				{
 					strcpy(sam_alignment->icigar , split_on_dash[0]);
+					printSamAlignmentInstance (sam_alignment , 1);
+					return 0;
 					convertIcigarToCigarandMD (single_genome_sequence , sam_alignment , chromosome , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
 					sprintf(temp , "%d" , read_number);
 					read_number++;
