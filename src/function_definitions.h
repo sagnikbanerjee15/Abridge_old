@@ -2124,7 +2124,8 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	for ( i = 0 ; sam_alignment_instance->seq[i] != '\0' ; i++ )
 		if ( sam_alignment_instance->seq[i] == '-' )
 			sam_alignment_instance->seq[i] = read_from_genome[i];
-
+	printf ("\nNowIamhere");
+	fflush (stdout);
 	strcpy (sam_alignment_instance->cigar_extended , read_from_genome_including_deletions);
 	if ( strlen (sam_alignment_instance->md_extended) != strlen (read_from_genome_including_deletions) )
 	{
