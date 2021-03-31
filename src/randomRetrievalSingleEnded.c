@@ -148,7 +148,6 @@ int main (int argc, char *argv[])
 	readInGenomeSequenceSingleChromosome (single_genome_sequence , chromosome , genome_filename , genome_index);
 	findReadClusterFromAbridgeIndex (abridge_index , chromosome , start , end , &abridge_match_start_index , &abridge_match_end_index);
 	writeSequenceHeaders (fhw , genome_filename);
-	return 0;
 
 	from = start;
 	to = end;
