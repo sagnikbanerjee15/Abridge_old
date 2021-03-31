@@ -553,10 +553,10 @@ def compressSamFile(options):
         files_to_be_removed.append(pass1_index_outputfilename)
         files_to_be_removed.append(name_of_max_input_reads_file)
         files_to_be_removed.append(name_of_file_with_max_commas)
-    
+    """
     for file in files_to_be_removed:
         os.system("rm -f "+file)
-        
+    """    
 
 def findEndedness(options,logging):
     """
