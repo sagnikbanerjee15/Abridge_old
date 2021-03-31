@@ -186,8 +186,8 @@ int main (int argc, char *argv[])
 		split_on_newline_qual_ROWS = number_of_newlines + 10;
 		split_on_newline_qual_COLS = MAX_SEQ_LEN;
 		split_on_newline_qual = ( char** ) malloc (sizeof(char*) * split_on_newline_qual_ROWS);
-		for ( i = 0 ; i < split_on_newline_qual_ROWS ; i++ )
-			split_on_newline_qual[i] = ( char* ) malloc (sizeof(char) * split_on_newline_qual_COLS);
+		for ( j = 0 ; j < split_on_newline_qual_ROWS ; j++ )
+			split_on_newline_qual[j] = ( char* ) malloc (sizeof(char) * split_on_newline_qual_COLS);
 
 		total_quals = splitByDelimiter (buffer_for_qual , '\n' , split_on_newline_qual);
 		qual_pool_iterator = 0;
