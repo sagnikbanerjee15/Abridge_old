@@ -889,7 +889,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     else:
         cmd+=f" \"\" " #argv[11]
     cmd+=f" {name_of_file_with_quality_scores}" #argv[12]
-    //print(cmd)
+    #print(cmd)
     sys.stdout.flush()
     os.system(cmd)
     
