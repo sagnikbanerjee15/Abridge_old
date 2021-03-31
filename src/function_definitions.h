@@ -2063,6 +2063,8 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			{
 				read_from_genome[read_from_genome_index++ ] = 'S';
 				//read_from_genome_including_deletions[read_from_genome_including_deletions_index++] = 'S';
+				printf ("\nSoft clips j=%d" , j);
+				fflush (stdout);
 			}
 		}
 		else if ( sam_alignment_instance->cigar_items[i].def == 'M' )
