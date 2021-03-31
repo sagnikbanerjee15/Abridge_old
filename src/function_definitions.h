@@ -2073,6 +2073,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			{
 				read_from_genome[read_from_genome_index++ ] = whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1];
 				read_from_genome_including_deletions[read_from_genome_including_deletions_index++ ] = whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1];
+				printf ("\nPosition %d Length of genome %d" , sam_alignment_instance->start_position + j - 1 , strlen (whole_genome->nucleotides[chromosome_index]));
 				printf ("\nM whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1] %c" , whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1]);
 			}
 			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
