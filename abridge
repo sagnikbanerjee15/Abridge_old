@@ -858,6 +858,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "_" + options.positions.replace(":","_") + ".sam"
     files_to_be_removed = []
     
+    """
     cmd  = f"(/usr/bin/time --verbose "
     cmd += f" {deCompressQualityScoresFile} "
     cmd += f" {name_of_file_with_quality_scores}.rle "
@@ -870,6 +871,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
         cmd += f"2> /dev/null"
     os.system(cmd)
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
+    """
     
     cmd =f" {randomRetrievalSingleEnded} " #argv[0]
     cmd+=f" {pass1_index_outputfilename} " #argv[1]
@@ -957,7 +959,7 @@ def main():
         name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
         compressed_abridged_filename = input_filename
         output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
-        
+        """
         cmd  = f"7za e {input_filename} -y "
         cmd += f" -o{options.output_directory}"
         cmd += f" 1> /dev/null 2>/dev/null"
@@ -967,7 +969,7 @@ def main():
         
         if options.inputabrfilenames[0][-3:]==".br":
             cmd = f"brotli -d -k -f {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br"
-        
+        """
         cmd=f"cat {pass1_outputfilename}|grep ^@ > {options.output_directory}/{name_of_input_file_without_location}.headers"
         os.system(cmd)
         chromosome_to_length = {}
