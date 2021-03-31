@@ -191,16 +191,18 @@ int main (int argc, char *argv[])
 
 		total_quals = splitByDelimiter (buffer_for_qual , '\n' , split_on_newline_qual);
 		qual_pool_iterator = 0;
-
-		printf ("\nfread_ret_val %d" , fread_ret_val);
-		printf ("\nNew Record:%d\n" , i);
-		printf ("%s" , buffer_for_pass1);
-		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		fflush (stdout);
-
+		/*
+		 printf ("\nfread_ret_val %d" , fread_ret_val);
+		 printf ("\nNew Record:%d\n" , i);
+		 printf ("%s" , buffer_for_pass1);
+		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		 fflush (stdout);
+		 */
 		curr_position = abridge_index->start[i];
-		printf ("\ncurr_position %d i=%d" , curr_position , i);
+		/*
+		 printf ("\ncurr_position %d i=%d" , curr_position , i);
+		 */
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
@@ -224,7 +226,9 @@ int main (int argc, char *argv[])
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 				curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
-			printf ("\ncurr_position %d" , curr_position);
+			/*
+			 printf ("\ncurr_position %d" , curr_position);
+			 */
 			strcpy(sam_alignment->reference_name , chromosome);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
@@ -299,7 +303,7 @@ int main (int argc, char *argv[])
 					}
 					if ( flag_save_all_quality_scores == 1 )
 					{
-						printf ("\nqual_pool_iterator %d total_quals %d " , qual_pool_iterator , total_quals);
+						printf ("\nqual_pool_iterator %d total_quals %d\n " , qual_pool_iterator , total_quals);
 						fflush (stdout);
 						printf ("%s" , split_on_newline_qual[qual_pool_iterator++ ]);
 					}
