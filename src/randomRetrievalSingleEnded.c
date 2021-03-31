@@ -270,8 +270,6 @@ int main (int argc, char *argv[])
 
 					printf ("%s" , sam_alignment->reference_name);
 					printf ("\t");
-					printf ("\nWritten upto here");
-					fflush (stdout);
 
 					printf ("%d" , sam_alignment->start_position);
 					printf ("\t");
@@ -293,7 +291,8 @@ int main (int argc, char *argv[])
 
 					printf ("%s" , sam_alignment->seq);
 					printf ("\t");
-
+					printf ("\nWritten upto here");
+					fflush (stdout);
 					if ( qual_pool_iterator >= total_quals )
 					{
 						printf ("\nQUAL SCORE ERROR");
