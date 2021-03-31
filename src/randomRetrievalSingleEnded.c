@@ -200,6 +200,7 @@ int main (int argc, char *argv[])
 		fflush (stdout);
 
 		curr_position = abridge_index->start[i];
+		printf ("\ncurr_position %d" , curr_position);
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
@@ -223,6 +224,7 @@ int main (int argc, char *argv[])
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 				curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
+			printf ("\ncurr_position %d" , curr_position);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
 				splitByDelimiter (split_on_comma[k] , '-' , split_on_dash);
