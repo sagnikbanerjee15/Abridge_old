@@ -225,6 +225,7 @@ int main (int argc, char *argv[])
 				curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
 			printf ("\ncurr_position %d" , curr_position);
+			strcpy(sam_alignment->reference_name , chromosome);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
 				splitByDelimiter (split_on_comma[k] , '-' , split_on_dash);
@@ -240,6 +241,8 @@ int main (int argc, char *argv[])
 				}
 				else
 				{
+					sprintf(temp , "%d" , read_number);
+					read_number++;
 					strcpy(sam_alignment->read_name , temp);
 					strcpy(sam_alignment->icigar , split_on_dash[0]);
 					printSamAlignmentInstance (sam_alignment , 1);
