@@ -2049,11 +2049,12 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	read_from_genome_index = 0;
 	distance_from_start_pos = 0;
 	MD[0] = '\0';
-	printf ("\nsam_alignment_instance->start_position %d" , sam_alignment_instance->start_position);
-	for ( i = 0 ; i < sam_alignment_instance->number_of_cigar_items ; i++ )
-	{
-		printf ("\n%d %c" , sam_alignment_instance->cigar_items[i].len , sam_alignment_instance->cigar_items[i].def);
-	}
+	/*
+	 printf ("\nsam_alignment_instance->start_position %d" , sam_alignment_instance->start_position);
+	 for ( i = 0 ; i < sam_alignment_instance->number_of_cigar_items ; i++ )
+	 {
+	 printf ("\n%d %c" , sam_alignment_instance->cigar_items[i].len , sam_alignment_instance->cigar_items[i].def);
+	 }*/
 	for ( i = 0 ; i < sam_alignment_instance->number_of_cigar_items ; i++ )
 	{
 		if ( sam_alignment_instance->cigar_items[i].def == 'S' )
@@ -2063,8 +2064,10 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			{
 				read_from_genome[read_from_genome_index++ ] = 'S';
 				//read_from_genome_including_deletions[read_from_genome_including_deletions_index++] = 'S';
-				printf ("\nSoft clips j=%d" , j);
-				fflush (stdout);
+				/*
+				 printf ("\nSoft clips j=%d" , j);
+				 fflush (stdout);
+				 */
 			}
 		}
 		else if ( sam_alignment_instance->cigar_items[i].def == 'M' )
@@ -2075,9 +2078,11 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			{
 				read_from_genome[read_from_genome_index++ ] = whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1];
 				read_from_genome_including_deletions[read_from_genome_including_deletions_index++ ] = whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1];
-				printf ("\nPosition %d Length of genome %d read_from_genome_including_deletions_index %d j=%d" , sam_alignment_instance->start_position + j - 1 , strlen (whole_genome->nucleotides[chromosome_index]) , read_from_genome_including_deletions_index , j);
-				printf ("\nM whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1] %c" , whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1]);
-				fflush (stdout);
+				/*
+				 printf ("\nPosition %d Length of genome %d read_from_genome_including_deletions_index %d j=%d" , sam_alignment_instance->start_position + j - 1 , strlen (whole_genome->nucleotides[chromosome_index]) , read_from_genome_including_deletions_index , j);
+				 printf ("\nM whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1] %c" , whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1]);
+				 fflush (stdout);
+				 */
 			}
 			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
 		}
@@ -2102,21 +2107,24 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 					j++ )
 			{
 				read_from_genome_including_deletions[read_from_genome_including_deletions_index++ ] = whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1];
-				printf ("\nD whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1] %c" , whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1]);
+				/*
+				 printf ("\nD whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1] %c" , whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1]);
+				 */
 			}
 			// Genome sequence is not consumed but pointer will move ahead
 			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
 		}
 	}
-
-	printf ("\n");
-	for ( j = 0 ; j < read_from_genome_including_deletions_index ; j++ )
-		printf ("%c" , read_from_genome_including_deletions[j]);
-	printf ("\n");
-	fflush (stdout);
-
-	printf ("\nread_from_genome_including_deletions_index=%d" , read_from_genome_including_deletions_index);
-	fflush (stdout);
+	/*
+	 printf ("\n");
+	 for ( j = 0 ; j < read_from_genome_including_deletions_index ; j++ )
+	 printf ("%c" , read_from_genome_including_deletions[j]);
+	 printf ("\n");
+	 fflush (stdout);
+	 */
+	/*
+	 printf ("\nread_from_genome_including_deletions_index=%d" , read_from_genome_including_deletions_index);
+	 fflush (stdout);*/
 	read_from_genome[read_from_genome_index++ ] = '\0';
 	read_from_genome_including_deletions[read_from_genome_including_deletions_index++ ] = '\0';
 	for ( i = 0 ; sam_alignment_instance->seq[i] != '\0' ; i++ )
@@ -2182,9 +2190,6 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 		sprintf (temp , "%d" , num);
 		strcat (sam_alignment_instance->tags[2].val , temp);
 	}
-
-	printf ("\generateReadSequenceAndMDStringCompleted");
-	fflush (stdout);
 	/*
 	 printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
 	 printf("\n%s\n%s\n%s", sam_alignment_instance->soft_clips_removed_seq, read_from_genome_including_deletions, read_from_genome);
