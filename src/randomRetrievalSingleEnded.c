@@ -301,7 +301,7 @@ int main (int argc, char *argv[])
 					{
 						printf ("\nqual_pool_iterator %d total_quals %d " , qual_pool_iterator , total_quals);
 						fflush (stdout);
-						printf ("%s" , buffer_for_qual[qual_pool_iterator++ ]);
+						printf ("%s" , split_on_newline_qual[qual_pool_iterator++ ]);
 					}
 					else printf ("%s" , sam_alignment->qual);
 					printf ("\t");
