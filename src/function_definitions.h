@@ -2099,7 +2099,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
 		}
 	}
-	printf ("\n %d" , read_from_genome_index);
+	printf ("\n %d" , read_from_genome_including_deletions_index);
 	read_from_genome[read_from_genome_index++ ] = '\0';
 	read_from_genome_including_deletions[read_from_genome_including_deletions_index++ ] = '\0';
 	for ( i = 0 ; sam_alignment_instance->seq[i] != '\0' ; i++ )
