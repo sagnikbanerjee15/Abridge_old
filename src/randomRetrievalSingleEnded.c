@@ -151,8 +151,8 @@ int main (int argc, char *argv[])
 
 	from = start;
 	to = end;
-	//printf("\n abridge_match_start_index %d abridge_match_end_index %d", abridge_match_start_index, abridge_match_end_index);
-	//fflush(stdout);
+	printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
+	fflush (stdout);
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
 		//printf("\n%s %lld %lld %lld %lld", abridge_index->chromosome[i], abridge_index->start[i], abridge_index->end[i], abridge_index->start_byte[i], abridge_index->end_byte[i]);
