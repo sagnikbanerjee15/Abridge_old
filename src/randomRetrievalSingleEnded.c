@@ -200,7 +200,7 @@ int main (int argc, char *argv[])
 		fflush (stdout);
 
 		curr_position = abridge_index->start[i];
-		printf ("\ncurr_position %d" , curr_position);
+		printf ("\ncurr_position %d i=%d" , curr_position , i);
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
