@@ -140,6 +140,10 @@ int main (int argc, char *argv[])
 
 	buffer_for_pass1 = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
 	single_genome_sequence = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
+	single_genome_sequence->number_of_reference_sequences = 0;
+	single_genome_sequence->nucleotides = ( char** ) malloc (sizeof(char*) * 1);
+	single_genome_sequence->reference_sequence_name = ( char** ) malloc (sizeof(char*) * 1);
+	single_genome_sequence->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * 1);
 	sam_alignment = allocateMemorySam_Alignment ();
 
 	/****************************************************************************************************************************************/
