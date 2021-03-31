@@ -150,7 +150,7 @@ int main (int argc, char *argv[])
 	readInEachChromosome (genome_filename , single_genome_sequence , chromosome);
 	findReadClusterFromAbridgeIndex (abridge_index , chromosome , start , end , &abridge_match_start_index , &abridge_match_end_index);
 	writeSequenceHeaders (fhw , genome_filename);
-
+	return 0;
 	from = start;
 	to = end;
 	printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);

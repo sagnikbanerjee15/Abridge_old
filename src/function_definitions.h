@@ -1537,7 +1537,7 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 		exit (1);
 	}
 
-	printf ("\nwhole_genome->number_of_reference_sequences %d" , whole_genome->number_of_reference_sequences);
+	//printf ("\nwhole_genome->number_of_reference_sequences %d" , whole_genome->number_of_reference_sequences);
 	if ( whole_genome->number_of_reference_sequences == 1 )
 	{
 		int total = strlen (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences - 1]) + strlen (whole_genome->nucleotides[whole_genome->number_of_reference_sequences - 1]);
