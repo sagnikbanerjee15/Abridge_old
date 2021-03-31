@@ -156,8 +156,10 @@ int main (int argc, char *argv[])
 
 	from = start;
 	to = end;
-	printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
-	fflush (stdout);
+	/*
+	 printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
+	 fflush (stdout);
+	 */
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
 		//printf("\n%s %lld %lld %lld %lld", abridge_index->chromosome[i], abridge_index->start[i], abridge_index->end[i], abridge_index->start_byte[i], abridge_index->end_byte[i]);
@@ -190,6 +192,8 @@ int main (int argc, char *argv[])
 			split_on_newline_qual[j] = ( char* ) malloc (sizeof(char) * split_on_newline_qual_COLS);
 
 		total_quals = splitByDelimiter (buffer_for_qual , '\n' , split_on_newline_qual);
+		for ( j = 0 ; j < total_quals ; j++ )
+			printf ("\n%s" , split_on_newline_qual[j]);
 		qual_pool_iterator = 0;
 		/*
 		 printf ("\nfread_ret_val %d" , fread_ret_val);
@@ -305,7 +309,7 @@ int main (int argc, char *argv[])
 					{
 						printf ("\nqual_pool_iterator %d total_quals %d\n " , qual_pool_iterator , total_quals);
 						fflush (stdout);
-						//printf ("%s" , split_on_newline_qual[qual_pool_iterator++ ]);
+						printf ("%s" , split_on_newline_qual[qual_pool_iterator++ ]);
 					}
 					else printf ("%s" , sam_alignment->qual);
 					printf ("\t");
