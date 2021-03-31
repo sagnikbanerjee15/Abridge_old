@@ -2094,15 +2094,20 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			for ( j = distance_from_start_pos ;
 					j < distance_from_start_pos + sam_alignment_instance->cigar_items[i].len ;
 					j++ )
+			{
 				read_from_genome_including_deletions[read_from_genome_including_deletions_index++ ] = whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1];
+				printf ("\nwhole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1] %c" , whole_genome->nucleotides[chromosome_index][sam_alignment_instance->start_position + j - 1]);
+			}
 			// Genome sequence is not consumed but pointer will move ahead
 			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
 		}
 	}
+
 	printf ("\n");
 	for ( j = 0 ; j < read_from_genome_including_deletions_index ; j++ )
 		printf ("%c" , read_from_genome_including_deletions[j]);
 	printf ("\n");
+
 	printf ("\nread_from_genome_including_deletions_index=%d" , read_from_genome_including_deletions_index);
 	read_from_genome[read_from_genome_index++ ] = '\0';
 	read_from_genome_including_deletions[read_from_genome_including_deletions_index++ ] = '\0';
