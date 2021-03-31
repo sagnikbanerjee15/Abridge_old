@@ -2108,8 +2108,6 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			distance_from_start_pos += sam_alignment_instance->cigar_items[i].len;
 		}
 	}
-	printf ("\nIamhere");
-	fflush (stdout);
 
 	printf ("\n");
 	for ( j = 0 ; j < read_from_genome_including_deletions_index ; j++ )
@@ -2124,8 +2122,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	for ( i = 0 ; sam_alignment_instance->seq[i] != '\0' ; i++ )
 		if ( sam_alignment_instance->seq[i] == '-' )
 			sam_alignment_instance->seq[i] = read_from_genome[i];
-	printf ("\nNowIamhere");
-	fflush (stdout);
+
 	strcpy (sam_alignment_instance->cigar_extended , read_from_genome_including_deletions);
 	if ( strlen (sam_alignment_instance->md_extended) != strlen (read_from_genome_including_deletions) )
 	{
@@ -2134,6 +2131,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 		printf ("\n%s\n%s" , sam_alignment_instance->md_extended , read_from_genome_including_deletions);
 		exit (1);
 	}
+
 	/*
 	 * Construct MD String
 	 */
@@ -2174,6 +2172,9 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 			strcat (sam_alignment_instance->tags[2].val , temp);
 		}
 	}
+
+	printf ("\nIamhere");
+	fflush (stdout);
 
 	for ( i = 0 ; sam_alignment_instance->tags[2].val[i] != '\0' ; i++ )
 		if ( sam_alignment_instance->tags[2].val[i] >= 'A' && sam_alignment_instance->tags[2].val[i] <= 'Z' && sam_alignment_instance->tags[2].val[i] != 'A' && sam_alignment_instance->tags[2].val[i] != 'T' && sam_alignment_instance->tags[2].val[i] != 'G' && sam_alignment_instance->tags[2].val[i] != 'C' )
