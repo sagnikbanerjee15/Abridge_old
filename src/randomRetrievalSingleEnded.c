@@ -17,7 +17,7 @@ int main (int argc, char *argv[])
 	char genome_filename[FILENAME_LENGTH];
 	char genome_index_filename[FILENAME_LENGTH];
 	char chromosome[1000];
-	char pass2_filename[FILENAME_LENGTH];
+	char pass1_filename[FILENAME_LENGTH];
 	char output_sam_filename[FILENAME_LENGTH];
 	char default_quality_value[10];
 	char read_prefix[1000];
@@ -83,7 +83,7 @@ int main (int argc, char *argv[])
 	strcpy(genome_filename , argv[2]);
 	strcpy(genome_index_filename , argv[3]);
 	strcpy(chromosome , argv[4]);
-	strcpy(pass2_filename , argv[5]);
+	strcpy(pass1_filename , argv[5]);
 	start = strtol (argv[6] , &temp , 10);
 	end = strtol (argv[7] , &temp , 10);
 	strcpy(output_sam_filename , argv[8]);
@@ -92,7 +92,7 @@ int main (int argc, char *argv[])
 	strcpy(read_prefix , argv[11]);
 	strcpy(name_of_file_with_quality_scores , argv[12]);
 
-	fhr_pass1 = fopen (pass2_filename , "rb");
+	fhr_pass1 = fopen (pass1_filename , "rb");
 	if ( fhr_pass1 == NULL )
 	{
 		printf ("Error! File not found");

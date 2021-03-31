@@ -876,7 +876,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     cmd+=f" {genome_filename} " #argv[2]
     cmd+=f" {genome_index_filename} " #argv[3]
     cmd+=f" {chromosome} " #argv[4]
-    cmd+=f" {input_filename}  " #argv[5]
+    cmd+=f" {pass1_outputfilename}  " #argv[5]
     cmd+=f" {start} " #argv[6]
     cmd+=f" {end} " #argv[7]
     cmd+=f" {outputfilename}" #argv[8]
