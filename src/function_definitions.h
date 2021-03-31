@@ -2106,10 +2106,10 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	if ( strlen (sam_alignment_instance->md_extended) != strlen (read_from_genome_including_deletions) )
 	{
 		printf ("\nLengths do not match");
+		printf ("\n%d %d" , strlen (sam_alignment_instance->md_extended) , strlen (read_from_genome_including_deletions));
 		printf ("\n%s\n%s" , sam_alignment_instance->md_extended , read_from_genome_including_deletions);
 		exit (1);
 	}
-//return;
 	/*
 	 * Construct MD String
 	 */
