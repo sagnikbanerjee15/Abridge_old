@@ -2051,6 +2051,10 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	MD[0] = '\0';
 	for ( i = 0 ; i < sam_alignment_instance->number_of_cigar_items ; i++ )
 	{
+		printf ("\n%d %c" , sam_alignment_instance->cigar_items[i].len , sam_alignment_instance->cigar_items[i].def);
+	}
+	for ( i = 0 ; i < sam_alignment_instance->number_of_cigar_items ; i++ )
+	{
 		if ( sam_alignment_instance->cigar_items[i].def == 'S' )
 		{
 			//Soft clips - not present in genome. Hence ignore
