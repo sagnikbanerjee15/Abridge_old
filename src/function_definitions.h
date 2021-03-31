@@ -613,7 +613,6 @@ void convertIcigarToCigarandMD (struct Whole_Genome_Sequence *whole_genome, stru
 						{
 							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = '-';
 							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index] = '\0';
-
 							sam_alignment_instance->md_extended[MD_extended_index++ ] = '=';
 						}
 
@@ -2159,9 +2158,11 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 		sprintf (temp , "%d" , num);
 		strcat (sam_alignment_instance->tags[2].val , temp);
 	}
-//printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
-//printf("\n%s\n%s\n%s", sam_alignment_instance->soft_clips_removed_seq, read_from_genome_including_deletions, read_from_genome);
-//printf("\n");
+	/*
+	 printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
+	 printf("\n%s\n%s\n%s", sam_alignment_instance->soft_clips_removed_seq, read_from_genome_including_deletions, read_from_genome);
+	 printf("\n");
+	 */
 }
 
 void writeAlignmentToFile (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores)
