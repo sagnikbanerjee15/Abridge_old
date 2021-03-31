@@ -1559,8 +1559,10 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 			buffer[i - 1] = '\0';
 			if ( strcmp (buffer , chromosome) == 0 )
 			{
-				printf ("\n Found chromosome %s" , chromosome);
-				fflush (stdout);
+				/*
+				 printf ("\n Found chromosome %s" , chromosome);
+				 fflush (stdout);
+				 */
 				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] = ( char* ) malloc (sizeof(char) * ( line_len + 1 ));
 				strcpy (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] , buffer);
 				line_len = getline ( &buffer , &len , fhr);
