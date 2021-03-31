@@ -245,11 +245,11 @@ int main (int argc, char *argv[])
 					read_number++;
 					strcpy(sam_alignment->read_name , temp);
 					strcpy(sam_alignment->icigar , split_on_dash[0]);
-					printSamAlignmentInstance (sam_alignment , 1);
-					fflush (stdout);
+					//printSamAlignmentInstance (sam_alignment , 1);
+					//fflush (stdout);
 					convertIcigarToCigarandMD (single_genome_sequence , sam_alignment , chromosome , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
-					printf ("\nconversion complete");
-					fflush (stdout);
+					//printf ("\nconversion complete");
+					//fflush (stdout);
 					sprintf(temp , "%d" , read_number);
 					read_number++;
 					strcpy(sam_alignment->read_name , temp);
@@ -305,11 +305,12 @@ int main (int argc, char *argv[])
 					}
 					else printf ("%s" , sam_alignment->qual);
 					printf ("\t");
-					printf ("\nWritten upto here");
-					fflush (stdout);
-					printf ("NH:i:%s" , sam_alignment->tags[0].val);
-					printf ("\t");
-
+					/*
+					 printf ("\nWritten upto here");
+					 fflush (stdout);
+					 printf ("NH:i:%s" , sam_alignment->tags[0].val);
+					 printf ("\t");
+					 */
 					if ( strcmp (sam_alignment->tags[1].val , ".") != 0 )
 					{
 						printf ("XS:A:%s" , sam_alignment->tags[1].val);
