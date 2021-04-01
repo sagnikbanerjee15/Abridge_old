@@ -157,10 +157,10 @@ int main (int argc, char *argv[])
 	buffer_for_qual = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
 	from = start;
 	to = end;
-	/*
-	 printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
-	 fflush (stdout);
-	 */
+
+	printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
+	fflush (stdout);
+
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
 		/*
