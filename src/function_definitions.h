@@ -1721,7 +1721,7 @@ void readInGenomeSequenceSingleChromosome (struct Whole_Genome_Sequence *single_
 	fclose (fhr);
 }
 
-void findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index)
+void findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index, long long int *curr_position)
 {
 	/********************************************************************
 	 * Variable declaration
