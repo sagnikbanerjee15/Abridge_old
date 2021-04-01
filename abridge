@@ -904,7 +904,6 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "_" + options.positions.replace(":","_") + ".sam"
     files_to_be_removed = []
     
-    """
     cmd  = f"(/usr/bin/time --verbose "
     cmd += f" {deCompressQualityScoresFile} "
     cmd += f" {name_of_file_with_quality_scores}.rle "
@@ -917,7 +916,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
         cmd += f"2> /dev/null"
     os.system(cmd)
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
-    """
+
     
     cmd =f" {randomRetrievalSingleEnded} " #argv[0]
     cmd+=f" {pass1_index_outputfilename} " #argv[1]
