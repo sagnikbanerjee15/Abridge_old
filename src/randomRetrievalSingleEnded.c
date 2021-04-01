@@ -236,9 +236,9 @@ int main (int argc, char *argv[])
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 				curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
-			/*
-			 printf ("\ncurr_position %d" , curr_position);
-			 */
+
+			printf ("\ncurr_position %d" , curr_position);
+
 			strcpy(sam_alignment->reference_name , chromosome);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
