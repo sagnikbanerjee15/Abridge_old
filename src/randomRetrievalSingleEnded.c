@@ -329,10 +329,8 @@ int main (int argc, char *argv[])
 					printf ("\n");
 					fflush (stdout);
 				}
-				/*
-				 printf ("\nFile write complete");
-				 fflush (stdout);
-				 */
+				printf ("\nFile write complete");
+				fflush (stdout);
 			}
 		}
 	}
