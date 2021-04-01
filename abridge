@@ -662,8 +662,8 @@ def mergeAbridgeData(options):
     all_commands = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
-        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+        pass1_filename = options.output_directory + "/" + input_filename_without_extension + ".pass1"
+        pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
         unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
         compressed_abridged_filename = input_filename
         
@@ -674,8 +674,8 @@ def mergeAbridgeData(options):
         all_commands.append([cmd,"dummy"])
     
         files_to_be_removed.extend([input_filename_without_extension,
-                                    pass2_filename,
-                                    pass2_index_filename,
+                                    pass1_filename,
+                                    pass1_index_filename,
                                     unmapped_outputfilename])
     pool.map(runCommand,all_commands)
     
@@ -696,8 +696,8 @@ def mergeAbridgeData(options):
     all_chromosomes = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-8]
-        pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
-        all_chromosomes.extend(findChromosomes(pass2_index_filename))
+        pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
+        all_chromosomes.extend(findChromosomes(pass1_index_filename))
     all_chromosomes=list(set(all_chromosomes))
     all_chromosomes=sorted(all_chromosomes)
     """print(all_chromosomes)
@@ -709,12 +709,12 @@ def mergeAbridgeData(options):
         cmd=mergeCompressedFilesSingleEnded
         for input_filename in options.inputabrfilenames:
             input_filename_without_extension = input_filename.split("/")[-1][:-8]
-            pass2_filename = options.output_directory + "/" + input_filename_without_extension + ".pass2"
-            pass2_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass2.index"
+            pass1_filename = options.output_directory + "/" + input_filename_without_extension + ".pass1"
+            pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
             unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
             compressed_abridged_filename = input_filename
             
-            cmd+=" "+pass2_filename
+            cmd+=" "+pass1_filename
         cmd+=" "+merged_output_filename
         cmd+=" "+chromosome
         all_commands.append([cmd,"dummy"]) 
@@ -734,10 +734,10 @@ def mergeAbridgeData(options):
         os.system(cmd)
         
         os.system("rm -f "+options.output_directory + "/" + options.output_directory.split("/")[-1] + ".merged." + chromosome) 
-    """
+    
     for file in files_to_be_removed:
         os.system("rm "+file)
-    """
+    
 
 def decompressSamFile(options):
     """
