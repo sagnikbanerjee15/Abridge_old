@@ -154,6 +154,7 @@ int main (int argc, char *argv[])
 	findReadClusterFromAbridgeIndex (abridge_index , chromosome , start , end , &abridge_match_start_index , &abridge_match_end_index);
 	writeSequenceHeaders (fhw , genome_filename);
 
+	buffer_for_qual = ( char* ) malloc (sizeof(char));
 	from = start;
 	to = end;
 	/*
