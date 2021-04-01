@@ -1721,12 +1721,13 @@ void readInGenomeSequenceSingleChromosome (struct Whole_Genome_Sequence *single_
 	fclose (fhr);
 }
 
-void findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index, long long int *curr_position)
+int findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
 	int i;
+	short int first_record = 0;
 	long long int start1, start2;
 	long long int end1, end2;
 	bool condition1;
@@ -1758,12 +1759,21 @@ void findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char 
 			if ( ! ( condition1 || condition2 ) )
 			{
 				if ( *abridge_match_end_index == -1 )
+				{
 					*abridge_match_start_index = i;
+					if ( i == 0 )
+						first_record = 1;
+					else
+					{
+						if ( strcmp (abridge_index->chromosome[i] , abridge_index->chromosome[i - 1]) != 0 )
+							first_record = 1;
+					}
+				}
 				*abridge_match_end_index = i;
 			}
 		}
 	}
-
+	return first_record;
 }
 
 void readGenomeIndex (struct Abridge_Index *genome_index, char *genome_index_filename, char **split_line)
@@ -2402,7 +2412,7 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename)
 	strcat (line_to_be_written_to_file , "\t");
 	strcat (line_to_be_written_to_file , "SO:coordinate");
 	strcat (line_to_be_written_to_file , "\n");
-	//fprintf (fhw , "%s" , line_to_be_written_to_file);
+//fprintf (fhw , "%s" , line_to_be_written_to_file);
 	printf ("%s" , line_to_be_written_to_file);
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{

@@ -47,6 +47,7 @@ int main (int argc, char *argv[])
 	short int flag_save_all_quality_scores;
 	short int flag_save_exact_quality_scores;
 	short int number_of_columns;
+	short int first_record;
 
 	int i, j, k, l;
 	int fseek_ret_val;
@@ -151,7 +152,7 @@ int main (int argc, char *argv[])
 	readGenomeIndex (genome_index , genome_index_filename , split_on_newline);
 	//readInGenomeSequenceSingleChromosome (single_genome_sequence , chromosome , genome_filename , genome_index);
 	readInEachChromosome (genome_filename , single_genome_sequence , chromosome);
-	findReadClusterFromAbridgeIndex (abridge_index , chromosome , start , end , &abridge_match_start_index , &abridge_match_end_index , &curr_position);
+	first_record = findReadClusterFromAbridgeIndex (abridge_index , chromosome , start , end , &abridge_match_start_index , &abridge_match_end_index);
 	writeSequenceHeaders (fhw , genome_filename);
 
 	buffer_for_qual = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
@@ -210,7 +211,7 @@ int main (int argc, char *argv[])
 		 fflush (stdout);
 		 */
 		curr_position = abridge_index->start[i];
-		if ( abridge_match_start_index == 0 ) curr_position = 0;
+		if ( first_record == 1 ) curr_position = 0;
 		printf ("\ncurr_position First %d i=%d" , curr_position , i);
 
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
