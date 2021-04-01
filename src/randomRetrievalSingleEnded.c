@@ -240,7 +240,7 @@ int main (int argc, char *argv[])
 				splitByDelimiter (split_on_comma[k] , '-' , split_on_dash);
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 				sam_alignment->start_position = curr_position;
-
+				if ( curr_position > end ) continue;
 				if ( split_on_comma[k][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 				{
 					// Use the same cigar
@@ -332,8 +332,10 @@ int main (int argc, char *argv[])
 					printf ("\n");
 					fflush (stdout);
 				}
-				printf ("\nFile write complete");
-				fflush (stdout);
+				/*
+				 printf ("\nFile write complete");
+				 fflush (stdout);
+				 */
 			}
 		}
 	}
