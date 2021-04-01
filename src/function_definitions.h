@@ -2402,7 +2402,8 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename)
 	strcat (line_to_be_written_to_file , "\t");
 	strcat (line_to_be_written_to_file , "SO:coordinate");
 	strcat (line_to_be_written_to_file , "\n");
-	fprintf (fhw , "%s" , line_to_be_written_to_file);
+	//fprintf (fhw , "%s" , line_to_be_written_to_file);
+	printf ("%s" , line_to_be_written_to_file);
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		splitByDelimiter (buffer , '\t' , split_on_tab);
@@ -2415,7 +2416,8 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename)
 		strcat (line_to_be_written_to_file , split_on_tab[1]);
 		strcat (line_to_be_written_to_file , "\t");
 		strcat (line_to_be_written_to_file , "\n");
-		fprintf (fhw , "%s" , line_to_be_written_to_file);
+		//fprintf (fhw , "%s" , line_to_be_written_to_file);
+		printf ("%s" , line_to_be_written_to_file);
 	}
 
 	fclose (fhr);
