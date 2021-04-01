@@ -888,6 +888,8 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     ######################################################################################
     cmd=f"gcc {randomRetrievalSingleEnded}.c -o {randomRetrievalSingleEnded} -g -Ofast"
     os.system(cmd)
+    cmd=f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
+    os.system(cmd)
     ######################################################################################
     
     genome_filename = options.genome
