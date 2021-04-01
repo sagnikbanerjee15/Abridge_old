@@ -473,7 +473,7 @@ def compressSamFile(options):
         ######################################################################################
         
         all_commands = []
-        for input_filename in options.inputabrfilenames:
+        for input_filename in options.inputsamfilenames:
             name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
             cmd  = "mv "
             cmd += f"{options.output_directory}/{name_of_input_file_without_location}.qual.decompressed "
