@@ -193,8 +193,10 @@ int main (int argc, char *argv[])
 			split_on_newline_qual[j] = ( char* ) malloc (sizeof(char) * split_on_newline_qual_COLS);
 
 		total_quals = splitByDelimiter (buffer_for_qual , '\n' , split_on_newline_qual);
-		for ( j = 0 ; j < total_quals ; j++ )
-			printf ("\n%s" , split_on_newline_qual[j]);
+		/*
+		 for ( j = 0 ; j < total_quals ; j++ )
+		 printf ("\n%s" , split_on_newline_qual[j]);
+		 */
 		qual_pool_iterator = 0;
 		/*
 		 printf ("\nfread_ret_val %d" , fread_ret_val);
