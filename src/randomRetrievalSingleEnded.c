@@ -237,7 +237,7 @@ int main (int argc, char *argv[])
 				curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
 
-			printf ("\ncurr_position %d" , curr_position);
+			printf ("\ncurr_position %d\n" , curr_position);
 
 			strcpy(sam_alignment->reference_name , chromosome);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
