@@ -53,8 +53,8 @@ int main (int argc, char *argv[])
 	int fread_ret_val;
 	int number_of_entries_in_cluster;
 	int sam_alignment_pool_index;
-	int split_on_newline_qual_ROWS = 1;
-	int split_on_newline_qual_COLS = 1;
+	int split_on_newline_qual_ROWS = ROWS;
+	int split_on_newline_qual_COLS = COLS * 10;
 	int number_of_newlines = 0;
 	int number_of_distinct_cigars_in_a_line;
 	int number_of_repititions_of_the_same_reads;
@@ -154,7 +154,7 @@ int main (int argc, char *argv[])
 	findReadClusterFromAbridgeIndex (abridge_index , chromosome , start , end , &abridge_match_start_index , &abridge_match_end_index);
 	writeSequenceHeaders (fhw , genome_filename);
 
-	buffer_for_qual = ( char* ) malloc (sizeof(char));
+	buffer_for_qual = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
 	from = start;
 	to = end;
 	/*
@@ -175,14 +175,16 @@ int main (int argc, char *argv[])
 		number_of_entries_in_cluster = splitByDelimiter (buffer_for_pass1 , '\n' , split_on_newline);
 		number_of_entries_in_cluster--; //Last line is always empty
 
-		free (buffer_for_qual);
-		buffer_for_qual = ( char* ) malloc (sizeof(char) * ( abridge_index->end_byte_qual[i] - abridge_index->start_byte_qual[i] ));
-		fseek_ret_val = fseek (fhr_qual , abridge_index->start_byte_qual[i] , SEEK_SET);
+		//free (buffer_for_qual);
+		//buffer_for_qual = ( char* ) malloc (sizeof(char) * ( abridge_index->end_byte_qual[i] - abridge_index->start_byte_qual[i] ));
 		buffer_for_qual[0] = '\0';
+		fseek_ret_val = fseek (fhr_qual , abridge_index->start_byte_qual[i] , SEEK_SET);
 		fread_ret_val = fread (buffer_for_qual , 1 , abridge_index->end_byte_qual[i] - abridge_index->start_byte_qual[i] , fhr_qual);
-		for ( j = 0 ; j < split_on_newline_qual_ROWS ; j++ )
-			free (split_on_newline_qual[i]);
-		free (split_on_newline_qual);
+		/*
+		 for ( j = 0 ; j < split_on_newline_qual_ROWS ; j++ )
+		 free (split_on_newline_qual[i]);
+		 free (split_on_newline_qual);
+		 */
 		number_of_newlines = 0;
 		for ( j = 0 ; buffer_for_qual[j] != '\0' ; j++ )
 			if ( buffer_for_qual[j] == '\n' ) number_of_newlines += 1;
