@@ -158,10 +158,10 @@ int main (int argc, char *argv[])
 	buffer_for_qual = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
 	from = start;
 	to = end;
-
-	printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
-	fflush (stdout);
-
+	/*
+	 printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
+	 fflush (stdout);
+	 */
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
 		/*
@@ -212,8 +212,9 @@ int main (int argc, char *argv[])
 		 */
 		curr_position = abridge_index->start[i];
 		//if ( first_record == 1 ) curr_position = 0;
-		printf ("\ncurr_position First %d i=%d" , curr_position , i);
-
+		/*
+		 printf ("\ncurr_position First %d i=%d" , curr_position , i);
+		 */
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
@@ -238,9 +239,9 @@ int main (int argc, char *argv[])
 				if ( j != 0 )
 					curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
-
-			printf ("\ncurr_position %d\n" , curr_position);
-
+			/*
+			 printf ("\ncurr_position %d\n" , curr_position);
+			 */
 			strcpy(sam_alignment->reference_name , chromosome);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
