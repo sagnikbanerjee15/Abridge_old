@@ -210,7 +210,7 @@ int main (int argc, char *argv[])
 		 fflush (stdout);
 		 */
 		curr_position = abridge_index->start[i];
-
+		curr_position = 0;
 		printf ("\ncurr_position First %d i=%d" , curr_position , i);
 
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
