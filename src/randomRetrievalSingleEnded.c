@@ -307,8 +307,10 @@ int main (int argc, char *argv[])
 					}
 					if ( flag_save_all_quality_scores == 1 )
 					{
-						printf ("\nqual_pool_iterator %d total_quals %d\n " , qual_pool_iterator , total_quals);
-						fflush (stdout);
+						/*
+						 printf ("\nqual_pool_iterator %d total_quals %d\n " , qual_pool_iterator , total_quals);
+						 fflush (stdout);
+						 */
 						printf ("%s" , split_on_newline_qual[qual_pool_iterator++ ]);
 					}
 					else printf ("%s" , sam_alignment->qual);
