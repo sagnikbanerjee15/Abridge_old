@@ -47,13 +47,11 @@ void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 			 */
 			for ( i = *read_length - 1 ; i >= 0 ; i-- )
 			{
-				//printf ("%d" , i);
 				if ( read_id[i] == ( strlen (alphabets) - 1 ) )
 					read_id[i] = 0;
 				else
 				{
 					read_id[i]++;
-					//printf ("%d" , read_id[i]);
 					break;
 				}
 			}
