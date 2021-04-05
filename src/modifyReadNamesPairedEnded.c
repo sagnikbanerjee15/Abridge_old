@@ -70,7 +70,7 @@ int main (int argc, char *argv[])
 	int read_id[100];
 	int i, j;
 
-	char alphabets[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	char alphabets[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-='{}[]|?<>,.";
 
 	/********************************************************************/
 
@@ -80,7 +80,7 @@ int main (int argc, char *argv[])
 	read_length = 0;
 
 	/********************************************************************/
-	for ( i = 0 ; i < 10000000 ; i++ )
+	for ( i = 0 ; i < 15000000 ; i++ )
 	{
 		generateNextReadID (alphabets , read_id , &read_length);
 		for ( j = 0 ; j < read_length ; j++ )
