@@ -34,7 +34,7 @@ void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 		 */
 		for ( i = 0 ; i < *read_length ; i++ )
 			if ( read_id[i] != strlen (alphabets) - 1 ) break;
-		if ( i != *read_length )
+		if ( i == *read_length )
 		{
 			( *read_length )++;
 			for ( i = 0 ; i < *read_length ; i++ )
