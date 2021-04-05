@@ -8,14 +8,12 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void generateNextReadID (int *alphabets, char *read_id, int *read_length)
+void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
 	int i;
-
-	int check_for_last_read_id[100];
 	/********************************************************************/
 
 	/********************************************************************
