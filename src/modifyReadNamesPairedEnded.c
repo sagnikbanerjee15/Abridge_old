@@ -53,6 +53,7 @@ void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 				else
 				{
 					read_id[i]++;
+					printf ("%d" , read_id[i]);
 					break;
 				}
 			}
