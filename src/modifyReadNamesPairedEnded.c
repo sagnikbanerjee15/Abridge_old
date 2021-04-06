@@ -100,7 +100,6 @@ void writeToFile (struct Sam_Alignment *curr_alignment, FILE *fhw)
 	fprintf (fhw , "%s" , str);
 	fprintf (fhw , "%s" , "\t");
 
-	printf ("\nInside writeToFile %ld" , curr_alignment->template_length);
 	sprintf(str , "%ld" , curr_alignment->template_length);
 	fprintf (fhw , "%s" , str);
 	fprintf (fhw , "%s" , "\t");
@@ -159,6 +158,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	 * Variable declaration
 	 ********************************************************************/
 	char alphabets[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-='{}[]|?<>,.";
+	char *temp; //Required for strtoi
 	char *line = NULL; // for reading each line
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags;
@@ -228,7 +228,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	{
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
-		printSamAlignmentInstance (curr_alignment , 1);
+		//printSamAlignmentInstance (curr_alignment , 1);
 
 		NH_tag_index = -1;
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
@@ -250,17 +250,34 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			}
 			else
 			{
-				//printSamAlignmentInstance (curr_alignment , 1);
 				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
 				writeToFile (curr_alignment , fhw);
 				read_id_mapping[old_read_name_index]->valid = 0;
 				read_id_mapping[old_read_name_index]->number_of_multi_maps = 0;
-				//printSamAlignmentInstance (curr_alignment , 1);
 			}
 		}
 		else
 		{
+			old_read_name_index = -1;
+			old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
 
+			if ( old_read_name_index == -1 )
+			{
+				generateNextReadID (alphabets , read_id , &read_length);
+				convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+				insertNewEntryInMappingDictionary (read_id_string , curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping , strtol (curr_alignment->tags[NH_tag_index].val , &temp , 10) * 2 - 1);
+				strcpy(curr_alignment->read_name , read_id_string);
+				writeToFile (curr_alignment , fhw);
+			}
+			else
+			{
+				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
+				writeToFile (curr_alignment , fhw);
+				read_id_mapping[old_read_name_index]->number_of_multi_maps--;
+				if ( read_id_mapping[old_read_name_index]->number_of_multi_maps == 0 )
+					read_id_mapping[old_read_name_index]->valid = 0;
+
+			}
 		}
 		reInitializeSamAlignmentInstance (curr_alignment);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
