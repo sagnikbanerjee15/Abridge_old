@@ -177,7 +177,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	for ( i = 0 ; i < ROWS ; i++ )
 		split_tags[i] = ( char* ) malloc (sizeof(char) * COLS);
 
-	read_id_mapping = ( struct Old_Read_ID_to_New_Read_ID* ) malloc (sizeof(struct Old_Read_ID_to_New_Read_ID*) * ROWS);
+	read_id_mapping = ( struct Old_Read_ID_to_New_Read_ID** ) malloc (sizeof(struct Old_Read_ID_to_New_Read_ID*) * ROWS);
 	for ( i = 0 ; i < ROWS ; i++ )
 		read_id_mapping[i] = allocateMemoryOld_Read_ID_to_New_Read_ID ();
 	read_length = 0;
