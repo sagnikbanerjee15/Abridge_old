@@ -219,7 +219,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			fprintf (fhw , "%s" , line);
 		else break;
 	}
-
+	return;
 	do
 	{
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
