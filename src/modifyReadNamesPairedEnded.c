@@ -162,7 +162,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		printf ("Error! File %s not found" , input_samfilename);
 		exit (1);
 	}
-	fhw = fopen (input_samfilename , "w");
+	fhw = fopen (output_samfilename , "w");
 	if ( fhw == NULL )
 	{
 		printf ("Error! File %s cannot be created" , output_samfilename);
