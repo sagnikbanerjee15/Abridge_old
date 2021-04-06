@@ -100,8 +100,8 @@ void writeToFile (struct Sam_Alignment *curr_alignment, FILE *fhw)
 	fprintf (fhw , "%s" , str);
 	fprintf (fhw , "%s" , "\t");
 
+	printf ("\nInside writeToFile %ld" , curr_alignment->template_length);
 	sprintf(str , "%ld" , curr_alignment->template_length);
-	printf ("\n%ld" , curr_alignment->template_length);
 	fprintf (fhw , "%s" , str);
 	fprintf (fhw , "%s" , "\t");
 
@@ -250,12 +250,13 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			}
 			else
 			{
-				printSamAlignmentInstance (curr_alignment , 1);
+				//printSamAlignmentInstance (curr_alignment , 1);
 				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
+				printf ("\nBefore writeToFile %ld" , curr_alignment->template_length);
 				writeToFile (curr_alignment , fhw);
 				read_id_mapping[old_read_name_index]->valid = 0;
 				read_id_mapping[old_read_name_index]->number_of_multi_maps = 0;
-				printSamAlignmentInstance (curr_alignment , 1);
+				//printSamAlignmentInstance (curr_alignment , 1);
 			}
 		}
 		else
