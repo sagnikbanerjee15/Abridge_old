@@ -59,7 +59,7 @@ void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 	}
 }
 
-void convertReadIdToString (int read_id, char *read_id_string, int read_length, char *alphabets)
+void convertReadIdToString (int *read_id, char *read_id_string, int read_length, char *alphabets)
 {
 	int i;
 	for ( i = 0 ; i < read_length ; i++ )
