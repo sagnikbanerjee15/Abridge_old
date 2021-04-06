@@ -123,6 +123,33 @@ void writeToFile (struct Sam_Alignment *curr_alignment, FILE *fhw)
 	}
 }
 
+void insertNewEntryInMappingDictionary (char *new_read_name, char *old_read_name, int max_elements, struct Old_Read_ID_to_New_Read_ID **read_id_mapping, int NH_val)
+{
+	int i;
+	for ( i = 0 ; i < max_elements ; i++ )
+	{
+		if ( read_id_mapping[i]->valid == 0 )
+		{
+			strcpy(read_id_mapping[i]->new_read_id , new_read_name);
+			strcpy(read_id_mapping[i]->old_read_id , old_read_name);
+			read_id_mapping[i]->number_of_multi_maps = NH_val;
+			read_id_mapping[i]->valid = 1;
+			break;
+		}
+	}
+
+}
+
+int searchOldReadNameInMappingDictionary (char *old_read_name, int max_elements, struct Old_Read_ID_to_New_Read_ID **read_id_mapping)
+{
+	int i;
+	for ( i = 0 ; i < max_elements ; i++ )
+		if ( read_id_mapping[i]->valid == 1 && strcmp (read_id_mapping[i]->old_read_id , old_read_name) == 0 )
+			return i;
+
+	return -1;
+}
+
 void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfilename)
 {
 	/********************************************************************
@@ -142,6 +169,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	int number_of_fields; // Number of fields in each sam alignment entry
 	int NH_tag_index;
 	int read_id[100];
+	int old_read_name_index;
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -181,7 +209,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	for ( i = 0 ; i < ROWS ; i++ )
 		read_id_mapping[i] = allocateMemoryOld_Read_ID_to_New_Read_ID ();
 	read_length = 0;
-	num_elements_read_id_mapping_dictionary = 0;
+	num_elements_read_id_mapping_dictionary = ROWS;
 
 	curr_alignment = allocateMemorySam_Alignment ();
 	/********************************************************************/
@@ -205,10 +233,24 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 
 		if ( strcmp (curr_alignment->tags[NH_tag_index].val , "1") == 0 ) //Only a single occurance
 		{
-			generateNextReadID (alphabets , read_id , &read_length);
-			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			strcpy(curr_alignment->read_name , read_id_string);
-			writeToFile (curr_alignment , fhw);
+			old_read_name_index = -1;
+			old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
+
+			if ( old_read_name_index == -1 )
+			{
+				generateNextReadID (alphabets , read_id , &read_length);
+				convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+				strcpy(curr_alignment->read_name , read_id_string);
+				writeToFile (curr_alignment , fhw);
+				insertNewEntryInMappingDictionary (read_id_string , curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping , 1);
+			}
+			else
+			{
+				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
+				writeToFile (curr_alignment , fhw);
+				read_id_mapping[old_read_name_index]->valid = 0;
+				read_id_mapping[old_read_name_index]->number_of_multi_maps = 0;
+			}
 		}
 		else
 		{

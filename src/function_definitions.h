@@ -220,6 +220,7 @@ struct Old_Read_ID_to_New_Read_ID* allocateMemoryOld_Read_ID_to_New_Read_ID ()
 	s->old_read_id = ( char* ) malloc (sizeof(char) * 100);
 	s->new_read_id = ( char* ) malloc (sizeof(char) * 100);
 	s->number_of_multi_maps = 0;
+	s->valid = 0;
 	return s;
 }
 
