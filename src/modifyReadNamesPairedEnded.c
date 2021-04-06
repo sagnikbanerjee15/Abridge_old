@@ -137,7 +137,6 @@ void insertNewEntryInMappingDictionary (char *new_read_name, char *old_read_name
 			break;
 		}
 	}
-
 }
 
 int searchOldReadNameInMappingDictionary (char *old_read_name, int max_elements, struct Old_Read_ID_to_New_Read_ID **read_id_mapping)
@@ -234,7 +233,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		if ( strcmp (curr_alignment->tags[NH_tag_index].val , "1") == 0 ) //Only a single occurance
 		{
 			old_read_name_index = -1;
-			//old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
+			old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
 
 			if ( old_read_name_index == -1 )
 			{
