@@ -228,7 +228,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	{
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
-		//printSamAlignmentInstance (curr_alignment , 1);
+		printSamAlignmentInstance (curr_alignment , 1);
 
 		NH_tag_index = -1;
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
@@ -251,9 +251,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			else
 			{
 				//printSamAlignmentInstance (curr_alignment , 1);
-				printf ("\nBefore writeToFile %ld" , curr_alignment->template_length);
 				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
-				printf ("\nBefore writeToFile %ld" , curr_alignment->template_length);
 				writeToFile (curr_alignment , fhw);
 				read_id_mapping[old_read_name_index]->valid = 0;
 				read_id_mapping[old_read_name_index]->number_of_multi_maps = 0;
