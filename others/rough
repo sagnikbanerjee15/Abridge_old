@@ -82,5 +82,5 @@ abridge \
 
 Abridge paired ended
 ====================
-
+gcc src/modifyReadNamesPairedEnded.c -o src/modifyReadNamesPairedEnded -Ofast
 
