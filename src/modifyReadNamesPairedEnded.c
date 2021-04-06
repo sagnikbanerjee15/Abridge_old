@@ -251,6 +251,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			else
 			{
 				//printSamAlignmentInstance (curr_alignment , 1);
+				printf ("\nBefore writeToFile %ld" , curr_alignment->template_length);
 				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
 				printf ("\nBefore writeToFile %ld" , curr_alignment->template_length);
 				writeToFile (curr_alignment , fhw);
