@@ -229,7 +229,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 				NH_tag_index = i;
-		continue;
+
 		if ( strcmp (curr_alignment->tags[NH_tag_index].val , "1") == 0 ) //Only a single occurance
 		{
 			old_read_name_index = -1;
