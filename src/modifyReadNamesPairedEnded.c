@@ -258,7 +258,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		{
 
 		}
-
+		reInitializeSamAlignmentInstance (curr_alignment);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 }
 
