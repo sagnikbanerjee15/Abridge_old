@@ -131,8 +131,8 @@ void insertNewEntryInMappingDictionary (char *new_read_name, char *old_read_name
 	{
 		if ( read_id_mapping[i]->valid == 0 )
 		{
-			printf ("\nAdding %s to mapping dictionary %s-->%s" , old_read_name , old_read_name , new_read_name);
-			fflush (stdout);
+			//printf ("\nAdding %s to mapping dictionary %s-->%s" , old_read_name , old_read_name , new_read_name);
+			//fflush (stdout);
 			strcpy(read_id_mapping[i]->new_read_id , new_read_name);
 			strcpy(read_id_mapping[i]->old_read_id , old_read_name);
 			read_id_mapping[i]->number_of_multi_maps = NH_val;
