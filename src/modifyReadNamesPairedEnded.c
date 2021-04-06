@@ -249,6 +249,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			else
 			{
 				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
+				printSamAlignmentInstance (curr_alignment , 1);
 				writeToFile (curr_alignment , fhw);
 				read_id_mapping[old_read_name_index]->valid = 0;
 				read_id_mapping[old_read_name_index]->number_of_multi_maps = 0;
