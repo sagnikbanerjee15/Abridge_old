@@ -234,7 +234,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		if ( strcmp (curr_alignment->tags[NH_tag_index].val , "1") == 0 ) //Only a single occurance
 		{
 			old_read_name_index = -1;
-			old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
+			//old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
 
 			if ( old_read_name_index == -1 )
 			{
