@@ -222,6 +222,13 @@ struct Quality_Score_RLE
 	long long int frequency;
 };
 
+struct Old_Read_ID_to_New_Read_ID
+{
+	char *old_read_id;
+	char *new_read_id;
+	int number_of_multi_maps;
+};
+
 int isCharacterInString (char*, char);
 void splitCigar (char*, int*, struct Cigar_Items*);
 long long int extractNHfromicigar (char*, int);
