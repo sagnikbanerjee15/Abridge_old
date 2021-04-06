@@ -242,6 +242,8 @@ int main (int argc, char *argv[])
 
 	/********************************************************************/
 	convertOldReadIdsToNewReadIds (input_samfilename , output_samfilename);
+
+	return 0;
 	for ( i = 0 ; i < 15000000 ; i++ )
 	{
 		generateNextReadID (alphabets , read_id , &read_length);
