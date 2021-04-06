@@ -83,4 +83,5 @@ abridge \
 Abridge paired ended
 ====================
 gcc src/modifyReadNamesPairedEnded.c -o src/modifyReadNamesPairedEnded -Ofast
+/90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/modifyReadNamesPairedEnded  /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_PE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_PE_names_modified.sam
 

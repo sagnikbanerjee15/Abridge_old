@@ -237,6 +237,8 @@ int main (int argc, char *argv[])
 	 * Variable initialization
 	 ********************************************************************/
 	read_length = 0;
+	strcpy(input_samfilename , argv[1]);
+	strcpy(output_samfilename , argv[2]);
 
 	/********************************************************************/
 	convertOldReadIdsToNewReadIds (input_samfilename , output_samfilename);
