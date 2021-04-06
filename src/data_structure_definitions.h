@@ -160,7 +160,7 @@ struct Sam_Alignment
 	char *cigar;
 	char *reference_name_next_mate; //Reference name where the mate/next read is mapped
 	long long int start_position_next; //Position of the mate/next read
-	int template_length; //observed Template length
+	long long int template_length; //observed Template length
 	char *seq; //The read sequence
 	char *qual; //The read quality
 
