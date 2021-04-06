@@ -227,7 +227,7 @@ struct Old_Read_ID_to_New_Read_ID
 	char *old_read_id;
 	char *new_read_id;
 	int number_of_multi_maps;
-	int q;
+	int valid;
 };
 
 int isCharacterInString (char*, char);
