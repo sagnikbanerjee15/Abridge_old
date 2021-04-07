@@ -206,7 +206,9 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_um, char *input_samf
 		{
 			generateNextReadID (alphabets , read_id , &read_length);
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			printf ("\n%s" , read_id_string);
+			for ( i = 0 ; i < read_length ; i++ )
+				printf ("\n%d " , read_id[i]);
+			printf ("\nread_id_string = %s" , read_id_string);
 		}
 		strcpy(split_line[0] , read_id_string);
 		writeToFile (split_line , fhw);
