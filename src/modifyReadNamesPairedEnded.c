@@ -118,6 +118,7 @@ void splitMappingInTwoParts (char *line, char **split_line)
 	}
 	split_line[0][j0] = '\0';
 	split_line[1][j1] = '\0';
+	printf ("\n%s %s" , split_line[0] , split_line[1]);
 }
 
 int findNumberOfValidMappings (struct Old_Read_ID_to_New_Read_ID **read_id_mapping, int num_elements_read_id_mapping_dictionary)
