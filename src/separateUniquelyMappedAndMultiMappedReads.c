@@ -13,19 +13,8 @@ int isMappingUnique (char *line)
 
 	for ( i = 0 ; line[i + 6] != '\0' ; i++ )
 	{
-		if ( line[i] == 'N' && line[i + 1] == 'H' && line[i + 2] == ':' && line[i + 3] == 'i' && line[i + 4] == ':' && line[i + 5] == '1' && line[i + 6] == '\t' )
+		if ( line[i] == 'N' && line[i + 1] == 'H' && line[i + 2] == ':' && line[i + 3] == 'i' && line[i + 4] == ':' && ( line[i + 5] == '1' || line[i + 5] == '0' ) && line[i + 6] == '\t' )
 		{
-			if ( line[0] == '7' && line[1] == '\t' )
-			{
-				printf ("\nCheck here %d" , i);
-				printf ("\n %c" , line[i]);
-				printf ("\n %c" , line[i + 1]);
-				printf ("\n %c" , line[i + 2]);
-				printf ("\n %c" , line[i + 3]);
-				printf ("\n %c" , line[i + 4]);
-				printf ("\n %c" , line[i + 5]);
-				printf ("\n %c" , line[i + 6]);
-			}
 			unique = 1;
 		}
 	}
