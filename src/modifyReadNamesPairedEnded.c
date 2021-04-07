@@ -259,16 +259,17 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	do
 	{
 
-		splitReadAndGetNHValue (line , split_line , &NH_val);
+		//splitReadAndGetNHValue (line , split_line , &NH_val);
 
-		//number_of_fields = splitByDelimiter (line , '\t' , split_line);
-		//populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
-		//printSamAlignmentInstance (curr_alignment , 1);
-		/*
-		 NH_tag_index = -1;
-		 for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
-		 if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
-		 NH_tag_index = i;*/
+		number_of_fields = splitByDelimiter (line , '\t' , split_line);
+		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
+		printSamAlignmentInstance (curr_alignment , 1);
+
+		NH_tag_index = -1;
+		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
+			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
+				NH_tag_index = i;
+
 		/*
 		 if ( strcmp (curr_alignment->tags[NH_tag_index].val , "1") == 0 ) //Only a single occurance
 		 {
