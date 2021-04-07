@@ -183,6 +183,16 @@ void splitReadAndGetNHValue (char *line, char **split_line, int *NH_val)
 	( *NH_val ) = strtol (NH_val_string , &temp , 10);
 }
 
+int findNumberOfValidMappings (struct Old_Read_ID_to_New_Read_ID **read_id_mapping, int num_elements_read_id_mapping_dictionary)
+{
+	int total = 0;
+	int i;
+	for ( i = 0 ; i < num_elements_read_id_mapping_dictionary ; i++ )
+		if ( read_id_mapping[i]->valid == 1 ) total += 1;
+
+	return total;
+}
+
 void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfilename)
 {
 	/********************************************************************
@@ -314,6 +324,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 
 			}
 		}
+		printf ("\nNo. of valid mappings in the dictionary" , findNumberOfValidMappings (read_id_mapping , num_elements_read_id_mapping_dictionary));
 		//reInitializeSamAlignmentInstance (curr_alignment);
 
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
