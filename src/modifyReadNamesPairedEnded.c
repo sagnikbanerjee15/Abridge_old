@@ -71,6 +71,7 @@ void writeToFile (char **split_line, FILE *fhw)
 {
 	fprintf (fhw , "%s" , split_line[0]);
 	fprintf (fhw , "%s" , "\t");
+	fprintf (fhw , "%s" , split_line[1]);
 	fprintf (fhw , "%s" , "\n");
 }
 
