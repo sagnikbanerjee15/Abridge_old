@@ -551,7 +551,7 @@ def compressSamFile(options):
             output_filename_multi_mapped_reads_sorted_by_name = f"{options.output_directory}/{name_of_input_file_without_location}_mm_sorted_by_name.sam"
             output_filename_read_names_changed = f"{options.output_directory}/{name_of_input_file_without_location}_read_names_changed.sam"
             
-            files_to_be_removed.append(output_filename_multi_read_names_changed)
+            files_to_be_removed.append(output_filename_read_names_changed)
             
             cmd  = f" {modifyReadNamesPairedEnded} "
             cmd += f" {output_filename_uniquely_mapped_reads} "
