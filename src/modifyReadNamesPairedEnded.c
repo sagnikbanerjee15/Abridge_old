@@ -145,7 +145,7 @@ void insertNewEntryInMappingDictionary (char *new_read_name, char *old_read_name
 int searchOldReadNameInMappingDictionary (char *old_read_name, int max_elements, struct Old_Read_ID_to_New_Read_ID **read_id_mapping)
 {
 	int i;
-	for ( i = 0 ; i < max_elements ; i++ )
+	for ( i = max_elements - 1 ; i >= 0 ; i-- )
 		if ( read_id_mapping[i]->valid == 1 && strcmp (read_id_mapping[i]->old_read_id , old_read_name) == 0 )
 			return i;
 
