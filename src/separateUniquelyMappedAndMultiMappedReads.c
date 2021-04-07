@@ -12,12 +12,8 @@ int isMappingUnique (char *line)
 	int i;
 
 	for ( i = 0 ; line[i + 6] != '\0' ; i++ )
-	{
 		if ( line[i] == 'N' && line[i + 1] == 'H' && line[i + 2] == ':' && line[i + 3] == 'i' && line[i + 4] == ':' && ( line[i + 5] == '1' || line[i + 5] == '0' ) && line[i + 6] == '\t' )
-		{
 			unique = 1;
-		}
-	}
 
 	return unique;
 }
