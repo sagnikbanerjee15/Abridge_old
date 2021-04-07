@@ -158,6 +158,7 @@ def validateCommandLineArguments(options):
     options.softwares["compressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressQualityScoresFile"
     options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
     options.softwares["separateUniquelyMappedAndMultiMappedReads"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateUniquelyMappedAndMultiMappedReads"
+    options.softwares["modifyReadNamesPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/modifyReadNamesPairedEnded"
     
     cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.genome}.temp"
     os.system(cmd)
@@ -492,8 +493,13 @@ def compressSamFile(options):
         # Compiling programs - will be removed during final version
         ######################################################################################
         separateUniquelyMappedAndMultiMappedReads = options.softwares["separateUniquelyMappedAndMultiMappedReads"]
+        modifyReadNamesPairedEnded = options.softwares["modifyReadNamesPairedEnded"]
         
         cmd=f"gcc {separateUniquelyMappedAndMultiMappedReads}.c -o {separateUniquelyMappedAndMultiMappedReads} -Ofast"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        cmd=f"gcc {modifyReadNamesPairedEnded}.c -o {modifyReadNamesPairedEnded} -Ofast"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
@@ -510,6 +516,8 @@ def compressSamFile(options):
             cmd += f" {input_filename} "
             cmd += f" {output_filename_uniquely_mapped_reads} "
             cmd += f" {output_filename_multi_mapped_reads} "
+            if options.quiet == False:
+                logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
         
@@ -529,8 +537,31 @@ def compressSamFile(options):
             cmd += f" {output_filename_multi_mapped_reads} "
             cmd += f" |samtools sort -n -o "
             cmd += f" {output_filename_multi_mapped_reads_sorted_by_name} "
+            if options.quiet == False:
+                logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
+        
+        all_commands = []
+        for input_filename in options.inputsamfilenames:  
+            name_of_input_file_without_location = input_filename.split("/")[-1] 
+            pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+            output_filename_uniquely_mapped_reads = f"{options.output_directory}/{name_of_input_file_without_location}_um.sam"
+            output_filename_multi_mapped_reads = f"{options.output_directory}/{name_of_input_file_without_location}_mm.sam" 
+            output_filename_multi_mapped_reads_sorted_by_name = f"{options.output_directory}/{name_of_input_file_without_location}_mm_sorted_by_name.sam"
+            output_filename_read_names_changed = f"{options.output_directory}/{name_of_input_file_without_location}_read_names_changed.sam"
+            
+            files_to_be_removed.append(output_filename_multi_read_names_changed)
+            
+            cmd  = f" {modifyReadNamesPairedEnded} "
+            cmd += f" {output_filename_uniquely_mapped_reads} "
+            cmd += f" {output_filename_multi_mapped_reads_sorted_by_name} "
+            cmd += f" {output_filename_read_names_changed} "
+            if options.quiet == False:
+                logging.info(f"Running cmd - {cmd}")
+            all_commands.append([cmd,"dummy"])
+        pool.map(runCommand,all_commands)
+            
 
     if options.quiet == False:
         logging.info("Starting compression")
