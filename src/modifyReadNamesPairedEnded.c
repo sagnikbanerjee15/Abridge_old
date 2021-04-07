@@ -232,8 +232,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		exit (1);
 	}
 
-	split_line = ( char** ) malloc (sizeof(char*) * 2);
-	for ( i = 0 ; i < 2 ; i++ )
+	split_line = ( char** ) malloc (sizeof(char*) * ROWS);
+	for ( i = 0 ; i < ROWS ; i++ )
 		split_line[i] = ( char* ) malloc (sizeof(char) * 1000);
 
 	split_tags = ( char** ) malloc (sizeof(char*) * ROWS);
