@@ -197,7 +197,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_um, char *input_samf
 	}
 
 	read_number = 0;
-
+	read_length = 0;
 	do
 	{
 		read_number++;
