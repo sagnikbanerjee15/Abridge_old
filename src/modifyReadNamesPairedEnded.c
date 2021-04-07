@@ -103,35 +103,21 @@ int searchOldReadNameInMappingDictionary (char *old_read_name, int max_elements,
 	return -1;
 }
 
-void splitReadAndGetNHValue (char *line, char **split_line, int *NH_val)
+void splitMappingInTwoParts (char *line, char **split_line)
 {
-	int i, j0, j1, first_tab_found = 0, k, NH_val_string_index;
-	char NH_val_string[100];
-	char *temp;
+	int i, j0, j1, first_tab_found = 0, k;
 
 	j0 = 0;
 	j1 = 0;
-	NH_val_string_index = 0;
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
 		if ( first_tab_found )
-		{
 			split_line[1][j1++ ] = line[i];
-		}
-		else
-		{
-			split_line[0][j0++ ] = line[i];
-		}
-		if ( line[i] == 'N' && line[i + 1] == 'H' )
-		{
-			for ( k = i + 5 ; line[k] != '\t' ; k++ )
-				NH_val_string[NH_val_string_index++ ] = line[k];
-		}
+		else split_line[0][j0++ ] = line[i];
+		if ( line[i] == '\t' && first_tab_found == 0 ) first_tab_found = 1;
 	}
 	split_line[0][j0] = '\0';
 	split_line[1][j1] = '\0';
-	NH_val_string[NH_val_string_index++ ] = '\0';
-	( *NH_val ) = strtol (NH_val_string , &temp , 10);
 }
 
 int findNumberOfValidMappings (struct Old_Read_ID_to_New_Read_ID **read_id_mapping, int num_elements_read_id_mapping_dictionary)
@@ -160,13 +146,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_um, char *input_samf
 	int read_length;
 	int i;
 	int j;
-	int num_elements_read_id_mapping_dictionary;
-	int number_of_tags;
-	int number_of_fields; // Number of fields in each sam alignment entry
-	int NH_tag_index;
-	int NH_val;
 	int read_id[100];
-	int old_read_name_index;
 
 	long long int read_number;
 
@@ -207,17 +187,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_um, char *input_samf
 	for ( i = 0 ; i < 2 ; i++ )
 		split_line[i] = ( char* ) malloc (sizeof(char) * 1000);
 
-	split_tags = ( char** ) malloc (sizeof(char*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		split_tags[i] = ( char* ) malloc (sizeof(char) * COLS);
-
-	read_id_mapping = ( struct Old_Read_ID_to_New_Read_ID** ) malloc (sizeof(struct Old_Read_ID_to_New_Read_ID*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		read_id_mapping[i] = allocateMemoryOld_Read_ID_to_New_Read_ID ();
-	read_length = 0;
-	num_elements_read_id_mapping_dictionary = ROWS;
-
-	curr_alignment = allocateMemorySam_Alignment ();
 	/********************************************************************/
 
 	while ( ( line_len = getline ( &line , &len , fhr_um) ) != -1 )
@@ -232,7 +201,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_um, char *input_samf
 	do
 	{
 		read_number++;
-		splitReadAndGetNHValue (line , split_line , &NH_val);
+		splitMappingInTwoParts (line , split_line);
 		if ( read_number % 2 == 1 )
 		{
 			generateNextReadID (alphabets , read_id , &read_length);
@@ -248,7 +217,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_um, char *input_samf
 
 	do
 	{
-		splitReadAndGetNHValue (line , split_line , &NH_val);
+		splitMappingInTwoParts (line , split_line);
 		if ( strcmp (prev_old_read , split_line[0]) != 0 )
 		{
 			generateNextReadID (alphabets , read_id , &read_length);
@@ -258,6 +227,9 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_um, char *input_samf
 		strcpy(split_line[0] , read_id_string);
 		writeToFile (split_line , fhw);
 	} while ( ( line_len = getline ( &line , &len , fhr_mm) ) != -1 );
+
+	fclose (fhr_um);
+	fclose (fhr_mm);
 }
 
 int main (int argc, char *argv[])
@@ -286,15 +258,5 @@ int main (int argc, char *argv[])
 
 	/********************************************************************/
 	convertOldReadIdsToNewReadIds (input_samfilename_um , input_samfilename_mm , output_samfilename);
-
-	return 0;
-	for ( i = 0 ; i < 15000000 ; i++ )
-	{
-		generateNextReadID (alphabets , read_id , &read_length);
-		for ( j = 0 ; j < read_length ; j++ )
-			printf ("%c" , alphabets[read_id[j]]);
-		printf ("\n");
-	}
-
 	return 0;
 }
