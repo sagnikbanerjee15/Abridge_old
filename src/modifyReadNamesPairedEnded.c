@@ -216,6 +216,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	int read_id[100];
 	int old_read_name_index;
 
+	long long int read_number;
+
 	size_t len = 0;
 	ssize_t line_len;
 
@@ -266,9 +268,10 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		else break;
 	}
 
+	read_number = 0;
 	do
 	{
-
+		read_number++;
 		//splitReadAndGetNHValue (line , split_line , &NH_val);
 
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
@@ -282,24 +285,32 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 
 		if ( strcmp (curr_alignment->tags[NH_tag_index].val , "1") == 0 ) //Only a single occurance
 		{
-			old_read_name_index = -1;
-			old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
-
-			if ( old_read_name_index == -1 )
+			//old_read_name_index = -1;
+			//old_read_name_index = searchOldReadNameInMappingDictionary (curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping);
+			/*
+			 if ( old_read_name_index == -1 )
+			 {
+			 generateNextReadID (alphabets , read_id , &read_length);
+			 convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+			 insertNewEntryInMappingDictionary (read_id_string , curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping , 1);
+			 strcpy(curr_alignment->read_name , read_id_string);
+			 writeToFile (curr_alignment , fhw);
+			 }
+			 else
+			 {
+			 strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
+			 writeToFile (curr_alignment , fhw);
+			 read_id_mapping[old_read_name_index]->valid = 0;
+			 read_id_mapping[old_read_name_index]->number_of_multi_maps = 0;
+			 }
+			 */
+			if ( read_number % 2 == 1 )
 			{
 				generateNextReadID (alphabets , read_id , &read_length);
 				convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-				insertNewEntryInMappingDictionary (read_id_string , curr_alignment->read_name , num_elements_read_id_mapping_dictionary , read_id_mapping , 1);
-				strcpy(curr_alignment->read_name , read_id_string);
-				writeToFile (curr_alignment , fhw);
 			}
-			else
-			{
-				strcpy(curr_alignment->read_name , read_id_mapping[old_read_name_index]->new_read_id);
-				writeToFile (curr_alignment , fhw);
-				read_id_mapping[old_read_name_index]->valid = 0;
-				read_id_mapping[old_read_name_index]->number_of_multi_maps = 0;
-			}
+			strcpy(curr_alignment->read_name , read_id_string);
+			writeToFile (curr_alignment , fhw);
 		}
 		else
 		{
