@@ -82,6 +82,21 @@ abridge \
 
 Abridge paired ended
 ====================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--save_all_quality_scores \
+--genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
+--inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_PE.sam \
+--output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
+1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.output \
+2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.error &
+
+
+
 gcc src/modifyReadNamesPairedEnded.c -o src/modifyReadNamesPairedEnded -Ofast
 (/usr/bin/time --verbose  \
 /90daydata/maizegdb/sagnik/ABRIDGE/Abridge/src/modifyReadNamesPairedEnded  \
