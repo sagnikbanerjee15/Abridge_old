@@ -325,6 +325,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			}
 		}
 		printf ("\nNo. of valid mappings in the dictionary" , findNumberOfValidMappings (read_id_mapping , num_elements_read_id_mapping_dictionary));
+		fflush (stdout);
 		//reInitializeSamAlignmentInstance (curr_alignment);
 
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
