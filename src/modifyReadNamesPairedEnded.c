@@ -152,6 +152,36 @@ int searchOldReadNameInMappingDictionary (char *old_read_name, int max_elements,
 	return -1;
 }
 
+void splitReadAndGetNHValue (char *line, char **split_line, int *NH_val)
+{
+	int i, j0, j1, first_tab_found = 0, k, NH_val_string_index;
+	char NH_val_string[100];
+	char *temp;
+
+	j0 = 0;
+	j1 = 0;
+	NH_val_string_index = 0;
+	for ( i = 0 ; line[i] != '\0' ; i++ )
+	{
+		if ( first_tab_found )
+		{
+			split_line[1][j1++ ] = line[i];
+		}
+		else
+		{
+			split_line[0][j0++ ] = line[i];
+		}
+		if ( line[i] == 'N' && line[i + 1] == 'H' )
+		{
+			for ( k = i + 5 ; line[k] != '\t' ; k++ )
+				NH_val_string[NH_val_string_index++ ] = line[k];
+		}
+	}
+	split_line[0][j0] = '\0';
+	split_line[1][j1] = '\0';
+	( *NH_val ) = strtol (NH_val_string , temp , 10);
+}
+
 void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfilename)
 {
 	/********************************************************************
@@ -171,6 +201,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	int number_of_tags;
 	int number_of_fields; // Number of fields in each sam alignment entry
 	int NH_tag_index;
+	int NH_val;
 	int read_id[100];
 	int old_read_name_index;
 
@@ -200,9 +231,9 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		exit (1);
 	}
 
-	split_line = ( char** ) malloc (sizeof(char*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		split_line[i] = ( char* ) malloc (sizeof(char) * COLS);
+	split_line = ( char** ) malloc (sizeof(char*) * 2);
+	for ( i = 0 ; i < 2 ; i++ )
+		split_line[i] = ( char* ) malloc (sizeof(char) * 1000);
 
 	split_tags = ( char** ) malloc (sizeof(char*) * ROWS);
 	for ( i = 0 ; i < ROWS ; i++ )
@@ -226,14 +257,17 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 
 	do
 	{
-		number_of_fields = splitByDelimiter (line , '\t' , split_line);
-		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
-		//printSamAlignmentInstance (curr_alignment , 1);
 
-		NH_tag_index = -1;
-		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
-			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
-				NH_tag_index = i;
+		splitReadAndGetNHValue (line , split_line , &NH_val);
+
+		//number_of_fields = splitByDelimiter (line , '\t' , split_line);
+		//populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
+		//printSamAlignmentInstance (curr_alignment , 1);
+		/*
+		 NH_tag_index = -1;
+		 for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
+		 if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
+		 NH_tag_index = i;*/
 		/*
 		 if ( strcmp (curr_alignment->tags[NH_tag_index].val , "1") == 0 ) //Only a single occurance
 		 {
