@@ -490,7 +490,7 @@ def compressSamFile(options):
         ######################################################################################
         # Compiling programs - will be removed during final version
         ######################################################################################
-        separateUniquelyMappedAndMultiMappedReads = options.software["separateUniquelyMappedAndMultiMappedReads"]
+        separateUniquelyMappedAndMultiMappedReads = options.softwares["separateUniquelyMappedAndMultiMappedReads"]
         
         cmd=f"gcc {separateUniquelyMappedAndMultiMappedReads}.c -o {separateUniquelyMappedAndMultiMappedReads} -Ofast"
         if options.quiet == False:
