@@ -179,7 +179,8 @@ void splitReadAndGetNHValue (char *line, char **split_line, int *NH_val)
 	}
 	split_line[0][j0] = '\0';
 	split_line[1][j1] = '\0';
-	( *NH_val ) = strtol (NH_val_string , temp , 10);
+	NH_val_string[NH_val_string_index++ ] = '\0';
+	( *NH_val ) = strtol (NH_val_string , &temp , 10);
 }
 
 void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfilename)
