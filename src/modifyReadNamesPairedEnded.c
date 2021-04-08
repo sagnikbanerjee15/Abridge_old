@@ -171,7 +171,6 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 		}
 
 		temp = node;
-		temp->next = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 		temp->next->next = head;
 		temp->next->prev = temp;
 		head->prev = temp->next;
