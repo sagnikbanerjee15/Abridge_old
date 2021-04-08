@@ -291,6 +291,9 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		}
 		else
 		{
+			generateNextReadID (alphabets , read_id , &read_length);
+			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+			insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value);
 			continue;
 			strcpy(prev_old_read_id , split_line[0]);
 			locate_node_of_interest = updateNodeInCircularLinkedList (read_mapping_head , split_line[0] , &number_of_invalid_nodes);
