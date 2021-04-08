@@ -214,14 +214,16 @@ struct Abridge_Index* allocateMemoryAbridge_Index ()
 	return s;
 }
 
-struct Old_Read_ID_to_New_Read_ID* allocateMemoryOld_Read_ID_to_New_Read_ID ()
+struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ()
 {
-	struct Old_Read_ID_to_New_Read_ID *s;
-	s = ( struct Old_Read_ID_to_New_Read_ID* ) malloc (sizeof(struct Old_Read_ID_to_New_Read_ID));
+	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *s;
+	s = ( struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* ) malloc (sizeof(struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list));
 	s->old_read_id = ( char* ) malloc (sizeof(char) * 100);
 	s->new_read_id = ( char* ) malloc (sizeof(char) * 100);
 	s->number_of_multi_maps = 0;
 	s->valid = 0;
+	s->prev = NULL;
+	s->next = NULL;
 	return s;
 }
 

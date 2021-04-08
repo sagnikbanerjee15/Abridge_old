@@ -222,12 +222,14 @@ struct Quality_Score_RLE
 	long long int frequency;
 };
 
-struct Old_Read_ID_to_New_Read_ID
+struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list
 {
+	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *prev;
 	char *old_read_id;
 	char *new_read_id;
 	int number_of_multi_maps;
 	int valid;
+	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *next;
 };
 
 int isCharacterInString (char*, char);
