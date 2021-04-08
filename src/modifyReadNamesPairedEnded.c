@@ -72,7 +72,6 @@ void writeToFile (char **split_line, FILE *fhw)
 	fprintf (fhw , "%s" , split_line[0]);
 	fprintf (fhw , "%s" , "\t");
 	fprintf (fhw , "%s" , split_line[1]);
-	fprintf (fhw , "%s" , "\n");
 }
 
 void insertNewEntryInMappingDictionary (char *new_read_name, char *old_read_name, int max_elements, struct Old_Read_ID_to_New_Read_ID **read_id_mapping, int NH_val)

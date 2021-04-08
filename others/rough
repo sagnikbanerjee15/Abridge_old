@@ -68,6 +68,7 @@ abridge \
 
 Abridge random access
 =====================
+
 (/usr/bin/time --verbose  \
 abridge \
 --random \
@@ -82,6 +83,9 @@ abridge \
 
 Abridge paired ended
 ====================
+ROOT_DIRECTORY=/90daydata/maizegdb/sagnik/ABRIDGE/
+ROOT_DIRECTORY=/project/maizegdb/sagnik/ABRIDGE/
+
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -90,10 +94,10 @@ abridge \
 --both \
 --save_all_quality_scores \
 --genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_PE.sam \
---output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
-1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.output \
-2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.error &
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge) \
+1> $ROOT_DIRECTORY/developing_abridge/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
 
 
 

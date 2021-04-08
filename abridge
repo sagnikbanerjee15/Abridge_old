@@ -593,7 +593,7 @@ def compressSamFile(options):
             output_filename_read_names_changed = f"{options.output_directory}/{name_of_input_file_without_location}_read_names_changed.sam"
             output_filename_read_names_changed_position_sorted = f"{options.output_directory}/{name_of_input_file_without_location}_read_names_changed_pos_sorted.sam"
             
-            files_to_be_removed.append(output_filename_read_names_changed_position_sorted)
+            #files_to_be_removed.append(output_filename_read_names_changed_position_sorted)
             
             cmd  = f"(/usr/bin/time --verbose "
             cmd += "samtools view -bS "
