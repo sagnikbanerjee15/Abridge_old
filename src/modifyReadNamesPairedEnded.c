@@ -268,7 +268,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	split_line = ( char** ) malloc (sizeof(char*) * 100);
 	for ( i = 0 ; i < 100 ; i++ )
 		split_line[i] = ( char* ) malloc (sizeof(char) * 1000);
-	return;
+
 	/********************************************************************/
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
@@ -277,7 +277,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			fprintf (fhw , "%s" , line);
 		else break;
 	}
-
+	return;
 	read_number = 0;
 	prev_old_read_id[0] = '\0';
 	do
