@@ -136,6 +136,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 
 void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, char *old_read_id, char *new_read_id, int NH_value)
 {
+	printf ("\nOutside if Head is null? %d" , head == NULL);
 	if ( head == NULL )
 	{
 		printf ("\nCreating head node");
@@ -146,7 +147,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		head->valid = 1;
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
-		printf ("\nHead is null? %d" , head == NULL);
+		printf ("\nInside if Head is null? %d" , head == NULL);
 	}
 	else
 	{
