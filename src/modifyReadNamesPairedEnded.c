@@ -224,7 +224,7 @@ void printEntireCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_L
 	temp = head;
 	while ( temp->next != head )
 	{
-		printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
+		//printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
 		temp = temp->next;
 	}
 }
