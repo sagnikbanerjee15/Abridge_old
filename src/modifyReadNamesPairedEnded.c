@@ -138,6 +138,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 {
 	if ( head == NULL )
 	{
+		printf ("\nCreating head node");
 		head = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 		head->prev = head;
 		strcpy(head->new_read_id , new_read_id);
@@ -228,7 +229,7 @@ void printEntireCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_L
 {
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
 	temp = head;
-	while ( temp->next != head )
+	while ( head != NULL && temp->next != head )
 	{
 		//printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
 		temp = temp->next;
@@ -330,7 +331,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		}
 		else
 		{
-			printf ("\n%d" , number_of_invalid_nodes);
+			//printf ("\n%d" , number_of_invalid_nodes);
 		}
 
 		//printEntireCircularLinkedList (read_mapping_head);
