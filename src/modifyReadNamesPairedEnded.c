@@ -8,6 +8,13 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
+void writeToFile (char **split_line, FILE *fhw)
+{
+	fprintf (fhw , "%s" , split_line[0]);
+	fprintf (fhw , "%s" , "\t");
+	fprintf (fhw , "%s" , split_line[1]);
+}
+
 void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 {
 	/********************************************************************
