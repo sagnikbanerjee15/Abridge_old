@@ -134,7 +134,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	return temp;
 }
 
-void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, char *old_read_id, char *new_read_id, int NH_value)
+struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, char *old_read_id, char *new_read_id, int NH_value)
 {
 	printf ("\nOutside if Head is null? %d" , head == NULL);
 	if ( head == NULL )
@@ -181,6 +181,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		temp->number_of_multi_maps = NH_value * 2 - 1;
 		temp->valid = 1;
 	}
+	return head;
 }
 
 void deleteEntireLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head)
@@ -322,7 +323,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			{
 				generateNextReadID (alphabets , read_id , &read_length);
 				convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-				insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value);
+				read_mapping_head = insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value);
 				printf ("\nRight after inserting node %d" , read_mapping_head == NULL);
 			}
 		}
