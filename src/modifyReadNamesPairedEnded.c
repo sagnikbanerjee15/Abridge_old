@@ -179,13 +179,13 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 			temp = node;
 			( *total_number_of_nodes_created )++;
 		}
-		printf ("\nIs temp null? %d" , temp == NULL);
-		printf ("\nIs temp head? %d" , temp == head);
-		fflush (stdout);
-		temp->next->next = head;
-		temp->next->prev = temp;
-		head->prev = temp->next;
-		temp = temp->next;
+		/*
+		 * Insert new node after head
+		 */
+		temp->next = head->next;
+		temp->prev = head;
+		head->next->prev = temp;
+		head->next = temp;
 		strcpy(temp->new_read_id , new_read_id);
 		strcpy(temp->old_read_id , old_read_id);
 		temp->number_of_multi_maps = NH_value * 2 - 1;
