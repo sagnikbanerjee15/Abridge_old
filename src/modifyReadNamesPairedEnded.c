@@ -323,6 +323,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			{
 				generateNextReadID (alphabets , read_id , &read_length);
 				convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+				strcpy(split_line[0] , read_id_string);
 				read_mapping_head = insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value);
 				//printf ("\nRight after inserting node %d" , read_mapping_head == NULL);
 			}
