@@ -333,7 +333,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			printf ("\n%d" , number_of_invalid_nodes);
 		}
 
-		printEntireCircularLinkedList (read_mapping_head);
+		//printEntireCircularLinkedList (read_mapping_head);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	deleteEntireLinkedList (read_mapping_head);
