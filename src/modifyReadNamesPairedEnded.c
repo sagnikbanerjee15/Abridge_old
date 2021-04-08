@@ -180,6 +180,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 			( *total_number_of_nodes_created )++;
 		}
 		printf ("\nIs temp null? %d" , temp == NULL);
+		printf ("\nIs temp head? %d" , temp == head);
 		fflush (stdout);
 		temp->next->next = head;
 		temp->next->prev = temp;
