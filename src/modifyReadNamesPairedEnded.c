@@ -319,28 +319,22 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	{
 		read_number++;
 		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		if ( read_number % 2 == 0 && strcmp (prev_old_read_id , split_line[0]) == 0 ) //Read id is exactly same as previous line no need to update or consult dictionary
+
+		//strcpy(prev_old_read_id , split_line[0]);
+		locate_node_of_interest = updateNodeInCircularLinkedList (read_mapping_head , split_line[0] , &number_of_invalid_nodes);
+		if ( locate_node_of_interest != NULL )
 		{
-			strcpy(split_line[0] , read_id_string);
-			updateNodeInCircularLinkedList (read_mapping_head , split_line[0] , &number_of_invalid_nodes);
+			strcpy(split_line[0] , locate_node_of_interest->new_read_id);
 		}
 		else
 		{
-			strcpy(prev_old_read_id , split_line[0]);
-			locate_node_of_interest = updateNodeInCircularLinkedList (read_mapping_head , split_line[0] , &number_of_invalid_nodes);
-			if ( locate_node_of_interest != NULL )
-			{
-				strcpy(split_line[0] , locate_node_of_interest->new_read_id);
-			}
-			else
-			{
-				generateNextReadID (alphabets , read_id , &read_length);
-				convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-				read_mapping_head = insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created);
-				strcpy(split_line[0] , read_id_string);
-				//printf ("\nRight after inserting node %d" , read_mapping_head == NULL);
-			}
+			generateNextReadID (alphabets , read_id , &read_length);
+			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+			read_mapping_head = insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created);
+			strcpy(split_line[0] , read_id_string);
+			//printf ("\nRight after inserting node %d" , read_mapping_head == NULL);
 		}
+
 		writeToFile (split_line , fhw);
 		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
 		{
