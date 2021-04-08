@@ -8,6 +8,65 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
+void generateNextReadID (char *alphabets, int *read_id, int *read_length)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	int i;
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+
+	/********************************************************************/
+
+	if ( *read_length == 0 )
+	{
+		read_id[0] = 0;
+		( *read_length )++;
+	}
+	else
+	{
+		/*
+		 * Check if the read is the last element of the maximum read_length
+		 */
+		for ( i = 0 ; i < *read_length ; i++ )
+			if ( read_id[i] != strlen (alphabets) - 1 ) break;
+		if ( i == *read_length )
+		{
+			( *read_length )++;
+			for ( i = 0 ; i < *read_length ; i++ )
+				read_id[i] = 0;
+		}
+		else
+		{
+			/*
+			 * Increment the read_id
+			 */
+			for ( i = *read_length - 1 ; i >= 0 ; i-- )
+			{
+				if ( read_id[i] == ( strlen (alphabets) - 1 ) )
+					read_id[i] = 0;
+				else
+				{
+					read_id[i]++;
+					break;
+				}
+			}
+		}
+	}
+}
+
+void convertReadIdToString (int *read_id, char *read_id_string, int read_length, char *alphabets)
+{
+	int i;
+	for ( i = 0 ; i < read_length ; i++ )
+		read_id_string[i] = alphabets[read_id[i]];
+	read_id_string[i] = '\0';
+}
+
 void splitMappingInTwoPartsAndSetNHValue (char *line, char **split_line, int *NH_value)
 {
 	int i, j0, j1, first_tab_found = 0, k, NH_string_index;
@@ -217,7 +276,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	do
 	{
 		read_number++;
-		splitMappingInTwoPartsAndSetNHValue (line , split_line , NH_value);
+		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
 		if ( read_number % 2 == 0 && strcmp (prev_old_read_id , split_line[0]) == 0 ) //Read id is exactly same as previous line no need to update or consult dictionary
 		{
 			strcpy(split_line[0] , read_id_string);
