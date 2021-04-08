@@ -291,10 +291,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		}
 		else
 		{
-			generateNextReadID (alphabets , read_id , &read_length);
-			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value);
-			continue;
 			strcpy(prev_old_read_id , split_line[0]);
 			locate_node_of_interest = updateNodeInCircularLinkedList (read_mapping_head , split_line[0] , &number_of_invalid_nodes);
 			if ( locate_node_of_interest != NULL )
@@ -309,8 +305,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			}
 		}
 		writeToFile (split_line , fhw);
-		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
-			deleteInvalidNodesFromCircularLinkedList (read_mapping_head , MAX_number_of_invalid_nodes_allowed);
+		//if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
+		//	deleteInvalidNodesFromCircularLinkedList (read_mapping_head , MAX_number_of_invalid_nodes_allowed);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	deleteEntireLinkedList (read_mapping_head);
