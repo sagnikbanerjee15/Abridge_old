@@ -146,6 +146,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		head->valid = 1;
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
+		printf ("\nHead is null? %d" , head == NULL);
 	}
 	else
 	{
