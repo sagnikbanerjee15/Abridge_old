@@ -152,14 +152,20 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node;
 		temp = head;
 		if ( temp->prev == head ) //Only one node in linked list
+		{
+			printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
+		}
 		else
 		{
 			while ( temp->prev->prev != head && temp->prev->valid == 0 )
 				temp = temp->prev;
 		}
 		if ( temp == head )
+		{
+			printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
+		}
 
 		temp = node;
 		temp->next = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
@@ -322,9 +328,12 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
 			deleteInvalidNodesFromCircularLinkedList (read_mapping_head , MAX_number_of_invalid_nodes_allowed);
 		}
-		else printf ("\n%d" , number_of_invalid_nodes);
+		else
+		{
+			printf ("\n%d" , number_of_invalid_nodes);
+		}
 
-		//printEntireCircularLinkedList (read_mapping_head);
+		printEntireCircularLinkedList (read_mapping_head);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	deleteEntireLinkedList (read_mapping_head);
