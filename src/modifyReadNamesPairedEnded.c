@@ -85,10 +85,15 @@ void splitMappingInTwoPartsAndSetNHValue (char *line, char **split_line, int *NH
 	NH_string_index = 0;
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
+		if ( line[i] == '\t' && first_tab_found == 0 )
+		{
+			first_tab_found = 1;
+			continue;
+		}
 		if ( first_tab_found )
 			split_line[1][j1++ ] = line[i];
 		else split_line[0][j0++ ] = line[i];
-		if ( line[i] == '\t' && first_tab_found == 0 ) first_tab_found = 1;
+
 		if ( line[i - 1] == ':' && line[i - 2] == 'i' && line[i - 3] == ':' && line[i - 4] == 'H' && line[i - 5] == 'N' )
 		{
 			for ( k = i ; line[k] != '\t' ; k++ )
@@ -134,7 +139,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	return temp;
 }
 
-struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, char *old_read_id, char *new_read_id, int NH_value)
+struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, char *old_read_id, char *new_read_id, int NH_value, unsigned int *total_number_of_nodes_created)
 {
 	//printf ("\nOutside if Head is null? %d" , head == NULL);
 	if ( head == NULL )
@@ -147,6 +152,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 		head->valid = 1;
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
+		( *total_number_of_nodes_created )++;
 		//printf ("\nInside if Head is null? %d" , head == NULL);
 	}
 	else
@@ -159,6 +165,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 			//printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 			temp = node;
+			( *total_number_of_nodes_created )++;
 		}
 		else
 		{
@@ -170,6 +177,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 			//printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 			temp = node;
+			( *total_number_of_nodes_created )++;
 		}
 		printf ("\nIs temp null? %d" , temp == NULL);
 		fflush (stdout);
@@ -229,10 +237,11 @@ void deleteInvalidNodesFromCircularLinkedList (struct Old_Read_ID_to_New_Read_ID
 	}
 }
 
-void printEntireCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head)
+void printEntireCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, unsigned int total_number_of_nodes_created)
 {
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
 	temp = head;
+	printf ("\nTotal nodes: %d" , total_number_of_nodes_created);
 	if ( head == NULL ) return;
 	if ( head->next == head )
 		printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
@@ -262,7 +271,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	int NH_value;
 	int number_of_invalid_nodes = 0;
 	int MAX_number_of_invalid_nodes_allowed = 10000;
-
+	unsigned int total_number_of_nodes_created = 0;
 	long long int read_number;
 
 	size_t len = 0;
@@ -327,7 +336,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			{
 				generateNextReadID (alphabets , read_id , &read_length);
 				convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-				read_mapping_head = insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value);
+				read_mapping_head = insertNodeInCircularLinkedList (read_mapping_head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created);
 				strcpy(split_line[0] , read_id_string);
 				//printf ("\nRight after inserting node %d" , read_mapping_head == NULL);
 			}
@@ -342,7 +351,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		{
 			//printf ("\n%d" , number_of_invalid_nodes);
 		}
-		printEntireCircularLinkedList (read_mapping_head);
+		printEntireCircularLinkedList (read_mapping_head , total_number_of_nodes_created);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	//deleteEntireLinkedList (read_mapping_head);
