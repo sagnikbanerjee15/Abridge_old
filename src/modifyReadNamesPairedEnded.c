@@ -168,7 +168,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	int j;
 	int read_id[100];
 	int NH_value;
-	int read_number = 0;
 	int number_of_invalid_nodes = 0;
 	int MAX_number_of_invalid_nodes_allowed = 10000;
 
