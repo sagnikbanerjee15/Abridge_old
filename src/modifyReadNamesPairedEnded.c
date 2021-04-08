@@ -151,8 +151,8 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 	}
 	else
 	{
-		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
-		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node;
+		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
+		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node = NULL;
 		temp = head;
 		if ( temp->prev == head ) //Only one node in linked list
 		{
@@ -171,7 +171,8 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 			temp = node;
 		}
-
+		printf ("\nIs temp null? %d" , temp == NULL);
+		fflush (stdout);
 		temp->next->next = head;
 		temp->next->prev = temp;
 		head->prev = temp->next;
