@@ -218,6 +218,17 @@ void deleteInvalidNodesFromCircularLinkedList (struct Old_Read_ID_to_New_Read_ID
 	}
 }
 
+void printEntireCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head)
+{
+	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
+	temp = head;
+	while ( temp->next != head )
+	{
+		printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
+		temp = temp->next;
+	}
+}
+
 void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfilename)
 {
 	/********************************************************************
@@ -312,6 +323,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			deleteInvalidNodesFromCircularLinkedList (read_mapping_head , MAX_number_of_invalid_nodes_allowed);
 		}
 		else printf ("\n%d" , number_of_invalid_nodes);
+
+		printEntireCircularLinkedList (read_mapping_head);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	deleteEntireLinkedList (read_mapping_head);
