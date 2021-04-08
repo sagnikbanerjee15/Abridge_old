@@ -158,6 +158,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 		{
 			//printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
+			temp = node;
 		}
 		else
 		{
@@ -168,9 +169,9 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* insertNodeInCircularLink
 		{
 			//printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
+			temp = node;
 		}
 
-		temp = node;
 		temp->next->next = head;
 		temp->next->prev = temp;
 		head->prev = temp->next;
