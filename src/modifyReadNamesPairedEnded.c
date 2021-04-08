@@ -234,7 +234,7 @@ void printEntireCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_L
 	temp = head;
 	while ( head != NULL && temp->next != head )
 	{
-		//printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
+		printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
 		temp = temp->next;
 	}
 }
@@ -341,7 +341,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		//printEntireCircularLinkedList (read_mapping_head);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
-	deleteEntireLinkedList (read_mapping_head);
+	//deleteEntireLinkedList (read_mapping_head);
 	fclose (fhr);
 	fclose (fhw);
 }
