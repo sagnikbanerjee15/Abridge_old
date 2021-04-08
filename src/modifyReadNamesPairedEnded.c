@@ -296,7 +296,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			locate_node_of_interest = updateNodeInCircularLinkedList (read_mapping_head , split_line[0] , &number_of_invalid_nodes);
 			if ( locate_node_of_interest != NULL )
 			{
-				strcpy(split_line[0] , locate_node_of_interest->new_read_id);
+				//strcpy(split_line[0] , locate_node_of_interest->new_read_id);
 			}
 			else
 			{
@@ -311,6 +311,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
 			deleteInvalidNodesFromCircularLinkedList (read_mapping_head , MAX_number_of_invalid_nodes_allowed);
 		}
+		else printf ("\n%d" , number_of_invalid_nodes);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	deleteEntireLinkedList (read_mapping_head);
