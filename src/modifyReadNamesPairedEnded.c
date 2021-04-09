@@ -162,7 +162,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 					head->prev = temp;
 				}
 				printf ("\nPlace 2 %s %s" , temp->old_read_id , old_read_id);
-				printf ("\nNumber of nodes explored " , number_of_nodes_explored);
+				printf ("\nNumber of nodes explored %d" , number_of_nodes_explored);
 				( *number_of_invalid_nodes )++;
 			}
 			*ptr_to_head = head;
