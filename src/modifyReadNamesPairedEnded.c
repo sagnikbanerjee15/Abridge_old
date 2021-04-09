@@ -153,7 +153,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	return temp;
 }
 
-void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **head, char *old_read_id, char *new_read_id, int NH_value, unsigned int *total_number_of_nodes_created, struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **invalid_nodes_head)
+void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **head, char *old_read_id, char *new_read_id, int NH_value, unsigned int *total_number_of_nodes_created, struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **invalid_nodes_head, int *number_of_invalid_nodes)
 {
 	//printf ("\nOutside if Head is null? %d" , head == NULL);
 	if ( ( *head ) == NULL )
@@ -190,6 +190,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 			{
 				temp = *invalid_nodes_head;
 				( *invalid_nodes_head ) = ( *invalid_nodes_head )->next;
+				( *number_of_invalid_nodes )--;
 			}
 		}
 		if ( temp == ( *head ) )
@@ -341,8 +342,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	{
 		read_number++;
 		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-
-		//strcpy(prev_old_read_id , split_line[0]);
 		locate_node_of_interest = updateNodeInCircularLinkedList (valid_nodes_head , split_line[0] , &number_of_invalid_nodes , &invalid_nodes_head);
 		if ( locate_node_of_interest != NULL )
 		{
@@ -352,7 +351,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		{
 			generateNextReadID (alphabets , read_id , &read_length);
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			insertNodeInCircularLinkedList ( &valid_nodes_head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &invalid_nodes_head);
+			insertNodeInCircularLinkedList ( &valid_nodes_head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &invalid_nodes_head , &number_of_invalid_nodes);
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , valid_nodes_head == NULL);
 		}
