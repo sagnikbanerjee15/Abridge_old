@@ -159,6 +159,9 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 				/*
 				 * Create a single linked list with the invalid nodes
 				 */
+
+				if ( temp == *head ) // If head is the node to be removed
+					( *head ) = ( *head )->next;
 				temp->prev->next = temp->next;
 				temp->next->prev = temp->prev;
 				temp->next = NULL;
@@ -177,6 +180,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 				}
 				( *number_of_invalid_nodes )++;
 			}
+
 			return temp;
 		}
 		temp = temp->next;
