@@ -389,12 +389,13 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		writeToFile (split_line , fhw);
 		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
 		{
-			continue;
-			printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
-			fflush (stdout);
-			deleteInvalidNodesFromCircularLinkedList ( &head , MAX_number_of_invalid_nodes_allowed);
-			number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
-			total_number_of_nodes_created -= MAX_number_of_invalid_nodes_allowed;
+			/*
+			 printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
+			 fflush (stdout);
+			 deleteInvalidNodesFromCircularLinkedList ( &head , MAX_number_of_invalid_nodes_allowed);
+			 number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
+			 total_number_of_nodes_created -= MAX_number_of_invalid_nodes_allowed;
+			 */
 		}
 		else
 		{
