@@ -239,7 +239,7 @@ void deleteEntireLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_l
 	free (node_to_be_removed);
 }
 
-void deleteInvalidNodesFromCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *invalid_nodes_head, int MAX_number_of_invalid_nodes_allowed)
+void deleteInvalidNodesFromCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **invalid_nodes_head, int MAX_number_of_invalid_nodes_allowed)
 {
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node_to_be_removed;
@@ -361,7 +361,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
 		{
 			printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
-			deleteInvalidNodesFromCircularLinkedList (valid_nodes_head , MAX_number_of_invalid_nodes_allowed);
+			deleteInvalidNodesFromCircularLinkedList ( &invalid_nodes_head , MAX_number_of_invalid_nodes_allowed);
+			number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
 		}
 		else
 		{
