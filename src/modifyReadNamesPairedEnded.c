@@ -126,6 +126,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 			head->number_of_multi_maps--;
 			if ( head->number_of_multi_maps == 0 ) // Set valid to 0 but no need to change pointer
 				head->valid = 0;
+			printf ("\nPlace 1");
 			( *number_of_invalid_nodes )++;
 			return head;
 		}
@@ -158,6 +159,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 					temp->prev->next = temp;
 					head->prev = temp;
 				}
+				printf ("\nPlace 2");
 				( *number_of_invalid_nodes )++;
 			}
 			*ptr_to_head = head;
@@ -182,7 +184,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
 		*ptr_to_head = head;
-		printf ("\nPlace 0");
+		//printf ("\nPlace 0");
 		( *total_number_of_nodes_created )++;
 	}
 	else
@@ -204,7 +206,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 			temp->valid = 1;
 			if ( head->valid == 0 ) head = head->next;
 			*ptr_to_head = head;
-			printf ("\nPlace 1");
+			//printf ("\nPlace 1");
 			( *total_number_of_nodes_created )++;
 		}
 		else
@@ -238,7 +240,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 				temp->number_of_multi_maps = NH_value * 2 - 1;
 				temp->valid = 1;
 				*ptr_to_head = head;
-				printf ("\nPlace 2");
+				//printf ("\nPlace 2");
 				( *total_number_of_nodes_created )++;
 			}
 		}
