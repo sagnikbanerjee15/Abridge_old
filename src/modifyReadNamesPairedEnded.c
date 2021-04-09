@@ -13,7 +13,7 @@ void writeToFile (char **split_line, FILE *fhw)
 	fprintf (fhw , "%s" , split_line[0]);
 	fprintf (fhw , "%s" , "\t");
 	fprintf (fhw , "%s" , split_line[1]);
-	fflush (fhw);
+	//fflush (fhw);
 }
 
 void generateNextReadID (char *alphabets, int *read_id, int *read_length)
@@ -400,8 +400,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		}
 		else
 		{
-			printf ("\n%d %d" , total_number_of_nodes_created , number_of_invalid_nodes);
-			fflush (stdout);
+			//printf ("\n%d %d" , total_number_of_nodes_created , number_of_invalid_nodes);
+			//fflush (stdout);
 		}
 		//printEntireCircularLinkedList (valid_nodes_head , total_number_of_nodes_created);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
