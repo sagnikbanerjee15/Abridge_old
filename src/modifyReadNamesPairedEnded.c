@@ -149,7 +149,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 		return NULL;
 	}
 	temp = *head;
-	while ( temp->next != ( *head ) )
+	while ( temp != ( *head ) )
 	{
 		if ( strcmp (old_read_id , "9921439") == 0 )
 		{
