@@ -223,6 +223,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 				temp->number_of_multi_maps = NH_value * 2 - 1;
 				temp->valid = 1;
 				*ptr_to_head = head;
+				( *number_of_invalid_nodes )--;
 			}
 			else
 			{
