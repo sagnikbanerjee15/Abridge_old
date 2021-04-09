@@ -117,6 +117,8 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	 */
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head = ( *ptr_to_head );
+	int number_of_nodes_explored = 0;
+
 	if ( head == NULL ) return temp; // Empty list
 	if ( head->valid == 0 ) return NULL; // No valid nodes
 	if ( head->next == head && head->prev == head ) // Contains a single node
@@ -160,12 +162,14 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 					head->prev = temp;
 				}
 				printf ("\nPlace 2 %s %s" , temp->old_read_id , old_read_id);
+				printf ("\nNumber of nodes explored " , number_of_nodes_explored);
 				( *number_of_invalid_nodes )++;
 			}
 			*ptr_to_head = head;
 			return temp;
 		}
 		temp = temp->next;
+		number_of_nodes_explored++;
 	} while ( temp != head && temp->valid == 1 );
 	temp = NULL;
 	return temp;
