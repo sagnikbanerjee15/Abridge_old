@@ -121,7 +121,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 		if ( strcmp ( ( *head )->old_read_id , old_read_id) == 0 )
 		{
 			( *head )->number_of_multi_maps--;
-			if ( temp->number_of_multi_maps == 0 ) //Remove this node from the valid nodes list and add it to the invalid nodes list - do not delete it now
+			if ( ( *head )->number_of_multi_maps == 0 ) //Remove this node from the valid nodes list and add it to the invalid nodes list - do not delete it now
 			{
 				/*
 				 * Create a single linked list with the invalid nodes
@@ -142,8 +142,9 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 				}
 				( *number_of_invalid_nodes )++;
 			}
-			return temp;
+			return ( *head );
 		}
+		return NULL;
 	}
 	temp = *head;
 	while ( temp->next != ( *head ) )
@@ -184,10 +185,8 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 
 void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **head, char *old_read_id, char *new_read_id, int NH_value, unsigned int *total_number_of_nodes_created, struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **invalid_nodes_head, int *number_of_invalid_nodes)
 {
-//printf ("\nOutside if Head is null? %d" , head == NULL);
 	if ( ( *head ) == NULL )
 	{
-		//printf ("\nCreating (*head) node");
 		( *head ) = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 		( *head )->prev = ( *head );
 		strcpy( ( *head )->new_read_id , new_read_id);
@@ -196,7 +195,6 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		( *head )->number_of_multi_maps = NH_value * 2 - 1;
 		( *head )->next = ( *head );
 		( *total_number_of_nodes_created )++;
-		//printf ("\nInside if (*head) is null? %d" , (*head) == NULL);
 	}
 	else
 	{
@@ -205,7 +203,6 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		temp = ( *head );
 		if ( temp->prev == ( *head ) ) //Only one node in linked list
 		{
-			//printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 			temp = node;
 			( *total_number_of_nodes_created )++;
@@ -224,7 +221,6 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		}
 		if ( temp == ( *head ) )
 		{
-			//printf ("\nCreating new node");
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 			temp = node;
 			( *total_number_of_nodes_created )++;
