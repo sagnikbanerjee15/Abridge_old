@@ -159,7 +159,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 					temp->prev->next = temp;
 					head->prev = temp;
 				}
-				printf ("\nPlace 2");
+				printf ("\nPlace 2 %s %s" , temp->old_read_id , old_read_id);
 				( *number_of_invalid_nodes )++;
 			}
 			*ptr_to_head = head;
