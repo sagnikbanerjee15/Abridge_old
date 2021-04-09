@@ -106,7 +106,7 @@ void splitMappingInTwoPartsAndSetNHValue (char *line, char **split_line, int *NH
 	split_line[1][j1] = '\0';
 }
 
-struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, char *old_read_id, int *number_of_invalid_nodes, struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **invalid_nodes_head)
+struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **head, char *old_read_id, int *number_of_invalid_nodes, struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **invalid_nodes_head)
 {
 	/*
 	 * Scan the entire Circular linked list
@@ -115,9 +115,38 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	 * If number_of_multi_maps becomes zero, delete the node
 	 */
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
-	if ( head == NULL ) return temp;
+	if ( ( *head ) == NULL ) return temp;
+	if ( ( *head )->next == ( *head ) && ( *head )->prev == ( *head ) ) // Contains a single node
+	{
+		if ( strcmp ( ( *head )->old_read_id , old_read_id) == 0 )
+		{
+			( *head )->number_of_multi_maps--;
+			if ( temp->number_of_multi_maps == 0 ) //Remove this node from the valid nodes list and add it to the invalid nodes list - do not delete it now
+			{
+				/*
+				 * Create a single linked list with the invalid nodes
+				 */
+				( *head )->next = NULL;
+				( *head )->prev = NULL;
+				if ( ( *invalid_nodes_head ) == NULL )
+				{
+					( *invalid_nodes_head ) = head;
+				}
+				else
+				{
+					/*
+					 * Add to the front of the linked list
+					 */
+					( *head )->next = ( *invalid_nodes_head );
+					( *invalid_nodes_head ) = head;
+				}
+				( *number_of_invalid_nodes )++;
+			}
+			return temp;
+		}
+	}
 	temp = head;
-	while ( temp->next != head )
+	while ( temp->next != ( *head ) )
 	{
 		if ( strcmp (temp->old_read_id , old_read_id) == 0 )
 		{
@@ -155,7 +184,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 
 void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **head, char *old_read_id, char *new_read_id, int NH_value, unsigned int *total_number_of_nodes_created, struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **invalid_nodes_head, int *number_of_invalid_nodes)
 {
-	//printf ("\nOutside if Head is null? %d" , head == NULL);
+//printf ("\nOutside if Head is null? %d" , head == NULL);
 	if ( ( *head ) == NULL )
 	{
 		//printf ("\nCreating (*head) node");
@@ -342,7 +371,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	{
 		read_number++;
 		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		locate_node_of_interest = updateNodeInCircularLinkedList (valid_nodes_head , split_line[0] , &number_of_invalid_nodes , &invalid_nodes_head);
+		locate_node_of_interest = updateNodeInCircularLinkedList ( &valid_nodes_head , split_line[0] , &number_of_invalid_nodes , &invalid_nodes_head);
 		if ( locate_node_of_interest != NULL )
 		{
 			strcpy(split_line[0] , locate_node_of_interest->new_read_id);
@@ -365,12 +394,12 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		}
 		else
 		{
-			printf ("\n%d" , number_of_invalid_nodes);
+			//printf ("\n%d" , number_of_invalid_nodes);
 		}
 		//printEntireCircularLinkedList (valid_nodes_head , total_number_of_nodes_created);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
-	//deleteEntireLinkedList (valid_nodes_head);
+//deleteEntireLinkedList (valid_nodes_head);
 	fclose (fhr);
 	fclose (fhw);
 }
