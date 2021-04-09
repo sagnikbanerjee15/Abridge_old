@@ -365,7 +365,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		}
 		else
 		{
-			//printf ("\n%d" , number_of_invalid_nodes);
+			printf ("\n%d" , number_of_invalid_nodes);
 		}
 		//printEntireCircularLinkedList (valid_nodes_head , total_number_of_nodes_created);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
