@@ -118,14 +118,15 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head = ( *ptr_to_head );
 	if ( head == NULL ) return temp; // Empty list
+	if ( head->valid == 0 ) return NULL; // No valid nodes
 	if ( head->next == head && head->prev == head ) // Contains a single node
 	{
-		if ( head->valid == 0 ) return NULL;
 		if ( strcmp (head->old_read_id , old_read_id) == 0 )
 		{
 			head->number_of_multi_maps--;
 			if ( head->number_of_multi_maps == 0 ) // Set valid to 0 but no need to change pointer
 				head->valid = 0;
+			( *number_of_invalid_nodes )++;
 			return head;
 		}
 		return NULL;
@@ -158,7 +159,6 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 					head->prev = temp;
 				}
 				( *number_of_invalid_nodes )++;
-
 			}
 			*ptr_to_head = head;
 			return temp;
