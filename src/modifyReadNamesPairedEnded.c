@@ -201,6 +201,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 			strcpy(temp->old_read_id , old_read_id);
 			temp->number_of_multi_maps = NH_value * 2 - 1;
 			temp->valid = 1;
+			if ( head->valid == 0 ) head = head->next;
 			*ptr_to_head = head;
 			( *total_number_of_nodes_created )++;
 		}
