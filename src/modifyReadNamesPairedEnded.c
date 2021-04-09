@@ -120,6 +120,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	if ( head == NULL ) return temp; // Empty list
 	if ( head->next == head && head->prev == head ) // Contains a single node
 	{
+		if ( head->valid == 0 ) return NULL;
 		if ( strcmp (head->old_read_id , old_read_id) == 0 )
 		{
 			head->number_of_multi_maps--;
@@ -163,7 +164,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 			return temp;
 		}
 		temp = temp->next;
-	} while ( temp != head );
+	} while ( temp != head && temp->valid == 1 );
 	temp = NULL;
 	return temp;
 }
