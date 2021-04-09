@@ -151,6 +151,11 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	temp = *head;
 	while ( temp->next != ( *head ) )
 	{
+		if ( strcmp (old_read_id , "9921439") == 0 )
+		{
+			printf ("\nThis %s %d" , temp->old_read_id , strcmp (temp->old_read_id , old_read_id));
+			fflush (stdout);
+		}
 		if ( strcmp (temp->old_read_id , old_read_id) == 0 )
 		{
 			temp->number_of_multi_maps--;
@@ -180,7 +185,6 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 				}
 				( *number_of_invalid_nodes )++;
 			}
-
 			return temp;
 		}
 		temp = temp->next;
