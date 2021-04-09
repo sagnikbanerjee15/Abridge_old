@@ -144,7 +144,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 				( *number_of_invalid_nodes )++;
 				( *head ) = NULL;
 			}
-			return ( *head );
+			return ( *invalid_nodes_head );
 		}
 		return NULL;
 	}
