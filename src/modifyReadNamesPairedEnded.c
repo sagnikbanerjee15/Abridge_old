@@ -288,6 +288,8 @@ void deleteInvalidNodesFromCircularLinkedList (struct Old_Read_ID_to_New_Read_ID
 		temp->next = NULL;
 		free (temp->new_read_id);
 		free (temp->old_read_id);
+		printf ("\nMAX_number_of_invalid_nodes_allowed %d" , MAX_number_of_invalid_nodes_allowed);
+		fflush (stdout);
 	}
 }
 
