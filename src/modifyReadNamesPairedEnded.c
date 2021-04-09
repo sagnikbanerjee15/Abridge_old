@@ -375,35 +375,37 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	prev_old_read_id[0] = '\0';
 	do
 	{
-		read_number++;
-		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		locate_node_of_interest = updateNodeInCircularLinkedList ( &valid_nodes_head , split_line[0] , &number_of_invalid_nodes , &invalid_nodes_head);
-		if ( locate_node_of_interest != NULL )
-		{
-			strcpy(split_line[0] , locate_node_of_interest->new_read_id);
-		}
-		else
-		{
-			generateNextReadID (alphabets , read_id , &read_length);
-			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			insertNodeInCircularLinkedList ( &valid_nodes_head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &invalid_nodes_head , &number_of_invalid_nodes);
-			strcpy(split_line[0] , read_id_string);
-			//printf ("\nRight after inserting node %d" , valid_nodes_head == NULL);
-		}
+		/*
+		 read_number++;
+		 splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
+		 locate_node_of_interest = updateNodeInCircularLinkedList ( &valid_nodes_head , split_line[0] , &number_of_invalid_nodes , &invalid_nodes_head);
+		 if ( locate_node_of_interest != NULL )
+		 {
+		 strcpy(split_line[0] , locate_node_of_interest->new_read_id);
+		 }
+		 else
+		 {
+		 generateNextReadID (alphabets , read_id , &read_length);
+		 convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+		 insertNodeInCircularLinkedList ( &valid_nodes_head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &invalid_nodes_head , &number_of_invalid_nodes);
+		 strcpy(split_line[0] , read_id_string);
+		 //printf ("\nRight after inserting node %d" , valid_nodes_head == NULL);
+		 }
 
-		writeToFile (split_line , fhw);
-		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
-		{
-			printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
-			deleteInvalidNodesFromCircularLinkedList ( &invalid_nodes_head , MAX_number_of_invalid_nodes_allowed);
-			number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
-		}
-		else
-		{
-			//printf ("\n%d %d" , total_number_of_nodes_created , number_of_invalid_nodes);
-			//fflush (stdout);
-		}
-		//printEntireCircularLinkedList (valid_nodes_head , total_number_of_nodes_created);
+		 writeToFile (split_line , fhw);
+		 if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
+		 {
+		 printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
+		 deleteInvalidNodesFromCircularLinkedList ( &invalid_nodes_head , MAX_number_of_invalid_nodes_allowed);
+		 number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
+		 }
+		 else
+		 {
+		 //printf ("\n%d %d" , total_number_of_nodes_created , number_of_invalid_nodes);
+		 //fflush (stdout);
+		 }
+		 //printEntireCircularLinkedList (valid_nodes_head , total_number_of_nodes_created);
+		 */
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	//deleteEntireLinkedList (valid_nodes_head);
