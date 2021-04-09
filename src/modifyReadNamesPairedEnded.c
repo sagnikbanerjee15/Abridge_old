@@ -130,7 +130,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 				( *head )->prev = NULL;
 				if ( ( *invalid_nodes_head ) == NULL )
 				{
-					( *invalid_nodes_head ) = head;
+					( *invalid_nodes_head ) = ( *head );
 				}
 				else
 				{
@@ -138,14 +138,14 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 					 * Add to the front of the linked list
 					 */
 					( *head )->next = ( *invalid_nodes_head );
-					( *invalid_nodes_head ) = head;
+					( *invalid_nodes_head ) = ( *head );
 				}
 				( *number_of_invalid_nodes )++;
 			}
 			return temp;
 		}
 	}
-	temp = head;
+	temp = *head;
 	while ( temp->next != ( *head ) )
 	{
 		if ( strcmp (temp->old_read_id , old_read_id) == 0 )
