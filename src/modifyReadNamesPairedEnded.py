@@ -8,7 +8,8 @@ def main():
     
     fhr=open(input_samfilename,"r")
     for line in fhr:
-        continue
+        if(line[0]=="."):
+            continue
     
     
 
