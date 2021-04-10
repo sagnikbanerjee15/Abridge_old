@@ -505,7 +505,6 @@ def compressSamFile(options):
         os.system(cmd)
         ######################################################################################
         
-        """
         all_commands = []
         for input_filename in options.inputsamfilenames:  
             name_of_input_file_without_location = input_filename.split("/")[-1] 
@@ -556,13 +555,12 @@ def compressSamFile(options):
                 logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
-        """
         
         all_commands = []
         for input_filename in options.inputsamfilenames:  
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
-            output_filename_mate_pairs_away_from_to_each_other = f"{options.output_directory}/{name_of_input_file_without_location}_mate_pairs_away_from_to_each_other.sam"
+            output_filename_mate_pairs_away_from_to_each_other = f"{options.output_directory}/{name_of_input_file_without_location}_mate_pairs_away_from_each_other.sam"
             output_filename_mate_pairs_away_from_to_each_other_sorted_by_name = f"{options.output_directory}/{name_of_input_file_without_location}_mate_pairs_away_from_to_each_other_sorted_by_name.sam"
             output_filename_read_names_changed = f"{options.output_directory}/{name_of_input_file_without_location}_read_names_changed.sam"
             
