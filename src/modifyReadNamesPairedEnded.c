@@ -128,7 +128,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 			head->number_of_multi_maps--;
 			if ( head->number_of_multi_maps == 0 ) // Set valid to 0 but no need to change pointer
 				head->valid = 0;
-			printf ("\nPlace 1");
+			//printf ("\nPlace 1");
 			( *number_of_invalid_nodes )++;
 			return head;
 		}
@@ -161,8 +161,8 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 					temp->prev->next = temp;
 					head->prev = temp;
 				}
-				printf ("\nPlace 2 %s %s" , temp->old_read_id , old_read_id);
-				printf ("\nNumber of nodes explored %d" , number_of_nodes_explored);
+				//printf ("\nPlace 2 %s %s" , temp->old_read_id , old_read_id);
+				//printf ("\nNumber of nodes explored %d" , number_of_nodes_explored);
 				( *number_of_invalid_nodes )++;
 			}
 			*ptr_to_head = head;
