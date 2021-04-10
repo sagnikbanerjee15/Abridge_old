@@ -157,7 +157,7 @@ def validateCommandLineArguments(options):
     options.softwares["maxReadsMappedToSingleNucleotide"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsMappedToSingleNucleotide"
     options.softwares["compressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressQualityScoresFile"
     options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
-    options.softwares["separateUniquelyMappedAndMultiMappedReads"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateUniquelyMappedAndMultiMappedReads"
+    options.softwares["separateReadsMatePairTogetherAndMatePairAway"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateReadsMatePairTogetherAndMatePairAway"
     options.softwares["modifyReadNamesPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/modifyReadNamesPairedEnded"
     
     cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.genome}.temp"
@@ -492,10 +492,10 @@ def compressSamFile(options):
         ######################################################################################
         # Compiling programs - will be removed during final version
         ######################################################################################
-        separateUniquelyMappedAndMultiMappedReads = options.softwares["separateUniquelyMappedAndMultiMappedReads"]
+        separateReadsMatePairTogetherAndMatePairAway = options.softwares["separateReadsMatePairTogetherAndMatePairAway"]
         modifyReadNamesPairedEnded = options.softwares["modifyReadNamesPairedEnded"]
         
-        cmd=f"gcc {separateUniquelyMappedAndMultiMappedReads}.c -o {separateUniquelyMappedAndMultiMappedReads} -Ofast"
+        cmd=f"gcc {separateReadsMatePairTogetherAndMatePairAway}.c -o {separateReadsMatePairTogetherAndMatePairAway} -Ofast"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
@@ -505,19 +505,50 @@ def compressSamFile(options):
         os.system(cmd)
         ######################################################################################
         
+        
+        all_commands = []
+        for input_filename in options.inputsamfilenames:  
+            name_of_input_file_without_location = input_filename.split("/")[-1] 
+            pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
+            output_filename_mate_pairs_already_next_to_each_other = f"{options.output_directory}/{name_of_input_file_without_location}_mate_pairs_already_next_to_each_other.sam"
+            output_filename_mate_pairs_away_from_to_each_other = f"{options.output_directory}/{name_of_input_file_without_location}_mate_pairs_away_from_to_each_other.sam"
+            
+            files_to_be_removed.append(output_filename_mate_pairs_away_from_to_each_other)
+            files_to_be_removed.append(output_filename_mate_pairs_already_next_to_each_other)
+            
+            cmd  = f"(/usr/bin/time --verbose "
+            cmd += f" {separateReadsMatePairTogetherAndMatePairAway} "
+            cmd += f" {input_filename} "
+            cmd += f" {output_filename_mate_pairs_already_next_to_each_other} "
+            cmd += f" {output_filename_mate_pairs_away_from_to_each_other} "
+            cmd += f") "   
+            cmd += f"1> /dev/null "
+            if options.keep_intermediate_error_files == True:
+                cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_separateReadsMatePairTogetherAndMatePairAway.error"
+            else:
+                cmd += f"2> /dev/null"
+            if options.quiet == False:
+                logging.info(f"Running cmd - {cmd}")
+            all_commands.append([cmd,"dummy"])
+        pool.map(runCommand,all_commands)
+        
+        return
         all_commands = []
         for input_filename in options.inputsamfilenames:  
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
             output_filename_sorted_by_name = f"{options.output_directory}/{name_of_input_file_without_location}_mm_sorted_by_name.sam"
             
-            files_to_be_removed.append(output_filename_sorted_by_name)
+            output_filename_mate_pairs_away_from_to_each_other = f"{options.output_directory}/{name_of_input_file_without_location}_mate_pairs_away_from_to_each_other.sam"
+            output_filename_mate_pairs_away_from_to_each_other_sorted_by_name = f"{options.output_directory}/{name_of_input_file_without_location}_mate_pairs_away_from_to_each_other_sorted_by_name.sam"
+            
+            files_to_be_removed.append(output_filename_mate_pairs_away_from_to_each_other_sorted_by_name)
             
             cmd  = f"(/usr/bin/time --verbose "
             cmd += "samtools view -bS "
-            cmd += f" {input_filename} "
+            cmd += f" {output_filename_mate_pairs_away_from_to_each_other} "
             cmd += f" |samtools sort -n -o "
-            cmd += f" {output_filename_sorted_by_name} "
+            cmd += f" {output_filename_mate_pairs_away_from_to_each_other_sorted_by_name} "
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
