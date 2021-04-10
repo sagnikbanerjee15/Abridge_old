@@ -401,10 +401,10 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
 			//printf ("\nNew Read id %s" , read_id_string);
 			//fflush (stdout);
+			insertNodeInCircularLinkedList ( &head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &number_of_invalid_nodes);
 			printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
 			fflush (stdout);
-			insertNodeInCircularLinkedList ( &head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &number_of_invalid_nodes);
-			if ( read_number == 2 ) exit (1);
+			if ( read_number == 3 ) exit (1);
 			continue;
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , head == NULL);
