@@ -13,6 +13,8 @@
  */
 
 struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head;
+unsigned int total_number_of_nodes_created = 0;
+unsigned int number_of_invalid_nodes = 0;
 
 void writeToFile (char **split_line, FILE *fhw)
 {
@@ -113,7 +115,7 @@ void splitMappingInTwoPartsAndSetNHValue (char *line, char **split_line, int *NH
 	split_line[1][j1] = '\0';
 }
 
-struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLinkedList (char *old_read_id, int *number_of_invalid_nodes)
+struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLinkedList (char *old_read_id)
 {
 	/*
 	 * Scan the entire Circular linked list
@@ -134,7 +136,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 			if ( head->number_of_multi_maps == 0 ) // Set valid to 0 but no need to change pointer
 				head->valid = 0;
 			//printf ("\nPlace 1");
-			( *number_of_invalid_nodes )++;
+			number_of_invalid_nodes++;
 			return head;
 		}
 		return NULL;
@@ -168,7 +170,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 				}
 				//printf ("\nPlace 2 %s %s" , temp->old_read_id , old_read_id);
 				//printf ("\nNumber of nodes explored %d" , number_of_nodes_explored);
-				( *number_of_invalid_nodes )++;
+				number_of_invalid_nodes++;
 			}
 			return temp;
 		}
@@ -179,7 +181,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLink
 	return temp;
 }
 
-void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int NH_value, unsigned int *total_number_of_nodes_created, int *number_of_invalid_nodes)
+void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int NH_value)
 {
 	if ( head == NULL )
 	{
@@ -193,7 +195,7 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
 		//printf ("\nPlace 0");
-		( *total_number_of_nodes_created )++;
+		total_number_of_nodes_created++;
 	}
 	else
 	{
@@ -221,7 +223,7 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 			temp->valid = 1;
 			if ( head->valid == 0 ) head = head->next;
 			//printf ("\nPlace 1");
-			( *total_number_of_nodes_created )++;
+			total_number_of_nodes_created++;
 		}
 		else
 		{
@@ -236,7 +238,7 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 				strcpy(temp->old_read_id , old_read_id);
 				temp->number_of_multi_maps = NH_value * 2 - 1;
 				temp->valid = 1;
-				( *number_of_invalid_nodes )--;
+				number_of_invalid_nodes--;
 			}
 			else
 			{
@@ -254,7 +256,7 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 				temp->number_of_multi_maps = NH_value * 2 - 1;
 				temp->valid = 1;
 				//printf ("\nPlace 2");
-				( *total_number_of_nodes_created )++;
+				total_number_of_nodes_created++;
 			}
 		}
 	}
@@ -337,9 +339,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	int j;
 	int read_id[100];
 	int NH_value;
-	int number_of_invalid_nodes = 0;
 	int MAX_number_of_invalid_nodes_allowed = 10000;
-	unsigned int total_number_of_nodes_created = 0;
 	long long int read_number;
 
 	size_t len = 0;
@@ -388,7 +388,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		printf ("\nRead Number %d" , read_number);
 		fflush (stdout);
 		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		node_of_interest = updateNodeInCircularLinkedList (split_line[0] , &number_of_invalid_nodes);
+		node_of_interest = updateNodeInCircularLinkedList (split_line[0]);
 		if ( node_of_interest != NULL )
 		{
 			strcpy(split_line[0] , node_of_interest->new_read_id);
@@ -405,7 +405,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			//printf ("\nNew Read id %s" , read_id_string);
 			//fflush (stdout);
 			printf ("\nIs head Null? %d" , head == NULL);
-			insertNodeInCircularLinkedList (split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &number_of_invalid_nodes);
+			insertNodeInCircularLinkedList (split_line[0] , read_id_string , NH_value);
 			printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
 			printf ("\nIs head Null? %d" , head == NULL);
 			fflush (stdout);
