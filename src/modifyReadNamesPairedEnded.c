@@ -185,6 +185,7 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 	{
 		printf ("\nCreating the first node");
 		fflush (stdout);
+		return;
 		head = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 		head->prev = head;
 		strcpy(head->new_read_id , new_read_id);
