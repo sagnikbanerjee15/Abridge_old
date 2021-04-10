@@ -180,6 +180,8 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head = ( *ptr_to_head );
 	if ( head == NULL )
 	{
+		printf ("\nCreating the first node");
+		fflush (stdout);
 		head = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 		head->prev = head;
 		strcpy(head->new_read_id , new_read_id);
@@ -394,7 +396,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			 printf ("%d " , read_id[i]);
 			 */
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			continue;
 			//printf ("\nNew Read id %s" , read_id_string);
 			//fflush (stdout);
 			printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
