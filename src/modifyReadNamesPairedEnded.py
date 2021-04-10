@@ -47,7 +47,7 @@ def main():
             continue"""
         
     for i in range(100000000):
-        generateNextID(read_name_index, read_name_length, alphabets)
+        generateNextID(read_name_index, read_name_length, alphabets, alphabet_size)
     
     
 
