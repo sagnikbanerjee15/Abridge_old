@@ -39,7 +39,7 @@ def main():
     alphabets="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-='{}[]|?<>,."
     read_name_length=0
     read_name_index = [0 for _ in range(100)]
-    alphabet_size=strlen(alphabets)
+    alphabet_size=len(alphabets)
     
     """fhr=open(input_samfilename,"r")
     for line in fhr:
