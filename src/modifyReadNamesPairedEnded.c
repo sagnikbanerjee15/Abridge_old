@@ -387,13 +387,13 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		else
 		{
 			generateNextReadID (alphabets , read_id , &read_length);
-			continue;
 			/*
 			 printf ("\nRead Id indices ");
 			 for ( i = 0 ; i < read_length ; i++ )
 			 printf ("%d " , read_id[i]);
 			 */
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+			continue;
 			//printf ("\nNew Read id %s" , read_id_string);
 			//fflush (stdout);
 			insertNodeInCircularLinkedList ( &head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &number_of_invalid_nodes);
