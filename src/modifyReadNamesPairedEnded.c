@@ -187,9 +187,9 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 		fflush (stdout);
 		head = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 		head->prev = head;
-		return;
 		strcpy(head->new_read_id , new_read_id);
 		strcpy(head->old_read_id , old_read_id);
+		return;
 		head->valid = 1;
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
