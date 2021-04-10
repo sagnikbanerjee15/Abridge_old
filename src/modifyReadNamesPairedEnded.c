@@ -189,12 +189,15 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		head->valid = 1;
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
-		* *ptr_to_head = *head;
+		*ptr_to_head = head;
 		//printf ("\nPlace 0");
 		( *total_number_of_nodes_created )++;
 	}
 	else
 	{
+		printf ("\nEntering here");
+		fflush (stdout);
+		return;
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node = NULL;
 		temp = head;
@@ -211,7 +214,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 			temp->number_of_multi_maps = NH_value * 2 - 1;
 			temp->valid = 1;
 			if ( head->valid == 0 ) head = head->next;
-			* *ptr_to_head = *head;
+			*ptr_to_head = head;
 			//printf ("\nPlace 1");
 			( *total_number_of_nodes_created )++;
 		}
@@ -228,7 +231,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 				strcpy(temp->old_read_id , old_read_id);
 				temp->number_of_multi_maps = NH_value * 2 - 1;
 				temp->valid = 1;
-				* *ptr_to_head = *head;
+				*ptr_to_head = head;
 				( *number_of_invalid_nodes )--;
 			}
 			else
@@ -246,7 +249,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 				strcpy(temp->old_read_id , old_read_id);
 				temp->number_of_multi_maps = NH_value * 2 - 1;
 				temp->valid = 1;
-				* *ptr_to_head = *head;
+				*ptr_to_head = head;
 				//printf ("\nPlace 2");
 				( *total_number_of_nodes_created )++;
 			}
