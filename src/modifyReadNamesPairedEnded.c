@@ -376,7 +376,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	do
 	{
 		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		continue;
 		node_of_interest = updateNodeInCircularLinkedList ( &head , split_line[0] , &number_of_invalid_nodes);
 		if ( node_of_interest != NULL )
 		{
