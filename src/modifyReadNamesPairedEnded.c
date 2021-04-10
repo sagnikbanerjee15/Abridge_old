@@ -172,7 +172,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_mate_pairs_next_to_e
 	for ( i = 0 ; i < 10 ; i++ )
 		split_line2[i] = ( char* ) malloc (sizeof(char) * 1000);
 
-	head = NULL;
 	/********************************************************************/
 
 	while ( ( line1_len = getline ( &line1 , &len1 , fhr_mate_pairs_next_to_each_other) ) != -1 )
