@@ -1,0 +1,15 @@
+
+import sys
+
+def main():
+    input_samfilename = sys.argv[0]
+    output_samfilename = sys.argv[1]
+    
+    fhr=open(input_samfilename,"r")
+    for line in fhr:
+        continue
+    
+    
+
+if __name__ == "__main__":
+    main()
