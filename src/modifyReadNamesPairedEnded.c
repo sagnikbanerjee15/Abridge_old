@@ -105,6 +105,7 @@ void splitMappingInTwoPartsAndSetNHValue (char *line, char **split_line, int *NH
 	( *NH_value ) = strtol (NH_string , &temp , 10);
 	split_line[0][j0] = '\0';
 	split_line[1][j1] = '\0';
+	printf ("\n%s%s" , split_line[0] , split_line[1]);
 }
 
 struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **ptr_to_head, char *old_read_id, int *number_of_invalid_nodes)
