@@ -403,7 +403,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			//fflush (stdout);
 			//printf ("\nIs head Null? %d" , head == NULL);
 			insertNodeInCircularLinkedList (split_line[0] , read_id_string , NH_value);
-			//printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
+			printf ("\ntotal_number_of_nodes_created %d number_of_invalid_nodes %d" , total_number_of_nodes_created , number_of_invalid_nodes);
 			//printf ("\nIs head Null? %d" , head == NULL);
 			//fflush (stdout);
 			//if ( read_number == 3 ) exit (1);
