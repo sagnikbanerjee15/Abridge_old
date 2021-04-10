@@ -130,7 +130,7 @@ void separateReads (char *input_samfilename, char *output_filename_mate_pairs_al
 		}
 		else
 		{
-			writeToFile (split_line1 , output_filename_mate_pairs_away_from_to_each_other);
+			writeToFile (split_line1 , fhw_away_from_to_each_other);
 			strcpy(line1 , line2);
 		}
 	} while ( 1 );

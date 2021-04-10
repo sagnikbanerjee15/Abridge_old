@@ -102,6 +102,7 @@ abridge \
 
 
 gcc src/modifyReadNamesPairedEnded.c -o src/modifyReadNamesPairedEnded -Ofast
+gcc src/separateReadsMatePairTogetherAndMatePairAway.c -o src/separateReadsMatePairTogetherAndMatePairAway -Ofast
 (/usr/bin/time --verbose  \
 $ROOT_DIRECTORY/Abridge/src/modifyReadNamesPairedEnded  \
 $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
@@ -109,4 +110,13 @@ $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE_names_modified.sam \
 ) \
 1> $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE_names_modified.output \
 2> $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE_names_modified.error
+
+(/usr/bin/time --verbose  \
+/project/maizegdb/sagnik/ABRIDGE/Abridge/src/separateReadsMatePairTogetherAndMatePairAway  \
+/project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam  \
+/project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_mate_pairs_already_next_to_each_other.sam  \
+/project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_mate_pairs_away_from_to_each_other.sam \
+) \
+1> /project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_separateReadsMatePairTogetherAndMatePairAway.output \
+2> /project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_separateReadsMatePairTogetherAndMatePairAway.error
 
