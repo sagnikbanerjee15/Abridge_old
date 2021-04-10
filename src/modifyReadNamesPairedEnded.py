@@ -46,7 +46,7 @@ def main():
         if(line[0]=="."):
             continue"""
         
-    for i in range(1000000):
+    for i in range(10000000):
         generateNextID(read_name_index, read_name_length, alphabets)
     
     
