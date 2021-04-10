@@ -131,7 +131,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename_mate_pairs_next_to_e
 	long long int read_number;
 
 	size_t len1 = 0;
-	ssize_t len2 = 0;
+	size_t len2 = 0;
 	ssize_t line1_len;
 	ssize_t line2_len;
 

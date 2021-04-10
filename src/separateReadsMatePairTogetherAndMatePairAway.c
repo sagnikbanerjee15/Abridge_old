@@ -62,7 +62,7 @@ void separateReads (char *input_samfilename, char *output_filename_mate_pairs_al
 	int i;
 
 	size_t len1 = 0;
-	ssize_t len2 = 0;
+	size_t len2 = 0;
 	ssize_t line1_len;
 	ssize_t line2_len;
 
