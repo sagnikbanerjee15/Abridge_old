@@ -13,6 +13,8 @@ void writeToFile (char **split_line, FILE *fhw)
 	fprintf (fhw , "%s" , split_line[0]);
 	fprintf (fhw , "%s" , "\t");
 	fprintf (fhw , "%s" , split_line[1]);
+	printf ("\n%s\t%s" , split_line[0] , split_line[1]);
+	fflush (stdout);
 	fflush (fhw);
 }
 
@@ -390,7 +392,6 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			//printf ("\nRight after inserting node %d" , head == NULL);
 		}
 		writeToFile (split_line , fhw);
-		exit (1);
 		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
 		{
 			/*
