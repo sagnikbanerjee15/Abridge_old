@@ -389,8 +389,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , head == NULL);
 		}
-		exit (1);
 		writeToFile (split_line , fhw);
+		exit (1);
 		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
 		{
 			/*
