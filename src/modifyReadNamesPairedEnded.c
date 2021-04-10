@@ -185,8 +185,8 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 {
 	if ( head == NULL )
 	{
-		printf ("\nCreating the first node");
-		fflush (stdout);
+		//printf ("\nCreating the first node");
+		//fflush (stdout);
 		head = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 		head->prev = head;
 		strcpy(head->new_read_id , new_read_id);
@@ -199,8 +199,8 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 	}
 	else
 	{
-		printf ("\nEntering here");
-		fflush (stdout);
+		//printf ("\nEntering here");
+		//fflush (stdout);
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node = NULL;
 		temp = head;
@@ -400,11 +400,11 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
 			//printf ("\nNew Read id %s" , read_id_string);
 			//fflush (stdout);
-			printf ("\nIs head Null? %d" , head == NULL);
+			//printf ("\nIs head Null? %d" , head == NULL);
 			insertNodeInCircularLinkedList (split_line[0] , read_id_string , NH_value);
-			printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
-			printf ("\nIs head Null? %d" , head == NULL);
-			fflush (stdout);
+			//printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
+			//printf ("\nIs head Null? %d" , head == NULL);
+			//fflush (stdout);
 			if ( read_number == 3 ) exit (1);
 			continue;
 			strcpy(split_line[0] , read_id_string);
