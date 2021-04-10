@@ -189,10 +189,10 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 		head->prev = head;
 		strcpy(head->new_read_id , new_read_id);
 		strcpy(head->old_read_id , old_read_id);
-		return;
 		head->valid = 1;
 		head->number_of_multi_maps = NH_value * 2 - 1;
 		head->next = head;
+		return;
 		//printf ("\nPlace 0");
 		( *total_number_of_nodes_created )++;
 	}
