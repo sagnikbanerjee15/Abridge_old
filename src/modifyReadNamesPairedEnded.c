@@ -197,12 +197,12 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 	{
 		printf ("\nEntering here");
 		fflush (stdout);
-		//return;
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node = NULL;
 		temp = head;
 		if ( temp->prev == head ) //Only one node in linked list
 		{
+			return;
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 			temp = node;
 			temp->next = head->next;
