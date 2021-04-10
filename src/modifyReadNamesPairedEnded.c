@@ -394,6 +394,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			 printf ("%d " , read_id[i]);
 			 */
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+			continue;
 			//printf ("\nNew Read id %s" , read_id_string);
 			//fflush (stdout);
 			printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
