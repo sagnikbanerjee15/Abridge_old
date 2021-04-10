@@ -431,6 +431,8 @@ int main (int argc, char *argv[])
 
 	char input_samfilename[FILENAME_LENGTH];
 	char output_samfilename[FILENAME_LENGTH];
+	char alphabets[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-='{}[]|?<>,.";
+	char read_id_string[100];
 
 	/********************************************************************/
 
@@ -443,5 +445,11 @@ int main (int argc, char *argv[])
 
 	/********************************************************************/
 	convertOldReadIdsToNewReadIds (input_samfilename , output_samfilename);
+	for ( i = 0 ; i <= 1000000 ; i++ )
+	{
+		generateNextReadID (alphabets , read_id , &read_length);
+		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+	}
+
 	return 0;
 }
