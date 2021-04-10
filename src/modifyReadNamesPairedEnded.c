@@ -375,46 +375,47 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 
 	do
 	{
-		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		node_of_interest = updateNodeInCircularLinkedList ( &head , split_line[0] , &number_of_invalid_nodes);
-		if ( node_of_interest != NULL )
-		{
-			strcpy(split_line[0] , node_of_interest->new_read_id);
-		}
-		else
-		{
-			generateNextReadID (alphabets , read_id , &read_length);
-			printf ("\nRead Id indices ");
-			for ( i = 0 ; i < read_length ; i++ )
-				printf ("%d " , read_id[i]);
+		/*
+		 splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
+		 node_of_interest = updateNodeInCircularLinkedList ( &head , split_line[0] , &number_of_invalid_nodes);
+		 if ( node_of_interest != NULL )
+		 {
+		 strcpy(split_line[0] , node_of_interest->new_read_id);
+		 }
+		 else
+		 {
+		 generateNextReadID (alphabets , read_id , &read_length);
+		 printf ("\nRead Id indices ");
+		 for ( i = 0 ; i < read_length ; i++ )
+		 printf ("%d " , read_id[i]);
 
-			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			printf ("\nNew Read id %s" , read_id_string);
-			fflush (stdout);
-			insertNodeInCircularLinkedList ( &head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &number_of_invalid_nodes);
-			strcpy(split_line[0] , read_id_string);
-			//printf ("\nRight after inserting node %d" , head == NULL);
-		}
-		writeToFile (split_line , fhw);
-		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
-		{
-			/*
-			 printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
-			 fflush (stdout);
-			 deleteInvalidNodesFromCircularLinkedList ( &head , MAX_number_of_invalid_nodes_allowed);
-			 number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
-			 total_number_of_nodes_created -= MAX_number_of_invalid_nodes_allowed;
-			 */
-		}
-		else
-		{
-			//printf ("\n%d %d" , total_number_of_nodes_created , number_of_invalid_nodes);
-			//fflush (stdout);
-		}
-		//printEntireCircularLinkedList (head , total_number_of_nodes_created);
+		 convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+		 printf ("\nNew Read id %s" , read_id_string);
+		 fflush (stdout);
+		 insertNodeInCircularLinkedList ( &head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &number_of_invalid_nodes);
+		 strcpy(split_line[0] , read_id_string);
+		 //printf ("\nRight after inserting node %d" , head == NULL);
+		 }
+		 writeToFile (split_line , fhw);
+		 if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
+		 {
+		 //printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
+		 //fflush (stdout);
+		 //deleteInvalidNodesFromCircularLinkedList ( &head , MAX_number_of_invalid_nodes_allowed);
+		 //number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
+		 //total_number_of_nodes_created -= MAX_number_of_invalid_nodes_allowed;
+		 }
+		 else
+		 {
+		 //printf ("\n%d %d" , total_number_of_nodes_created , number_of_invalid_nodes);
+		 //fflush (stdout);
+		 }
+		 //printEntireCircularLinkedList (head , total_number_of_nodes_created);
+
+		 */
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
-	//deleteEntireLinkedList (head);
+//deleteEntireLinkedList (head);
 	fclose (fhr);
 	fclose (fhw);
 }
