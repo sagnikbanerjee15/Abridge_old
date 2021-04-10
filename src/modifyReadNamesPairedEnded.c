@@ -393,7 +393,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		{
 			generateNextReadID (alphabets , read_id , &read_length);
 
-			printf ("\nRead Id indices ");
+			printf ("\nread_length=%d Read Id indices " , read_length);
 			for ( i = 0 ; i < read_length ; i++ )
 				printf ("%d " , read_id[i]);
 
