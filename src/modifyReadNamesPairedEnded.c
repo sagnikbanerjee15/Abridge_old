@@ -13,8 +13,6 @@ void writeToFile (char **split_line, FILE *fhw)
 	fprintf (fhw , "%s" , split_line[0]);
 	fprintf (fhw , "%s" , "\t");
 	fprintf (fhw , "%s" , split_line[1]);
-	printf ("\n%s\t%s" , split_line[0] , split_line[1]);
-	fflush (stdout);
 	fflush (fhw);
 }
 
@@ -387,6 +385,8 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		{
 			generateNextReadID (alphabets , read_id , &read_length);
 			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+			printf ("\nNew Read id %s" , read_id_string);
+			fflush (stdout);
 			insertNodeInCircularLinkedList ( &head , split_line[0] , read_id_string , NH_value , &total_number_of_nodes_created , &number_of_invalid_nodes);
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , head == NULL);
