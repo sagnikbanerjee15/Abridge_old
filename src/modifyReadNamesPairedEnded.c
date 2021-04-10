@@ -199,7 +199,7 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 	{
 		printf ("\nEntering here");
 		fflush (stdout);
-		rreturn;
+		return;
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node = NULL;
 		//temp = ( *ptr_to_head );
