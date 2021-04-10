@@ -532,7 +532,6 @@ def compressSamFile(options):
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
         
-        return
         all_commands = []
         for input_filename in options.inputsamfilenames:  
             name_of_input_file_without_location = input_filename.split("/")[-1] 
