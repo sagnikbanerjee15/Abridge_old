@@ -13,7 +13,7 @@ void writeToFile (char **split_line, FILE *fhw)
 	fprintf (fhw , "%s" , split_line[0]);
 	fprintf (fhw , "%s" , "\t");
 	fprintf (fhw , "%s" , split_line[1]);
-	fflush (fhw);
+	//fflush (fhw);
 }
 
 void generateNextReadID (char *alphabets, int *read_id, int *read_length)
