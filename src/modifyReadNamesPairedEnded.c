@@ -405,7 +405,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			insertNodeInCircularLinkedList (split_line[0] , read_id_string , NH_value);
 			//printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
 			//printf ("\nIs head Null? %d" , head == NULL);
-			fflush (stdout);
+			//fflush (stdout);
 			//if ( read_number == 3 ) exit (1);
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , head == NULL);
