@@ -8,14 +8,6 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-/*
- * Global variable
- */
-
-struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head;
-unsigned int total_number_of_nodes_created = 0;
-unsigned int number_of_invalid_nodes = 0;
-
 void writeToFile (char **split_line, FILE *fhw)
 {
 	fprintf (fhw , "%s" , split_line[0]);
@@ -115,217 +107,17 @@ void splitMappingInTwoPartsAndSetNHValue (char *line, char **split_line, int *NH
 	split_line[1][j1] = '\0';
 }
 
-struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* updateNodeInCircularLinkedList (char *old_read_id)
-{
-	/*
-	 * Scan the entire Circular linked list
-	 * to find the old_read_id
-	 * If old_read_id is found then reduce the value of number_of_multi_maps field by 1
-	 * If number_of_multi_maps becomes zero, delete the node
-	 */
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
-	int number_of_nodes_explored = 0;
-
-	if ( head == NULL ) return temp; // Empty list
-	if ( head->valid == 0 ) return NULL; // No valid nodes
-	if ( head->next == head && head->prev == head ) // Contains a single node
-	{
-		if ( strcmp (head->old_read_id , old_read_id) == 0 )
-		{
-			head->number_of_multi_maps--;
-			if ( head->number_of_multi_maps == 0 ) // Set valid to 0 but no need to change pointer
-				head->valid = 0;
-			//printf ("\nPlace 1");
-			number_of_invalid_nodes++;
-			return head;
-		}
-		return NULL;
-	}
-	temp = head;
-	do
-	{
-		if ( strcmp (temp->old_read_id , old_read_id) == 0 )
-		{
-			temp->number_of_multi_maps--;
-			if ( temp->number_of_multi_maps == 0 ) //Remove this node from the valid nodes list and add it to the invalid nodes list - do not delete it now
-			{
-				temp->valid = 0;
-				if ( temp == head ) // If head is the node to be removed
-					head = head->next;
-				else
-				{
-					/*
-					 * Detach temp and re-attach before head
-					 */
-
-					temp->prev->next = temp->next;
-					temp->next->prev = temp->prev;
-					temp->next = NULL;
-					temp->prev = NULL;
-
-					temp->next = head;
-					temp->prev = head->prev;
-					temp->prev->next = temp;
-					head->prev = temp;
-				}
-				//printf ("\nPlace 2 %s %s" , temp->old_read_id , old_read_id);
-				//printf ("\nNumber of nodes explored %d" , number_of_nodes_explored);
-				number_of_invalid_nodes++;
-			}
-			return temp;
-		}
-		temp = temp->next;
-		number_of_nodes_explored++;
-	} while ( temp != head && temp->valid == 1 );
-	temp = NULL;
-	return temp;
-}
-
-void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int NH_value)
-{
-	if ( head == NULL )
-	{
-		//printf ("\nCreating the first node");
-		//fflush (stdout);
-		head = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
-		head->prev = head;
-		strcpy(head->new_read_id , new_read_id);
-		strcpy(head->old_read_id , old_read_id);
-		head->valid = 1;
-		head->number_of_multi_maps = NH_value * 2 - 1;
-		head->next = head;
-		//printf ("\nPlace 0");
-		total_number_of_nodes_created++;
-	}
-	else
-	{
-		//printf ("\nEntering here");
-		//fflush (stdout);
-		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp = NULL;
-		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node = NULL;
-		temp = head;
-		if ( temp->prev == head ) //Only one node in linked list
-		{
-			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
-			temp = node;
-			temp->next = head->next;
-			temp->prev = head;
-			head->next->prev = temp;
-			head->next = temp;
-			strcpy(temp->new_read_id , new_read_id);
-			strcpy(temp->old_read_id , old_read_id);
-			temp->number_of_multi_maps = NH_value * 2 - 1;
-			temp->valid = 1;
-			if ( head->valid == 0 ) head = head->next;
-			//printf ("\nPlace 1");
-			total_number_of_nodes_created++;
-		}
-		else
-		{
-			/*
-			 * Pick up the first node from the invalid nodes part
-			 */
-			if ( head->prev->valid == 0 )
-			{
-				temp = head->prev;
-				head = head->prev;
-				strcpy(temp->new_read_id , new_read_id);
-				strcpy(temp->old_read_id , old_read_id);
-				temp->number_of_multi_maps = NH_value * 2 - 1;
-				temp->valid = 1;
-				number_of_invalid_nodes--;
-			}
-			else
-			{
-				node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
-				temp = node;
-				/*
-				 * Insert new node after (*head)
-				 */
-				temp->next = head->next;
-				temp->prev = head;
-				head->next->prev = temp;
-				head->next = temp;
-				strcpy(temp->new_read_id , new_read_id);
-				strcpy(temp->old_read_id , old_read_id);
-				temp->number_of_multi_maps = NH_value * 2 - 1;
-				temp->valid = 1;
-				//printf ("\nPlace 2");
-				total_number_of_nodes_created++;
-			}
-		}
-	}
-}
-
-void deleteEntireLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head)
-{
-	if ( head == NULL ) return;
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node_to_be_removed;
-	temp = head;
-	while ( temp->next != NULL )
-	{
-		node_to_be_removed = temp->next;
-		temp->next->next->prev = temp;
-		temp->next = temp->next->next;
-		node_to_be_removed->prev = NULL;
-		node_to_be_removed->next = NULL;
-		free (node_to_be_removed->new_read_id);
-		free (node_to_be_removed->old_read_id);
-		free (node_to_be_removed);
-	}
-
-	node_to_be_removed = head;
-	node_to_be_removed->prev = NULL;
-	node_to_be_removed->next = NULL;
-	free (node_to_be_removed->new_read_id);
-	free (node_to_be_removed->old_read_id);
-	free (node_to_be_removed);
-}
-
-void deleteInvalidNodesFromCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list **ptr_to_head, int MAX_number_of_invalid_nodes_allowed)
-{
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node_to_be_removed;
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head = ( *ptr_to_head );
-	node_to_be_removed = head->prev;
-	while ( MAX_number_of_invalid_nodes_allowed-- )
-	{
-		temp->prev->next = temp->next; //similar to temp->prev->next = head
-		head->prev = temp->prev;
-		temp->prev = NULL;
-		temp->next = NULL;
-		free (temp->new_read_id);
-		free (temp->old_read_id);
-		printf ("\nMAX_number_of_invalid_nodes_allowed %d" , MAX_number_of_invalid_nodes_allowed);
-		fflush (stdout);
-	}
-}
-
-void printEntireCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head, unsigned int total_number_of_nodes_created)
-{
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *temp;
-	temp = head;
-	printf ("\nTotal nodes: %d" , total_number_of_nodes_created);
-	if ( head == NULL ) return;
-	if ( head->next == head )
-		printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
-	while ( temp->next != head )
-	{
-		printf ("\nOld=%s New=%s Multimaps=%d Valid=%d" , temp->old_read_id , temp->new_read_id , temp->number_of_multi_maps , temp->valid);
-		temp = temp->next;
-	}
-}
-
-void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfilename)
+void convertOldReadIdsToNewReadIds (char *input_samfilename_mate_pairs_next_to_each_other, char *input_samfilename_mate_pairs_away_from_each_other, char *output_samfilename)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
 	char alphabets[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-='{}[]|?<>,.";
 	char *temp; //Required for strtoi
-	char *line = NULL; // for reading each line
-	char **split_line; // List of strings to store each element of a single alignment
+	char *line1 = NULL; // for reading each line
+	char *line2 = NULL; // for reading each line
+	char **split_line1; // List of strings to store each element of a single alignment
+	char **split_line2;
 	char prev_old_read_id[1000];
 	char read_id_string[100];
 
@@ -333,14 +125,18 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	int i;
 	int j;
 	int read_id[100];
-	int NH_value;
+	int NH_value1;
+	int NH_value2;
 	int MAX_number_of_invalid_nodes_allowed = 10000;
 	long long int read_number;
 
-	size_t len = 0;
-	ssize_t line_len;
+	size_t len1 = 0;
+	ssize_t len2 = 0;
+	ssize_t line1_len;
+	ssize_t line2_len;
 
-	FILE *fhr;
+	FILE *fhr_mate_pairs_next_to_each_other;
+	FILE *fhr_mate_pairs_away_from_each_other;
 	FILE *fhw;
 
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node_of_interest;
@@ -349,10 +145,16 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen (input_samfilename , "r");
-	if ( fhr == NULL )
+	fhr_mate_pairs_next_to_each_other = fopen (input_samfilename_mate_pairs_next_to_each_other , "r");
+	if ( fhr_mate_pairs_next_to_each_other == NULL )
 	{
-		printf ("Error! File %s not found" , input_samfilename);
+		printf ("Error! File %s not found" , input_samfilename_mate_pairs_next_to_each_other);
+		exit (1);
+	}
+	fhr_mate_pairs_away_from_each_other = fopen (input_samfilename_mate_pairs_away_from_each_other , "r");
+	if ( fhr_mate_pairs_away_from_each_other == NULL )
+	{
+		printf ("Error! File %s not found" , input_samfilename_mate_pairs_away_from_each_other);
 		exit (1);
 	}
 	fhw = fopen (output_samfilename , "w");
@@ -362,73 +164,68 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 		exit (1);
 	}
 
-	split_line = ( char** ) malloc (sizeof(char*) * 100);
-	for ( i = 0 ; i < 100 ; i++ )
-		split_line[i] = ( char* ) malloc (sizeof(char) * 1000);
+	split_line1 = ( char** ) malloc (sizeof(char*) * 10);
+	for ( i = 0 ; i < 10 ; i++ )
+		split_line1[i] = ( char* ) malloc (sizeof(char) * 1000);
+
+	split_line2 = ( char** ) malloc (sizeof(char*) * 10);
+	for ( i = 0 ; i < 10 ; i++ )
+		split_line2[i] = ( char* ) malloc (sizeof(char) * 1000);
 
 	head = NULL;
 	/********************************************************************/
 
-	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
+	while ( ( line1_len = getline ( &line1 , &len1 , fhr_mate_pairs_next_to_each_other) ) != -1 )
 	{
-		if ( line[0] == '@' )
-			fprintf (fhw , "%s" , line);
+		if ( line1[0] == '@' )
+			fprintf (fhw , "%s" , line1);
 		else break;
 	}
+	while ( ( line1_len = getline ( &line1 , &len1 , fhr_mate_pairs_away_from_each_other) ) != -1 )
+		if ( line1[0] != '@' ) break;
 
 	read_number = 0;
 	read_length = 0;
 	do
 	{
-		//read_number++;
-		//printf ("\nRead Number %d" , read_number);
-		//fflush (stdout);
-		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		node_of_interest = updateNodeInCircularLinkedList (split_line[0]);
-		if ( node_of_interest != NULL )
-		{
-			strcpy(split_line[0] , node_of_interest->new_read_id);
-		}
-		else
-		{
-			generateNextReadID (alphabets , read_id , &read_length);
-			/*
-			 printf ("\nread_length=%d Read Id indices " , read_length);
-			 for ( i = 0 ; i < read_length ; i++ )
-			 printf ("%d " , read_id[i]);
-			 */
-			convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-			//printf ("\nNew Read id %s" , read_id_string);
-			//fflush (stdout);
-			//printf ("\nIs head Null? %d" , head == NULL);
-			insertNodeInCircularLinkedList (split_line[0] , read_id_string , NH_value);
-			//printf ("\ntotal_number_of_nodes_created %d number_of_invalid_nodes %d" , total_number_of_nodes_created , number_of_invalid_nodes);
-			//printf ("\nIs head Null? %d" , head == NULL);
-			//fflush (stdout);
-			//if ( read_number == 3 ) exit (1);
-			strcpy(split_line[0] , read_id_string);
-			//printf ("\nRight after inserting node %d" , head == NULL);
-		}
-		writeToFile (split_line , fhw);
-		continue;
-		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
-		{
-			//printf ("\nMAX_number_of_invalid_nodes_allowed exceeded");
-			//fflush (stdout);
-			//deleteInvalidNodesFromCircularLinkedList ( &head , MAX_number_of_invalid_nodes_allowed);
-			//number_of_invalid_nodes -= MAX_number_of_invalid_nodes_allowed;
-			//total_number_of_nodes_created -= MAX_number_of_invalid_nodes_allowed;
-		}
-		else
-		{
-			//printf ("\n%d %d" , total_number_of_nodes_created , number_of_invalid_nodes);
-			//fflush (stdout);
-		}
-		//printEntireCircularLinkedList (head , total_number_of_nodes_created);
-	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
+		line1_len = getline ( &line1 , &len1 , fhr_mate_pairs_next_to_each_other);
+		if ( line1_len == -1 ) break;
+		line2_len = getline ( &line2 , &len2 , fhr_mate_pairs_next_to_each_other);
+		if ( line2_len == -1 ) break;
 
-	//deleteEntireLinkedList (head);
-	fclose (fhr);
+		splitMappingInTwoPartsAndSetNHValue (line1 , split_line1 , &NH_value1);
+		splitMappingInTwoPartsAndSetNHValue (line2 , split_line2 , &NH_value2);
+
+		generateNextReadID (alphabets , read_id , &read_length);
+		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+		strcpy(split_line1[0] , read_id_string);
+		strcpy(split_line2[0] , read_id_string);
+
+		writeToFile (split_line1 , fhw);
+		writeToFile (split_line2 , fhw);
+	} while ( 1 );
+
+	do
+	{
+		line1_len = getline ( &line1 , &len1 , fhr_mate_pairs_away_from_each_other);
+		if ( line1_len == -1 ) break;
+		line2_len = getline ( &line2 , &len2 , fhr_mate_pairs_away_from_each_other);
+		if ( line2_len == -1 ) break;
+
+		splitMappingInTwoPartsAndSetNHValue (line1 , split_line1 , &NH_value1);
+		splitMappingInTwoPartsAndSetNHValue (line2 , split_line2 , &NH_value2);
+
+		generateNextReadID (alphabets , read_id , &read_length);
+		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+		strcpy(split_line1[0] , read_id_string);
+		strcpy(split_line2[0] , read_id_string);
+
+		writeToFile (split_line1 , fhw);
+		writeToFile (split_line2 , fhw);
+	} while ( 1 );
+
+	fclose (fhr_mate_pairs_next_to_each_other);
+	fclose (fhr_mate_pairs_away_from_each_other);
 	fclose (fhw);
 }
 
@@ -441,7 +238,8 @@ int main (int argc, char *argv[])
 	int read_id[100];
 	int i, j;
 
-	char input_samfilename[FILENAME_LENGTH];
+	char input_samfilename_mate_pairs_next_to_each_other[FILENAME_LENGTH];
+	char input_samfilename_mate_pairs_away_from_each_other[FILENAME_LENGTH];
 	char output_samfilename[FILENAME_LENGTH];
 
 	/********************************************************************/
@@ -450,10 +248,11 @@ int main (int argc, char *argv[])
 	 * Variable initialization
 	 ********************************************************************/
 	read_length = 0;
-	strcpy(input_samfilename , argv[1]);
-	strcpy(output_samfilename , argv[2]);
+	strcpy(input_samfilename_mate_pairs_next_to_each_other , argv[1]);
+	strcpy(input_samfilename_mate_pairs_away_from_each_other , argv[2]);
+	strcpy(output_samfilename , argv[3]);
 
 	/********************************************************************/
-	convertOldReadIdsToNewReadIds (input_samfilename , output_samfilename);
+	convertOldReadIdsToNewReadIds (input_samfilename_mate_pairs_next_to_each_other , input_samfilename_mate_pairs_away_from_each_other , output_samfilename);
 	return 0;
 }
