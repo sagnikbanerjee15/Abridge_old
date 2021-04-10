@@ -377,10 +377,9 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	do
 	{
 		read_number++;
+		printf ("\n%d" , read_number);
 		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
 		node_of_interest = updateNodeInCircularLinkedList ( &head , split_line[0] , &number_of_invalid_nodes);
-		printf ("\n%d" , read_number);
-		continue;
 		if ( node_of_interest != NULL )
 		{
 			strcpy(split_line[0] , node_of_interest->new_read_id);
@@ -400,6 +399,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , head == NULL);
 		}
+		continue;
 		writeToFile (split_line , fhw);
 		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
 		{
