@@ -341,7 +341,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	FILE *fhw;
 
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *head = NULL;
-	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *locate_node_of_interest;
+	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node_of_interest;
 	/********************************************************************/
 
 	/********************************************************************
@@ -376,10 +376,10 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 	do
 	{
 		splitMappingInTwoPartsAndSetNHValue (line , split_line , &NH_value);
-		locate_node_of_interest = updateNodeInCircularLinkedList ( &head , split_line[0] , &number_of_invalid_nodes);
-		if ( locate_node_of_interest != NULL )
+		node_of_interest = updateNodeInCircularLinkedList ( &head , split_line[0] , &number_of_invalid_nodes);
+		if ( node_of_interest != NULL )
 		{
-			strcpy(split_line[0] , locate_node_of_interest->new_read_id);
+			strcpy(split_line[0] , node_of_interest->new_read_id);
 		}
 		else
 		{
@@ -389,7 +389,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , head == NULL);
 		}
-
+		exit (1);
 		writeToFile (split_line , fhw);
 		if ( number_of_invalid_nodes > MAX_number_of_invalid_nodes_allowed )
 		{
