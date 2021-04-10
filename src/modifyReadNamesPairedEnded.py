@@ -2,13 +2,13 @@
 
 import sys
 
-def convertReadNameIndexToReadNameString(read_name_index,read_name_length,alphabets,alphabet_size):
+def convertReadNameIndexToReadNameString(read_name_index,read_name_length,alphabets):
     s=""
     for i in range(read_name_length):
         s+=alphabets[read_name_index[i]]
     return s
 
-def generateNextID(read_name_index,read_name_length,alphabets):
+def generateNextID(read_name_index,read_name_length,alphabets,alphabet_size):
     if read_name_length==0:
         read_name_length+=1
         read_name_index[0]=0
