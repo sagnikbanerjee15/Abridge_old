@@ -36,14 +36,14 @@ void splitMappingInTwoPartsAndSetNHValue (char *line1, char **split_line1, int *
 			split_line1[1][j1++ ] = line1[i];
 		else split_line1[0][j0++ ] = line1[i];
 
-		if ( line1[i - 1] == ':' && line1[i - 2] == 'i' && line1[i - 3] == ':' && line1[i - 4] == 'H' && line1[i - 5] == 'N' )
-		{
-			for ( k = i ; line1[k] != '\t' ; k++ )
-				NH_string[NH_string_index++ ] = line1[k];
-			NH_string[NH_string_index++ ] = '\0';
-		}
+		/*if ( line1[i - 1] == ':' && line1[i - 2] == 'i' && line1[i - 3] == ':' && line1[i - 4] == 'H' && line1[i - 5] == 'N' )
+		 {
+		 for ( k = i ; line1[k] != '\t' ; k++ )
+		 NH_string[NH_string_index++ ] = line1[k];
+		 NH_string[NH_string_index++ ] = '\0';
+		 }*/
 	}
-	( *NH_value1 ) = strtol (NH_string , &temp , 10);
+	//( *NH_value1 ) = strtol (NH_string , &temp , 10);
 	split_line1[0][j0] = '\0';
 	split_line1[1][j1] = '\0';
 }
