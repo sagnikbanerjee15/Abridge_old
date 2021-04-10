@@ -444,7 +444,7 @@ int main (int argc, char *argv[])
 	strcpy(output_samfilename , argv[2]);
 
 	/********************************************************************/
-	convertOldReadIdsToNewReadIds (input_samfilename , output_samfilename);
+	//convertOldReadIdsToNewReadIds (input_samfilename , output_samfilename);
 	for ( i = 0 ; i <= 1000000 ; i++ )
 	{
 		generateNextReadID (alphabets , read_id , &read_length);

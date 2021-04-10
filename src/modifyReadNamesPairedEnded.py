@@ -41,10 +41,10 @@ def main():
     read_name_index = [0 for _ in range(100)]
     alphabet_size=strlen(alphabets)
     
-    fhr=open(input_samfilename,"r")
+    """fhr=open(input_samfilename,"r")
     for line in fhr:
         if(line[0]=="."):
-            continue
+            continue"""
         
     for i in range(1000000):
         generateNextID(read_name_index, read_name_length, alphabets)
