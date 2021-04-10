@@ -206,7 +206,6 @@ void insertNodeInCircularLinkedList (char *old_read_id, char *new_read_id, int N
 		temp = head;
 		if ( temp->prev == head ) //Only one node in linked list
 		{
-			return;
 			node = allocateMemoryOld_Read_ID_to_New_Read_ID_Circular_Linked_list ();
 			temp = node;
 			temp->next = head->next;
