@@ -201,6 +201,7 @@ void insertNodeInCircularLinkedList (struct Old_Read_ID_to_New_Read_ID_Circular_
 		struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *node = NULL;
 		//temp = ( *ptr_to_head );
 		temp = head;
+		return;
 		if ( temp->prev == head ) //Only one node in linked list
 		{
 			return;
