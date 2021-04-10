@@ -405,8 +405,7 @@ void convertOldReadIdsToNewReadIds (char *input_samfilename, char *output_samfil
 			//printf ("\ntotal_number_of_nodes_created %d" , total_number_of_nodes_created);
 			//printf ("\nIs head Null? %d" , head == NULL);
 			//fflush (stdout);
-			if ( read_number == 3 ) exit (1);
-			continue;
+			//if ( read_number == 3 ) exit (1);
 			strcpy(split_line[0] , read_id_string);
 			//printf ("\nRight after inserting node %d" , head == NULL);
 		}
