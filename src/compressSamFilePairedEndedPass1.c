@@ -56,6 +56,7 @@ int main (int argc, char *argv[])
 	strcpy(name_of_file_with_quality_scores , argv[14]);
 	max_number_of_alignments = strtol (argv[15] , &temp , 10);
 
+	printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
 	mega_array = ( struct All_Relevant_Info_PE_per_Alignment** ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment*) * max_number_of_alignments);
 	for ( i = 0 ; i < max_number_of_alignments ; i++ )
 		mega_array[i] = allocateMemoryAll_Relevant_Info_PE_per_Alignment ();
