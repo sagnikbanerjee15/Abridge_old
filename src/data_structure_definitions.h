@@ -232,6 +232,13 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list
 	struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list *next;
 };
 
+struct All_Relevant_Info_PE_per_Alignment
+{
+	char *new_read_id;
+	char *icigar;
+	int NH_value;
+};
+
 int isCharacterInString (char*, char);
 void splitCigar (char*, int*, struct Cigar_Items*);
 long long int extractNHfromicigar (char*, int);
