@@ -23,7 +23,7 @@ void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, cha
 	FILE *fhr;
 	FILE *fhw;
 	FILE *fhw_tot_alignments;
-	FILE fhw_max_read_length;
+	FILE *fhw_max_read_length;
 
 	size_t len = 0;
 	ssize_t line_len;
