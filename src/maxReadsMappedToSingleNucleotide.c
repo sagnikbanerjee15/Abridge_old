@@ -146,6 +146,7 @@ int main (int argc, char *argv[])
 
 	strcpy(input_samfilename , argv[1]);
 	strcpy(output_filename , argv[2]);
+	strcpy(name_of_total_number_of_alignments_file , argv[3]);
 
 	/********************************************************************/
 	findMaximumNumberOfReadsMappedToOneNucleotide (input_samfilename , output_filename , name_of_total_number_of_alignments_file);
