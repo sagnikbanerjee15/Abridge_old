@@ -60,6 +60,7 @@ int main (int argc, char *argv[])
 	mega_array = ( struct All_Relevant_Info_PE_per_Alignment** ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment*) * max_number_of_alignments);
 	for ( i = 0 ; i < max_number_of_alignments ; i++ )
 		mega_array[i] = allocateMemoryAll_Relevant_Info_PE_per_Alignment ();
+	printf ("\nSize of mega array %d" , sizeof ( mega_array ));
 	/********************************************************************/
 
 	return 0;
