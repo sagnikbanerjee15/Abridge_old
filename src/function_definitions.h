@@ -232,8 +232,8 @@ struct All_Relevant_Info_PE_per_Alignment* allocateMemoryAll_Relevant_Info_PE_pe
 	struct All_Relevant_Info_PE_per_Alignment *s;
 	s = ( struct All_Relevant_Info_PE_per_Alignment* ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment));
 	s->NH_value = 0;
-	s->icigar = ( char* ) malloc (sizeof(char) * 500);
-	s->new_read_id = ( char* ) malloc (sizeof(char) * 350);
+	s->icigar = ( char* ) malloc (sizeof(char) * 3500);
+	s->new_read_id = ( char* ) malloc (sizeof(char) * 3500);
 	return s;
 }
 
