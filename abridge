@@ -497,8 +497,8 @@ def compressSamFile(options):
         ######################################################################################
         # Compiling programs - will be removed during final version
         ######################################################################################
-        separateReadsMatePairTogetherAndMatePairAway = options.softwares["separateReadsMatePairTogetherAndMatePairAway"]
-        modifyReadNamesPairedEnded = options.softwares["modifyReadNamesPairedEnded"]
+        maxReadsMappedToSingleNucleotide = options.softwares["maxReadsMappedToSingleNucleotide"]
+        compressSamFilePairedEndedPass1 = options.softwares["compressSamFilePairedEndedPass1"]
         
         cmd=f"gcc {maxReadsMappedToSingleNucleotide}.c -o {maxReadsMappedToSingleNucleotide} -Ofast"
         if options.quiet == False:
