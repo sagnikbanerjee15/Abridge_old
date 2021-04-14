@@ -230,7 +230,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* allocateMemoryOld_Read_I
 struct All_Relevant_Info_PE_per_Alignment* allocateMemoryAll_Relevant_Info_PE_per_Alignment ()
 {
 	struct All_Relevant_Info_PE_per_Alignment *s;
-	s = ( struct All_Relevant_Info_PE_per_Alignment ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment));
+	s = ( struct All_Relevant_Info_PE_per_Alignment* ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment));
 	s->NH_value = 0;
 	s->icigar = ( char* ) malloc (sizeof(char) * 350);
 	s->new_read_id = ( char* ) malloc (sizeof(char) * 350);
