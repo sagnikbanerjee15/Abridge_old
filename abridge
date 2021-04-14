@@ -291,6 +291,7 @@ def compressSamFile(options):
             cmd += f" {input_filename} "
             cmd += f" {name_of_max_input_reads_file}"
             cmd += f" {name_of_total_number_of_alignments_file} "
+            cmd += f" {name_of_file_max_read_length}"
             cmd += f")"
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -520,15 +521,18 @@ def compressSamFile(options):
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
             name_of_total_number_of_alignments_file = f"{input_filename}.total_number_of_alignments"
+            name_of_file_max_read_length = f"{input_filename}.max_read_size"
             
             files_to_be_removed.append(name_of_max_input_reads_file)
             files_to_be_removed.append(name_of_total_number_of_alignments_file)
+            files_to_be_removed.append(name_of_file_max_read_length)
             
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f" {maxReadsMappedToSingleNucleotide} "
             cmd += f" {input_filename} "
             cmd += f" {name_of_max_input_reads_file}"
             cmd += f" {name_of_total_number_of_alignments_file} "
+            cmd += f" {name_of_file_max_read_length}"
             cmd += f")"
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -541,7 +545,7 @@ def compressSamFile(options):
         #######################################################################
         # Uncomment later
         #######################################################################
-        #pool.map(runCommand,all_commands)
+        pool.map(runCommand,all_commands)
         
         all_commands = []
         for input_filename in options.inputsamfilenames:
@@ -555,9 +559,11 @@ def compressSamFile(options):
             name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
             name_of_total_number_of_alignments_file = f"{input_filename}.total_number_of_alignments"
+            name_of_file_max_read_length = f"{input_filename}.max_read_size"
             
             max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
             max_number_of_alignments = int(open(name_of_total_number_of_alignments_file,"r").read().strip())
+            max_read_length = int(open(name_of_file_max_read_length,"r").read().strip())
             
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f"{compressSamFilePairedEndedPass1}" # argv[0] - name of the program
@@ -585,6 +591,7 @@ def compressSamFile(options):
                 cmd += f" 0 0 " # argv[12] and argv[13]
             cmd += f" {name_of_file_with_quality_scores} " # argv[14]
             cmd += f" {max_number_of_alignments} " #argv[15]
+            cmd += f" {max_read_length} " #argv[16]
             cmd += f") "
             #cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:

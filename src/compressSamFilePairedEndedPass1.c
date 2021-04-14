@@ -33,6 +33,7 @@ int main (int argc, char *argv[])
 	long long int max_number_of_alignments;
 
 	int i;
+	int max_read_length;
 
 	struct All_Relevant_Info_PE_per_Alignment **mega_array;
 	/********************************************************************/
@@ -55,11 +56,12 @@ int main (int argc, char *argv[])
 	save_exact_quality_scores = strtol (argv[13] , &temp , 10);
 	strcpy(name_of_file_with_quality_scores , argv[14]);
 	max_number_of_alignments = strtol (argv[15] , &temp , 10);
+	max_read_length = strtol (argv[16] , &temp , 10);
 
 	printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
 	mega_array = ( struct All_Relevant_Info_PE_per_Alignment** ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment*) * max_number_of_alignments);
 	for ( i = 0 ; i < max_number_of_alignments ; i++ )
-		mega_array[i] = allocateMemoryAll_Relevant_Info_PE_per_Alignment ();
+		mega_array[i] = allocateMemoryAll_Relevant_Info_PE_per_Alignment (max_read_length);
 	printf ("\nSize of mega array %d" , sizeof ( mega_array ));
 	/********************************************************************/
 

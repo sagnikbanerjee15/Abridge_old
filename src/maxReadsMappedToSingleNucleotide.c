@@ -6,13 +6,14 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, char *output_filename, char *name_of_total_number_of_alignments_file)
+void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, char *output_filename, char *name_of_total_number_of_alignments_file, char *name_of_file_max_read_length)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
 	int i, j, k;
 	int number_of_fields;
+	int max_read_length;
 
 	long long int max_position, max_value;
 	long long int prev_position, prev_value;
@@ -22,6 +23,7 @@ void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, cha
 	FILE *fhr;
 	FILE *fhw;
 	FILE *fhw_tot_alignments;
+	FILE fhw_max_read_length;
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -51,6 +53,12 @@ void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, cha
 		printf ("%s File cannot be created" , output_filename);
 		exit (1);
 	}
+	fhw_max_read_length = fopen (name_of_file_max_read_length , "w");
+	if ( fhw_max_read_length == NULL )
+	{
+		printf ("%s File cannot be created" , name_of_file_max_read_length);
+		exit (1);
+	}
 	fhw_tot_alignments = fopen (name_of_total_number_of_alignments_file , "w");
 	if ( fhw_tot_alignments == NULL )
 	{
@@ -64,6 +72,7 @@ void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, cha
 	curr_value = 0;
 	prev_position = 0;
 	prev_value = 0;
+	max_read_length = 0;
 
 	split_line = ( char** ) malloc (sizeof(char*) * ROWS);
 	for ( i = 0 ; i < ROWS ; i++ )
@@ -82,6 +91,8 @@ void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, cha
 	{
 		total_number_of_alignments += 1;
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
+		if ( max_read_length < strlen (split_line[9]) )
+			max_read_length = strlen (split_line[9]);
 		//populateSamAlignmentInstance ( curr_alignment , split_line , number_of_fields , split_tags );
 
 		curr_position = strtol (split_line[3] , &temp , 10);
@@ -128,8 +139,13 @@ void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, cha
 	strcat(str , "\n");
 	fprintf (fhw_tot_alignments , "%s" , str);
 
+	sprintf(str , "%lld" , max_read_length);
+	strcat(str , "\n");
+	fprintf (fhw_max_read_length , "%s" , str);
+
 	fclose (fhw);
 	fclose (fhw_tot_alignments);
+	fclose (fhw_max_read_length);
 	fclose (fhr);
 }
 
@@ -141,6 +157,7 @@ int main (int argc, char *argv[])
 	char input_samfilename[FILENAME_LENGTH];
 	char output_filename[FILENAME_LENGTH];
 	char name_of_total_number_of_alignments_file[FILENAME_LENGTH];
+	char name_of_file_max_read_length[FILENAME_LENGTH];
 
 	/********************************************************************/
 
@@ -151,8 +168,9 @@ int main (int argc, char *argv[])
 	strcpy(input_samfilename , argv[1]);
 	strcpy(output_filename , argv[2]);
 	strcpy(name_of_total_number_of_alignments_file , argv[3]);
+	strcpy(name_of_file_max_read_length , argv[4]);
 
 	/********************************************************************/
-	findMaximumNumberOfReadsMappedToOneNucleotide (input_samfilename , output_filename , name_of_total_number_of_alignments_file);
+	findMaximumNumberOfReadsMappedToOneNucleotide (input_samfilename , output_filename , name_of_total_number_of_alignments_file , name_of_file_max_read_length);
 
 }
