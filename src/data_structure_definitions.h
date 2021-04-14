@@ -235,6 +235,7 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list
 struct All_Relevant_Info_PE_per_Alignment
 {
 	char *new_read_id;
+	char *old_read_id;
 	char *icigar;
 	int NH_value;
 };
