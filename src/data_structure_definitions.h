@@ -238,6 +238,7 @@ struct All_Relevant_Info_PE_per_Alignment
 	char *old_read_id;
 	char *icigar;
 	int NH_value;
+	unsigned long int position;
 };
 
 int isCharacterInString (char*, char);
