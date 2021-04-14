@@ -157,8 +157,9 @@ def validateCommandLineArguments(options):
     options.softwares["maxReadsMappedToSingleNucleotide"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsMappedToSingleNucleotide"
     options.softwares["compressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressQualityScoresFile"
     options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
-    options.softwares["separateReadsMatePairTogetherAndMatePairAway"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateReadsMatePairTogetherAndMatePairAway"
-    options.softwares["modifyReadNamesPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/modifyReadNamesPairedEnded"
+    #options.softwares["separateReadsMatePairTogetherAndMatePairAway"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateReadsMatePairTogetherAndMatePairAway"
+    #options.softwares["modifyReadNamesPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/modifyReadNamesPairedEnded"
+    options.softwares["compressSamFilePairedEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEndedPass1"
     
     cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.genome}.temp"
     os.system(cmd)
