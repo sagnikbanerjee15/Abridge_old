@@ -127,6 +127,10 @@ void findMaximumNumberOfReadsMappedToOneNucleotide (char *input_samfilename, cha
 	sprintf(str , "%lld" , total_number_of_alignments);
 	strcat(str , "\n");
 	fprintf (fhw_tot_alignments , "%s" , str);
+
+	fclose (fhw);
+	fclose (fhw_tot_alignments);
+	fclose (fhr);
 }
 
 int main (int argc, char *argv[])
