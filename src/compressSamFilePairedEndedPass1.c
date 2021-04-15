@@ -82,6 +82,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags; // List of strings to store tag information
 	char **split_reference_info;
+	char alphabets[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-='{}[]|?<>,.";
 	char *temp; //Useless
 	char *line = NULL; // for reading each line
 	char *entry_in_output_file; //entry in output file
@@ -95,6 +96,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	char *encoded_string;
 	char **modified_icigars;
 	char str[100];
+	char read_id_string[100];
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -114,6 +116,9 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	int quality_score_index = 0;
 	int number_of_reference_sequences = 0;
 	int reference_sequence_index = 0;
+	int number_of_repetitions = 0;
+	int read_length;
+	int read_id[100];
 
 	long long int relative_position_to_previous_read_cluster;
 	long long int previous_position = -1;
@@ -310,17 +315,37 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 		//generateIntegratedCigar (curr_alignment , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics);
 		NH_tag_index = -1;
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
-		{
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 				NH_tag_index = i;
-		}
 
 		mega_array[mega_array_index]->NH_value = strtol (curr_alignment->tags[NH_tag_index].val , &temp , 10);
 		//mega_array[mega_array_index]->icigar = Fill this field with the integrated cigar
 		strcpy(mega_array[mega_array_index]->old_read_id , curr_alignment->read_name);
-
 		mega_array_index++;
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
+
+	/*
+	 * Assign new read ids
+	 */
+	read_length = 0;
+	for ( i = 0 ; i < mega_array_index ; i++ )
+	{
+		number_of_repetitions = 2 * mega_array[i]->NH_value - 1;
+		generateNextReadID (alphabets , read_id , &read_length);
+		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
+		strcpy(mega_array[i] , read_id_string);
+		for ( j = i + 1 ; j < mega_array_index ; j++ )
+		{
+			if ( strcmp (mega_array[i]->old_read_id , mega_array[j]->old_read_id) == 0 )
+			{
+				number_of_repetitions--;
+				strcpy(mega_array[j] , read_id_string);
+			}
+			if ( number_of_repetitions == 0 ) break;
+		}
+	}
+
+	rewind (fhr);
 }
 
 int main (int argc, char *argv[])
