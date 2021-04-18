@@ -236,6 +236,7 @@ struct All_Relevant_Info_PE_per_Alignment* allocateMemoryAll_Relevant_Info_PE_pe
 	s->new_read_id = ( char* ) malloc (sizeof(char) * 10);
 	s->old_read_id = ( char* ) malloc (sizeof(char) * 50);
 	s->position = 0;
+	s->new_read_id_assigned = 0;
 	return s;
 }
 
