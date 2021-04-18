@@ -344,8 +344,12 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 				strcpy(mega_array[j]->new_read_id , read_id_string);
 				mega_array[j]->new_read_id_assigned = 1;
 			}
-			if ( number_of_repetitions == 0 ) break;
-			printf ("\ni=%d j=%d number_of_repetitions=%d" , i , j , number_of_repetitions);
+			if ( number_of_repetitions == 0 )
+			{
+				printf ("\ni=%d j=%d number_of_repetitions=%d BREAK" , i , j , number_of_repetitions);
+				break;
+			}
+			else printf ("\ni=%d j=%d number_of_repetitions=%d" , i , j , number_of_repetitions);
 		}
 	}
 	rewind (fhr);
