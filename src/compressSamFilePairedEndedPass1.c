@@ -344,6 +344,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 				mega_array[j]->new_read_id_assigned = 1;
 			}
 			if ( number_of_repetitions == 0 ) break;
+			printf ("\ni=%d j=%d number_of_repetitions=%d" , i , j , number_of_repetitions);
 		}
 	}
 	rewind (fhr);
