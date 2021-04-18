@@ -333,14 +333,14 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 		number_of_repetitions = 2 * mega_array[i]->NH_value - 1;
 		generateNextReadID (alphabets , read_id , &read_length);
 		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-		strcpy(mega_array[i] , read_id_string);
+		strcpy(mega_array[i]->new_read_id , read_id_string);
 		mega_array[i]->new_read_id_assigned = 0;
 		for ( j = i + 1 ; j < mega_array_index ; j++ )
 		{
 			if ( mega_array[j]->new_read_id_assigned == 0 && strcmp (mega_array[i]->old_read_id , mega_array[j]->old_read_id) == 0 )
 			{
 				number_of_repetitions--;
-				strcpy(mega_array[j] , read_id_string);
+				strcpy(mega_array[j]->new_read_id , read_id_string);
 				mega_array[j]->new_read_id_assigned = 1;
 			}
 			if ( number_of_repetitions == 0 ) break;
