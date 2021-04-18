@@ -347,7 +347,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 			}
 			if ( number_of_repetitions == 0 )
 			{
-				//printf ("\ni=%d j=%d number_of_repetitions=%d BREAK" , i , j , number_of_repetitions);
+				printf ("\ni=%d j=%d Total records reviewed=%d number_of_repetitions=%d BREAK" , i , j , j - i , number_of_repetitions);
 				break;
 			}
 			//else printf ("\ni=%d j=%d number_of_repetitions=%d" , i , j , number_of_repetitions);
