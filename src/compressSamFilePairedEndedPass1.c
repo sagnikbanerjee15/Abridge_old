@@ -337,6 +337,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
 		strcpy(mega_array[i]->new_read_id , read_id_string);
 		mega_array[i]->new_read_id_assigned = 0;
+		printf ("\ni=%d NH_value=%d" , i , number_of_repetitions);
 		for ( j = i + 1 ; j < mega_array_index ; j++ )
 		{
 			if ( mega_array[j]->new_read_id_assigned == 0 && strcmp (mega_array[i]->old_read_id , mega_array[j]->old_read_id) == 0 )
