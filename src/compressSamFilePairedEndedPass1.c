@@ -323,7 +323,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 		strcpy(mega_array[mega_array_index]->old_read_id , curr_alignment->read_name);
 		mega_array_index++;
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
-	printf ("\nInitial read complete");
+	printf ("\nInitial read complete mega_array_index=%d" , mega_array_index);
 	fflush (stdout);
 	/*
 	 * Assign new read ids
