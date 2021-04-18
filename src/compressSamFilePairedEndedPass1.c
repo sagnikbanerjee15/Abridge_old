@@ -331,7 +331,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	read_length = 0;
 	for ( i = 0 ; i < mega_array_index ; i++ )
 	{
-		if ( mega_array[j]->new_read_id_assigned == 1 ) continue;
+		if ( mega_array[i]->new_read_id_assigned == 1 ) continue;
 		number_of_repetitions = 2 * mega_array[i]->NH_value - 1;
 		generateNextReadID (alphabets , read_id , &read_length);
 		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
