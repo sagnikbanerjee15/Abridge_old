@@ -67,7 +67,7 @@ void convertReadIdToString (int *read_id, char *read_id_string, int read_length,
 	read_id_string[i] = '\0';
 }
 
-void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc, short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, long long int max_number_of_alignments, int max_read_length)
+void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *name_of_file_with_quality_scores, char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc, short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, long long int max_number_of_alignments, int max_read_length)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -77,6 +77,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	FILE *fhw_unmapped;
 	FILE *fhw_name_of_file_with_max_commas;
 	FILE *fhw_qual;
+	FILE *fhr_freq_samflags;
 
 	char **qual_scores;
 	char **split_line; // List of strings to store each element of a single alignment
@@ -119,6 +120,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	int number_of_repetitions = 0;
 	int read_length;
 	int read_id[100];
+	int number_of_unique_samformatflags;
 
 	long long int relative_position_to_previous_read_cluster;
 	long long int previous_position = -1;
@@ -139,6 +141,7 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	struct Compressed_DS **compressed_ds_pool_rearranged;
 	struct Reference_Sequence_Info **reference_info;
 	struct Whole_Genome_Sequence *whole_genome;
+	struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary;
 
 	//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
 
@@ -153,6 +156,12 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	if ( fhr == NULL )
 	{
 		printf ("Error! File %s not found" , input_samfilename);
+		exit (1);
+	}
+	fhr_freq_samflags = fopen (fhr_freq_samflags , "r");
+	if ( fhr_freq_samflags == NULL )
+	{
+		printf ("Error! File %s not found" , fhr_freq_samflags);
 		exit (1);
 	}
 	fhw_pass1 = fopen (output_abridgefilename , "w");
@@ -266,6 +275,19 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 		readInTheEntireGenome (genome_filename , whole_genome);
 
 	/*
+	 *	Construct the mapping between samformatflag and the Single Character
+	 */
+	number_of_unique_samformatflags = 0;
+	while ( ( line_len = getline ( &line , &len , fhr_freq_samflags) ) != -1 )
+		number_of_unique_samformatflags++;
+	samflag_dictionary = allocateMemoryPaired_Ended_Flag_to_Single_Character (number_of_unique_samformatflags);
+	rewind (fhr_freq_samflags);
+	while ( ( line_len = getline ( &line , &len , fhr_freq_samflags) ) != -1 )
+	{
+
+	}
+
+	/*
 	 * Read in the reference sequence information
 	 */
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
@@ -327,6 +349,7 @@ int main (int argc, char *argv[])
 	char unmapped_filename[FILENAME_LENGTH];
 	char name_of_file_with_max_commas[FILENAME_LENGTH];
 	char name_of_file_with_quality_scores[FILENAME_LENGTH];
+	char frequency_of_flags_filename[FILENAME_LENGTH];
 	char *temp; //Required for strtoi
 
 	short int flag_ignore_soft_clippings;
@@ -364,9 +387,10 @@ int main (int argc, char *argv[])
 	strcpy(name_of_file_with_quality_scores , argv[14]);
 	max_number_of_alignments = strtol (argv[15] , &temp , 10);
 	max_read_length = strtol (argv[16] , &temp , 10);
+	strcpy(frequency_of_flags_filename , argv[17]);
 
 	/********************************************************************/
 
-	compressPairedEndedAlignments (name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , max_number_of_alignments , max_read_length);
+	compressPairedEndedAlignments (frequency_of_flags_filename , name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , max_number_of_alignments , max_read_length);
 	return 0;
 }

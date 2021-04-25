@@ -63,6 +63,16 @@ struct Sam_Alignment* allocateMemorySam_Alignment ()
 	return s;
 }
 
+struct Paired_Ended_Flag_to_Single_Character* allocateMemoryPaired_Ended_Flag_to_Single_Character (int size)
+{
+	struct Paired_Ended_Flag_to_Single_Character *s;
+	s = ( struct Paired_Ended_Flag_to_Single_Character* ) malloc (sizeof(struct Paired_Ended_Flag_to_Single_Character));
+	s->character = ( char* ) malloc (sizeof(char) * size * 2);
+	s->samflags = ( int* ) malloc (sizeof(int) * size * 2);
+	s->direction = ( char* ) malloc (sizeof(int) * size * 2);
+	return s;
+}
+
 struct Quality_Score_RLE* allocateMemoryQuality_Score_RLE ()
 {
 	struct Quality_Score_RLE *s;

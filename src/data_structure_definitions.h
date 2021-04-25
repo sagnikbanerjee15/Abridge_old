@@ -242,6 +242,14 @@ struct All_Relevant_Info_PE_per_Alignment
 	short int new_read_id_assigned;
 };
 
+struct Paired_Ended_Flag_to_Single_Character
+{
+	char *character;
+	char *direction;
+	int *samflags;
+
+};
+
 int isCharacterInString (char*, char);
 void splitCigar (char*, int*, struct Cigar_Items*);
 long long int extractNHfromicigar (char*, int);

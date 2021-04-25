@@ -588,8 +588,8 @@ def compressSamFile(options):
             cmd  = f" cat "
             cmd += f" {input_filename} "
             cmd += f" |grep -v ^@ "
-            cmd += f" |cut -f2 "
-            cmd += f" |sort|uniq -c| sort -nrk1 > {frequency_of_flags_filename}"
+            cmd += f" |cut -f2|uniq "
+            cmd += f" |sort|uniq > {frequency_of_flags_filename}"
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
         return
@@ -602,6 +602,7 @@ def compressSamFile(options):
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
             unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
+            frequency_of_flags_filename = options.output_directory + "/" + name_of_input_file_without_location + ".frequency_of_flags"
             name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
             name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
             name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
@@ -639,6 +640,7 @@ def compressSamFile(options):
             cmd += f" {name_of_file_with_quality_scores} " # argv[14]
             cmd += f" {max_number_of_alignments} " #argv[15]
             cmd += f" {max_read_length} " #argv[16]
+            cmd += f" {frequency_of_flags_filename} " #argv[17]
             cmd += f") "
             #cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
