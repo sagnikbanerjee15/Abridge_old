@@ -589,7 +589,7 @@ def compressSamFile(options):
             cmd += f" {input_filename} "
             cmd += f" |grep -v ^@ "
             cmd += f" |cut -f2 "
-            cmd += f" |sort -nrk1 > {frequency_of_flags_filename}"
+            cmd += f" |sort|uniq -c| sort -nrk1 > {frequency_of_flags_filename}"
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
         return
