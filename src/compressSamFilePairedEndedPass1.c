@@ -288,7 +288,10 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	while ( ( line_len = getline ( &line , &len , fhr_freq_samflags) ) != -1 )
 	{
 		if ( strtol (line , &temp , 10) == 77 || strtol (line , &temp , 10) == 141 )
+		{
+			number_of_unique_samformatflags--;
 			continue;
+		}
 		samflag_dictionary->direction[i] = '+';
 		samflag_dictionary->samflags[i] = strtol (line , &temp , 10);
 		samflag_dictionary->character[i] = samformatflag_replacer_characters[j++ ];
