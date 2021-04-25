@@ -287,17 +287,18 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	j = 0;
 	while ( ( line_len = getline ( &line , &len , fhr_freq_samflags) ) != -1 )
 	{
-		samflag_dictionary->direction[i] = '+';
+		//samflag_dictionary->direction[i] = '+';
 		samflag_dictionary->samflags[i] = strtol (line , &temp , 10);
 		samflag_dictionary->character[i] = samformatflag_replacer_characters[j++ ];
 
-		samflag_dictionary->direction[i + 1] = '-';
-		samflag_dictionary->character[i + 1] = samformatflag_replacer_characters[j++ ];
-		samflag_dictionary->samflags[i + 1] = strtol (line , &temp , 10);
-		i += 2;
+		//samflag_dictionary->direction[i + 1] = '-';
+		//samflag_dictionary->character[i + 1] = samformatflag_replacer_characters[j++ ];
+		//samflag_dictionary->samflags[i + 1] = strtol (line , &temp , 10);
+		//i += 2;
+		i += 1;
 	}
 	for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
-		printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
+		printf ("\n%d %c" , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
 	return;
 
 	/*
