@@ -592,7 +592,6 @@ def compressSamFile(options):
             cmd += f" |sort|uniq > {frequency_of_flags_filename}"
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
-        return
         
         all_commands = []
         for input_filename in options.inputsamfilenames:
