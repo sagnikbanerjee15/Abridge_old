@@ -274,6 +274,12 @@ def compressSamFile(options):
         os.system(cmd)
         ######################################################################################
         
+        ######################################################################################
+        # Find maximum number of reads mapped to a single location
+        # Find maximum read length
+        # Find total number of alignments
+        ######################################################################################
+        
         all_commands = []
         for input_filename in options.inputsamfilenames:
             if options.quiet == False:
@@ -513,6 +519,12 @@ def compressSamFile(options):
         os.system(cmd)
         ######################################################################################
         
+        
+        ######################################################################################
+        # Find maximum number of reads mapped to a single location
+        # Find maximum read length
+        # Find total number of alignments
+        ######################################################################################
         all_commands = []
         for input_filename in options.inputsamfilenames:
             if options.quiet == False:
@@ -546,6 +558,41 @@ def compressSamFile(options):
         # Uncomment later
         #######################################################################
         #pool.map(runCommand,all_commands)
+        
+        #######################################################################
+        # Sort alignment file by Name - might be discontinued later
+        #######################################################################
+        """all_commands = []
+        for input_filename in options.inputsamfilenames:
+            if options.quiet == False:
+                logging.info(f"Starting name sort for {input_filename}")
+            name_of_input_file_without_location = input_filename.split("/")[-1] 
+            read_name_sorted_filename = options.output_directory + "/" + name_of_input_file_without_location[:-4] + "_name_sorted.sam"
+            cmd  = f" samtools "
+            cmd += f" view -bS "
+            cmd += f" {input_filename} "
+            cmd += f"|samtools sort -n |samtools view -h "
+            cmd += f" > {read_name_sorted_filename}"
+            all_commands.append([cmd,"dummy"])
+            #os.system(cmd)
+        pool.map(runCommand,all_commands)
+        """
+        all_commands = []
+        for input_filename in options.inputsamfilenames:
+            if options.quiet == False:
+                logging.info(f"Generating for {input_filename}")
+            name_of_input_file_without_location = input_filename.split("/")[-1] 
+            frequency_of_flags_filename = options.output_directory + "/" + name_of_input_file_without_location + ".frequency_of_flags"
+            files_to_be_removed.append(frequency_of_flags_filename)
+            
+            cmd  = f" cat "
+            cmd += f" {input_filename} "
+            cmd += f" |grep -v ^@ "
+            cmd += f" |cut -f2 "
+            cmd += f" |sort -nrk1 > {frequency_of_flags_filename}"
+            all_commands.append([cmd,"dummy"])
+        pool.map(runCommand,all_commands)
+        return
         
         all_commands = []
         for input_filename in options.inputsamfilenames:

@@ -880,7 +880,7 @@ void convertRegularCIGARToStringRepresentation (struct Cigar_Items *cigar_items_
 	cigar_extended[cigar_extended_index++ ] = '\0';
 }
 
-void designIntegratedCIGAR (char *md, char *seq, int *seq_length, char *soft_clips_removed_qual, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices, short int flag_ignore_quality_score, short int flag_ignore_mismatches)
+void designIntegratedCIGARSingleEnded (char *md, char *seq, int *seq_length, char *soft_clips_removed_qual, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices, short int flag_ignore_quality_score, short int flag_ignore_mismatches)
 {
 	int i;
 	int num;
@@ -1131,7 +1131,7 @@ int isAlignmentPerfect (char *cigar, struct Sam_Tags *tags, int MD_tag_index, in
 	return 1;
 }
 
-void generateIntegratedCigar (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics)
+void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics)
 {
 	/*
 	 * Creates the integrated cigar
@@ -1240,7 +1240,7 @@ void generateIntegratedCigar (struct Sam_Alignment *curr_alignment, short int fl
 	perfect_alignment_indicator = isAlignmentPerfect (curr_alignment->cigar , curr_alignment->tags , MD_tag_index , NM_tag_index , nM_tag_index);
 
 	if ( perfect_alignment_indicator == 0 )
-		designIntegratedCIGAR (curr_alignment->tags[MD_tag_index].val , curr_alignment->soft_clips_removed_seq , &curr_alignment->soft_clips_removed_seq_len , curr_alignment->soft_clips_removed_qual , curr_alignment->cigar_items , curr_alignment->number_of_cigar_items , curr_alignment->cigar , curr_alignment->cigar_extended , curr_alignment->md_extended , curr_alignment->icigar , curr_alignment->splices , flag_ignore_quality_score , flag_ignore_mismatches);
+		designIntegratedCIGARSingleEnded (curr_alignment->tags[MD_tag_index].val , curr_alignment->soft_clips_removed_seq , &curr_alignment->soft_clips_removed_seq_len , curr_alignment->soft_clips_removed_qual , curr_alignment->cigar_items , curr_alignment->number_of_cigar_items , curr_alignment->cigar , curr_alignment->cigar_extended , curr_alignment->md_extended , curr_alignment->icigar , curr_alignment->splices , flag_ignore_quality_score , flag_ignore_mismatches);
 	else
 	{
 		if ( curr_alignment->cigar_items[0].def == 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S' )

@@ -140,8 +140,6 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	struct Reference_Sequence_Info **reference_info;
 	struct Whole_Genome_Sequence *whole_genome;
 
-	struct All_Relevant_Info_PE_per_Alignment **mega_array;
-
 	//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
 
 	//printf ("\nSize of mega array %d" , sizeof ( mega_array ));
@@ -235,9 +233,6 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 	modified_icigars = ( char** ) malloc (sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		modified_icigars[i] = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
-	mega_array = ( struct All_Relevant_Info_PE_per_Alignment** ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment*) * max_number_of_alignments);
-	for ( i = 0 ; i < max_number_of_alignments ; i++ )
-		mega_array[i] = allocateMemoryAll_Relevant_Info_PE_per_Alignment (max_read_length);
 	/********************************************************************/
 
 	/*
@@ -288,7 +283,6 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 		else break;
 	}
 
-	mega_array_index = 0;
 	do
 	{
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
@@ -318,51 +312,8 @@ void compressPairedEndedAlignments (char *name_of_file_with_quality_scores, char
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 				NH_tag_index = i;
 
-		mega_array[mega_array_index]->NH_value = strtol (curr_alignment->tags[NH_tag_index].val , &temp , 10);
-		//mega_array[mega_array_index]->icigar = Fill this field with the integrated cigar
-		strcpy(mega_array[mega_array_index]->old_read_id , curr_alignment->read_name);
-		mega_array_index++;
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
-	printf ("\nInitial read complete mega_array_index=%d" , mega_array_index);
-	fflush (stdout);
-	/*
-	 * Assign new read ids
-	 */
-	read_length = 0;
-	for ( i = 0 ; i < mega_array_index ; i++ )
-	{
-		if ( mega_array[i]->new_read_id_assigned == 1 ) continue;
-		number_of_repetitions = 2 * mega_array[i]->NH_value - 1;
-		generateNextReadID (alphabets , read_id , &read_length);
-		convertReadIdToString (read_id , read_id_string , read_length , alphabets);
-		strcpy(mega_array[i]->new_read_id , read_id_string);
-		mega_array[i]->new_read_id_assigned = 0;
-		printf ("\ni=%d NH_value=%d" , i , number_of_repetitions);
-		for ( j = i + 1 ; j < mega_array_index ; j++ )
-		{
-			if ( mega_array[j]->new_read_id_assigned == 0 && strcmp (mega_array[i]->old_read_id , mega_array[j]->old_read_id) == 0 )
-			{
-				number_of_repetitions--;
-				strcpy(mega_array[j]->new_read_id , read_id_string);
-				mega_array[j]->new_read_id_assigned = 1;
-			}
-			if ( number_of_repetitions == 0 )
-			{
-				printf ("\ni=%d j=%d Total records reviewed=%d number_of_repetitions=%d %f BREAK" , i , j , j - i , ( float ) i * 100 / ( float ) mega_array_index , number_of_repetitions);
-				break;
-			}
-			//else printf ("\ni=%d j=%d number_of_repetitions=%d" , i , j , number_of_repetitions);
-		}
-	}
-	rewind (fhr);
 
-	/*
-	 * Print the new read ids
-	 */
-	for ( i = 0 ; i < mega_array_index ; i++ )
-	{
-		printf ("\n%s" , mega_array[i]->new_read_id);
-	}
 }
 
 int main (int argc, char *argv[])

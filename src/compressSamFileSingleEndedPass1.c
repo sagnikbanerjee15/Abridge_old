@@ -454,7 +454,7 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 		}
 		current_position = curr_alignment->start_position;
 		//printSamAlignmentInstance(curr_alignment,0);
-		generateIntegratedCigar (curr_alignment , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics);
+		generateIntegratedCigarSingleEnded (curr_alignment , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics);
 		//printf("\n Position:%lld iCIGAR: %s", curr_alignment->start_position, curr_alignment->icigar);
 		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
 		{
