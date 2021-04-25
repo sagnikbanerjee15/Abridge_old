@@ -69,7 +69,7 @@ struct Paired_Ended_Flag_to_Single_Character* allocateMemoryPaired_Ended_Flag_to
 	s = ( struct Paired_Ended_Flag_to_Single_Character* ) malloc (sizeof(struct Paired_Ended_Flag_to_Single_Character));
 	s->character = ( char* ) malloc (sizeof(char) * size * 2);
 	s->samflags = ( int* ) malloc (sizeof(int) * size * 2);
-	//s->direction = ( char* ) malloc (sizeof(int) * size * 2);
+	s->direction = ( char* ) malloc (sizeof(int) * size * 2);
 	return s;
 }
 
