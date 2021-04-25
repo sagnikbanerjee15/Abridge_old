@@ -84,7 +84,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	char **split_tags; // List of strings to store tag information
 	char **split_reference_info;
 	char alphabets[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-='{}[]|?<>,.";
-	char samformatflag_replacer_characters = "BCDEFHIJKLMOPQRSUVWXYZbcdefhijklmonpqrsuvwxyz";
+	char samformatflag_replacer_characters[] = "BCDEFHIJKLMOPQRSUVWXYZbcdefhijklmonpqrsuvwxyz";
 	char *temp; //Useless
 	char *line = NULL; // for reading each line
 	char *entry_in_output_file; //entry in output file
