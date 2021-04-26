@@ -1538,12 +1538,12 @@ char findReplamentCharacterForPairedEndedReads (int samflag, struct Paired_Ended
 		}
 		else
 		{
-			if ( strcmp (tags[XS_tag_index] , "+") == 0 && samflag_dictionary->direction[i] == '+' && samflag == samflag_dictionary->samflags[i] )
+			if ( strcmp (tags[XS_tag_index]->name , "+") == 0 && samflag_dictionary->direction[i] == '+' && samflag == samflag_dictionary->samflags[i] )
 			{
 				replacement_character = samflag_dictionary->character[i];
 				break;
 			}
-			else if ( strcmp (tags[XS_tag_index] , "-") == 0 && samflag_dictionary->direction[i] == '-' && samflag == samflag_dictionary->samflags[i] )
+			else if ( strcmp (tags[XS_tag_index]->name , "-") == 0 && samflag_dictionary->direction[i] == '-' && samflag == samflag_dictionary->samflags[i] )
 			{
 				replacement_character = samflag_dictionary->character[i];
 				break;
