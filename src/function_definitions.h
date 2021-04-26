@@ -491,6 +491,7 @@ void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_g
 
 	char XS[2];
 	char MD[1000];
+	char character_to_be_replaced;
 
 	struct Cigar_Items cigar_items_instance[MAX_SEQ_LEN];
 
@@ -501,8 +502,12 @@ void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_g
 	NH_value = extractNHfromicigar (sam_alignment_instance->icigar , icigar_length);
 
 	XS[1] = '\0';
-	samformatflag = findSamFormatFlagPairedEnded (sam_alignment_instance->icigar , icigar_length , XS , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
+	samformatflag = findSamFormatFlagPairedEnded (sam_alignment_instance->icigar , icigar_length , XS , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters , &character_to_be_replaced);
 	sam_alignment_instance->samflag = samformatflag;
+	for ( i = 0 ; i < icigar_length ; i++ )
+		if ( sam_alignment_instance->icigar == character_to_be_replaced )
+			sam_alignment_instance->icigar = 'M';
+
 	/*
 	 * Construct the Cigar string, MD string, Soft Clips, etc.
 	 */
@@ -2622,14 +2627,12 @@ void replaceCharacterInString (char *str, char ch_to_be_replaced, char replace_w
 		if ( str[i] == ch_to_be_replaced ) str[i] = replace_with;
 }
 
-int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
+int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[], char *character_to_be_replaced)
 {
 	int i, j;
 	int samformatflag = -1;
 	for ( i = 0 ; i < icigar_length ; i++ )
 	{
-		printf ("\nInvestigating Outside %c" , icigar[i]);
-		fflush (stdout);
 		if ( ( icigar[i] != 'a' || icigar[i] != 't' || icigar[i] != 'g' || icigar[i] != 'c' ) && ! ( icigar[i] >= 48 && icigar[i] <= 57 ) && strchr (samformatflag_replacer_characters , icigar[i]) != NULL )
 		{
 			printf ("\nInvestigating %c" , icigar[i]);
@@ -2640,6 +2643,7 @@ int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, str
 				{
 					XS[0] = samflag_dictionary->direction[j];
 					samformatflag = samflag_dictionary->samflags[j];
+					( *character_to_be_replaced ) = icigar[i];
 					break;
 				}
 			}
