@@ -1522,6 +1522,387 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	}
 }
 
+void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary)
+{
+	/*
+	 * Creates the integrated cigar
+	 */
+	/********************************************************************
+	 * Variable declarations
+	 ********************************************************************/
+	int left_soft_clip_point = 0;
+	int right_soft_clip_point = 0;
+	int i;
+	int flag;
+	int MD_tag_index;
+	int nM_tag_index;
+	int XS_tag_index;
+	int NH_tag_index;
+	int NM_tag_index;
+	int print_outputs = 0;
+	int perfect_alignment_indicator = 0;
+	int spliced_alignment_indicator = 0;
+	char str[1000];
+	char temp_str[5];
+	char M_replacement_character;
+	char dummy;
+	/********************************************************************/
+
+	splitCigar (curr_alignment->cigar , &curr_alignment->number_of_cigar_items , curr_alignment->cigar_items);
+
+	for ( i = 0 ; i < curr_alignment->number_of_cigar_items ; i++ )
+	{
+		if ( curr_alignment->cigar_items[i].def == 'N' )
+		{
+			spliced_alignment_indicator = 1;
+			break;
+		}
+	}
+	/*
+	 * Process each alignment to extract soft clipped portion of reads
+	 */
+	if ( isSequenceSoftClipped (curr_alignment->cigar) == 1 )
+	{
+		if ( curr_alignment->cigar_items[0].def == 'S' )
+		{
+			left_soft_clip_point = curr_alignment->cigar_items[0].len;
+			extractSubString (curr_alignment->seq , curr_alignment->soft_clippings.left , 0 , left_soft_clip_point - 1);
+			extractSubString (curr_alignment->qual , curr_alignment->soft_clippings.left_qual , 0 , left_soft_clip_point - 1);
+			curr_alignment->soft_clips_removed_seq_len = curr_alignment->read_seq_len - curr_alignment->cigar_items[0].len;
+			for ( i = 0 ; i <= left_soft_clip_point - 1 ; i++ )
+				curr_alignment->soft_clippings.left[i] =
+						( curr_alignment->soft_clippings.left[i] >= 65 && curr_alignment->soft_clippings.left[i] <= 90 ) ? curr_alignment->soft_clippings.left[i] + 32 : curr_alignment->soft_clippings.left[i];
+		}
+		if ( curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S' )
+		{
+			right_soft_clip_point = curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len;
+			extractSubString (curr_alignment->seq , curr_alignment->soft_clippings.right , curr_alignment->read_seq_len - right_soft_clip_point , curr_alignment->read_seq_len - 1);
+			extractSubString (curr_alignment->qual , curr_alignment->soft_clippings.right_qual , curr_alignment->read_seq_len - right_soft_clip_point , curr_alignment->read_seq_len - 1);
+			curr_alignment->soft_clips_removed_seq_len = curr_alignment->read_seq_len - curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].len;
+			for ( i = 0 ; i <= right_soft_clip_point ; i++ )
+				curr_alignment->soft_clippings.right[i] =
+						( curr_alignment->soft_clippings.right[i] >= 65 && curr_alignment->soft_clippings.right[i] <= 90 ) ? curr_alignment->soft_clippings.right[i] + 32 : curr_alignment->soft_clippings.right[i];
+		}
+
+		/*
+		 * Remove the soft-clips and construct new sequence
+		 */
+
+		int j = 0;
+		for ( i = left_soft_clip_point ;
+				i < curr_alignment->read_seq_len - right_soft_clip_point ; i++ )
+		{
+			curr_alignment->soft_clips_removed_seq[j] = curr_alignment->seq[i];
+			curr_alignment->soft_clips_removed_qual[j] = curr_alignment->qual[i];
+			j++;
+		}
+		curr_alignment->soft_clips_removed_seq[j] = '\0';
+		curr_alignment->soft_clips_removed_qual[j] = '\0';
+	}
+	else
+	{
+		strcpy (curr_alignment->soft_clips_removed_seq , curr_alignment->seq);
+		strcpy (curr_alignment->soft_clips_removed_qual , curr_alignment->qual);
+		curr_alignment->soft_clips_removed_seq_len = strlen (curr_alignment->soft_clips_removed_seq);
+	}
+
+	/*
+	 * Find the different tags
+	 */
+	XS_tag_index = -1;
+	NH_tag_index = -1;
+	NM_tag_index = -1;
+	nM_tag_index = -1;
+	MD_tag_index = -1;
+	for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
+	{
+		if ( strcmp (curr_alignment->tags[i].name , "MD") == 0 )
+			MD_tag_index = i;
+		if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
+			XS_tag_index = i;
+		if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
+			NH_tag_index = i;
+		if ( strcmp (curr_alignment->tags[i].name , "NM") == 0 )
+			NM_tag_index = i;
+		if ( strcmp (curr_alignment->tags[i].name , "nM") == 0 )
+			nM_tag_index = i;
+	}
+
+	perfect_alignment_indicator = isAlignmentPerfect (curr_alignment->cigar , curr_alignment->tags , MD_tag_index , NM_tag_index , nM_tag_index);
+
+	if ( perfect_alignment_indicator == 0 )
+		designIntegratedCIGARSingleEnded (curr_alignment->tags[MD_tag_index].val , curr_alignment->soft_clips_removed_seq , &curr_alignment->soft_clips_removed_seq_len , curr_alignment->soft_clips_removed_qual , curr_alignment->cigar_items , curr_alignment->number_of_cigar_items , curr_alignment->cigar , curr_alignment->cigar_extended , curr_alignment->md_extended , curr_alignment->icigar , curr_alignment->splices , flag_ignore_quality_score , flag_ignore_mismatches);
+	else
+	{
+		if ( curr_alignment->cigar_items[0].def == 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S' )
+		{
+			strcpy (curr_alignment->icigar , "");
+			for ( i = 1 ; i < curr_alignment->number_of_cigar_items - 1 ; i++ )
+			{
+				sprintf (str , "%d" , curr_alignment->cigar_items[i].len);
+				strcat (curr_alignment->icigar , str);
+				temp_str[0] = curr_alignment->cigar_items[i].def;
+				temp_str[1] = '\0';
+				strcat (curr_alignment->icigar , temp_str);
+			}
+		}
+		else if ( curr_alignment->cigar_items[0].def != 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def == 'S' )
+		{
+			strcpy (curr_alignment->icigar , "");
+			for ( i = 0 ; i < curr_alignment->number_of_cigar_items - 1 ; i++ )
+			{
+				sprintf (str , "%d" , curr_alignment->cigar_items[i].len);
+				strcat (curr_alignment->icigar , str);
+				temp_str[0] = curr_alignment->cigar_items[i].def;
+				temp_str[1] = '\0';
+				strcat (curr_alignment->icigar , temp_str);
+			}
+		}
+		else if ( curr_alignment->cigar_items[0].def == 'S' && curr_alignment->cigar_items[curr_alignment->number_of_cigar_items - 1].def != 'S' )
+		{
+			strcpy (curr_alignment->icigar , "");
+			for ( i = 1 ; i < curr_alignment->number_of_cigar_items ; i++ )
+			{
+				sprintf (str , "%d" , curr_alignment->cigar_items[i].len);
+				strcat (curr_alignment->icigar , str);
+				temp_str[0] = curr_alignment->cigar_items[i].def;
+				temp_str[1] = '\0';
+				strcat (curr_alignment->icigar , temp_str);
+			}
+		}
+		else strcpy (curr_alignment->icigar , curr_alignment->cigar);
+		//printf("\nPartial icigar %s left soft clip %d right soft clip %d", curr_alignment->icigar, left_soft_clip_point, right_soft_clip_point);
+	}
+
+	/*
+	 * Prepend and append the soft clips to icigar
+	 */
+	curr_alignment->temp[0] = '\0';
+	if ( flag_ignore_soft_clippings == 0 ) // DO NOT ignore soft clippings
+	{
+		if ( left_soft_clip_point != 0 && right_soft_clip_point == 0 )
+		{
+			if ( flag_ignore_quality_score == 0 )
+			{
+				int j = 0;
+				for ( i = 0 ;
+						curr_alignment->soft_clippings.left_qual[i] != '\0' ;
+						i++ )
+				{
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.left[i];
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.left_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+			else strcpy (curr_alignment->temp , curr_alignment->soft_clippings.left);
+			strcat (curr_alignment->temp , curr_alignment->icigar);
+		}
+		else if ( left_soft_clip_point == 0 && right_soft_clip_point != 0 )
+		{
+			strcpy (curr_alignment->temp , curr_alignment->icigar);
+			if ( flag_ignore_quality_score == 1 )
+				strcat (curr_alignment->temp , curr_alignment->soft_clippings.right);
+			else
+			{
+				int j = strlen (curr_alignment->temp);
+				for ( i = 0 ;
+						curr_alignment->soft_clippings.right_qual[i] != '\0' ;
+						i++ )
+				{
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.right[i];
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.right_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+		}
+		else if ( left_soft_clip_point != 0 && right_soft_clip_point != 0 )
+		{
+			if ( flag_ignore_quality_score == 0 )
+			{
+				int j = 0;
+				for ( i = 0 ;
+						curr_alignment->soft_clippings.left_qual[i] != '\0' ;
+						i++ )
+				{
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.left[i];
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.left_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+			else strcpy (curr_alignment->temp , curr_alignment->soft_clippings.left);
+			strcat (curr_alignment->temp , curr_alignment->icigar);
+			if ( flag_ignore_quality_score == 1 )
+				strcat (curr_alignment->temp , curr_alignment->soft_clippings.right);
+			else
+			{
+				int j = strlen (curr_alignment->temp);
+				for ( i = 0 ;
+						curr_alignment->soft_clippings.right_qual[i] != '\0' ;
+						i++ )
+				{
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.right[i];
+					curr_alignment->temp[j++ ] = curr_alignment->soft_clippings.right_qual[i];
+				}
+				curr_alignment->temp[j] = '\0';
+			}
+		}
+		else if ( left_soft_clip_point == 0 && right_soft_clip_point == 0 )
+		{
+			strcpy (curr_alignment->temp , curr_alignment->icigar);
+		}
+	}
+	else // DO ignore soft clippings
+	{
+		strcpy (curr_alignment->temp , curr_alignment->icigar);
+	}
+
+	strcpy (curr_alignment->icigar , curr_alignment->temp);
+
+	/*
+	 * Add NH tag
+	 */
+	/*if (XS_tag_index != -1) strcat(curr_alignment->icigar, curr_alignment->tags[XS_tag_index].val);*/
+	if ( NH_tag_index != -1 )
+		strcat (curr_alignment->icigar , curr_alignment->tags[NH_tag_index].val);
+
+	/*
+	 * Change the iCIGAR representation to reflect the samformatflag and XS tag
+	 */
+	if ( spliced_alignment_indicator == 0 )
+	{
+		switch ( curr_alignment->samflag )
+		{
+			case 0:
+				M_replacement_character = 'B';
+				break;
+			case 16:
+				M_replacement_character = 'E';
+				break;
+			case 256:
+				M_replacement_character = 'F';
+				break;
+			case 272:
+				M_replacement_character = 'H';
+				break;
+		}
+		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
+			if ( curr_alignment->icigar[i] == 'M' )
+				curr_alignment->icigar[i] = M_replacement_character;
+	}
+	else
+	{
+		if ( XS_tag_index == -1 )
+		{
+			switch ( curr_alignment->samflag )
+			{
+				case 0:
+					M_replacement_character = 'B';
+					break;
+				case 16:
+					M_replacement_character = 'E';
+					break;
+				case 256:
+					M_replacement_character = 'F';
+					break;
+				case 272:
+					M_replacement_character = 'H';
+					break;
+			}
+		}
+		else
+		{
+			if ( strcmp (curr_alignment->tags[XS_tag_index].val , "+") == 0 )
+			{
+				switch ( curr_alignment->samflag )
+				{
+					case 0:
+						M_replacement_character = 'J';
+						break;
+					case 16:
+						M_replacement_character = 'K';
+						break;
+					case 256:
+						M_replacement_character = 'L';
+						break;
+					case 272:
+						M_replacement_character = 'O';
+						break;
+				}
+			}
+			else if ( strcmp (curr_alignment->tags[XS_tag_index].val , "-") == 0 )
+			{
+				switch ( curr_alignment->samflag )
+				{
+					case 0:
+						M_replacement_character = 'P';
+						break;
+					case 16:
+						M_replacement_character = 'Q';
+						break;
+					case 256:
+						M_replacement_character = 'R';
+						break;
+					case 272:
+						M_replacement_character = 'U';
+						break;
+				}
+			}
+
+		}
+		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
+			if ( curr_alignment->icigar[i] == 'M' )
+				curr_alignment->icigar[i] = M_replacement_character;
+	}
+
+	/*
+	 * For diagnostics
+	 */
+
+	if ( run_diagnostics == 1 )
+	{
+		dummy = 'Z';
+		strcpy (sam_alignment_instance_diagnostics->icigar , curr_alignment->icigar);
+		sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
+		convertIcigarToCigarandMD (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy);
+		/************************************************************************
+		 * Remove this section later
+		 *************************************************************************/
+		/*if (isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'I') && isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'D') && isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'N') && isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'S'))
+		 {
+		 printSamAlignmentInstance(curr_alignment, 1);
+		 printSamAlignmentInstance(sam_alignment_instance_diagnostics, 1);
+		 exit(1);
+		 }
+		 */
+		/************************************************************************/
+
+		flag = 0;
+		if ( strcmp (sam_alignment_instance_diagnostics->cigar , curr_alignment->cigar) != 0 )
+		{
+			printf ("\nCIGAR Mismatch");
+			flag = 1;
+		}
+		if ( strcmp (sam_alignment_instance_diagnostics->seq , curr_alignment->seq) != 0 )
+		{
+			printf ("\nSEQ Mismatch");
+			flag = 1;
+		}
+		if ( strcmp (sam_alignment_instance_diagnostics->tags[2].val , curr_alignment->tags[MD_tag_index].val) != 0 )
+		{
+			printf ("\nMD Mismatch Actual: %s Deciphered: %s" , curr_alignment->tags[MD_tag_index].val , sam_alignment_instance_diagnostics->tags[2].val);
+			flag = 1;
+		}
+
+		if ( flag )
+		{
+			printf ("\nRecord Number : %lld" , number_of_records_read);
+			printSamAlignmentInstance (curr_alignment , 1);
+			printSamAlignmentInstance (sam_alignment_instance_diagnostics , 1);
+			exit (1);
+		}
+	}
+}
+
 void initializePass3_Compression_Symbol_icigar_MappingPool (struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping)
 {
 	int i;
