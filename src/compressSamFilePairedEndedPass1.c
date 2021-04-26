@@ -67,6 +67,84 @@ void convertReadIdToString (int *read_id, char *read_id_string, int read_length,
 	read_id_string[i] = '\0';
 }
 
+void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **modified_icigars)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	int i, j, k;
+	int compressed_ds_pool_rearranged_index = 0;
+
+	//char icigar1[MAX_SEQ_LEN];
+	//char icigar2[MAX_SEQ_LEN];
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+		already_processed[i] = 0;
+
+	/********************************************************************/
+	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+		prepareIcigarForComparison (modified_icigars[i] , compressed_ds_pool[i]->icigar);
+
+	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+	{
+		if ( already_processed[i] == 1 ) continue;
+		already_processed[i] = 1;
+		//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar );
+		/*
+		 * Copy the icigar entry into the rearranged pool
+		 */
+		//icigar1 = modified_icigars[i];
+		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar);
+		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[i]->num_reads;
+		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[i]->position;
+		for ( k = 0 ; k < compressed_ds_pool[i]->num_reads ; k++ )
+		{
+			compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] = compressed_ds_pool[i]->pointers_to_qual_scores[k];
+			compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_read_names[k] = compressed_ds_pool[i]->pointers_to_read_names[k];
+		}
+		compressed_ds_pool_rearranged_index++;
+
+		for ( j = i + 1 ; j < compressed_ds_pool_index ; j++ )
+		{
+			if ( already_processed[j] == 1 ) continue;
+			//prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
+			//icigar2 = modified_icigars[j];
+			if ( strcmp (modified_icigars[i] , modified_icigars[j]) == 0 )
+			{
+				//printf ( "\n%s %s %d" , modified_icigars[i] , modified_icigars[j] , strcmp ( modified_icigars[i] , modified_icigars[j] ) );
+				//printf ( "\n%s %s %d" , compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar , strcmp ( compressed_ds_pool[i]->icigar , compressed_ds_pool[j]->icigar ) );
+				//strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
+				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[0] = findMatchCharacterIcigar (compressed_ds_pool[j]->icigar);
+				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[1] = '\0';
+				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[j]->num_reads;
+				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[j]->position;
+				for ( k = 0 ; k < compressed_ds_pool[j]->num_reads ; k++ )
+				{
+					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] = compressed_ds_pool[j]->pointers_to_qual_scores[k];
+					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_read_names[k] = compressed_ds_pool[j]->pointers_to_read_names[k];
+				}
+				compressed_ds_pool_rearranged_index++;
+				already_processed[j] = 1;
+			}
+		}
+	}
+	/*
+	 printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
+	 if ( compressed_ds_pool_index > 25000 )
+	 {
+	 for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+	 {
+	 printf ( "\n%s %d %s %d" , compressed_ds_pool[i]->icigar , compressed_ds_pool[i]->num_reads , compressed_ds_pool_rearranged[i]->icigar , compressed_ds_pool_rearranged[i]->num_reads );
+	 }
+	 printf ( "\n==============================================================================================================================================================================================" );
+	 }
+	 */
+}
+
 void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *name_of_file_with_quality_scores, char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc, short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, long long int max_number_of_alignments, int max_read_length)
 {
 	/********************************************************************
@@ -361,6 +439,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = curr_alignment->read_name;
 			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
 			//printf("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			quality_score_index++;
@@ -370,8 +449,98 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
 			reference_sequence_index++;
 		}
+		else if ( strcmp (prev_reference_name , curr_reference_name) != 0 ) // New chromosome
+		{
+			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
+			//fflush(stdout);
+			reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars);
+			writeToFile (flag_save_all_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index);
+			if ( max_commas < curr_commas ) max_commas = curr_commas;
+			//printf ( "\n%lld %lld" , curr_commas , max_commas );
+			compressed_ds_pool_index = 0;
+			previous_position = current_position;
+			strcpy(prev_reference_name , curr_reference_name);
+			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
+			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+			quality_score_index++;
+			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
+			compressed_ds_pool_index++;
+			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
+			//fflush(stdout);
+			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
+			reference_sequence_index++;
+		}
+		else // Same chromosome
+		{
+			if ( previous_position == current_position )
+			{
+				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
+				//fflush(stdout);
 
+				for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+				{
+					if ( strcmp (compressed_ds_pool[i]->icigar , curr_alignment->icigar) == 0 )
+					{
+						compressed_ds_pool[i]->num_reads++;
+						strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+						compressed_ds_pool[i]->pointers_to_qual_scores[compressed_ds_pool[i]->num_reads - 1] = qual_scores[quality_score_index];
+						compressed_ds_pool[i]->pointers_to_read_names[compressed_ds_pool[i]->num_reads - 1] = curr_alignment->read_name;
+						quality_score_index++;
+						//printf("\n3. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[i]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, i);
+						break;
+					}
+				}
+				if ( i == compressed_ds_pool_index ) // New icigar encountered
+				{
+					strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+					compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+					compressed_ds_pool[compressed_ds_pool_index]->position = compressed_ds_pool[0]->position;
+					strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+					quality_score_index++;
+					//printf("\n4. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
+					compressed_ds_pool_index++;
+				}
+			}
+			else
+			{
+				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
+				//fflush(stdout);
+				reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars);
+				writeToFile (flag_save_all_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index);
+				if ( max_commas < curr_commas ) max_commas = curr_commas;
+				//printf ( "\n%lld %lld" , curr_commas , max_commas );
+				compressed_ds_pool_index = 0;
+				quality_score_index = 0;
+				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+				strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = curr_alignment->read_name;
+				compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position - previous_position;
+				quality_score_index++;
+				//printf("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
+				compressed_ds_pool_index++;
+			}
+			previous_position = current_position;
+		}
+		//printf("\nMax_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
+		reInitializeSamAlignmentInstance (curr_alignment);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
+
+	reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars);
+	writeToFile (flag_save_all_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index);
+	if ( max_commas < curr_commas ) max_commas = curr_commas;
+	sprintf(temp , "%lld" , max_commas);
+	strcat(temp , "\n");
+	fprintf (fhw_name_of_file_with_max_commas , "%s" , temp);
+
+	fclose (fhr);
+	fclose (fhw_pass1);
+	fclose (fhw_unmapped);
+	fclose (fhw_name_of_file_with_max_commas);
 
 }
 
