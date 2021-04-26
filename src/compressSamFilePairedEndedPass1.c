@@ -8,6 +8,18 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
+char findMatchCharacterIcigar (char *icigar, char samformatflag_replacer_characters[])
+{
+	int i;
+
+	for ( i = 0 ; icigar[i] != '\0' ; i++ )
+	{
+		if ( strchr (samformatflag_replacer_characters , icigar[i]) != NULL )
+			return icigar[i];
+	}
+	return ' ';
+}
+
 void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 {
 	/********************************************************************
@@ -75,7 +87,7 @@ char returnDirection (char character, struct Paired_Ended_Flag_to_Single_Charact
 		if ( samflag_dictionary->character[i] == character )
 			return samflag_dictionary->direction[i];
 	}
-	return '';
+	return ' ';
 }
 
 void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string, long long int *count, char **qual_Scores, int quality_score_index, char samformatflag_replacer_characters[], int number_of_unique_samformatflags, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary)
@@ -134,18 +146,6 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 	strcat(line_to_be_written_to_file , "\n");
 	fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
 	*count = compressed_ds_pool_total;
-}
-
-char findMatchCharacterIcigar (char *icigar, char samformatflag_replacer_characters[])
-{
-	int i;
-
-	for ( i = 0 ; icigar[i] != '\0' ; i++ )
-	{
-		if ( strchr (samformatflag_replacer_characters , icigar[i]) != NULL )
-			return icigar[i];
-	}
-	return ' ';
 }
 
 void prepareIcigarForComparison (char *icigar1, char *icigar, char samformatflag_replacer_characters[])
