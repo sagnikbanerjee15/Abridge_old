@@ -463,7 +463,7 @@ int isSequenceSoftClipped (char *cigar)
 	return 0;
 }
 
-void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char *samformatflag_replacer_characters)
+void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
 {
 	/*
 	 * Coverts the iCIGAR into CIGAR and MD
@@ -2107,7 +2107,7 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
 		if ( curr_alignment->icigar[i] == 'M' )
 			curr_alignment->icigar[i] = M_replacement_character;
-	//printf ("\niCIGAR: %s" , curr_alignment->icigar);
+	printf ("\niCIGAR: %s" , curr_alignment->icigar);
 
 	/*
 	 * For diagnostics
@@ -2622,7 +2622,7 @@ void replaceCharacterInString (char *str, char ch_to_be_replaced, char replace_w
 		if ( str[i] == ch_to_be_replaced ) str[i] = replace_with;
 }
 
-int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char *samformatflag_replacer_characters)
+int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
 {
 	int i, j;
 	int samformatflag = -1;
