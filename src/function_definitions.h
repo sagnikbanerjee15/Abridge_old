@@ -2109,7 +2109,7 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
 		if ( curr_alignment->icigar[i] == 'M' )
 			curr_alignment->icigar[i] = M_replacement_character;
-	printf ("\niCIGAR: %s" , curr_alignment->icigar);
+	printf ("\nCIGAR %s iCIGAR: %s" , curr_alignment->cigar , curr_alignment->icigar);
 	fflush (stdout);
 
 	/*
