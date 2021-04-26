@@ -653,7 +653,8 @@ def compressSamFile(options):
             all_commands.append([cmd,"dummy"])
             #os.system(cmd)
         pool.map(runCommand,all_commands)
-            
+    
+    return 
 
     if options.quiet == False:
         logging.info("Starting compression")
