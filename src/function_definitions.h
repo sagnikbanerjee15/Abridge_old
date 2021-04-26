@@ -2625,7 +2625,7 @@ void replaceCharacterInString (char *str, char ch_to_be_replaced, char replace_w
 int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char *samformatflag_replacer_characters)
 {
 	int i, j;
-	int samformatflag;
+	int samformatflag = -1;
 	for ( i = 0 ; i < icigar_length ; i++ )
 	{
 		if ( ( icigar[i] != 'a' || icigar[i] != 't' || icigar[i] != 'g' || icigar[i] != 'c' ) && ! ( icigar[i] >= 48 && icigar[i] <= 57 ) && strchr (samformatflag_replacer_characters , icigar[i]) == 0 )
