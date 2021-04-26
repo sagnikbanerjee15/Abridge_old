@@ -2636,9 +2636,11 @@ int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, str
 				{
 					XS[0] = samflag_dictionary->direction[j];
 					samformatflag = samflag_dictionary->samflags[j];
+					break;
 				}
 			}
 		}
+		if ( samformatflag != -1 ) break;
 	}
 	return samformatflag;
 }
