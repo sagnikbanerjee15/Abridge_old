@@ -112,7 +112,6 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 	strcat(line_to_be_written_to_file , "\n");
 	fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
 	*count = compressed_ds_pool_total;
-
 }
 
 void prepareIcigarForComparison (char *icigar1, char *icigar)
