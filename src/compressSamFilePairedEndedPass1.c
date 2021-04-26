@@ -96,8 +96,10 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
 	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
+	char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 
 	line_to_be_written_to_file[0] = '\0';
+	list_of_read_names[0] = '\0';
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
 		if ( i == 0 )
@@ -116,6 +118,12 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 		strcat(line_to_be_written_to_file , str);
 		if ( i != compressed_ds_pool_total - 1 )
 		strcat(line_to_be_written_to_file , ",");
+
+		for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
+		{
+			strcat(list_of_read_names , compressed_ds_pool[i]->pointers_to_read_names[j]);
+			strcat(list_of_read_names , ",");
+		}
 
 		if ( flag_save_all_quality_scores == 1 )
 		{
@@ -143,6 +151,8 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 			}
 		}
 	}
+	strcat(line_to_be_written_to_file , list_of_read_names);
+	strcat(line_to_be_written_to_file , "\t");
 	strcat(line_to_be_written_to_file , "\n");
 	fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
 	*count = compressed_ds_pool_total;
