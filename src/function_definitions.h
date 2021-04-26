@@ -112,6 +112,7 @@ struct Compressed_DS* allocateMemoryCompressed_DS (long long int max_input_reads
 	s = ( struct Compressed_DS* ) malloc (sizeof(struct Compressed_DS));
 	s->icigar = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	s->pointers_to_qual_scores = ( char** ) malloc (sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
+	s->pointers_to_read_names = ( char** ) malloc (sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
 	s->num_reads = 0;
 	s->position = 0;
 	return s;

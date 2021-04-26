@@ -351,6 +351,26 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 				NH_tag_index = i;
 
+		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
+		{
+			//printf("\n1. compressed_ds_pool_index %d", compressed_ds_pool_index);
+			//fflush(stdout);
+			previous_position = current_position;
+			strcpy(prev_reference_name , curr_reference_name);
+			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
+			//printf("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
+			quality_score_index++;
+			compressed_ds_pool_index++;
+			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
+			//fflush(stdout);
+			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
+			reference_sequence_index++;
+		}
+
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 }
