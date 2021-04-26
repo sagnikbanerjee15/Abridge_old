@@ -505,8 +505,8 @@ void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_g
 	samformatflag = findSamFormatFlagPairedEnded (sam_alignment_instance->icigar , icigar_length , XS , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters , &character_to_be_replaced);
 	sam_alignment_instance->samflag = samformatflag;
 	for ( i = 0 ; i < icigar_length ; i++ )
-		if ( sam_alignment_instance->icigar == character_to_be_replaced )
-			sam_alignment_instance->icigar = 'M';
+		if ( sam_alignment_instance->icigar[i] == character_to_be_replaced )
+			sam_alignment_instance->icigar[i] = 'M';
 
 	/*
 	 * Construct the Cigar string, MD string, Soft Clips, etc.
