@@ -67,7 +67,39 @@ void convertReadIdToString (int *read_id, char *read_id_string, int read_length,
 	read_id_string[i] = '\0';
 }
 
-void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **modified_icigars)
+char findMatchCharacterIcigar (char *icigar, char samformatflag_replacer_characters[])
+{
+	int i;
+
+	for ( i = 0 ; icigar[i] != '\0' ; i++ )
+	{
+		if ( strchr (samformatflag_replacer_characters , icigar[i]) != NULL )
+			return icigar[i];
+	}
+	return ' ';
+}
+
+void prepareIcigarForComparison (char *icigar1, char *icigar, char samformatflag_replacer_characters[])
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	int i, j, k;
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	for ( i = 0 ; icigar[i] != '\0' ; i++ )
+	{
+		if ( strchr (samformatflag_replacer_characters , icigar[i]) == NULL )
+			icigar1[i] = icigar[i];
+		else icigar1[i] = 'M';
+	}
+	icigar1[i] = '\0';
+}
+
+void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **modified_icigars, char samformatflag_replacer_characters[])
 {
 	/********************************************************************
 	 * Variable declaration
@@ -87,13 +119,13 @@ void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struc
 
 	/********************************************************************/
 	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
-		prepareIcigarForComparison (modified_icigars[i] , compressed_ds_pool[i]->icigar);
+		prepareIcigarForComparison (modified_icigars[i] , compressed_ds_pool[i]->icigar , samformatflag_replacer_characters);
 
 	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 	{
 		if ( already_processed[i] == 1 ) continue;
 		already_processed[i] = 1;
-		//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar );
+		//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar,samformatflag_replacer_characters );
 		/*
 		 * Copy the icigar entry into the rearranged pool
 		 */
