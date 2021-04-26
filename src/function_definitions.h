@@ -504,9 +504,6 @@ void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_g
 	XS[1] = '\0';
 	samformatflag = findSamFormatFlagPairedEnded (sam_alignment_instance->icigar , icigar_length , XS , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters , &character_to_be_replaced);
 	sam_alignment_instance->samflag = samformatflag;
-	for ( i = 0 ; i < icigar_length ; i++ )
-		if ( sam_alignment_instance->icigar[i] == character_to_be_replaced )
-			sam_alignment_instance->icigar[i] = 'M';
 
 	/*
 	 * Construct the Cigar string, MD string, Soft Clips, etc.
@@ -643,12 +640,12 @@ void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_g
 
 			}
 			// Merging consecutive matches and mismatches
-			if ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
+			if ( isCharacterInString (samformatflag_replacer_characters , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
 			{
 				num = 0;
-				while ( i < icigar_items_instance_index && ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) ) )
+				while ( i < icigar_items_instance_index && ( isCharacterInString (samformatflag_replacer_characters , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) ) )
 				{
-					if ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) )
+					if ( isCharacterInString (samformatflag_replacer_characters , cigar_items_instance[i].def) )
 					{
 						for ( j = 0 ; j < cigar_items_instance[i].len ; j++ )
 						{
