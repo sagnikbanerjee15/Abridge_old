@@ -327,7 +327,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
 		strcpy(curr_reference_name , curr_alignment->reference_name);
-		if ( curr_alignment->samflag == 4 )
+		if ( curr_alignment->samflag == 77 || curr_alignment->samflag == 141 )
 		{
 			if ( flag_ignore_unmapped_sequences == 0 )
 			{
