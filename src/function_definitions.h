@@ -1522,7 +1522,40 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	}
 }
 
-void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary)
+char findReplamentCharacterForPairedEndedReads (int samflag, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, int XS_tag_index, struct Sam_Tags *tags)
+{
+	int i, j, k;
+	char replacement_character;
+	for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
+	{
+		if ( XS_tag_index == -1 ) // Either splice does not exist or direction could not be determined from the alignment
+		{
+			if ( samflag_dictionary->direction[i] == '+' && samflag == samflag_dictionary->samflags[i] )
+			{
+				replacement_character = samflag_dictionary->character[i];
+				break;
+			}
+		}
+		else
+		{
+			if ( strcmp (tags[XS_tag_index] , "+") == 0 && samflag_dictionary->direction[i] == '+' && samflag == samflag_dictionary->samflags[i] )
+			{
+				replacement_character = samflag_dictionary->character[i];
+				break;
+			}
+			else if ( strcmp (tags[XS_tag_index] , "-") == 0 && samflag_dictionary->direction[i] == '-' && samflag == samflag_dictionary->samflags[i] )
+			{
+				replacement_character = samflag_dictionary->character[i];
+				break;
+			}
+		}
+	}
+
+	return replacement_character;
+
+}
+
+void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags)
 {
 	/*
 	 * Creates the integrated cigar
@@ -1768,91 +1801,26 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	/*
 	 * Change the iCIGAR representation to reflect the samformatflag and XS tag
 	 */
-	if ( spliced_alignment_indicator == 0 )
-	{
-		switch ( curr_alignment->samflag )
-		{
-			case 0:
-				M_replacement_character = 'B';
-				break;
-			case 16:
-				M_replacement_character = 'E';
-				break;
-			case 256:
-				M_replacement_character = 'F';
-				break;
-			case 272:
-				M_replacement_character = 'H';
-				break;
-		}
-		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
-			if ( curr_alignment->icigar[i] == 'M' )
-				curr_alignment->icigar[i] = M_replacement_character;
-	}
-	else
-	{
-		if ( XS_tag_index == -1 )
-		{
-			switch ( curr_alignment->samflag )
-			{
-				case 0:
-					M_replacement_character = 'B';
-					break;
-				case 16:
-					M_replacement_character = 'E';
-					break;
-				case 256:
-					M_replacement_character = 'F';
-					break;
-				case 272:
-					M_replacement_character = 'H';
-					break;
-			}
-		}
-		else
-		{
-			if ( strcmp (curr_alignment->tags[XS_tag_index].val , "+") == 0 )
-			{
-				switch ( curr_alignment->samflag )
-				{
-					case 0:
-						M_replacement_character = 'J';
-						break;
-					case 16:
-						M_replacement_character = 'K';
-						break;
-					case 256:
-						M_replacement_character = 'L';
-						break;
-					case 272:
-						M_replacement_character = 'O';
-						break;
-				}
-			}
-			else if ( strcmp (curr_alignment->tags[XS_tag_index].val , "-") == 0 )
-			{
-				switch ( curr_alignment->samflag )
-				{
-					case 0:
-						M_replacement_character = 'P';
-						break;
-					case 16:
-						M_replacement_character = 'Q';
-						break;
-					case 256:
-						M_replacement_character = 'R';
-						break;
-					case 272:
-						M_replacement_character = 'U';
-						break;
-				}
-			}
-
-		}
-		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
-			if ( curr_alignment->icigar[i] == 'M' )
-				curr_alignment->icigar[i] = M_replacement_character;
-	}
+	/*if ( spliced_alignment_indicator == 0 )
+	 {
+	 M_replacement_character = findReplamentCharacterForPairedEndedReads (curr_alignment->samflag , samflag_dictionary , number_of_unique_samformatflags , XS_tag_index , curr_alignment->tags);
+	 for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
+	 if ( curr_alignment->icigar[i] == 'M' )
+	 curr_alignment->icigar[i] = M_replacement_character;
+	 }
+	 else
+	 {
+	 M_replacement_character = findReplamentCharacterForPairedEndedReads (curr_alignment->samflag , samflag_dictionary , number_of_unique_samformatflags , XS_tag_index , curr_alignment->tags);
+	 for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
+	 if ( curr_alignment->icigar[i] == 'M' )
+	 curr_alignment->icigar[i] = M_replacement_character;
+	 }
+	 */
+	M_replacement_character = findReplamentCharacterForPairedEndedReads (curr_alignment->samflag , samflag_dictionary , number_of_unique_samformatflags , XS_tag_index , curr_alignment->tags);
+	for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
+		if ( curr_alignment->icigar[i] == 'M' )
+			curr_alignment->icigar[i] = M_replacement_character;
+	printf ("\niCIGAR: %s" , curr_alignment->icigar);
 
 	/*
 	 * For diagnostics
@@ -1946,7 +1914,7 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 	int i;
 	int j;
 
-	//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
+//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
 	fhr = fopen (genome_filename , "r");
 	if ( fhr == NULL )
 	{
@@ -1954,7 +1922,7 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 		exit (1);
 	}
 
-	//printf ("\nwhole_genome->number_of_reference_sequences %d" , whole_genome->number_of_reference_sequences);
+//printf ("\nwhole_genome->number_of_reference_sequences %d" , whole_genome->number_of_reference_sequences);
 	if ( whole_genome->number_of_reference_sequences == 1 )
 	{
 		int total = strlen (whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences - 1]) + strlen (whole_genome->nucleotides[whole_genome->number_of_reference_sequences - 1]);
@@ -1963,8 +1931,8 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 		free (whole_genome->nucleotides[whole_genome->number_of_reference_sequences - 1]);
 	}
 	whole_genome->number_of_reference_sequences = 0;
-	//printf ("\n Loading chromosome %s" , chromosome);
-	//fflush (stdout);
+//printf ("\n Loading chromosome %s" , chromosome);
+//fflush (stdout);
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		//printf(“\n%lld”, strlen(buffer));
@@ -2011,7 +1979,7 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 	int i;
 	int j;
 
-	//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
+//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
 	fhr = fopen (genome_filename , "rb");
 	if ( fhr == NULL )
 	{
@@ -2047,8 +2015,8 @@ void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence 
 		}
 
 	}
-	//free(buffer);
-	//buffer = NULL;
+//free(buffer);
+//buffer = NULL;
 	/*
 	 for (i = 0; i < whole_genome->number_of_reference_sequences; i++)
 	 printf("\n %d %s %lld %lld", i + 1, whole_genome->reference_sequence_name[i], strlen(whole_genome->nucleotides[i]), whole_genome->reference_sequence_length[i]);
@@ -2127,8 +2095,8 @@ void readInGenomeSequenceSingleChromosome (struct Whole_Genome_Sequence *single_
 	fseek_ret_val = fseek (fhr , genome_index->start_byte[i] , SEEK_SET);
 	fread_ret_val = fread (buffer , 1 , genome_index->end_byte[i] - genome_index->start_byte[i] , fhr);
 	if ( buffer == NULL ) printf ("\nBuffer is null chromosome number %d" , i);
-	//printf("\nReading from %lld Num bytes read %lld fseek_ret_val %lld fread_ret_val %lld ferror %lld feof %lld Genome filename %s\n", genome_index->start_byte[i], genome_index->end_byte[i] - genome_index->start_byte[i], fseek_ret_val, fread_ret_val, ferror(fhr), feof(fhr), genome_filename);
-	//fflush (stdout);
+//printf("\nReading from %lld Num bytes read %lld fseek_ret_val %lld fread_ret_val %lld ferror %lld feof %lld Genome filename %s\n", genome_index->start_byte[i], genome_index->end_byte[i] - genome_index->start_byte[i], fseek_ret_val, fread_ret_val, ferror(fhr), feof(fhr), genome_filename);
+//fflush (stdout);
 	buffer[genome_index->end_byte[i] - genome_index->start_byte[i] + 1] = '\0';
 	single_genome_sequence->reference_sequence_name[0] = ( char* ) malloc (sizeof(char) * ( 100 ));
 	strcpy (single_genome_sequence->reference_sequence_name[0] , chromosome);
