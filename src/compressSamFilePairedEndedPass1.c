@@ -186,8 +186,8 @@ void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struc
 	int i, j, k;
 	int compressed_ds_pool_rearranged_index = 0;
 
-//char icigar1[MAX_SEQ_LEN];
-//char icigar2[MAX_SEQ_LEN];
+	//char icigar1[MAX_SEQ_LEN];
+	//char icigar2[MAX_SEQ_LEN];
 	/********************************************************************/
 
 	/********************************************************************
@@ -333,9 +333,9 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	struct Whole_Genome_Sequence *whole_genome;
 	struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary;
 
-//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
+	//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
 
-//printf ("\nSize of mega array %d" , sizeof ( mega_array ));
+	//printf ("\nSize of mega array %d" , sizeof ( mega_array ));
 
 	/********************************************************************/
 
@@ -490,8 +490,10 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		samflag_dictionary->samflags[i + 1] = strtol (line , &temp , 10);
 		i += 2;
 	}
-	for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
-		printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
+	/*
+	 for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
+	 printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
+	 */
 
 	/*
 	 * Read in the reference sequence information
