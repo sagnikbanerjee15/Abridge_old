@@ -93,6 +93,7 @@ abridge \
 --cpu $CPU \
 --both \
 --save_all_quality_scores \
+--run_diagnostics \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
 --inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
 --output_directory $ROOT_DIRECTORY/developing_abridge) \

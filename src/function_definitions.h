@@ -463,7 +463,7 @@ int isSequenceSoftClipped (char *cigar)
 	return 0;
 }
 
-void convertIcigarToCigarandMD (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value)
+void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char *samformatflag_replacer_characters)
 {
 	/*
 	 * Coverts the iCIGAR into CIGAR and MD
@@ -501,7 +501,294 @@ void convertIcigarToCigarandMD (struct Whole_Genome_Sequence *whole_genome, stru
 	NH_value = extractNHfromicigar (sam_alignment_instance->icigar , icigar_length);
 
 	XS[1] = '\0';
-	samformatflag = findSamFormatFlag (sam_alignment_instance->icigar , icigar_length , XS);
+	samformatflag = findSamFormatFlagPairedEnded (sam_alignment_instance->icigar , icigar_length , XS , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
+	sam_alignment_instance->samflag = samformatflag;
+	/*
+	 * Construct the Cigar string, MD string, Soft Clips, etc.
+	 */
+	splitCigar (sam_alignment_instance->icigar , &icigar_items_instance_index , cigar_items_instance);
+
+	strcpy (sam_alignment_instance->reference_name , chromosome);
+	sam_alignment_instance->cigar[0] = '\0';
+	sam_alignment_instance->temp[0] = '\0';
+	sam_alignment_instance->soft_clippings.left[0] = '\0';
+	sam_alignment_instance->soft_clippings.right[0] = '\0';
+	sam_alignment_instance->soft_clippings.left_qual[0] = '\0';
+	sam_alignment_instance->soft_clippings.right_qual[0] = '\0';
+	sam_alignment_instance->soft_clips_removed_qual[0] = '\0';
+	sam_alignment_instance->soft_clips_removed_seq[0] = '\0';
+	soft_clips_removed_qual_index = 0;
+	soft_clips_removed_seq_index = 0;
+
+	strcpy (sam_alignment_instance->tags[0].name , "NH");
+	strcpy (sam_alignment_instance->tags[0].type , "i");
+	sprintf (temp , "%d" , NH_value);
+	strcpy (sam_alignment_instance->tags[0].val , temp);
+
+	strcpy (sam_alignment_instance->tags[1].name , "XS");
+	strcpy (sam_alignment_instance->tags[1].type , ".");
+	strcpy (sam_alignment_instance->tags[1].val , XS);
+
+	strcpy (sam_alignment_instance->tags[2].name , "MD");
+	strcpy (sam_alignment_instance->tags[2].type , "Z");
+	strcpy (sam_alignment_instance->tags[2].val , "dummy");
+
+	sam_alignment_instance->number_of_tag_items = 3;
+	sam_alignment_instance->md_extended[0] = '\0';
+	MD_extended_index = 0;
+
+	for ( i = 0 ; i < icigar_items_instance_index ; i++ )
+	{
+		if ( processing_left_soft_clip == 1 && isCharacterInString ("atgcn" , cigar_items_instance[i].def) )
+		{
+			sam_alignment_instance->soft_clippings.left[left_soft_clip_index] = cigar_items_instance[i].def - 32;
+			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] = '\0';
+			if ( flag_ignore_quality_score == 0 )
+			{
+				i++;
+				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
+				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index + 1] = '\0';
+			}
+			left_soft_clip_index++;
+		}
+		else if ( processing_left_soft_clip == 0 && isCharacterInString ("atgcn" , cigar_items_instance[i].def) )
+		{
+			sam_alignment_instance->soft_clippings.right[right_soft_clip_index] = cigar_items_instance[i].def - 32;
+			sam_alignment_instance->soft_clippings.right[right_soft_clip_index + 1] = '\0';
+			if ( flag_ignore_quality_score == 0 )
+			{
+				i++;
+				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
+				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index + 1] = '\0';
+			}
+			right_soft_clip_index++;
+		}
+		else // Capital letters & special characters - cannot be soft clips
+		{
+			flag = 0;
+			processing_left_soft_clip = 0;
+			if ( left_soft_clip_index > 0 ) //There were some left soft clips
+			{
+				sprintf (temp , "%d" , left_soft_clip_index);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "S");
+				num = 0;
+				left_soft_clip_index = 0;
+			}
+			if ( cigar_items_instance[i].def == 'N' )
+			{
+				sprintf (temp , "%d" , cigar_items_instance[i].len);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "N");
+				num = 0;
+			}
+			else if ( cigar_items_instance[i].def == 'D' )
+			{
+				sprintf (temp , "%d" , cigar_items_instance[i].len);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "D");
+				num = 0;
+
+				for ( j = 0 ; j < cigar_items_instance[i].len ; j++ )
+					sam_alignment_instance->md_extended[MD_extended_index++ ] = '-';
+			}
+			else if ( isCharacterInString (insert_characters , cigar_items_instance[i].def) )
+			{
+				num = 0;
+				while ( i < icigar_items_instance_index && isCharacterInString (insert_characters , cigar_items_instance[i].def) )
+				{
+					switch ( cigar_items_instance[i].def )
+					{
+						case '!':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'A';
+							sam_alignment_instance->md_extended[MD_extended_index++ ] = '!';
+							break;
+						case '"':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'T';
+							sam_alignment_instance->md_extended[MD_extended_index++ ] = '"';
+							break;
+						case '#':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'G';
+							sam_alignment_instance->md_extended[MD_extended_index++ ] = '#';
+							break;
+						case '$':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'C';
+							sam_alignment_instance->md_extended[MD_extended_index++ ] = '$';
+							break;
+						case '%':
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'N';
+							sam_alignment_instance->md_extended[MD_extended_index++ ] = '%';
+							break;
+					}
+					if ( flag_ignore_quality_score == 0 )
+					{
+						i++;
+						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
+						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
+						soft_clips_removed_qual_index++;
+					}
+					num++;
+					i++;
+				}
+				i--;
+				sprintf (temp , "%d" , num);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "I");
+				num = 0;
+
+			}
+			// Merging consecutive matches and mismatches
+			if ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
+			{
+				num = 0;
+				while ( i < icigar_items_instance_index && ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) || isCharacterInString (mismatch_characters , cigar_items_instance[i].def) ) )
+				{
+					if ( isCharacterInString ("BEFHJKLOPQRU" , cigar_items_instance[i].def) )
+					{
+						for ( j = 0 ; j < cigar_items_instance[i].len ; j++ )
+						{
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = '-';
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index] = '\0';
+							sam_alignment_instance->md_extended[MD_extended_index++ ] = '=';
+						}
+
+						if ( flag_ignore_quality_score == 0 )
+						{
+							for ( j = 0 ; j < cigar_items_instance[i].len ;
+									j++ )
+							{
+								sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = default_quality_value[0];
+								sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
+								soft_clips_removed_qual_index++;
+							}
+						}
+						num += cigar_items_instance[i].len;
+					}
+					else if ( isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
+					{
+						if ( isCharacterInString (mismatch_characters , cigar_items_instance[i].def) )
+						{
+							switch ( cigar_items_instance[i].def )
+							{
+								case '&':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'A';
+									sam_alignment_instance->md_extended[MD_extended_index++ ] = '&';
+									break;
+								case '\'':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'T';
+									sam_alignment_instance->md_extended[MD_extended_index++ ] = '\'';
+									break;
+								case '(':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'G';
+									sam_alignment_instance->md_extended[MD_extended_index++ ] = '(';
+									break;
+								case ')':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'C';
+									sam_alignment_instance->md_extended[MD_extended_index++ ] = ')';
+									break;
+								case '*':
+									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'N';
+									sam_alignment_instance->md_extended[MD_extended_index++ ] = '*';
+									break;
+							}
+						}
+						if ( flag_ignore_quality_score == 0 )
+						{
+							i++;
+							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
+							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
+							soft_clips_removed_qual_index++;
+						}
+						num++;
+					}
+					i++;
+					flag = 1;
+				}
+				i--;
+				sprintf (temp , "%d" , num);
+				strcat (sam_alignment_instance->cigar , temp);
+				strcat (sam_alignment_instance->cigar , "M");
+				num = 0;
+			}
+		}
+	}
+	if ( right_soft_clip_index > 0 ) //There were some right soft clips
+	{
+		sprintf (temp , "%d" , right_soft_clip_index);
+		strcat (sam_alignment_instance->cigar , temp);
+		strcat (sam_alignment_instance->cigar , "S");
+		num = 0;
+	}
+	sam_alignment_instance->md_extended[MD_extended_index++ ] = '\0';
+
+	strcpy (sam_alignment_instance->seq , sam_alignment_instance->soft_clippings.left);
+	strcat (sam_alignment_instance->seq , sam_alignment_instance->soft_clips_removed_seq);
+	strcat (sam_alignment_instance->seq , sam_alignment_instance->soft_clippings.right);
+
+	strcpy (sam_alignment_instance->qual , sam_alignment_instance->soft_clippings.left_qual);
+	strcat (sam_alignment_instance->qual , sam_alignment_instance->soft_clips_removed_qual);
+	strcat (sam_alignment_instance->qual , sam_alignment_instance->soft_clippings.right_qual);
+
+	splitCigar (sam_alignment_instance->cigar , &sam_alignment_instance->number_of_cigar_items , sam_alignment_instance->cigar_items);
+	if ( flag_ignore_sequence_information == 0 )
+		generateReadSequenceAndMDString (sam_alignment_instance , whole_genome);
+	else
+	{
+		splitCigar (sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance);
+		int length_of_read = 0;
+		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
+			if ( cigar_items_instance[cigar_items_instance_index].def == 'M' )
+				length_of_read += cigar_items_instance[cigar_items_instance_index].len;
+		for ( i = 0 ; i < length_of_read ; i++ )
+		{
+			sam_alignment_instance->seq[i] = 'A';
+			sam_alignment_instance->qual[i] = default_quality_value[0];
+		}
+		sam_alignment_instance->seq[i] = '\0';
+		sam_alignment_instance->qual[i] = '\0';
+	}
+
+}
+
+void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value)
+{
+	/*
+	 * Coverts the iCIGAR into CIGAR and MD
+	 * Returns the samformatflag
+	 */
+
+	int samformatflag = -1;
+	int NH_value;
+	int icigar_length;
+	int i;
+	int j;
+	int processing_left_soft_clip = 1;
+	int left_soft_clip_index = 0;
+	int right_soft_clip_index = 0;
+	int cigar_index = 0;
+	int num = 0;
+	int cigar_temp_index = 0;
+	int icigar_items_instance_index;
+	int cigar_items_instance_index;
+	int flag = 0;
+	int soft_clips_removed_qual_index;
+	int soft_clips_removed_seq_index;
+	int MD_index = 0;
+	int MD_extended_index = 0;
+
+	char XS[2];
+	char MD[1000];
+
+	struct Cigar_Items cigar_items_instance[MAX_SEQ_LEN];
+
+	char temp[100];
+	char cigar_temp[MAX_SEQ_LEN];
+
+	icigar_length = strlen (sam_alignment_instance->icigar);
+	NH_value = extractNHfromicigar (sam_alignment_instance->icigar , icigar_length);
+
+	XS[1] = '\0';
+	samformatflag = findSamFormatFlagSingleEnded (sam_alignment_instance->icigar , icigar_length , XS);
 	sam_alignment_instance->samflag = samformatflag;
 	/*
 	 * Construct the Cigar string, MD string, Soft Clips, etc.
@@ -1482,7 +1769,7 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 		dummy = 'Z';
 		strcpy (sam_alignment_instance_diagnostics->icigar , curr_alignment->icigar);
 		sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
-		convertIcigarToCigarandMD (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy);
+		convertIcigarToCigarandMDSingleEnded (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy);
 		/************************************************************************
 		 * Remove this section later
 		 *************************************************************************/
@@ -1555,7 +1842,7 @@ char findReplamentCharacterForPairedEndedReads (int samflag, struct Paired_Ended
 
 }
 
-void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags)
+void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char *samformatflag_replacer_characters)
 {
 	/*
 	 * Creates the integrated cigar
@@ -1820,7 +2107,7 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
 		if ( curr_alignment->icigar[i] == 'M' )
 			curr_alignment->icigar[i] = M_replacement_character;
-	printf ("\niCIGAR: %s" , curr_alignment->icigar);
+	//printf ("\niCIGAR: %s" , curr_alignment->icigar);
 
 	/*
 	 * For diagnostics
@@ -1831,7 +2118,7 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 		dummy = 'Z';
 		strcpy (sam_alignment_instance_diagnostics->icigar , curr_alignment->icigar);
 		sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
-		convertIcigarToCigarandMD (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy);
+		convertIcigarToCigarandMDPairedEnded (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy , *samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
 		/************************************************************************
 		 * Remove this section later
 		 *************************************************************************/
@@ -2335,7 +2622,28 @@ void replaceCharacterInString (char *str, char ch_to_be_replaced, char replace_w
 		if ( str[i] == ch_to_be_replaced ) str[i] = replace_with;
 }
 
-int findSamFormatFlag (char *icigar, int icigar_length, char *XS)
+int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char *samformatflag_replacer_characters)
+{
+	int i, j;
+	int samformatflag;
+	for ( i = 0 ; i < icigar_length ; i++ )
+	{
+		if ( ( icigar[i] != 'a' || icigar[i] != 't' || icigar[i] != 'g' || icigar[i] != 'c' ) && ! ( icigar[i] >= 48 && icigar[i] <= 57 ) && strchr (samformatflag_replacer_characters , icigar[i]) == 0 )
+		{
+			for ( j = 0 ; j < number_of_unique_samformatflags * 2 ; j++ )
+			{
+				if ( icigar[i] == samflag_dictionary->character[j] )
+				{
+					XS[0] = samflag_dictionary->direction[j];
+					samformatflag = samflag_dictionary->samflags[j];
+				}
+			}
+		}
+	}
+	return samformatflag;
+}
+
+int findSamFormatFlagSingleEnded (char *icigar, int icigar_length, char *XS)
 {
 	int i;
 	int samformatflag;
@@ -2741,7 +3049,7 @@ void convertToAlignment (struct Sam_Alignment *sam_alignment_instance, struct Wh
 			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
 			//fflush (stdout);
 
-			convertIcigarToCigarandMD (whole_genome , sam_alignment_instance , chromosome , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
+			convertIcigarToCigarandMDSingleEnded (whole_genome , sam_alignment_instance , chromosome , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
 
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
