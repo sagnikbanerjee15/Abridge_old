@@ -2118,7 +2118,7 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 		dummy = 'Z';
 		strcpy (sam_alignment_instance_diagnostics->icigar , curr_alignment->icigar);
 		sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
-		convertIcigarToCigarandMDPairedEnded (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy , *samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
+		convertIcigarToCigarandMDPairedEnded (whole_genome , sam_alignment_instance_diagnostics , curr_alignment->reference_name , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , 0 , &dummy , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
 		/************************************************************************
 		 * Remove this section later
 		 *************************************************************************/
