@@ -608,6 +608,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 					{
 						compressed_ds_pool[i]->num_reads++;
 						strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+						strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 						compressed_ds_pool[i]->pointers_to_qual_scores[compressed_ds_pool[i]->num_reads - 1] = qual_scores[quality_score_index];
 						compressed_ds_pool[i]->pointers_to_read_names[compressed_ds_pool[i]->num_reads - 1] = read_names[quality_score_index];
 						quality_score_index++;
@@ -621,6 +622,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 					compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 					compressed_ds_pool[compressed_ds_pool_index]->position = compressed_ds_pool[0]->position;
 					strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+					strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 					quality_score_index++;
