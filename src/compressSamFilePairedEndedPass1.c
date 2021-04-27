@@ -257,7 +257,7 @@ void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struc
 	 */
 }
 
-void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *name_of_file_with_quality_scores, char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc, short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, long long int max_number_of_alignments, int max_read_length)
+void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *name_of_file_with_quality_scores, char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc, short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, long long int max_number_of_alignments, int max_read_length, char *dictionary_filename)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -267,6 +267,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	FILE *fhw_unmapped;
 	FILE *fhw_name_of_file_with_max_commas;
 	FILE *fhw_qual;
+	FILE *fhw_dictionary;
 	FILE *fhr_freq_samflags;
 
 	char **qual_scores;
@@ -290,6 +291,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	char **modified_icigars;
 	char str[100];
 	char read_id_string[100];
+	char line_to_be_written_to_file[1000];
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -378,6 +380,12 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	if ( fhw_qual == NULL )
 	{
 		printf ("%s File cannot be created" , name_of_file_with_quality_scores);
+		exit (1);
+	}
+	fhw_dictionary = fopen (dictionary_filename , "w");
+	if ( fhw_dictionary == NULL )
+	{
+		printf ("%s File cannot be created" , dictionary_filename);
 		exit (1);
 	}
 
@@ -495,10 +503,20 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		samflag_dictionary->samflags[i + 1] = strtol (line , &temp , 10);
 		i += 2;
 	}
-	/*
-	 for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
-	 printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
-	 */
+
+	line_to_be_written_to_file[0] = '\0';
+	for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
+	{
+		//printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
+		sprintf(temp , "%lld" , samflag_dictionary->samflags[i]);
+		strcat(line_to_be_written_to_file , temp);
+		strcat(line_to_be_written_to_file , "\t");
+		strncat(line_to_be_written_to_file , samflag_dictionary->direction[i]);
+		strcat(line_to_be_written_to_file , "\t");
+		strncat(line_to_be_written_to_file , samflag_dictionary->character[i]);
+		strcat(line_to_be_written_to_file , "\n");
+		fprintf (fhw_dictionary , "%s" , line_to_be_written_to_file);
+	}
 
 	/*
 	 * Read in the reference sequence information
@@ -665,7 +683,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	fclose (fhw_pass1);
 	fclose (fhw_unmapped);
 	fclose (fhw_name_of_file_with_max_commas);
-
+	fclose (fhw_dictionary);
 }
 
 int main (int argc, char *argv[])
@@ -680,6 +698,7 @@ int main (int argc, char *argv[])
 	char name_of_file_with_max_commas[FILENAME_LENGTH];
 	char name_of_file_with_quality_scores[FILENAME_LENGTH];
 	char frequency_of_flags_filename[FILENAME_LENGTH];
+	char dictionary_filename[FILENAME_LENGTH];
 	char *temp; //Required for strtoi
 
 	short int flag_ignore_soft_clippings;
@@ -721,6 +740,6 @@ int main (int argc, char *argv[])
 
 	/********************************************************************/
 
-	compressPairedEndedAlignments (frequency_of_flags_filename , name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , max_number_of_alignments , max_read_length);
+	compressPairedEndedAlignments (frequency_of_flags_filename , name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , max_number_of_alignments , max_read_length , dictionary_filename);
 	return 0;
 }
