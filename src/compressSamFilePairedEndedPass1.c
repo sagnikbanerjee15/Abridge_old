@@ -639,6 +639,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 				compressed_ds_pool_index = 0;
 				quality_score_index = 0;
 				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+				strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
