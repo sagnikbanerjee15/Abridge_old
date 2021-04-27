@@ -126,7 +126,7 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 			printf ("\nRead name %s" , compressed_ds_pool[i]->pointers_to_read_names[j]);
 			fflush (stdout);
 			strcat(list_of_read_names , compressed_ds_pool[i]->pointers_to_read_names[j]);
-			if ( i != compressed_ds_pool_total - 1 )
+			if ( i != compressed_ds_pool_total - 1 && j != compressed_ds_pool[i]->num_reads - 1 )
 			strcat(list_of_read_names , ",");
 		}
 
