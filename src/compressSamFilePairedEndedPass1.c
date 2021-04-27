@@ -738,7 +738,7 @@ int main (int argc, char *argv[])
 	max_number_of_alignments = strtol (argv[15] , &temp , 10);
 	max_read_length = strtol (argv[16] , &temp , 10);
 	strcpy(frequency_of_flags_filename , argv[17]);
-
+	strcpy(dictionary_filename , argv[18]);
 	/********************************************************************/
 
 	compressPairedEndedAlignments (frequency_of_flags_filename , name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , max_number_of_alignments , max_read_length , dictionary_filename);
