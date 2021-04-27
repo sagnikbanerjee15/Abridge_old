@@ -702,8 +702,8 @@ def compressSamFile(options):
                 logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands) 
-        return
         
+        """
         ######################################################################################
         # Convert RLE back to quality scores
         ######################################################################################
@@ -743,7 +743,7 @@ def compressSamFile(options):
             if options.quiet == False:
                 logging.info(f"Running command - {cmd}")
         pool.map(runCommand,all_commands)
-        
+        """
         ######################################################################################
         # Index generation
         ######################################################################################
@@ -830,7 +830,7 @@ def compressSamFile(options):
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
             #cmd += f"brotli -9 -f -k -n {pass1_outputfilename} {pass1_index_outputfilename} {unmapped_outputfilename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
-            cmd += f"brotli -9 -f -k -n {pass1_outputfilename} {unmapped_outputfilename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
+            cmd += f"brotli -9 -f -k -n {pass1_outputfilename} {unmapped_outputfilename} {name_of_file_with_quality_scores}.rle "
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -866,7 +866,7 @@ def compressSamFile(options):
         
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename} {name_of_file_with_quality_scores}.rle.br"
+            cmd += f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename} {name_of_file_with_quality_scores}.rle.br {name_of_file_dictionary}"
             cmd += f") "   
             cmd += f"1> /dev/null "
             cmd += f"2> /dev/null"
