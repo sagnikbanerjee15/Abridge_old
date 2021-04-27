@@ -511,9 +511,9 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		sprintf(temp , "%lld" , samflag_dictionary->samflags[i]);
 		strcat(line_to_be_written_to_file , temp);
 		strcat(line_to_be_written_to_file , "\t");
-		strncat(line_to_be_written_to_file , samflag_dictionary->direction[i]);
+		strncat(line_to_be_written_to_file , samflag_dictionary->direction[i] , 1);
 		strcat(line_to_be_written_to_file , "\t");
-		strncat(line_to_be_written_to_file , samflag_dictionary->character[i]);
+		strncat(line_to_be_written_to_file , samflag_dictionary->character[i] , 1);
 		strcat(line_to_be_written_to_file , "\n");
 		fprintf (fhw_dictionary , "%s" , line_to_be_written_to_file);
 	}
