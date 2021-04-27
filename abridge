@@ -702,7 +702,7 @@ def compressSamFile(options):
                 logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands) 
-        
+        return
         
         ######################################################################################
         # Convert RLE back to quality scores
