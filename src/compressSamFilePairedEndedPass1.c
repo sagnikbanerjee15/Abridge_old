@@ -92,8 +92,6 @@ char returnDirection (char character, struct Paired_Ended_Flag_to_Single_Charact
 
 void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string, long long int *count, char **qual_Scores, int quality_score_index, char samformatflag_replacer_characters[], int number_of_unique_samformatflags, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary)
 {
-	printf ("\nNew compressed pool");
-	fflush (stdout);
 	int i, j, k;
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
@@ -123,8 +121,6 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 
 		for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 		{
-			printf ("\nRead name %s" , compressed_ds_pool[i]->pointers_to_read_names[j]);
-			fflush (stdout);
 			strcat(list_of_read_names , compressed_ds_pool[i]->pointers_to_read_names[j]);
 			if ( i != compressed_ds_pool_total - 1 || j != compressed_ds_pool[i]->num_reads - 1 )
 			strcat(list_of_read_names , ",");
