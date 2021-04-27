@@ -687,7 +687,8 @@ def compressSamFile(options):
         
         if options.both == True or options.fast == False:
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_7z} {pass1_outputfilename} {pass1_index_outputfilename} {unmapped_outputfilename} {genome_sha512_filename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
+            #cmd += f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_7z} {pass1_outputfilename} {pass1_index_outputfilename} {unmapped_outputfilename} {genome_sha512_filename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
+            cmd += f"7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_7z} {pass1_outputfilename} {unmapped_outputfilename} {genome_sha512_filename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -712,7 +713,8 @@ def compressSamFile(options):
                 
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"brotli -9 -f -k -n {pass1_outputfilename} {pass1_index_outputfilename} {unmapped_outputfilename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
+            #cmd += f"brotli -9 -f -k -n {pass1_outputfilename} {pass1_index_outputfilename} {unmapped_outputfilename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
+            cmd += f"brotli -9 -f -k -n {pass1_outputfilename} {unmapped_outputfilename} {name_of_file_with_quality_scores}.rle {name_of_file_dictionary}"
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
