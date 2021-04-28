@@ -504,10 +504,10 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		i += 2;
 	}
 
-	line_to_be_written_to_file[0] = '\0';
 	for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
 	{
 		//printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
+		line_to_be_written_to_file[0] = '\0';
 		sprintf(temp , "%lld" , samflag_dictionary->samflags[i]);
 		strcat(line_to_be_written_to_file , temp);
 		strcat(line_to_be_written_to_file , "\t");
@@ -518,7 +518,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		line_to_be_written_to_file[strlen (line_to_be_written_to_file) + 4] = '\0';
 		fprintf (fhw_dictionary , "%s" , line_to_be_written_to_file);
 	}
-
+	exit (1);
 	/*
 	 * Read in the reference sequence information
 	 */
