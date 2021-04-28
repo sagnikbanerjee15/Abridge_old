@@ -189,7 +189,6 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 
 	samflag_dictionary = allocateMemoryPaired_Ended_Flag_to_Single_Character (10000);
 	number_of_unique_samformatflags = fillUpDictionary (samflag_dictionary , fhr_dictionary , 10000);
-	return;
 	/********************************************************************/
 
 	writeSequenceHeaders (fhw , genome_filename);
