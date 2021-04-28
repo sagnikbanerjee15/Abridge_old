@@ -1045,7 +1045,7 @@ def decompressSamFile(options):
         os.system(cmd)
     
     decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
-    decompressSamFilePairedEnded = options.softwarers["decompressSamFilePairedEnded"]
+    decompressSamFilePairedEnded = options.softwares["decompressSamFilePairedEnded"]
     deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
     ######################################################################################
     # Compiling programs - will be removed during final version
