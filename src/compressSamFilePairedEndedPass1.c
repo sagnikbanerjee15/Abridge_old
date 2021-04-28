@@ -520,7 +520,6 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file + 4] = '\0';
 		fprintf (fhw_dictionary , "%s" , line_to_be_written_to_file);
 	}
-	exit (1);
 	/*
 	 * Read in the reference sequence information
 	 */

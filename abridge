@@ -673,7 +673,7 @@ def compressSamFile(options):
             all_commands.append([cmd,"dummy"])
             #os.system(cmd)
         pool.map(runCommand,all_commands)
-        return
+        
         ######################################################################################
         # Generate RLE for quality scores
         ######################################################################################
