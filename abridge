@@ -573,7 +573,7 @@ def compressSamFile(options):
         #######################################################################
         # Uncomment later
         #######################################################################
-        #pool.map(runCommand,all_commands)
+        pool.map(runCommand,all_commands)
         
         #######################################################################
         # Sort alignment file by Name - might be discontinued later
