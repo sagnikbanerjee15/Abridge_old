@@ -314,6 +314,11 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
 			}
 			printf ("\n3. Number of reads in each line %d" , number_of_reads_per_line_in_pass1_file);
+			printf ("\n%d" , line);
+			for ( i = 0 ; i < number_of_fields ; i++ )
+			{
+				printf ("\n%s" , split_icigar_field[i]);
+			}
 			fflush (stdout);
 			/*
 			 * Advancing the file pointer of quality
