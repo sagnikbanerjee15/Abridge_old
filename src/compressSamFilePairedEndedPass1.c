@@ -315,6 +315,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	int read_length;
 	int read_id[100];
 	int number_of_unique_samformatflags;
+	int current_length_of_line_to_be_written_to_file;
 
 	long long int relative_position_to_previous_read_cluster;
 	long long int previous_position = -1;
@@ -511,11 +512,12 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		sprintf(temp , "%lld" , samflag_dictionary->samflags[i]);
 		strcat(line_to_be_written_to_file , temp);
 		strcat(line_to_be_written_to_file , "\t");
-		line_to_be_written_to_file[strlen (line_to_be_written_to_file)] = samflag_dictionary->direction[i];
-		line_to_be_written_to_file[strlen (line_to_be_written_to_file) + 1] = '\t';
-		line_to_be_written_to_file[strlen (line_to_be_written_to_file) + 2] = samflag_dictionary->character[i];
-		line_to_be_written_to_file[strlen (line_to_be_written_to_file) + 3] = '\n';
-		line_to_be_written_to_file[strlen (line_to_be_written_to_file) + 4] = '\0';
+		current_length_of_line_to_be_written_to_file = strlen (line_to_be_written_to_file);
+		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file] = samflag_dictionary->direction[i];
+		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file + 1] = '\t';
+		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file + 2] = samflag_dictionary->character[i];
+		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file + 3] = '\n';
+		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file + 4] = '\0';
 		fprintf (fhw_dictionary , "%s" , line_to_be_written_to_file);
 	}
 	exit (1);
