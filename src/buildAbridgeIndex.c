@@ -89,7 +89,7 @@ void findFarthestMapping (long long int *start, long long int *end, char **split
 	}
 }
 
-void findContinousClusters (char *input_pass1_filename, char *input_qual_filename, char *output_filename, long long int max_input_reads_in_a_single_nucl_loc)
+void findContinousClusters (char *input_pass1_filename, char *input_qual_filename, char *output_filename, long long int max_input_reads_in_a_single_nucl_loc, int paired)
 {
 	/*
 	 *
@@ -231,6 +231,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 			line_len = getline ( &line , &len , fhr_pass1);
 			num_lines_read++;
 			number_of_fields = splitByDelimiter (line , '\t' , split_on_tab);
+			if ( paired == 1 ) number_of_fields--;
 
 			if ( number_of_fields == 1 )
 			{
@@ -297,6 +298,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 		{
 			//continue;
 			number_of_fields = splitByDelimiter (line , '\t' , split_on_tab);
+			if ( paired == 1 ) number_of_fields--;
 			if ( number_of_fields == 1 )
 			{
 				start_position_of_read++;
@@ -437,6 +439,8 @@ int main (int argc, char *argv[])
 	char *temp;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
+
+	int paired;
 	/********************************************************************/
 
 	/********************************************************************
@@ -446,10 +450,11 @@ int main (int argc, char *argv[])
 	strcpy(input_qual_filename , argv[2]);
 	strcpy(output_filename , argv[3]);
 	max_input_reads_in_a_single_nucl_loc = strtol (argv[4] , &temp , 10);
+	paired = strtol (argv[5] , &temp , 10);
 	/********************************************************************/
 
 	//printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
 	//fflush ( stdout );
-	findContinousClusters (input_pass1_filename , input_qual_filename , output_filename , max_input_reads_in_a_single_nucl_loc);
+	findContinousClusters (input_pass1_filename , input_qual_filename , output_filename , max_input_reads_in_a_single_nucl_loc , paired);
 	return 0;
 }

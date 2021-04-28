@@ -487,7 +487,7 @@ def compressSamFile(options):
                 logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
             
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} "
+            cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 0 "
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
@@ -761,7 +761,7 @@ def compressSamFile(options):
                 logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
             
             cmd  = f"(/usr/bin/time --verbose "
-            cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} "
+            cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 1 "
             cmd += f") "   
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
