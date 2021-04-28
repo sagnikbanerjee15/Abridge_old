@@ -571,7 +571,7 @@ def compressSamFile(options):
         #######################################################################
         # Uncomment later
         #######################################################################
-        #pool.map(runCommand,all_commands)
+        pool.map(runCommand,all_commands)
         
         #######################################################################
         # Sort alignment file by Name - might be discontinued later
@@ -591,7 +591,7 @@ def compressSamFile(options):
             #os.system(cmd)
         pool.map(runCommand,all_commands)
         """
-        """
+        
         all_commands = []
         for input_filename in options.inputsamfilenames:
             if options.quiet == False:
@@ -607,7 +607,7 @@ def compressSamFile(options):
             cmd += f" |sort|uniq > {frequency_of_flags_filename}"
             all_commands.append([cmd,"dummy"])
         pool.map(runCommand,all_commands)
-        """
+        
         all_commands = []
         for input_filename in options.inputsamfilenames:
             if options.quiet == False:
