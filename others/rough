@@ -42,17 +42,6 @@ abridge \
 1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
 2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
 
-(/usr/bin/time --verbose  \
-abridge \
---decompress \
---cpu $CPU \
---keep_intermediate_error_files \
---genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.br \
---output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
-1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
-2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
-
 
 Abridge Merge
 =============
@@ -101,23 +90,13 @@ abridge \
 2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
 
 
-
-gcc src/modifyReadNamesPairedEnded.c -o src/modifyReadNamesPairedEnded -Ofast
-gcc src/separateReadsMatePairTogetherAndMatePairAway.c -o src/separateReadsMatePairTogetherAndMatePairAway -Ofast
 (/usr/bin/time --verbose  \
-$ROOT_DIRECTORY/Abridge/src/modifyReadNamesPairedEnded  \
-$ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
-$ROOT_DIRECTORY/developing_abridge/SRR13711355_PE_names_modified.sam \
-) \
-1> $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE_names_modified.output \
-2> $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE_names_modified.error
-
-(/usr/bin/time --verbose  \
-/project/maizegdb/sagnik/ABRIDGE/Abridge/src/separateReadsMatePairTogetherAndMatePairAway  \
-/project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam  \
-/project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_mate_pairs_already_next_to_each_other.sam  \
-/project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_mate_pairs_away_from_to_each_other.sam \
-) \
-1> /project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_separateReadsMatePairTogetherAndMatePairAway.output \
-2> /project/maizegdb/sagnik/ABRIDGE//developing_abridge/SRR13711355_PE.sam_separateReadsMatePairTogetherAndMatePairAway.error
-
+abridge \
+--decompress \
+--cpu $CPU \
+--keep_intermediate_error_files \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
+--inputabrfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam.abridge.br \
+--output_directory $ROOT_DIRECTORY/developing_abridge/decompress) \
+1> $ROOT_DIRECTORY/developing_abridge/tests_decompress.output \
+2> $ROOT_DIRECTORY/developing_abridge/tests_decompress.error &
