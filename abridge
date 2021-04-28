@@ -288,6 +288,7 @@ def compressSamFile(options):
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
             name_of_total_number_of_alignments_file = f"{input_filename}.total_number_of_alignments"
+            name_of_file_max_read_length = f"{input_filename}.max_read_size"
             
             files_to_be_removed.append(name_of_max_input_reads_file)
             files_to_be_removed.append(name_of_total_number_of_alignments_file)
