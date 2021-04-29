@@ -2633,6 +2633,8 @@ int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, str
 	int i, j;
 	int samformatflag = -1;
 	XS[0] = 'X';
+	XS[1] = '\0';
+	printf ("\nnumber_of_unique_samformatflags %d" , number_of_unique_samformatflags);
 	for ( i = 0 ; i < icigar_length ; i++ )
 	{
 		if ( ( icigar[i] != 'a' && icigar[i] != 't' && icigar[i] != 'g' && icigar[i] != 'c' ) && ! ( icigar[i] >= 48 && icigar[i] <= 57 ) && strchr (samformatflag_replacer_characters , icigar[i]) != NULL )
