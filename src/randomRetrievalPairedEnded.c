@@ -199,6 +199,7 @@ int main (int argc, char *argv[])
 		number_of_entries_in_cluster = splitByDelimiter (buffer_for_pass1 , '\n' , split_on_newline);
 		number_of_entries_in_cluster--; //Last line is always empty
 
+		continue;
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
