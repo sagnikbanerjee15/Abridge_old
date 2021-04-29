@@ -1180,7 +1180,7 @@ def decompressSamFile(options):
             cmd  = f"cat "
             cmd += f" {pass1_outputfilename} "
             cmd += "|rev|cut -f1|rev|awk -F, '{print NF}'|uniq|sort -nrk1|head "
-            cmd += f" {max_reads_in_each_line_filename} "
+            cmd += f" > {max_reads_in_each_line_filename} "
             os.system(cmd)
             
             max_reads_in_each_line = open(max_reads_in_each_line_filename,"r").readline().split()
