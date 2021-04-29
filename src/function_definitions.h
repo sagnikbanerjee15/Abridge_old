@@ -2644,6 +2644,7 @@ int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, str
 					XS[0] = samflag_dictionary->direction[j];
 					samformatflag = samflag_dictionary->samflags[j];
 					( *character_to_be_replaced ) = icigar[i];
+					printf ("\nicigar_character %c direction %c samformatflag %d " , icigar[i] , samflag_dictionary->direction[j] , samflag_dictionary->samflags[j]);
 					break;
 				}
 			}
