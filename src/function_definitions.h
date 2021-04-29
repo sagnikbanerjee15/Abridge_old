@@ -2992,7 +2992,7 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 			strcat (line_to_be_written_to_file , "\t");
 		}
 
-		if ( flag_ignore_sequence_information == 0 )
+		if ( flag_ignore_sequence_information == 0 && strchr (sam_alignment->cigar , 'N') != NULL )
 		{
 			strcat (line_to_be_written_to_file , "MD:Z:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
@@ -3074,7 +3074,7 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 			strcat (line_to_be_written_to_file , "\t");
 		}
 
-		if ( flag_ignore_sequence_information == 0 )
+		if ( flag_ignore_sequence_information == 0 && strchr (sam_alignment->cigar , 'N') != NULL )
 		{
 			strcat (line_to_be_written_to_file , "MD:Z:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
