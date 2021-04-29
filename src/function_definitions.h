@@ -2985,14 +2985,14 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 		strcat (line_to_be_written_to_file , sam_alignment->tags[0].val);
 		strcat (line_to_be_written_to_file , "\t");
 
-		if ( strcmp (sam_alignment->tags[1].val , ".") != 0 )
+		if ( strcmp (sam_alignment->tags[1].val , ".") != 0 && strchr (sam_alignment->cigar , 'N') != NULL )
 		{
 			strcat (line_to_be_written_to_file , "XS:A:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[1].val);
 			strcat (line_to_be_written_to_file , "\t");
 		}
 
-		if ( flag_ignore_sequence_information == 0 && strchr (sam_alignment->cigar , 'N') != NULL )
+		if ( flag_ignore_sequence_information == 0 )
 		{
 			strcat (line_to_be_written_to_file , "MD:Z:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
@@ -3067,14 +3067,14 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 		strcat (line_to_be_written_to_file , sam_alignment->tags[0].val);
 		strcat (line_to_be_written_to_file , "\t");
 
-		if ( strcmp (sam_alignment->tags[1].val , ".") != 0 )
+		if ( strcmp (sam_alignment->tags[1].val , ".") != 0 && strchr (sam_alignment->cigar , 'N') != NULL )
 		{
 			strcat (line_to_be_written_to_file , "XS:A:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[1].val);
 			strcat (line_to_be_written_to_file , "\t");
 		}
 
-		if ( flag_ignore_sequence_information == 0 && strchr (sam_alignment->cigar , 'N') != NULL )
+		if ( flag_ignore_sequence_information == 0 )
 		{
 			strcat (line_to_be_written_to_file , "MD:Z:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
