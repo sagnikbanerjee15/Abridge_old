@@ -1177,13 +1177,13 @@ def decompressSamFile(options):
         if os.path.exists(dictionary_name)==True:
             cmd += f" {dictionary_name} " #argv[10]
             
-            cmd  = f"cat "
-            cmd += f" {pass1_outputfilename} "
-            cmd += "|rev|cut -f1|rev|awk -F, '{print NF}'|uniq|sort -nrk1|head "
-            cmd += f" > {max_reads_in_each_line_filename} "
-            os.system(cmd)
+            cmd_1  = f"cat "
+            cmd_1 += f" {pass1_outputfilename} "
+            cmd_1 += "|rev|cut -f1|rev|awk -F, '{print NF}'|uniq|sort -nrk1|head "
+            cmd_1 += f" > {max_reads_in_each_line_filename} "
+            os.system(cmd_1)
             
-            max_reads_in_each_line = open(max_reads_in_each_line_filename,"r").readline().split()
+            max_reads_in_each_line = open(max_reads_in_each_line_filename,"r").readline().strip()
             cmd += f" {max_reads_in_each_line} " #argv[11]
         cmd += f") "   
         cmd += f"1> /dev/null "
