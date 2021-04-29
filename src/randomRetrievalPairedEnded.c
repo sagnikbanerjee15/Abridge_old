@@ -206,7 +206,7 @@ int main (int argc, char *argv[])
 			{
 				int number_of_reads_in_each_line = 0;
 				for ( k = 0 ; split_on_tab[1][k] != '\0' ; k++ )
-					if ( split_on_tab[i][k] == ',' )
+					if ( split_on_tab[1][k] == ',' )
 						number_of_reads_in_each_line += 1;
 				if ( max_reads < number_of_reads_in_each_line )
 					max_reads = number_of_reads_in_each_line;
@@ -215,7 +215,7 @@ int main (int argc, char *argv[])
 			{
 				int number_of_reads_in_each_line = 0;
 				for ( k = 0 ; split_on_tab[2][k] != '\0' ; k++ )
-					if ( split_on_tab[i][k] == ',' )
+					if ( split_on_tab[2][k] == ',' )
 						number_of_reads_in_each_line += 1;
 				if ( max_reads < number_of_reads_in_each_line )
 					max_reads = number_of_reads_in_each_line;
