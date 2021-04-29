@@ -89,6 +89,20 @@ abridge \
 1> $ROOT_DIRECTORY/developing_abridge/tests_compress.output \
 2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
 
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--save_all_quality_scores \
+--run_diagnostics \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa  \
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam $ROOT_DIRECTORY/developing_abridge/SRR13711354_PE.sam $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge) \
+1> $ROOT_DIRECTORY/developing_abridge/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
+
 
 (/usr/bin/time --verbose  \
 abridge \
