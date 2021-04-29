@@ -273,10 +273,11 @@ int main (int argc, char *argv[])
 		/*
 		 printf ("\ncurr_position First %d i=%d" , curr_position , i);
 		 */
-		read_names_index = 0;
+
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
+			read_names_index = 0;
 			if ( number_of_columns == 2 )
 			{
 				/*
