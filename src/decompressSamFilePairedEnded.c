@@ -161,7 +161,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	number_of_unique_samformatflags /= 2;
 	/********************************************************************/
 
-	writeSequenceHeaders (fhw , genome_filename);
+	writeSequenceHeaders (fhw , genome_filename , 1);
 	line_num = 0;
 	line_len = getline ( &buffer , &len , fhr);
 	splitByDelimiter (buffer , '\t' , split_on_tab);
