@@ -3081,7 +3081,7 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 			strcat (line_to_be_written_to_file , "\t");
 		}
 
-		strcat (line_to_be_written_to_file , "\n");
+		//strcat (line_to_be_written_to_file , "\n");
 		fprintf (fhw , "%s" , line_to_be_written_to_file);
 	}
 }
