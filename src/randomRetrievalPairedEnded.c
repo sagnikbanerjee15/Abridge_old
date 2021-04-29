@@ -234,7 +234,6 @@ int main (int argc, char *argv[])
 		for ( j = 0 ; j < read_names_ROWS ; j++ )
 			read_names[j] = ( char* ) malloc (sizeof(char) * read_names_COLS);
 
-		continue;
 		//free (buffer_for_qual);
 		//buffer_for_qual = ( char* ) malloc (sizeof(char) * ( abridge_index->end_byte_qual[i] - abridge_index->start_byte_qual[i] ));
 		buffer_for_qual[0] = '\0';
