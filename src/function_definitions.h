@@ -2848,6 +2848,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	strcpy (sam_alignment_instance->cigar_extended , read_from_genome_including_deletions);
 	if ( strlen (sam_alignment_instance->md_extended) != strlen (read_from_genome_including_deletions) )
 	{
+		printf ("\nCIGAR %s iCIGAR %s" , sam_alignment_instance->cigar , sam_alignment_instance->icigar);
 		printf ("\nLengths do not match");
 		printf ("\n%d %d" , strlen (sam_alignment_instance->md_extended) , strlen (read_from_genome_including_deletions));
 		printf ("\n%s\n%s" , sam_alignment_instance->md_extended , read_from_genome_including_deletions);
