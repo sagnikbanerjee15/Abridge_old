@@ -100,3 +100,16 @@ abridge \
 --output_directory $ROOT_DIRECTORY/developing_abridge/decompress) \
 1> $ROOT_DIRECTORY/developing_abridge/tests_decompress.output \
 2> $ROOT_DIRECTORY/developing_abridge/tests_decompress.error &
+
+(/usr/bin/time --verbose  \
+abridge \
+--random \
+--inputabrfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam.abridge.br  \
+--positions 1:5000-7000 \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna_sm.toplevel.fa \
+--output_directory $ROOT_DIRECTORY/developing_abridge/decompress \
+) \
+1> $ROOT_DIRECTORY/developing_abridge/tests_random.output \
+2> $ROOT_DIRECTORY/developing_abridge/tests_random.error &
+
+
