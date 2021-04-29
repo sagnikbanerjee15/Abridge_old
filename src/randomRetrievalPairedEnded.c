@@ -220,11 +220,7 @@ int main (int argc, char *argv[])
 				if ( max_reads < number_of_reads_in_each_line )
 					max_reads = number_of_reads_in_each_line;
 			}
-			printf ("\nMAX_READS %d" , max_reads);
-			fflush (stdout);
 		}
-
-		continue;
 
 		if ( read_names_ROWS != -1 )
 		{
