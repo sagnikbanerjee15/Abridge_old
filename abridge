@@ -1199,10 +1199,10 @@ def decompressSamFile(options):
         all_commands.append([cmd,"dummy"])
         #os.system(cmd)
     pool.map(runCommand,all_commands)
-    """
+
     for file in files_to_be_removed:
         os.system("rm -f "+file)
-    """
+
     
 def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
