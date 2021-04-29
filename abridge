@@ -1245,7 +1245,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
         cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_RLE_decompress.error"
     else:
         cmd += f"2> /dev/null"
-    #os.system(cmd)
+    os.system(cmd)
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
 
     dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
