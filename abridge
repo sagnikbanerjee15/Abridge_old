@@ -1108,6 +1108,7 @@ def decompressSamFile(options):
         
         if input_filename[-3:]==".br":
             cmd = f"brotli -d -k -f {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br"
+            files_to_be_removed.extend(f"{pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br".split())
             all_commands.append([cmd,"dummy"])
     pool.map(runCommand,all_commands)
 
