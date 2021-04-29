@@ -284,7 +284,7 @@ int main (int argc, char *argv[])
 				 for ( k = 0 ; split_on_tab[0][k] != '\0' ; k++ )
 				 if ( split_on_tab[0][k] == ',' ) number_of_commas++;
 				 */
-				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
+				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 				curr_position++;
 			}
 			else if ( number_of_columns == 3 )
@@ -294,7 +294,7 @@ int main (int argc, char *argv[])
 				 for ( k = 0 ; split_on_tab[1][k] != '\0' ; k++ )
 				 if ( split_on_tab[1][k] == ',' ) number_of_commas++;
 				 */
-				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
+				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[2] , ',' , split_on_comma);
 				if ( j != 0 )
 					curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
