@@ -2993,7 +2993,7 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 	}
 }
 
-void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char *read_names, int *read_names_index)
+void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names, int *read_names_index)
 {
 	int i;
 
