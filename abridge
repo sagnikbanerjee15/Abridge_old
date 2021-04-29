@@ -1353,6 +1353,7 @@ def main():
         
         if options.inputabrfilenames[0][-3:]==".br":
             cmd = f"brotli -d -k -f {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br"
+            os.system(cmd)
         
         cmd=f"cat {pass1_outputfilename}|grep ^@ > {options.output_directory}/{name_of_input_file_without_location}.headers"
         os.system(cmd)
