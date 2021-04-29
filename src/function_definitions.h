@@ -2641,6 +2641,8 @@ int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, str
 		{
 			printf ("\nEntering here %c" , icigar[i]);
 			for ( j = 0 ; j < number_of_unique_samformatflags * 2 ; j++ )
+				printf ("\n %c %d %d" , samflag_dictionary->character[j] , samflag_dictionary->samflags[j] , samflag_dictionary->direction[j]);
+			for ( j = 0 ; j < number_of_unique_samformatflags * 2 ; j++ )
 			{
 				if ( icigar[i] == samflag_dictionary->character[j] )
 				{
