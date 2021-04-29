@@ -2634,7 +2634,7 @@ int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, str
 	int samformatflag = -1;
 	XS[0] = 'X';
 	XS[1] = '\0';
-	printf ("\nicigar %s" , icigar);
+	//printf ("\nicigar %s" , icigar);
 	for ( i = 0 ; i < icigar_length ; i++ )
 	{
 		if ( ( icigar[i] != 'a' && icigar[i] != 't' && icigar[i] != 'g' && icigar[i] != 'c' ) && ! ( icigar[i] >= 48 && icigar[i] <= 57 ) && strchr (samformatflag_replacer_characters , icigar[i]) != NULL )
@@ -2651,7 +2651,7 @@ int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, str
 					XS[0] = samflag_dictionary->direction[j];
 					samformatflag = samflag_dictionary->samflags[j];
 					( *character_to_be_replaced ) = icigar[i];
-					printf ("\nicigar_character %c direction %c samformatflag %d " , icigar[i] , samflag_dictionary->direction[j] , samflag_dictionary->samflags[j]);
+					//printf ("\nicigar_character %c direction %c samformatflag %d " , icigar[i] , samflag_dictionary->direction[j] , samflag_dictionary->samflags[j]);
 					break;
 				}
 			}
