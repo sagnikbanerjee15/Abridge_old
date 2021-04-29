@@ -153,7 +153,7 @@ int main (int argc, char *argv[])
 	//readInGenomeSequenceSingleChromosome (single_genome_sequence , chromosome , genome_filename , genome_index);
 	readInEachChromosome (genome_filename , single_genome_sequence , chromosome);
 	first_record = findReadClusterFromAbridgeIndex (abridge_index , chromosome , start , end , &abridge_match_start_index , &abridge_match_end_index);
-	writeSequenceHeaders (fhw , genome_filename);
+	writeSequenceHeaders (fhw , genome_filename , 0);
 
 	buffer_for_qual = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
 	from = start;
