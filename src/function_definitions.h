@@ -456,6 +456,44 @@ void printSamAlignmentInstance (struct Sam_Alignment *s, short int print_everyth
 	printf ("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
 
+int fillUpDictionary (struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, FILE *fhr, int max_lines)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+	int i;
+	int ROWS_split_on_tab = 5; //5
+	int COLS_split_on_tab = 100; //100
+	int total_lines = 0;
+
+	size_t len = 0;
+	ssize_t line_len;
+
+	char *buffer = NULL;
+	char **split_on_tab;
+	char *temp;
+
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tab);
+	for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
+
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
+	{
+		splitByDelimiter (buffer , '\t' , split_on_tab);
+		samflag_dictionary->samflags[total_lines] = strtol (split_on_tab[0] , &temp , 10);
+		samflag_dictionary->direction[total_lines] = split_on_tab[1][0];
+		samflag_dictionary->character[total_lines] = split_on_tab[2][0];
+		total_lines++;
+	}
+
+	return total_lines;
+}
+
 int isSequenceSoftClipped (char *cigar)
 {
 	int i;

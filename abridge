@@ -152,6 +152,7 @@ def validateCommandLineArguments(options):
     options.softwares["decompressSamFileSingleEnded"]= "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFileSingleEnded"
     options.softwares["extractSequencesFromReferences"] = "/".join(abridge_location.split("/")[:-1])+"/scripts/extractSequencesFromReferences.py"
     options.softwares["randomRetrievalSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalSingleEnded"
+    options.softwares["randomRetrievalPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalPairedEnded"
     options.softwares["mergeCompressedFilesSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/mergeCompressedFilesSingleEnded"
     options.softwares["addTagToSamFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/addTagToSamFile"
     options.softwares["maxReadsMappedToSingleNucleotide"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsMappedToSingleNucleotide"
@@ -1031,7 +1032,6 @@ def mergeAbridgeData(options):
     for file in files_to_be_removed:
         os.system("rm "+file)
     
-
 def decompressSamFile(options):
     """
     """
@@ -1207,12 +1207,15 @@ def decompressSamFile(options):
     
 def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
-    randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"] 
+    randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"]
+    randomRetrievalPairedEnded = options.softwares["randomRetrievalPairedEnded"] 
     deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
     ######################################################################################
     # Compiling programs - will be removed during final version
     ######################################################################################
     cmd=f"gcc {randomRetrievalSingleEnded}.c -o {randomRetrievalSingleEnded} -g -Ofast"
+    os.system(cmd)
+    cmd=f"gcc {randomRetrievalPairedEnded}.c -o {randomRetrievalPairedEnded} -g -Ofast"
     os.system(cmd)
     cmd=f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
     os.system(cmd)
@@ -1245,25 +1248,30 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     os.system(cmd)
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
 
-    
-    cmd =f" {randomRetrievalSingleEnded} " #argv[0]
-    cmd+=f" {pass1_index_outputfilename} " #argv[1]
-    cmd+=f" {genome_filename} " #argv[2]
-    cmd+=f" {genome_index_filename} " #argv[3]
-    cmd+=f" {chromosome} " #argv[4]
-    cmd+=f" {pass1_outputfilename}  " #argv[5]
-    cmd+=f" {start} " #argv[6]
-    cmd+=f" {end} " #argv[7]
-    cmd+=f" {outputfilename}" #argv[8]
-    cmd+=f" {options.quality}" #argv[9[
-    cmd+=f" {options.ignore_sequence}" #argv[10]
-    if options.read_prefix is not None:
-        cmd+=f" {options.read_prefix}" #argv[11]
+    dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
+    if os.path.exists(dictionary_name)==False:
+        cmd  = f" {randomRetrievalSingleEnded} " #argv[0]
     else:
-        cmd+=f" \"\" " #argv[11]
-    cmd+=f" {name_of_file_with_quality_scores}" #argv[12]
+        cmd  = f" {randomRetrievalPairedEnded} " #argv[0]
+    cmd += f" {pass1_index_outputfilename} " #argv[1]
+    cmd += f" {genome_filename} " #argv[2]
+    cmd += f" {genome_index_filename} " #argv[3]
+    cmd += f" {chromosome} " #argv[4]
+    cmd += f" {pass1_outputfilename}  " #argv[5]
+    cmd += f" {start} " #argv[6]
+    cmd += f" {end} " #argv[7]
+    cmd += f" {outputfilename}" #argv[8]
+    cmd += f" {options.quality}" #argv[9[
+    cmd += f" {options.ignore_sequence}" #argv[10]
+    if options.read_prefix is not None:
+        cmd += f" {options.read_prefix}" #argv[11]
+    else:
+        cmd += f" \"\" " #argv[11]
+    cmd += f" {name_of_file_with_quality_scores}" #argv[12]
+    if os.path.exists(dictionary_name)==True:
+        cmd += f" {dictionary_name} "
     #print(cmd)
-    sys.stdout.flush()
+    #sys.stdout.flush()
     os.system(cmd)
     
 def main():
