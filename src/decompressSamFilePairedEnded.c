@@ -47,7 +47,7 @@ int fillUpDictionary (struct Paired_Ended_Flag_to_Single_Character *samflag_dict
 	return total_lines;
 }
 
-void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass1_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information, char *dictionary_name)
+void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass1_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information, char *dictionary_name, int max_reads_in_each_line)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -106,6 +106,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	char **split_on_tab;
 	char **split_on_dash;
 	char **split_on_comma;
+	char **read_names;
 	char *buffer = NULL;
 	char **sequence_portions_from_reference;
 	char *fasta_file_with_expressed_portions;
@@ -161,6 +162,11 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
 		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
 
+	max_reads_in_each_line += 10;
+	read_names = ( char** ) malloc (sizeof(char*) * max_reads_in_each_line);
+	for ( i = 0 ; i < max_reads_in_each_line ; i++ )
+		read_names[i] = ( char* ) malloc (sizeof(char) * 100);
+
 	split_on_dash = ( char** ) malloc (sizeof(char*) * ROWS_split_on_dash);
 	for ( i = 0 ; i < ROWS_split_on_dash ; i++ )
 		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_dash);
@@ -189,6 +195,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 
 	samflag_dictionary = allocateMemoryPaired_Ended_Flag_to_Single_Character (10000);
 	number_of_unique_samformatflags = fillUpDictionary (samflag_dictionary , fhr_dictionary , 10000);
+	number_of_unique_samformatflags /= 2;
 	/********************************************************************/
 
 	writeSequenceHeaders (fhw , genome_filename);
@@ -257,7 +264,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		if ( number_of_columns == 1 )
 			curr_position++;
 		else curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
-		convertToAlignment (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome);
+		convertToAlignmentPairedEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , read_names , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome , samflag_dictionary , number_of_unique_samformatflags);
 	}
 
 	/*
@@ -342,6 +349,7 @@ int main (int argc, char *argv[])
 	char unmapped_filename[FILENAME_LENGTH];
 	char dictionary_name[FILENAME_LENGTH];
 	char *temp; //Required for strtoi
+	int max_reads_in_each_line;
 
 	short int flag_ignore_sequence_information;
 	/********************************************************************/
@@ -359,8 +367,9 @@ int main (int argc, char *argv[])
 	strcpy(unmapped_filename , argv[8]);
 	strcpy(name_of_file_with_quality_scores , argv[9]);
 	strcpy(dictionary_name , argv[10]);
+	max_reads_in_each_line = strtol (argv[11] , &temp , 10);
 	/********************************************************************/
 
-	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass1_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information , dictionary_name);
+	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass1_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information , dictionary_name , max_reads_in_each_line);
 	return 0;
 }
