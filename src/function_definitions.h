@@ -3015,10 +3015,10 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 	size_t len = 0;
 	ssize_t line_len;
 
-	printf ("\nnumber_of_repititions_of_the_same_reads %d" , number_of_repititions_of_the_same_reads);
 	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
+		printf ("\n%s" , read_names[ *read_names_index]);
 		strcat (line_to_be_written_to_file , read_names[ *read_names_index]);
 		( *read_names_index )++;
 		//sprintf (temp , "%d" , i + 1);
