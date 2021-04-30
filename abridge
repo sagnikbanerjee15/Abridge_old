@@ -52,7 +52,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("-gu","--ignore_unmapped_reads",help="Request abridge to discard all reads that are unmapped",action="store_true")
     optional_named.add_argument("-sq","--save_all_quality_scores",help="Request abridge to save all quality scores",action='store_true')
     optional_named.add_argument("-aq","--save_exact_quality_scores",help="Adjust quality scores for matched bases to achieve better encoding. For more details please check ...",action="store_true")
-    optional_named.add_argument("-dna","--dnaseq",help="Set this parameter if your data is DNA-Seq",action = "store_true")
+    #optional_named.add_argument("-dna","--dnaseq",help="Set this parameter if your data is DNA-Seq",action = "store_true")
     #optional_named.add_argument("-o","--outputfilenameprefix",help="Enter the prefix of the output file. If this parameter is not provided then abridge will attempt to write to the directory where the input file is present. Please make sure that the directory has write permissions enabled. This parameter is ignored while decompressing.")
     optional_named.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
     optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of samples submitted for compression or decompression.",default = 1)
