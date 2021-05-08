@@ -613,6 +613,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		}
 		else // Same chromosome
 		{
+			continue;
 			if ( previous_position == current_position )
 			{
 				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
