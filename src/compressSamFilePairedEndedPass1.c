@@ -538,10 +538,8 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	}
 	do
 	{
-		continue;
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
-
 		strcpy(curr_reference_name , curr_alignment->reference_name);
 		if ( curr_alignment->samflag == 77 || curr_alignment->samflag == 141 )
 		{
@@ -561,7 +559,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		/*
 		 * Change this function
 		 */
-
+		continue;
 		generateIntegratedCigarPairedEnded (curr_alignment , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
 
 		NH_tag_index = -1;
@@ -676,6 +674,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		reInitializeSamAlignmentInstance (curr_alignment);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
+	return;
 	reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
 	writeToFile (flag_save_all_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary);
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
