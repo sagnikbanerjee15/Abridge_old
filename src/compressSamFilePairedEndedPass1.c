@@ -503,7 +503,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		samflag_dictionary->samflags[i + 1] = strtol (line , &temp , 10);
 		i += 2;
 	}
-	return;
+
 	for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
 	{
 		//printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
@@ -536,7 +536,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		}
 		else break;
 	}
-
+	return;
 	do
 	{
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
