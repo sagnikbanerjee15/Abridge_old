@@ -472,6 +472,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	strcat(temp , "\n");
 	fprintf (fhw_pass1 , "%s" , temp);
 
+	return;
 	/*
 	 * For diagnostics
 	 */
