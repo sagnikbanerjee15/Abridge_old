@@ -477,7 +477,6 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	 */
 	if ( run_diagnostics == 1 )
 		readInTheEntireGenome (genome_filename , whole_genome);
-	return;
 	/*
 	 *	Construct the mapping between samformatflag and the Single Character
 	 */
@@ -486,6 +485,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		number_of_unique_samformatflags++;
 	samflag_dictionary = allocateMemoryPaired_Ended_Flag_to_Single_Character (number_of_unique_samformatflags);
 	rewind (fhr_freq_samflags);
+	return;
 	i = 0;
 	j = 0;
 	while ( ( line_len = getline ( &line , &len , fhr_freq_samflags) ) != -1 )
