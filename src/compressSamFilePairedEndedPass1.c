@@ -613,12 +613,10 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		}
 		else // Same chromosome
 		{
-			continue;
 			if ( previous_position == current_position )
 			{
 				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
-
 				for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 				{
 					if ( strcmp (compressed_ds_pool[i]->icigar , curr_alignment->icigar) == 0 )
@@ -649,6 +647,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 			}
 			else
 			{
+				continue;
 				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
 				reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
