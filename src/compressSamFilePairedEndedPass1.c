@@ -538,9 +538,10 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	}
 	do
 	{
+		continue;
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
-		continue;
+
 		strcpy(curr_reference_name , curr_alignment->reference_name);
 		if ( curr_alignment->samflag == 77 || curr_alignment->samflag == 141 )
 		{
