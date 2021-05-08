@@ -472,13 +472,12 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 	strcat(temp , "\n");
 	fprintf (fhw_pass1 , "%s" , temp);
 
-	return;
 	/*
 	 * For diagnostics
 	 */
 	if ( run_diagnostics == 1 )
 		readInTheEntireGenome (genome_filename , whole_genome);
-
+	return;
 	/*
 	 *	Construct the mapping between samformatflag and the Single Character
 	 */
