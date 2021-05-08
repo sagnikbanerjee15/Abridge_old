@@ -619,6 +619,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 				//fflush(stdout);
 				for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 				{
+					continue;
 					if ( strcmp (compressed_ds_pool[i]->icigar , curr_alignment->icigar) == 0 )
 					{
 						compressed_ds_pool[i]->num_reads++;
