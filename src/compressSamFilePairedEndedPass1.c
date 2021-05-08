@@ -536,7 +536,6 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		}
 		else break;
 	}
-	return;
 	do
 	{
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
@@ -560,7 +559,9 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 		/*
 		 * Change this function
 		 */
+		continue;
 		generateIntegratedCigarPairedEnded (curr_alignment , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
+
 		NH_tag_index = -1;
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
