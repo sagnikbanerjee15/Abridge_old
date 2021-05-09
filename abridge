@@ -547,10 +547,10 @@ def compressSamFile(options):
                 logging.info(f"Starting Pass1 for {input_filename}")
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             name_of_input_file_without_location = input_filename.split("/")[-1] 
-            name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
-            name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
-            name_of_file_max_read_length = f"{options.output_directory}/{input_filename}.max_read_size"
-            name_of_total_number_of_alignments_file = f"{options.output_directory}/{input_filename}.total_number_of_alignments"
+            name_of_max_input_reads_file = f" {options.output_directory}/{name_of_input_file_without_location}.max_input_reads "
+            name_of_file_with_max_commas = f" {options.output_directory}/{name_of_input_file_without_location}.max_commas "
+            name_of_file_max_read_length = f" {options.output_directory}/{input_filename}.max_read_size "
+            name_of_total_number_of_alignments_file = f"{options.output_directory}/{input_filename}.total_number_of_alignments "
             
             files_to_be_removed.append(name_of_max_input_reads_file)
             files_to_be_removed.append(name_of_total_number_of_alignments_file)
@@ -559,9 +559,9 @@ def compressSamFile(options):
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f" {maxReadsMappedToSingleNucleotide} "
             cmd += f" {input_filename} "
-            cmd += f" {name_of_max_input_reads_file}"
+            cmd += f" {name_of_max_input_reads_file} "
             cmd += f" {name_of_total_number_of_alignments_file} "
-            cmd += f" {name_of_file_max_read_length}"
+            cmd += f" {name_of_file_max_read_length} "
             cmd += f")"
             cmd += f"1> /dev/null "
             if options.keep_intermediate_error_files == True:
