@@ -688,7 +688,7 @@ def compressSamFile(options):
         name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
         pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_compressed_quality_scores, name_of_file_dictionary = other_files
         error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index = error_files
-        compressed_abridged_filename_7z, compressed_abridged_filename_br = ompressed_files
+        compressed_abridged_filename_7z, compressed_abridged_filename_br = compressed_files
         
         if options.both == True or options.fast == False:
             cmd  = f"(/usr/bin/time --verbose "
@@ -712,7 +712,7 @@ def compressSamFile(options):
         name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
         pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_compressed_quality_scores, name_of_file_dictionary = other_files
         error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index = error_files
-        compressed_abridged_filename_7z, compressed_abridged_filename_br = ompressed_files
+        compressed_abridged_filename_7z, compressed_abridged_filename_br = compressed_files
                 
         if options.both == True or options.fast == True:
             cmd  = f"(/usr/bin/time --verbose "
@@ -741,7 +741,7 @@ def compressSamFile(options):
         name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
         pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_compressed_quality_scores, name_of_file_dictionary = other_files
         error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index = error_files
-        compressed_abridged_filename_7z, compressed_abridged_filename_br = ompressed_files
+        compressed_abridged_filename_7z, compressed_abridged_filename_br = compressed_files
         
         files_to_be_removed.append(f"{pass1_outputfilename}.br")
         files_to_be_removed.append(f"{pass1_index_outputfilename}.br")
