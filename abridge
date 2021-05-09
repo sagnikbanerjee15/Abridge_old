@@ -240,22 +240,22 @@ def runCommand(eachpinput):
     
 def constructFileNames(input_filename,options):
     name_of_input_file_without_location = input_filename.split("/")[-1] 
-    name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads "
-    name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas "
-    name_of_file_max_read_length = f"{options.output_directory}/{name_of_input_file_without_location}.max_read_size "
-    name_of_total_number_of_alignments_file = f"{options.output_directory}/{name_of_input_file_without_location}.total_number_of_alignments "
-    frequency_of_flags_filename = f"{options.output_directory}/{name_of_input_file_without_location}.frequency_of_flags "
+    name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
+    name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
+    name_of_file_max_read_length = f"{options.output_directory}/{name_of_input_file_without_location}.max_read_size"
+    name_of_total_number_of_alignments_file = f"{options.output_directory}/{name_of_input_file_without_location}.total_number_of_alignments"
+    frequency_of_flags_filename = f"{options.output_directory}/{name_of_input_file_without_location}.frequency_of_flags"
     
-    pass1_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.pass1 "
-    pass1_index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.pass1.index "
-    unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.unmapped "
-    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual "
-    name_of_file_with_compressed_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual.rle "
+    pass1_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.pass1"
+    pass1_index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.pass1.index"
+    unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.unmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
+    name_of_file_with_compressed_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual.rle"
     
-    error_file_max_input_reads = f"{options.error_directory}/{name_of_input_file_without_location}_max_input_reads.error "
-    error_file_compress_pass1 = f"{options.error_directory}/{name_of_input_file_without_location}_compress_pass1.error "
-    error_file_qual_rle = f"{options.error_directory}/{name_of_input_file_without_location}_qual_rle.error "
-    error_file_prep_abridge_index = f"{options.error_directory}/{name_of_input_file_without_location}_prep_abridge_index.error "
+    error_file_max_input_reads = f"{options.error_directory}/{name_of_input_file_without_location}_max_input_reads.error"
+    error_file_compress_pass1 = f"{options.error_directory}/{name_of_input_file_without_location}_compress_pass1.error"
+    error_file_qual_rle = f"{options.error_directory}/{name_of_input_file_without_location}_qual_rle.error"
+    error_file_prep_abridge_index = f"{options.error_directory}/{name_of_input_file_without_location}_prep_abridge_index.error"
     
     delete_these_files = [name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename]
     other_files = [pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_compressed_quality_scores]
