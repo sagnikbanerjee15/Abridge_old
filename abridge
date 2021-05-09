@@ -238,7 +238,7 @@ def runCommand(eachpinput):
     cmd,dummy = eachpinput
     os.system(cmd)
     
-def constructFileNames(input_samfilename,options):
+def constructFileNames(input_filename,options):
     name_of_input_file_without_location = input_filename.split("/")[-1] 
     name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads "
     name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas "
