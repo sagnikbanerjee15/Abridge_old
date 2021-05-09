@@ -287,10 +287,9 @@ def compressSamFile(options):
             if options.quiet == False:
                 logging.info(f"Starting Pass1 for {input_filename}")
             name_of_input_file_without_location = input_filename.split("/")[-1] 
-            name_of_input_file_without_location = input_filename.split("/")[-1] 
-            name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
-            name_of_total_number_of_alignments_file = f"{input_filename}.total_number_of_alignments"
-            name_of_file_max_read_length = f"{input_filename}.max_read_size"
+            name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
+            name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
+            name_of_file_max_read_length = f"{options.output_directory}/{input_filename}.max_read_size"
             
             files_to_be_removed.append(name_of_max_input_reads_file)
             files_to_be_removed.append(name_of_total_number_of_alignments_file)
@@ -548,9 +547,10 @@ def compressSamFile(options):
                 logging.info(f"Starting Pass1 for {input_filename}")
             name_of_input_file_without_location = input_filename.split("/")[-1] 
             name_of_input_file_without_location = input_filename.split("/")[-1] 
-            name_of_max_input_reads_file = f"{input_filename}.max_input_reads"
-            name_of_total_number_of_alignments_file = f"{input_filename}.total_number_of_alignments"
-            name_of_file_max_read_length = f"{input_filename}.max_read_size"
+            name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
+            name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
+            name_of_file_max_read_length = f"{options.output_directory}/{input_filename}.max_read_size"
+            name_of_total_number_of_alignments_file = f"{options.output_directory}/{input_filename}.total_number_of_alignments"
             
             files_to_be_removed.append(name_of_max_input_reads_file)
             files_to_be_removed.append(name_of_total_number_of_alignments_file)
@@ -620,12 +620,11 @@ def compressSamFile(options):
             pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
             unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
             frequency_of_flags_filename = options.output_directory + "/" + name_of_input_file_without_location + ".frequency_of_flags"
+            name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
+            name_of_total_number_of_alignments_file = f"{options.output_directory}/{input_filename}.total_number_of_alignments"
             name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
             name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
-            name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
-            name_of_total_number_of_alignments_file = f"{input_filename}.total_number_of_alignments"
-            name_of_file_max_read_length = f"{input_filename}.max_read_size"
-            name_of_file_dictionary = f"{input_filename}.dictionary"
+            name_of_file_max_read_length = f"{options.output_directory}/{input_filename}.max_read_size"
             
             max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
             max_number_of_alignments = int(open(name_of_total_number_of_alignments_file,"r").read().strip())

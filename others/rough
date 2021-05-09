@@ -75,6 +75,22 @@ Abridge paired ended
 ROOT_DIRECTORY=/90daydata/maizegdb/sagnik/ABRIDGE/
 ROOT_DIRECTORY=/project/maizegdb/sagnik/ABRIDGE/
 
+
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--save_all_quality_scores \
+--save_exact_quality_scores \
+--run_diagnostics \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge) \
+1> $ROOT_DIRECTORY/developing_abridge/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
+
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -132,6 +148,8 @@ abridge \
 1> $ROOT_DIRECTORY/developing_abridge/tests_decompress.output \
 2> $ROOT_DIRECTORY/developing_abridge/tests_decompress.error &
 
+RANDOM
+======
 (/usr/bin/time --verbose  \
 abridge \
 --random \
@@ -142,5 +160,86 @@ abridge \
 ) \
 1> $ROOT_DIRECTORY/developing_abridge/tests_random.output \
 2> $ROOT_DIRECTORY/developing_abridge/tests_random.error &
+
+
+
+TESTS WITH ONE RNA-SEQ SAMPLE
+=============================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--save_all_quality_scores \
+--save_exact_quality_scores \
+--run_diagnostics \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_exact_quality_scores ) \
+1> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_exact_quality_scores/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_exact_quality_scores/tests_compress.error &
+
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--save_all_quality_scores \
+--run_diagnostics \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores ) \
+1> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_compress.error &
+
+
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--run_diagnostics \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge/save_only_indels_save_qual_scores ) \
+1> $ROOT_DIRECTORY/developing_abridge/save_only_indels_save_qual_scores/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/save_only_indels_save_qual_scores/tests_compress.error &
+
+
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--run_diagnostics \
+--ignore_quality_scores \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge/save_only_indels_nosave_qual_scores ) \
+1> $ROOT_DIRECTORY/developing_abridge/save_only_indels_nosave_qual_scores/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/save_only_indels_nosave_qual_scores/tests_compress.error &
+
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--both \
+--run_diagnostics \
+--ignore_soft_clippings \
+--ignore_mismatches \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
+--output_directory $ROOT_DIRECTORY/developing_abridge/ignore_soft_clippings_ignore_mismatches ) \
+1> $ROOT_DIRECTORY/developing_abridge/ignore_soft_clippings_ignore_mismatches/tests_compress.output \
+2> $ROOT_DIRECTORY/developing_abridge/ignore_soft_clippings_ignore_mismatches/tests_compress.error &
+
+
+
+
 
 
