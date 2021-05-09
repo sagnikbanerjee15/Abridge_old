@@ -262,7 +262,7 @@ def constructFileNames(input_filename,options):
     compressed_abridged_filename_br = f"{options.output_directory}/{name_of_input_file_without_location}.abridge.br"
     
     delete_these_files = [name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename]
-    other_files = [pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_compressed_quality_scores, name_of_file_dictionary, name_of_file_dictionary]
+    other_files = [pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_compressed_quality_scores, name_of_file_dictionary]
     error_files = [error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index]
     compressed_files = [compressed_abridged_filename_7z, compressed_abridged_filename_br]
     return  delete_these_files, other_files, error_files, compressed_files
