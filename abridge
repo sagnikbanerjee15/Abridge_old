@@ -561,7 +561,7 @@ def compressSamFile(options):
             if options.quiet == False:
                 logging.info(f"{name_of_input_file_without_location} max_number_of_alignments = {max_number_of_alignments}")
             
-            max_read_length = int(open(name_of_file_max_read_length,"r").read().split())
+            max_read_length = int(open(name_of_file_max_read_length,"r").read().strip())
             if options.quiet == False:
                 logging.info(f"{name_of_input_file_without_location} max_read_length = {max_read_length}")
             
