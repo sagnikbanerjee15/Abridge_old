@@ -548,6 +548,10 @@ def compressSamFile(options):
             pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_compressed_quality_scores = other_files
             error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index = error_files
             
+            max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
+            if options.quiet == False:
+                logging.info(f"{name_of_input_file_without_location} max_input_reads_in_a_single_nucl_loc = {max_input_reads_in_a_single_nucl_loc}")
+            
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f"{compressSamFilePairedEndedPass1}" # argv[0] - name of the program
             cmd += f" {options.genome}" # argv[1] - genome_filename
