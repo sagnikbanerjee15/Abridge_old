@@ -229,7 +229,6 @@ abridge \
 --compress \
 --cpu $CPU \
 --both \
---run_diagnostics \
 --ignore_soft_clippings \
 --ignore_mismatches \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
