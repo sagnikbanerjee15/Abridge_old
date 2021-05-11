@@ -42,6 +42,8 @@ def parseCommandLineArguments():
     compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
     compress_decompress_group.add_argument("-l","--list",help="List the constituents of the compressed file and exit. This option will come in handy to find the samples that have been compressed.")
     compress_decompress_group.add_argument("-s","--split_files",help="Enter the name of the compressed merged file which you wish to split.")
+    compress_decompress_group.add_argument("-ov","--generate_overlapping_coverage",help="Enter the name of the compressed file from which you wish to generate an overlapping coverage of reads. This option can be used in conjuction with --positions to construct coverage from a specific location")
+    compress_decompress_group.add_argument("-nov","--generate_non_overlapping_coverage",help="Enter the name of the compressed file from which you wish to generate a non-overlapping coverage of reads. This option can be used in conjuction with --positions to construct coverage from a specific location")
     
     # Optional arguments
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
@@ -65,6 +67,12 @@ def parseCommandLineArguments():
     optional_named.add_argument("--both","-b",help="Compress using both approaches. This option is reserved for diagnostic purposes",action="store_true")
     optional_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory",default=None)
     optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
+    
+    # Options for generating coverage
+    optional_named.add_argument("-d","--d",help = "", action = "store_true")
+    optional_named.add_argument("-bg","--bg",help = "", action = "store_true")
+    optional_named.add_argument("-bga","--bga",help = "", action = "store_true")
+    optional_named.add_argument("-split","--split",help = "", action = "store_true")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile

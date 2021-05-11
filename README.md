@@ -74,6 +74,7 @@ Explain the process and refer to paper and supplemental information
 5. What is the correct command for viewing alignments without reference headers?
 6. How do I retreive alignments to a particular chromosome?
 7. I have only bamfiles but `abridge` needs samfiles to compress. What should I do?
+8. How do I retrieve multiple locations using random access?
 
 
 
