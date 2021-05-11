@@ -75,6 +75,7 @@ Explain the process and refer to paper and supplemental information
 6. How do I retreive alignments to a particular chromosome?
 7. I have only bamfiles but `abridge` needs samfiles to compress. What should I do?
 8. How do I retrieve multiple locations using random access?
+9. Can I generate overlapping read coverage for random locations?
 
 
 
