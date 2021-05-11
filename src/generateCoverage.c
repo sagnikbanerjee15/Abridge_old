@@ -203,21 +203,21 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				else
 				{
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
-					for ( k = 0 ; k < num_of_cigar_types ; k++ )
-					{
-						if ( cigar_items_instance[k]->def == 'a' || cigar_items_instance[k]->def == 't' || cigar_items_instance[k]->def == 'g' || cigar_items_instance[k]->def == 'c' ) // Soft clips
-							continue;
-						else if ( cigar_items_instance[k]->def >= ( 33 + 90 ) && cigar_items_instance[k]->def <= ( 73 + 90 ) ) // Quality scores
-							continue;
-						else if ( cigar_items_instance[k]->def == 'N' ) // Intron splice
-							continue;
-						else if ( cigar_items_instance[k]->def == '!' || cigar_items_instance[k]->def == '"' || cigar_items_instance[k]->def == '#' || cigar_items_instance[k]->def == '%' ) // Insertions in reads
-							continue;
-						else if ( cigar_items_instance[k]->def == 'D' ) // Deletions from the reference
-							continue;
-						for ( l = 0 ; l < cigar_items_instance[k]->len ; l++ )
-							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
-					}
+				}
+				for ( k = 0 ; k < num_of_cigar_types ; k++ )
+				{
+					if ( cigar_items_instance[k]->def == 'a' || cigar_items_instance[k]->def == 't' || cigar_items_instance[k]->def == 'g' || cigar_items_instance[k]->def == 'c' ) // Soft clips
+						continue;
+					else if ( cigar_items_instance[k]->def >= ( 33 + 90 ) && cigar_items_instance[k]->def <= ( 73 + 90 ) ) // Quality scores
+						continue;
+					else if ( cigar_items_instance[k]->def == 'N' ) // Intron splice
+						continue;
+					else if ( cigar_items_instance[k]->def == '!' || cigar_items_instance[k]->def == '"' || cigar_items_instance[k]->def == '#' || cigar_items_instance[k]->def == '%' ) // Insertions in reads
+						continue;
+					else if ( cigar_items_instance[k]->def == 'D' ) // Deletions from the reference
+						continue;
+					for ( l = 0 ; l < cigar_items_instance[k]->len ; l++ )
+						coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
 				}
 			}
 		}
