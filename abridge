@@ -35,9 +35,9 @@ def parseCommandLineArguments():
     required_named.add_argument("-o","--output_directory",help="Enter the prefix of the output directory.",required=True)
     
     compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
-    compress_decompress_group.add_argument("-c","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
+    compress_decompress_group.add_argument("-cmp","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-m","--merge",help="Set this option if you wish to compress the alignment file",action="store_true")
-    compress_decompress_group.add_argument("-d","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
+    compress_decompress_group.add_argument("-dcmp","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-r","--random",help="Retrieve alignments from random locations",action="store_true")
     compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
     compress_decompress_group.add_argument("-l","--list",help="List the constituents of the compressed file and exit. This option will come in handy to find the samples that have been compressed.")
@@ -78,7 +78,7 @@ def parseCommandLineArguments():
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
     parser.add_argument("--files_for_removal","-files_for_removal",help=argparse.SUPPRESS)# Files will be removed later
     parser.add_argument("--softwares","-softwares",help=argparse.SUPPRESS) # Software paths
-    parser.add_argument("--single_ended","-single_ended",help=argparse.SUPPRESS) # Software paths
+    parser.add_argument("--single_ended","-single_ended",help=argparse.SUPPRESS)
     parser.add_argument("--reference_to_length","-num_of_reference_sequences",help=argparse.SUPPRESS)
     parser.add_argument("--outputfilename","-outputfilena",help=argparse.SUPPRESS) 
     
