@@ -238,6 +238,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 							{
 								printf ("\nHoly crap");
 								printf ("%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
+								fflush (stdout);
 								exit (1);
 							}
 							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
