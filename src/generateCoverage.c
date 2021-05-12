@@ -186,7 +186,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				//printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
 				//fflush (stdout);
 			}
-
+			continue;
 			number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
 			if ( number_of_columns == 2 )
 			{
