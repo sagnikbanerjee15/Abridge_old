@@ -229,16 +229,22 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 					else if ( cigar_items_instance[k].def == 'D' ) // Deletions from the reference
 						continue;
-					/*
-					 if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
-					 for ( l = 0 ; l < cigar_items_instance[k].len ; l++ )
-					 {
-					 //printf ("\nUpdating coverage");
-					 coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
-					 }
-					 else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
-					 coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
-					 */
+
+					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
+						for ( l = 0 ; l < cigar_items_instance[k].len ; l++ )
+						{
+							//printf ("\nUpdating coverage");
+							if ( curr_position - abridge_index->start[i] + l < 0 || curr_position - abridge_index->start[i] + l >= length_of_continuous_segment )
+							{
+								printf ("\nHoly crap");
+								printf ("%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
+								exit (1);
+							}
+							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
+						}
+					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
+						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
+
 				}
 			}
 		}
