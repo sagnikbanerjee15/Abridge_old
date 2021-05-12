@@ -1164,7 +1164,7 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     else:
         options.generate_non_overlapping_coverage = 0
     
-    name_of_input_file_without_location = options.inputsamfilenames.split("/")[-1]
+    name_of_input_file_without_location = options.inputabrfilenames.split("/")[-1]
     if os.path.exists(f"{options.output_directory}/{name_of_input_file_without_location}.dictionary") == True:
         single = 1
     else:
