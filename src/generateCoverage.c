@@ -137,11 +137,13 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 
 	line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
+	coverage_array = NULL;
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
 		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
 		max_bytes_for_current_index_entry = abridge_index->end_byte[i] - abridge_index->start_byte[i];
 		number_of_bytes_read_from_compressed_file = 0;
+		if ( coverage_array != NULL ) free (coverage_array);
 		coverage_array = ( long long int* ) malloc (sizeof(long long int*) * length_of_continuous_segment);
 		for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 			coverage_array[j] = 0;
