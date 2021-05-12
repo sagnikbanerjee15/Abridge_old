@@ -79,13 +79,13 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	fhr_pass1 = fopen (pass1_filename , "rb");
 	if ( fhr_pass1 == NULL )
 	{
-		printf ("Error! File %s not found" , pass1_filename);
+		printf ("Error! File pass1_filename = %s not found" , pass1_filename);
 		exit (1);
 	}
 	fhr_index = fopen (abridge_index_filename , "r");
 	if ( fhr_index == NULL )
 	{
-		printf ("Error! File %s not found" , abridge_index_filename);
+		printf ("Error! File abridge_index_filename = %s not found" , abridge_index_filename);
 		exit (1);
 	}
 	if ( single == 0 )
@@ -93,7 +93,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		fhr_dictionary = fopen (dictionary_name , "r");
 		if ( fhr_dictionary == NULL )
 		{
-			printf ("Error! File %s not found" , dictionary_name);
+			printf ("Error! File dictionary_name = %s not found" , dictionary_name);
 			exit (1);
 		}
 	}
