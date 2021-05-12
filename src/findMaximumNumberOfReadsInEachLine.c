@@ -62,7 +62,9 @@ int main (int argc, char *argv[])
 		printf ("%s" , buffer_for_pass1);
 		fflush (stdout);
 		reads_in_this_line = 0;
-		for ( i = 0 ; buffer_for_pass1[i] != ' ' ; i++ )
+		for ( i = 0 ;
+				buffer_for_pass1[i] != ' ' && buffer_for_pass1[i] != '\0' ;
+				i++ )
 			if ( buffer_for_pass1[i] == ',' ) reads_in_this_line += 1;
 		if ( reads_in_this_line > max_reads_in_a_line )
 			max_reads_in_a_line = reads_in_this_line;
