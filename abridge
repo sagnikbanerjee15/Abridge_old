@@ -1171,7 +1171,7 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
         single = 0
     
     dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
-    print("dictionary name")
+    print(f"dictionary name {dictionary_name}")
     print(os.path.exists(dictionary_name))
     sys.stdout.flush()
     cmd  = f"(/usr/bin/time --verbose "
