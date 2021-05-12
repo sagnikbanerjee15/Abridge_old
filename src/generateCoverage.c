@@ -232,6 +232,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				}
 			}
 			printf ("=======================================================================================================================================");
+			fflush (stdout);
 		} while ( number_of_bytes_read_from_compressed_file < max_bytes_for_current_index_entry );
 		/*
 		 * Print the coverage as requested by user
