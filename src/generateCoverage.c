@@ -201,7 +201,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				ptr_to_icigars = split_on_tab[1];
 			}
 			number_of_distinct_cigars_in_a_line = splitByDelimiter (ptr_to_icigars , ',' , split_on_comma);
-
+			continue;
 			for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 			{
 				splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
