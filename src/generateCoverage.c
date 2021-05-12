@@ -237,6 +237,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		{
 			if ( d == 1 && bg == 0 && bga == 0 )
 			{
+				printf ("\nInside here");
 				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 					printf ("%s %d %d\n" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 			}
