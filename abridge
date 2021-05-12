@@ -1389,14 +1389,10 @@ def main():
         os.system(f"rm -f {options.output_directory}")
     
     if options.generate_overlapping_coverage is not None or options.generate_nonoverlapping_coverage is not None:
-        input_filename = options.inputabrfilenames[0]
+        input_filename = options.inputabrfilenames
         name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
         pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
         pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
-        unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
-        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
-        compressed_abridged_filename = input_filename
-        output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
         
         cmd  = f"7za e {input_filename} -y "
         cmd += f" -o{options.output_directory}"
