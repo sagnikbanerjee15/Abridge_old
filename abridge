@@ -212,20 +212,20 @@ def validateCommandLineArguments(options):
     else:
         options.ignore_quality_score_flag = 0
         
-    if options.generate_overlapping_coverage is None and options.generate_non_overlapping_coverage is None:
+    if options.generate_overlapping_coverage == False and options.generate_non_overlapping_coverage == False:
         if True in [options.d, options.bg, options.bga, options.split]:
             print("Incorrect arguments. Please provide arguments -d -bg -bga or -split only when you wish to generate coverage")
             if options.quiet==False:
                 logging.info("Incorrect arguments. Please provide arguments -d -bg -bga or -split only when you wish to generate coverage")
             sys.exit()
             
-    if options.generate_overlapping_coverage is not None and options.generate_non_overlapping_coverage is not None:
+    if options.generate_overlapping_coverage == True and options.generate_non_overlapping_coverage == True:
         print("You can either generate overlapping or non-overlapping coverage. If you need to generate both please run abridge twice each time with either option")
         if options.quiet == False:
             logging.info("You can either generate overlapping or non-overlapping coverage. If you need to generate both please run abridge twice each time with either option")
         sys.exit()
     
-    if options.generate_overlapping_coverage is not None or options.generate_non_overlapping_coverage is not None:
+    if options.generate_overlapping_coverage == False or options.generate_non_overlapping_coverage == False:
         if [options.d,options.bg,options.bga].count(True)>1:
             print("You can specify only one among -d, -bg or -bga")
             if options.quiet == False:
