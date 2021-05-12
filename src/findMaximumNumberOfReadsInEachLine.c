@@ -59,8 +59,6 @@ int main (int argc, char *argv[])
 	while ( ( line_len = getline ( &buffer_for_pass1 , &len , fhr) ) != -1 )
 	{
 		str_reverse (buffer_for_pass1);
-		printf ("%s" , buffer_for_pass1);
-		fflush (stdout);
 		reads_in_this_line = 0;
 		for ( i = 0 ;
 				buffer_for_pass1[i] != ' ' && buffer_for_pass1[i] != '\0' ;
