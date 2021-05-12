@@ -195,7 +195,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			{
 				splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
-
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 				{
 
@@ -222,6 +221,40 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
+			}
+		}
+		/*
+		 * Print the coverage as requested by user
+		 */
+		if ( split == 0 )
+		{
+			if ( d == 1 && bg == 0 && bga == 0 )
+			{
+				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
+					printf ("%s %d %d\n" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
+			}
+			else if ( d == 0 && bg == 1 && bga == 0 )
+			{
+
+			}
+			else if ( d == 0 && bg == 0 && bga == 1 )
+			{
+
+			}
+		}
+		else if ( split == 1 )
+		{
+			if ( d == 1 && bg == 0 && bga == 0 )
+			{
+
+			}
+			else if ( d == 0 && bg == 1 && bga == 0 )
+			{
+
+			}
+			else if ( d == 0 && bg == 0 && bga == 1 )
+			{
+
 			}
 		}
 	}

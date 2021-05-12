@@ -239,6 +239,18 @@ abridge \
 
 
 
-
+COVERAGE GENERATION
+===================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--generate_overlapping_coverage \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputabrfilenames $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/SRR13711353_PE.sam.abridge.7z \
+--output_directory $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores ) \
+1> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_non_overlapping_cov_generation.output \
+2> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_non_overlapping_cov_generation.error &
 
 
