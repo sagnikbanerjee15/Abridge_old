@@ -173,6 +173,7 @@ def validateCommandLineArguments(options):
     options.softwares["compressSamFilePairedEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEndedPass1"
     options.softwares["decompressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFilePairedEnded"
     options.softwares["generateCoverage"] = "/".join(abridge_location.split("/")[:-1])+"/src/generateCoverage"
+    options.softwares["findMaximumNumberOfReadsInEachLine"] = "/".join(abridge_location.split("/")[:-1])+"/src/findMaximumNumberOfReadsInEachLine"
     
     cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.genome}.temp"
     os.system(cmd)
@@ -1132,11 +1133,15 @@ def decompressSamFile(options):
 
 def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     generateCoverage = options.softwares["generateCoverage"]
+    findMaximumNumberOfReadsInEachLine = options.softwares["findMaximumNumberOfReadsInEachLine"]
     
     ######################################################################################
     # Compiling programs - will be removed during final version
     ######################################################################################
     cmd=f"gcc {generateCoverage}.c -o {generateCoverage} -g -Ofast"
+    os.system(cmd)
+    
+    cmd=f"gcc {findMaximumNumberOfReadsInEachLine}.c -o {findMaximumNumberOfReadsInEachLine} -g -Ofast"
     os.system(cmd)
     ######################################################################################
     if options.d == True:
@@ -1186,9 +1191,8 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     cmd += f" {single} " #argv[9]
     if os.path.exists(dictionary_name)==True:
         cmd += f" {dictionary_name} " #argv[10]
-        cmd_1  = f"cat "
+        cmd_1  = f" {findMaximumNumberOfReadsInEachLine} "
         cmd_1 += f" {pass1_outputfilename} "
-        cmd_1 += "|rev|cut -f1|rev|awk -F, '{print NF}'|uniq|sort -nrk1|head "
         cmd_1 += f" 1> {max_reads_in_each_line_filename} "
         cmd_1 += f" 2> /dev/null "
         if options.quiet == False:
