@@ -238,7 +238,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				}
 			}
 		}
-		printf ("\nnumber_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
+		printf ("\n%s number_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , abridge_index->chromosome[i] , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
 		printf ("\n=======================================================================================================================================");
 		fflush (stdout);
 		/*
