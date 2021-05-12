@@ -145,7 +145,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		coverage_array = ( long long int* ) malloc (sizeof(long long int*) * length_of_continuous_segment);
 		for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 			coverage_array[j] = 0;
-		do
+		while ( number_of_bytes_read_from_compressed_file < max_bytes_for_current_index_entry )
 		{
 			printf ("\nnumber_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
 			//printf ("\n%s %d" , abridge_index->chromosome[i] , curr_position);
@@ -234,9 +234,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
 			}
-		} while ( number_of_bytes_read_from_compressed_file < max_bytes_for_current_index_entry );
+		}
 		printf ("\n=======================================================================================================================================");
 		fflush (stdout);
+		return;
 		/*
 		 * Print the coverage as requested by user
 		 */
