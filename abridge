@@ -128,7 +128,7 @@ def validateCommandLineArguments(options):
         options.quiet = True
     
     if options.random==True or options.generate_overlapping_coverage==True or otions.generate_nonoverlapping_coverage==True:
-        options.output_directory = "/".join(options.inputsamfilenames.split("/")[:-1])+"/"+str(int(time.time()))
+        options.output_directory = "/".join(options.inputabrfilenames.split("/")[:-1])+"/"+str(int(time.time()))
     
     if options.random==True and options.positions==None:
         print("You need to enter at least one location from where reads will be retrieved")
