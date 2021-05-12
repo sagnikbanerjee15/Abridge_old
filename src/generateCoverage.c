@@ -149,11 +149,11 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			coverage_array[j] = 0;
 		while ( number_of_bytes_read_from_compressed_file < max_bytes_for_current_index_entry )
 		{
-			printf ("\n%s number_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , abridge_index->chromosome[i] , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
-			//printf ("\n%s %d" , abridge_index->chromosome[i] , curr_position);
+			/*
+			 printf ("\n%s number_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , abridge_index->chromosome[i] , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
+			 fflush (stdout);
+			 */
 			line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1);
-			//printf ("\n%s %d %d" , buffer_for_pass1 , line_len , len);
-			fflush (stdout);
 			if ( buffer_for_pass1[0] == '@' )
 			{
 				curr_position = 0;
@@ -249,13 +249,14 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						}
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
-
 				}
 			}
 		}
-		printf ("\n%s number_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , abridge_index->chromosome[i] , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
-		printf ("\n=======================================================================================================================================");
-		fflush (stdout);
+		/*
+		 printf ("\n%s number_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , abridge_index->chromosome[i] , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
+		 printf ("\n=======================================================================================================================================");
+		 fflush (stdout);
+		 */
 		/*
 		 * Print the coverage as requested by user
 		 */
