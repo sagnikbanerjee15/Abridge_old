@@ -231,9 +231,9 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
 			}
-			printf ("=======================================================================================================================================");
-			fflush (stdout);
 		} while ( number_of_bytes_read_from_compressed_file < max_bytes_for_current_index_entry );
+		printf ("=======================================================================================================================================");
+		fflush (stdout);
 		/*
 		 * Print the coverage as requested by user
 		 */
