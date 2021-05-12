@@ -154,7 +154,11 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1);
 			//printf ("\n%s %d %d" , buffer_for_pass1 , line_len , len);
 			fflush (stdout);
-			if ( buffer_for_pass1[0] == '@' ) continue;
+			if ( buffer_for_pass1[0] == '@' )
+			{
+				curr_position = 0;
+				continue;
+			}
 			number_of_bytes_read_from_compressed_file += line_len;
 			number_of_commas_in_each_line = 0;
 			for ( j = 0 ; buffer_for_pass1[j] != '\0' ; j++ )
@@ -237,7 +241,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 							if ( curr_position - abridge_index->start[i] + l < 0 || curr_position - abridge_index->start[i] + l >= length_of_continuous_segment )
 							{
 								printf ("\nHoly crap");
-								printf ("%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
+								printf ("\n%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
 								fflush (stdout);
 								exit (1);
 							}
