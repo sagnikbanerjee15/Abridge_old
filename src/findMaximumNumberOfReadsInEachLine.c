@@ -8,26 +8,21 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-size_t safe_usub (size_t x, size_t y)
+void str_reverse (char *str)
 {
-	return x > y ? x - y : y - x;
-}
+	if ( !str ) return;
 
-char* str_reverse (const char *const str)
-{
-	if ( !str ) return NULL;
+	int i, j;
+	int length_of_string;
+	char ch;
 
-	size_t len = strlen (str);
-	char *new = malloc (sizeof(char) * len);
-
-	size_t i;
-	for ( i = 0 ; i < len ; i++ )
+	length_of_string = strlen (str);
+	for ( i = 0 ; i < length_of_string / 2 ; i++ )
 	{
-		new[i] = str[safe_usub (i + 1 , len)];
+		ch = str[i];
+		str[i] = str[length_of_string - i - 1];
+		str[length_of_string - i - 1] = ch;
 	}
-	new[i] = 0;
-
-	return new;
 }
 
 int main (int argc, char *argv[])
