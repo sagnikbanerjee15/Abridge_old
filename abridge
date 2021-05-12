@@ -1406,7 +1406,7 @@ def main():
             os.system(cmd)
         
         generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options)
-        os.system(f"rm -f {options.output_directory}")
+        #os.system(f"rm -rf {options.output_directory}")
     
     cleanUp(options)
     if options.quiet == False:
