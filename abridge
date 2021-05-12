@@ -1179,7 +1179,7 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     cmd += f" {options.bga} " #argv[5]
     cmd += f" {options.split} " #argv[6]
     cmd += f" {options.generate_overlapping_coverage} " #argv[7]
-    cmd += f" {options.generate_nonoverlapping_coverage} " #argv[8]
+    cmd += f" {options.generate_non_overlapping_coverage} " #argv[8]
     cmd += f" {single} " #argv[9]
     if os.path.exists(dictionary_name)==True:
         cmd += f" {dictionary_name} " #argv[10]
