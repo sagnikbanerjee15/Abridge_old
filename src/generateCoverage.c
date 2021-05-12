@@ -8,7 +8,7 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abridge_index_filename, int d, int bg, int bga, int split, int generate_overlapping_coverage, int generate_nonoverlapping_coverage, int single, int max_reads_in_each_line, char dictionary_name)
+void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abridge_index_filename, int d, int bg, int bga, int split, int generate_overlapping_coverage, int generate_nonoverlapping_coverage, int single, int max_reads_in_each_line, char *dictionary_name)
 {
 	/****************************************************************************************************************************************
 	 * Variable declaration
