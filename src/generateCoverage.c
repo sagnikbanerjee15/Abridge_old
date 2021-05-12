@@ -137,7 +137,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 
 	line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
-	printf ("\n%d %d" , generate_overlapping_coverage , generate_nonoverlapping_coverage);
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
 		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
@@ -190,7 +189,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				//printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
 				//fflush (stdout);
 			}
-			continue;
 			number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
 			if ( number_of_columns == 2 )
 			{
@@ -216,6 +214,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				{
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
+				printf ("\nnum_of_cigar_types %d" , num_of_cigar_types);
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
 					if ( cigar_items_instance[k].def == 'a' || cigar_items_instance[k].def == 't' || cigar_items_instance[k].def == 'g' || cigar_items_instance[k].def == 'c' ) // Soft clips
