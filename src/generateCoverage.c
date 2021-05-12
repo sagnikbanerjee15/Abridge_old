@@ -206,18 +206,18 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				}
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
-					if ( cigar_items_instance[k]->def == 'a' || cigar_items_instance[k]->def == 't' || cigar_items_instance[k]->def == 'g' || cigar_items_instance[k]->def == 'c' ) // Soft clips
+					if ( cigar_items_instance[k].def == 'a' || cigar_items_instance[k].def == 't' || cigar_items_instance[k].def == 'g' || cigar_items_instance[k].def == 'c' ) // Soft clips
 						continue;
-					else if ( cigar_items_instance[k]->def >= ( 33 + 90 ) && cigar_items_instance[k]->def <= ( 73 + 90 ) ) // Quality scores
+					else if ( cigar_items_instance[k].def >= ( 33 + 90 ) && cigar_items_instance[k].def <= ( 73 + 90 ) ) // Quality scores
 						continue;
-					else if ( cigar_items_instance[k]->def == 'N' ) // Intron splice
+					else if ( cigar_items_instance[k].def == 'N' ) // Intron splice
 						continue;
-					else if ( cigar_items_instance[k]->def == '!' || cigar_items_instance[k]->def == '"' || cigar_items_instance[k]->def == '#' || cigar_items_instance[k]->def == '%' ) // Insertions in reads
+					else if ( cigar_items_instance[k].def == '!' || cigar_items_instance[k].def == '"' || cigar_items_instance[k].def == '#' || cigar_items_instance[k].def == '%' ) // Insertions in reads
 						continue;
-					else if ( cigar_items_instance[k]->def == 'D' ) // Deletions from the reference
+					else if ( cigar_items_instance[k].def == 'D' ) // Deletions from the reference
 						continue;
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
-						for ( l = 0 ; l < cigar_items_instance[k]->len ; l++ )
+						for ( l = 0 ; l < cigar_items_instance[k].len ; l++ )
 							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
