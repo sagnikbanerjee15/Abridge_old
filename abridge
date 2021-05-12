@@ -1159,10 +1159,10 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
         options.generate_overlapping_coverage = 1
     else:
         options.generate_overlapping_coverage = 0
-    if options.generate_nonoverlapping_coverage == True:
-        options.generate_nonoverlapping_coverage = 1
+    if options.generate_non_overlapping_coverage == True:
+        options.generate_non_overlapping_coverage = 1
     else:
-        options.generate_nonoverlapping_coverage = 0
+        options.generate_non_overlapping_coverage = 0
     
     if os.path.exists(f"{options.output_directory}/{name_of_input_file_without_location}.dictionary") == True:
         single = 1
