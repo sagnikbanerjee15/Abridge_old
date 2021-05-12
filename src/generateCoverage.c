@@ -136,7 +136,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 
-	line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1);
+	line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
 		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
@@ -148,10 +148,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		do
 		{
 			printf ("\nnumber_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
-			printf ("\n%s %d" , abridge_index->chromosome[i] , curr_position);
-			fflush (stdout);
+			//printf ("\n%s %d" , abridge_index->chromosome[i] , curr_position);
 			line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1);
-			//printf ("\n%s %d" , buffer_for_pass1 , line_len);
+			printf ("\n%s %d" , buffer_for_pass1 , line_len);
+			fflush (stdout);
 			if ( buffer_for_pass1[0] == '@' ) continue;
 			number_of_bytes_read_from_compressed_file += line_len;
 			number_of_commas_in_each_line = 0;
