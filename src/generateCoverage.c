@@ -46,6 +46,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	int COLS_split_on_dash = MAX_SEQ_LEN * 3; //3,000
 	int ROWS_split_on_comma = ROWS * 10; //10,000
 	int COLS_split_on_comma = MAX_SEQ_LEN * 3; //3,000
+	int ROWS_split_on_newline = ROWS * 100; // 1,000,000
+	int COLS_split_on_newline = COLS * 100; // 1,000,000
 	int number_of_unique_samformatflags;
 	int length_of_continuous_segment;
 	int number_of_commas_in_each_line;
@@ -114,6 +116,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
 	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
 		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+
+	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS_split_on_newline);
+	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
 
 	abridge_index = allocateMemoryAbridge_Index ();
 	/****************************************************************************************************************************************/
