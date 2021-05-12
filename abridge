@@ -106,21 +106,20 @@ def validateCommandLineArguments(options):
         inputfiles = options.inputsamfilenames
     else:
         inputfiles = options.inputabrfilenames
-    for file in inputfiles:
-        if os.path.exists(file)==False:
-            print(f"The input file {file} does not exist. Exiting...")
-            if options.quiet==False:
-                logging.info(f"The input file {file} does not exist. Exiting...")
-            sys.exit()
+    
+    if os.path.exists(inputfiles)==False:
+        print(f"The input file {inputfiles} does not exist. Exiting...")
+        if options.quiet==False:
+            logging.info(f"The input file {inputfiles} does not exist. Exiting...")
+        sys.exit()
      
     #Check if the input format is sam
     if options.inputsamfilenames is not None:
-        for file in options.inputsamfilenames:
-            if file[-3:]!="sam" and options.compress==True:
-                print(f"The input file {file} needs to be in sam format. Exiting...")
-                if options.quiet==False:
-                    logging.info(f"The input file {file} needs to be in sam format. Exiting...")
-                sys.exit()
+        if options.inputsamfilenames[-3:]!="sam" and options.compress==True:
+            print(f"The input file {options.inputsamfilenames} needs to be in sam format. Exiting...")
+            if options.quiet==False:
+                logging.info(f"The input file {options.inputsamfilenames} needs to be in sam format. Exiting...")
+            sys.exit()
     
     options.files_for_removal = []
     options.softwares = {}
