@@ -216,7 +216,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				{
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
-				continue;
 				//printf ("\nnum_of_cigar_types %d" , num_of_cigar_types);
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
