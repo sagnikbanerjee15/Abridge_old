@@ -148,9 +148,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		do
 		{
 			printf ("\nnumber_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
+			printf ("\n%s %d" , abridge_index->chromosome[i] , curr_position);
 			fflush (stdout);
 			line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1);
-			printf ("\n%s %d" , buffer_for_pass1 , line_len);
+			//printf ("\n%s %d" , buffer_for_pass1 , line_len);
 			if ( buffer_for_pass1[0] == '@' ) continue;
 			number_of_bytes_read_from_compressed_file += line_len;
 			number_of_commas_in_each_line = 0;
