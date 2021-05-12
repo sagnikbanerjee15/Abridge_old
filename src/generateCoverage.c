@@ -137,6 +137,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
 
 	line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
+	printf ("\n%d %d" , generate_overlapping_coverage , generate_nonoverlapping_coverage);
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
 		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
@@ -229,7 +230,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
 						for ( l = 0 ; l < cigar_items_instance[k].len ; l++ )
+						{
+							printf ("\nUpdating coverage");
 							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
+						}
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
