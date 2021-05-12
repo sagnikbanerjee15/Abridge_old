@@ -135,7 +135,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	flag_save_exact_quality_scores = strtol (split_on_tab[5] , &convert_to_int_temp , 10);
 
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
-	return;
+
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
 		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
