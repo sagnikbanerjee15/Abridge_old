@@ -186,7 +186,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				//printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
 				//fflush (stdout);
 			}
-			continue;
+
 			number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
 			if ( number_of_columns == 2 )
 			{
@@ -199,7 +199,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				ptr_to_icigars = split_on_tab[1];
 			}
 			number_of_distinct_cigars_in_a_line = splitByDelimiter (ptr_to_icigars , ',' , split_on_comma);
-
+			continue;
 			for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 			{
 				splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
