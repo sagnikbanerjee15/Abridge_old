@@ -201,7 +201,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				ptr_to_icigars = split_on_tab[1];
 			}
 			number_of_distinct_cigars_in_a_line = splitByDelimiter (ptr_to_icigars , ',' , split_on_comma);
-			continue;
+
 			for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 			{
 				splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
@@ -214,6 +214,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				{
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
+				continue;
 				//printf ("\nnum_of_cigar_types %d" , num_of_cigar_types);
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
