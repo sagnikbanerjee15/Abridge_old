@@ -253,15 +253,13 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 					else if ( cigar_items_instance[k].def >= ( 33 + 90 ) && cigar_items_instance[k].def <= ( 73 + 90 ) ) // Quality scores
 						continue;
-					else if ( cigar_items_instance[k].def == 'N' && split == 1 ) // Intron splice
+					else if ( ( cigar_items_instance[k].def == 'N' || cigar_items_instance[k].def == 'D' ) && split == 1 ) // Intron splice
 					{
 						//splice_distance += cigar_items_instance[k].len;
 						l += cigar_items_instance[k].len;
 						continue;
 					}
 					else if ( cigar_items_instance[k].def == '!' || cigar_items_instance[k].def == '"' || cigar_items_instance[k].def == '#' || cigar_items_instance[k].def == '$' || cigar_items_instance[k].def == '%' ) // Insertions in reads
-						continue;
-					else if ( cigar_items_instance[k].def == 'D' ) // Deletions from the reference
 						continue;
 					else if ( cigar_items_instance[k].def == '&' || cigar_items_instance[k].def == '\'' || cigar_items_instance[k].def == '(' || cigar_items_instance[k].def == ')' || cigar_items_instance[k].def == '*' )
 						cigar_items_instance[k].len = 1;
