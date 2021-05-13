@@ -58,6 +58,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 
 	long long int *coverage_array;
 	long long int curr_position;
+	long long int prev_stopping_location;
 
 	short int flag_ignore_mismatches;
 	short int flag_ignore_soft_clippings;
@@ -159,6 +160,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			{
 				curr_position = 0;
 				first_position = 1;
+				prev_stopping_location = 1;
 				continue;
 			}
 			number_of_bytes_read_from_compressed_file += line_len;
@@ -277,8 +279,16 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
 					first_position = 0;
 				}
+				else if ( first_position == 0 )
+				{
+					for ( j = prev_stopping_location ;
+							j < abridge_index->start[i] ; j++ )
+						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
+
+				}
 				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
+				prev_stopping_location = abridge_index->start[i] + j - 1;
 
 			}
 			else if ( d == 0 && bg == 1 && bga == 0 )
