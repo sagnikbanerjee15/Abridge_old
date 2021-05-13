@@ -272,7 +272,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( cigar_items_instance[k].def == '&' || cigar_items_instance[k].def == '\'' || cigar_items_instance[k].def == '(' || cigar_items_instance[k].def == ')' || cigar_items_instance[k].def == '*' )
 						cigar_items_instance[k].len = 1;
 
-					printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
+					if ( curr_position + 150 <= 33968 || curr_position - 150 <= 33968 )
+						printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
 					{
 						//printf ("\n%d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
@@ -294,7 +295,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
-				//printf ("\ncigar====================================================================================================================");
+				if ( curr_position + 150 <= 33968 || curr_position - 150 <= 33968 )
+					printf ("\ncigar====================================================================================================================");
 			}
 		}
 		/*
