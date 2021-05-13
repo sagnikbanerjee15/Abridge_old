@@ -250,7 +250,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				//splice_distance = 0;
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
-					printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
+
 					if ( cigar_items_instance[k].def == 'a' || cigar_items_instance[k].def == 't' || cigar_items_instance[k].def == 'g' || cigar_items_instance[k].def == 'c' || cigar_items_instance[k].def == 'n' ) // Soft clips
 						continue;
 					else if ( cigar_items_instance[k].def >= ( 33 + 90 ) && cigar_items_instance[k].def <= ( 73 + 90 ) ) // Quality scores
@@ -266,6 +266,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( cigar_items_instance[k].def == '&' || cigar_items_instance[k].def == '\'' || cigar_items_instance[k].def == '(' || cigar_items_instance[k].def == ')' || cigar_items_instance[k].def == '*' )
 						cigar_items_instance[k].len = 1;
 
+					printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
 					{
 						//printf ("\n%d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
