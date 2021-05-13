@@ -231,6 +231,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 
 			for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 			{
+				printf ("\n%s" , split_on_comma[j]);
 				splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
