@@ -214,7 +214,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 				{
-
+					printf ("\nEntering here");
 				}
 				else
 				{
