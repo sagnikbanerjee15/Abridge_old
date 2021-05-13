@@ -215,6 +215,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 				{
 					printf ("\nEntering here");
+					splitByDelimiter (split_on_comma[j - 1] , '-' , split_on_dash);
+					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
 				else
 				{
