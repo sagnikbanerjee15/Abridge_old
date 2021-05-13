@@ -252,7 +252,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 					else if ( cigar_items_instance[k].def >= ( 33 + 90 ) && cigar_items_instance[k].def <= ( 73 + 90 ) ) // Quality scores
 						continue;
-					else if ( cigar_items_instance[k].def == 'N' ) // Intron splice
+					else if ( cigar_items_instance[k].def == 'N' && split == 1 ) // Intron splice
 					{
 						//splice_distance += cigar_items_instance[k].len;
 						l += cigar_items_instance[k].len;
@@ -310,10 +310,11 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 
 				 }
 				 */
-				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
-					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
-				prev_stopping_location = abridge_index->start[i] + j - 1;
-
+				/*
+				 for ( j = 0 ; j < length_of_continuous_segment ; j++ )
+				 printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
+				 prev_stopping_location = abridge_index->start[i] + j - 1;
+				 */
 			}
 			else if ( d == 0 && bg == 1 && bga == 0 )
 			{
