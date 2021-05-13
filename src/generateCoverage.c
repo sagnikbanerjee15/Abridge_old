@@ -260,7 +260,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( ( cigar_items_instance[k].def == 'N' || cigar_items_instance[k].def == 'D' ) && split == 1 ) // Intron splice
 					{
 						if ( cigar_items_instance[k].def == 'D' )
+						{
 							printf ("\n Deletion encountered");
+							fflush (stdout);
+						}
 						//splice_distance += cigar_items_instance[k].len;
 						l += cigar_items_instance[k].len;
 						continue;
