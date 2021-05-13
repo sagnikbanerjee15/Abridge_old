@@ -60,6 +60,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	long long int curr_position;
 	long long int prev_stopping_location;
 	long long int last_location_of_current_chromosome;
+	long long int splice_distance;
 
 	short int flag_ignore_mismatches;
 	short int flag_ignore_soft_clippings;
@@ -244,6 +245,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				}
 				//printf ("\nnum_of_cigar_types %d" , num_of_cigar_types);
 				l = 0;
+				splice_distance = 0;
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
 					if ( cigar_items_instance[k].def == 'a' || cigar_items_instance[k].def == 't' || cigar_items_instance[k].def == 'g' || cigar_items_instance[k].def == 'c' ) // Soft clips
@@ -251,7 +253,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( cigar_items_instance[k].def >= ( 33 + 90 ) && cigar_items_instance[k].def <= ( 73 + 90 ) ) // Quality scores
 						continue;
 					else if ( cigar_items_instance[k].def == 'N' ) // Intron splice
+					{
+						splice_distance += cigar_items_instance[k].len;
 						continue;
+					}
 					else if ( cigar_items_instance[k].def == '!' || cigar_items_instance[k].def == '"' || cigar_items_instance[k].def == '#' || cigar_items_instance[k].def == '%' ) // Insertions in reads
 						continue;
 					else if ( cigar_items_instance[k].def == 'D' ) // Deletions from the reference
@@ -261,7 +266,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						while ( cigar_items_instance[k].len-- )
 						{
 							//printf ("\nUpdating coverage");
-							if ( curr_position - abridge_index->start[i] + l < 0 || curr_position - abridge_index->start[i] + l >= length_of_continuous_segment )
+							if ( curr_position - abridge_index->start[i] + l + splice_distance < 0 || curr_position - abridge_index->start[i] + l + splice_distance >= length_of_continuous_segment )
 							{
 								printf ("\nHoly crap");
 								printf ("\n%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
@@ -269,7 +274,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 								fflush (stdout);
 								exit (1);
 							}
-							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
+							coverage_array[curr_position - abridge_index->start[i] + l + splice_distance] += number_of_repititions_of_the_same_reads;
 							l++;
 						}
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
