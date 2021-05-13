@@ -66,6 +66,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	short int flag_save_all_quality_scores;
 	short int flag_save_exact_quality_scores;
 	short int number_of_columns;
+	short int first_position;
 
 	FILE *fhr_pass1;
 	FILE *fhr_index;
@@ -157,6 +158,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			if ( buffer_for_pass1[0] == '@' )
 			{
 				curr_position = 0;
+				first_position = 1;
 				continue;
 			}
 			number_of_bytes_read_from_compressed_file += line_len;
@@ -269,6 +271,12 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		{
 			if ( d == 1 && bg == 0 && bga == 0 )
 			{
+				if ( first_position == 1 )
+				{
+					for ( j = 1 ; j < abridge_index->start[i] ; j++ )
+						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
+					first_position = 0;
+				}
 				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 
