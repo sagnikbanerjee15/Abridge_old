@@ -59,6 +59,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	long long int *coverage_array;
 	long long int curr_position;
 	long long int prev_stopping_location;
+	long long int last_location_of_current_chromosome;
 
 	short int flag_ignore_mismatches;
 	short int flag_ignore_soft_clippings;
@@ -160,7 +161,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			{
 				curr_position = 0;
 				first_position = 1;
-				prev_stopping_location = 1;
+				prev_stopping_location = 0;
+				number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
+				splitByDelimiter (buffer_for_pass1[2] , ':' , split_on_comma);
+				last_location_of_current_chromosome = strtol (split_on_comma[1] , &temp , 10);
 				continue;
 			}
 			number_of_bytes_read_from_compressed_file += line_len;
@@ -278,6 +282,12 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					for ( j = 1 ; j < abridge_index->start[i] ; j++ )
 						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
 					first_position = 0;
+					if ( i != 0 ) // Not the first chromosome
+					{
+						for ( j = prev_stopping_location + 1 ;
+								j <= last_location_of_current_chromosome ; j++ )
+							printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
+					}
 				}
 				else if ( first_position == 0 )
 				{
@@ -314,6 +324,42 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			{
 
 			}
+		}
+	}
+
+	/*
+	 * Print out the zero entries for the final nucleotides of the last chromosome
+	 */
+	if ( split == 0 )
+	{
+		if ( d == 1 && bg == 0 && bga == 0 )
+		{
+			for ( j = prev_stopping_location + 1 ;
+					j <= last_location_of_current_chromosome ; j++ )
+				printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
+		}
+		else if ( d == 0 && bg == 1 && bga == 0 )
+		{
+
+		}
+		else if ( d == 0 && bg == 0 && bga == 1 )
+		{
+
+		}
+	}
+	else if ( split == 1 )
+	{
+		if ( d == 1 && bg == 0 && bga == 0 )
+		{
+
+		}
+		else if ( d == 0 && bg == 1 && bga == 0 )
+		{
+
+		}
+		else if ( d == 0 && bg == 0 && bga == 1 )
+		{
+
 		}
 	}
 
