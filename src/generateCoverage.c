@@ -221,6 +221,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
 				//printf ("\nnum_of_cigar_types %d" , num_of_cigar_types);
+				l = 0;
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
 					if ( cigar_items_instance[k].def == 'a' || cigar_items_instance[k].def == 't' || cigar_items_instance[k].def == 'g' || cigar_items_instance[k].def == 'c' ) // Soft clips
@@ -235,7 +236,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
-						for ( l = 0 ; l < cigar_items_instance[k].len ; l++ )
+						while ( cigar_items_instance[k].len-- )
 						{
 							//printf ("\nUpdating coverage");
 							if ( curr_position - abridge_index->start[i] + l < 0 || curr_position - abridge_index->start[i] + l >= length_of_continuous_segment )
@@ -254,6 +255,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						}
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
+					l++;
 				}
 			}
 		}
