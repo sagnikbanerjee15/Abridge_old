@@ -163,7 +163,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				{
 					if ( i != 0 ) // Not the first chromosome
 					{
-						printf ("\nThis %s start = %d end = %d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome);
+						//printf ("\nThis %s start = %d end = %d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome);
 						for ( j = prev_stopping_location + 1 ;
 								j <= last_location_of_current_chromosome ; j++ )
 							printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i - 1] , j , 0);
@@ -292,12 +292,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					for ( j = 1 ; j < abridge_index->start[i] ; j++ )
 						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
 					first_position = 0;
-					if ( i != 0 ) // Not the first chromosome
-					{
-						for ( j = prev_stopping_location + 1 ;
-								j <= last_location_of_current_chromosome ; j++ )
-							printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
-					}
 				}
 				else if ( first_position == 0 )
 				{
