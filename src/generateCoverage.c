@@ -144,6 +144,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	coverage_array = NULL;
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
+		if ( abridge_index->start != 23162 && abridge_index->end != 207509 )
+			continue;
 		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
 		max_bytes_for_current_index_entry = abridge_index->end_byte[i] - abridge_index->start_byte[i];
 		number_of_bytes_read_from_compressed_file = 0;
@@ -248,7 +250,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				//splice_distance = 0;
 				for ( k = 0 ; k < num_of_cigar_types ; k++ )
 				{
-					//printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
+					printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
 					if ( cigar_items_instance[k].def == 'a' || cigar_items_instance[k].def == 't' || cigar_items_instance[k].def == 'g' || cigar_items_instance[k].def == 'c' || cigar_items_instance[k].def == 'n' ) // Soft clips
 						continue;
 					else if ( cigar_items_instance[k].def >= ( 33 + 90 ) && cigar_items_instance[k].def <= ( 73 + 90 ) ) // Quality scores
@@ -285,7 +287,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
-				//printf ("\ncigar====================================================================================================================");
+				printf ("\ncigar====================================================================================================================");
 			}
 		}
 		/*
