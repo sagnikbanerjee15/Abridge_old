@@ -245,9 +245,9 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 								fflush (stdout);
 								exit (1);
 							}
-							if ( curr_position == 3661 )
+							if ( curr_position == 3661 && abridge_index->start[i] - l == 3661 )
 							{
-								printf ("iCIGAR: %s" , split_on_dash[0]);
+								printf ("\niCIGAR: %s" , split_on_dash[0]);
 								fflush (stdout);
 							}
 							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
