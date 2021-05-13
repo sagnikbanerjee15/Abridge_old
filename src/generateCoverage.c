@@ -144,8 +144,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	coverage_array = NULL;
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
-		if ( abridge_index->start[i] != 23162 || abridge_index->end[i] != 207509 )
-			continue;
 		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
 		max_bytes_for_current_index_entry = abridge_index->end_byte[i] - abridge_index->start_byte[i];
 		number_of_bytes_read_from_compressed_file = 0;
@@ -229,6 +227,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 				ptr_to_icigars = split_on_tab[1];
 			}
+			if ( abridge_index->start[i] != 23162 || abridge_index->end[i] != 207509 )
+				continue;
 			number_of_distinct_cigars_in_a_line = splitByDelimiter (ptr_to_icigars , ',' , split_on_comma);
 
 			for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
