@@ -257,14 +257,13 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 					else if ( cigar_items_instance[k].def >= ( 33 + 90 ) && cigar_items_instance[k].def <= ( 73 + 90 ) ) // Quality scores
 						continue;
-					else if ( ( cigar_items_instance[k].def == 'N' || cigar_items_instance[k].def == 'D' ) && split == 1 ) // Intron splice
+					else if ( cigar_items_instance[k].def == 'N' && split == 1 ) // Intron splice
 					{
-						if ( cigar_items_instance[k].def == 'D' )
-						{
-							printf ("\n Deletion encountered");
-							fflush (stdout);
-						}
-						//splice_distance += cigar_items_instance[k].len;
+						l += cigar_items_instance[k].len;
+						continue;
+					}
+					else if ( cigar_items_instance[k].def == 'D' )
+					{
 						l += cigar_items_instance[k].len;
 						continue;
 					}
