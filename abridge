@@ -181,12 +181,11 @@ def validateCommandLineArguments(options):
     os.system(cmd)
     
     if options.decompress==True:
-        for file in options.inputabrfilenames:
-            if file[-11:]!=".abridge.7z" and file[-11:]!=".abridge.br":
-                print(f"The input file {file} needs to be in abridge format. Exiting...")
-                if options.quiet==False:
-                    logging.info(f"The input file {file} needs to be in abridge format. Exiting...")
-                sys.exit()
+        if options.inputabrfilenames[-11:]!=".abridge.7z" and options.inputabrfilenames[-11:]!=".abridge.br":
+            print(f"The input file {file} needs to be in abridge format. Exiting...")
+            if options.quiet==False:
+                logging.info(f"The input file {file} needs to be in abridge format. Exiting...")
+            sys.exit()
         
     if options.ignore_soft_clippings == True:
         options.ignore_soft_clippings = 1
