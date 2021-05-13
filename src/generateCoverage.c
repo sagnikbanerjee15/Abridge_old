@@ -17,6 +17,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	char samformatflag_replacer_characters[] = "BEFHIJKLMOPQRSUVWXYZbdefhijklmopqrsuvwxyz";
 
 	char *temp;
+	char *last_cigar;
 	char *convert_to_int_temp;
 	char *buffer_for_pass1;
 	char *buffer_for_index;
@@ -126,6 +127,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
 
 	abridge_index = allocateMemoryAbridge_Index ();
+	last_cigar = ( char* ) malloc (sizeof(char) * 1000);
+	last_cigar[0] = '\0';
 	/****************************************************************************************************************************************/
 
 	line_len = getline ( &buffer_for_index , &len , fhr_index);
@@ -170,7 +173,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 								j <= last_location_of_current_chromosome ; j++ )
 							printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i - 1] , j , 0);
 					}
-
 				}
 				curr_position = 0;
 				first_position = 1;
@@ -239,14 +241,15 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 				{
-					printf ("\ncigarEntering here borrowing from %s" , split_on_comma[j - 1]);
+					printf ("\ncigar Entering here borrowing from %s" , split_on_comma[j - 1]);
 					printf ("\ncigar %s %d" , ptr_to_icigars , number_of_distinct_cigars_in_a_line);
-					splitByDelimiter (split_on_comma[j - 1] , '-' , split_on_dash);
+					splitByDelimiter (last_cigar , '-' , split_on_dash);
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
 				else
 				{
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
+					strcpy(last_cigar , split_on_dash[0]);
 				}
 				//printf ("\nnum_of_cigar_types %d" , num_of_cigar_types);
 				l = 0;
