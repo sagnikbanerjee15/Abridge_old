@@ -214,7 +214,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 				{
-					printf ("\nEntering here");
+					//printf ("\nEntering here");
 					splitByDelimiter (split_on_comma[j - 1] , '-' , split_on_dash);
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
@@ -248,11 +248,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 								printf ("\niCIGAR: %s j = %d k = %d" , split_on_comma[j] , j , k);
 								fflush (stdout);
 								exit (1);
-							}
-							if ( curr_position == 3661 && abridge_index->start[i] - l == 3661 )
-							{
-								printf ("\niCIGAR: %s j = %d k = %d" , split_on_dash[0] , j , k);
-								fflush (stdout);
 							}
 							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
 							l++;
