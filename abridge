@@ -127,7 +127,7 @@ def validateCommandLineArguments(options):
     if options.header==True:
         options.quiet = True
     
-    if options.random==True or options.generate_overlapping_coverage==True or otions.generate_nonoverlapping_coverage==True:
+    if options.random==True or options.generate_overlapping_coverage==True or options.generate_nonoverlapping_coverage==True:
         options.output_directory = "/".join(options.inputabrfilenames.split("/")[:-1])+"/"+str(int(time.time()))
     
     if options.random==True and options.positions==None:
