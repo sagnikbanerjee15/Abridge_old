@@ -163,7 +163,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				first_position = 1;
 				prev_stopping_location = 0;
 				number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
-				splitByDelimiter (buffer_for_pass1[2] , ':' , split_on_comma);
+				splitByDelimiter (split_on_tab[2] , ':' , split_on_comma);
 				last_location_of_current_chromosome = strtol (split_on_comma[1] , &temp , 10);
 				continue;
 			}
