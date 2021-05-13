@@ -240,7 +240,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 				{
 					printf ("\ncigarEntering here borrowing from %s" , split_on_comma[j - 1]);
-					printf ("\n%s %d" , ptr_to_icigars , number_of_distinct_cigars_in_a_line);
+					printf ("\ncigar %s %d" , ptr_to_icigars , number_of_distinct_cigars_in_a_line);
 					splitByDelimiter (split_on_comma[j - 1] , '-' , split_on_dash);
 					splitCigar (split_on_dash[0] , &num_of_cigar_types , cigar_items_instance);
 				}
