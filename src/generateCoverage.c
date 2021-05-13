@@ -245,6 +245,11 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 								fflush (stdout);
 								exit (1);
 							}
+							if ( curr_position - abridge_index->start[i] + l == 3661 )
+							{
+								printf ("iCIGAR: %s" , split_on_dash[0]);
+								fflush (stdout);
+							}
 							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
 						}
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
