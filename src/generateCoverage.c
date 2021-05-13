@@ -339,7 +339,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 
 			}
 		}
-		return;
 	}
 
 	/*
