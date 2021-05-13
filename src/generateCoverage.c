@@ -310,11 +310,11 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 
 				 }
 				 */
-				/*
-				 for ( j = 0 ; j < length_of_continuous_segment ; j++ )
-				 printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
-				 prev_stopping_location = abridge_index->start[i] + j - 1;
-				 */
+
+				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
+					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
+				prev_stopping_location = abridge_index->start[i] + j - 1;
+
 			}
 			else if ( d == 0 && bg == 1 && bga == 0 )
 			{
