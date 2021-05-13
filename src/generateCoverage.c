@@ -231,7 +231,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 
 			for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 			{
-				printf ("\n%s" , split_on_comma[j]);
 				splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 				if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
@@ -265,6 +264,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
+					{
+						printf ("\n%d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
 						while ( cigar_items_instance[k].len-- )
 						{
 							//printf ("\nUpdating coverage");
@@ -279,6 +280,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 							coverage_array[curr_position - abridge_index->start[i] + l] += number_of_repititions_of_the_same_reads;
 							l++;
 						}
+					}
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
