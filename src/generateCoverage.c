@@ -227,8 +227,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 				ptr_to_icigars = split_on_tab[1];
 			}
-			if ( abridge_index->start[i] != 23162 || abridge_index->end[i] != 207509 )
-				continue;
+			/*
+			 if ( abridge_index->start[i] != 23162 || abridge_index->end[i] != 207509 )
+			 continue;
+			 */
 			number_of_distinct_cigars_in_a_line = splitByDelimiter (ptr_to_icigars , ',' , split_on_comma);
 
 			for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
@@ -266,7 +268,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( cigar_items_instance[k].def == '&' || cigar_items_instance[k].def == '\'' || cigar_items_instance[k].def == '(' || cigar_items_instance[k].def == ')' || cigar_items_instance[k].def == '*' )
 						cigar_items_instance[k].len = 1;
 
-					printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
+					//printf ("\ncigar %d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
 					{
 						//printf ("\n%d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
@@ -288,7 +290,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
-				printf ("\ncigar====================================================================================================================");
+				//printf ("\ncigar====================================================================================================================");
 			}
 		}
 		/*
