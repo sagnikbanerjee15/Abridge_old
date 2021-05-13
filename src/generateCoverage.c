@@ -281,7 +281,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				}
 				else if ( first_position == 0 )
 				{
-					for ( j = prev_stopping_location ;
+					for ( j = prev_stopping_location + 1 ;
 							j < abridge_index->start[i] ; j++ )
 						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
 
