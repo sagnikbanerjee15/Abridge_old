@@ -243,7 +243,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 							{
 								printf ("\nHoly crap");
 								printf ("\n%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
-								printf ("\niCIGAR: %s j = %d k = %d" , split_on_dash[0] , j , k);
+								printf ("\niCIGAR: %s j = %d k = %d" , split_on_comma[j] , j , k);
 								fflush (stdout);
 								exit (1);
 							}
