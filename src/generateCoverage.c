@@ -165,7 +165,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			{
 				if ( d == 1 && bg == 0 && bga == 0 )
 				{
-
 					if ( i != 0 ) // Not the first chromosome
 					{
 						//printf ("\nThis %s start = %d end = %d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome);
@@ -284,7 +283,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						//printf ("\n%d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
 						while ( cigar_items_instance[k].len-- )
 						{
-							//printf ("\nUpdating coverage");
+							printf ("\nUpdating coverage");
 							if ( curr_position - abridge_index->start[i] + l < 0 || curr_position - abridge_index->start[i] + l >= length_of_continuous_segment )
 							{
 								printf ("\nIncorrect");
