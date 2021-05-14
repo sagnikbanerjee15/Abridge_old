@@ -384,7 +384,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					{
 						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
 						if ( j == length_of_continuous_segment - 1 )
-							pritnf ("Last nucleotide group of cluster");
+							printf ("Last nucleotide group of cluster");
 						previous_coverage = coverage_array[j];
 						if ( j != length_of_continuous_segment - 1 )
 						{
