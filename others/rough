@@ -257,6 +257,7 @@ abridge \
 --keep_intermediate_error_files \
 --cpu $CPU \
 -d \
+-split \
 --generate_overlapping_coverage \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
 --inputabrfilenames $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/SRR13711353_PE.sam.abridge.7z \
