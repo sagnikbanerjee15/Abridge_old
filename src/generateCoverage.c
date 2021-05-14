@@ -275,9 +275,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 						continue;
 					else if ( cigar_items_instance[k].def == '&' || cigar_items_instance[k].def == '\'' || cigar_items_instance[k].def == '(' || cigar_items_instance[k].def == ')' || cigar_items_instance[k].def == '*' )
 						cigar_items_instance[k].len = 1;
-
-					if ( abridge_index->start[i] == 23046848 )
-						printf ("\ncigar %d %c %d" , cigar_items_instance[k].len , cigar_items_instance[k].def , curr_position);
+					/*
+					 if ( abridge_index->start[i] == 23046848 )
+					 printf ("\ncigar %d %c %d" , cigar_items_instance[k].len , cigar_items_instance[k].def , curr_position);
+					 */
 					if ( generate_overlapping_coverage == 1 && generate_nonoverlapping_coverage == 0 )
 					{
 						//printf ("\n%d %c" , cigar_items_instance[k].len , cigar_items_instance[k].def);
@@ -286,7 +287,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 							//printf ("\nUpdating coverage");
 							if ( curr_position - abridge_index->start[i] + l < 0 || curr_position - abridge_index->start[i] + l >= length_of_continuous_segment )
 							{
-								printf ("\nHoly crap");
+								printf ("\nIncorrect");
 								printf ("\n%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
 								printf ("\niCIGAR: %s j = %d k = %d" , split_on_comma[j] , j , k);
 								fflush (stdout);
@@ -299,8 +300,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else if ( generate_overlapping_coverage == 0 && generate_nonoverlapping_coverage == 1 )
 						coverage_array[curr_position - abridge_index->start[i]] += number_of_repititions_of_the_same_reads;
 				}
-				if ( abridge_index->start[i] == 23046848 )
-					printf ("\ncigar====================================================================================================================");
+				/*
+				 if ( abridge_index->start[i] == 23046848 )
+				 printf ("\ncigar====================================================================================================================");
+				 */
 			}
 		}
 		/*
