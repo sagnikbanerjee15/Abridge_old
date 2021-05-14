@@ -364,35 +364,30 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			}
 			int local_start, local_end, previous_coverage;
 			int print_last_record = 0;
+			local_start = 0;
+			local_end = 0;
+			previous_coverage = -1;
 			for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 			{
-				if ( j == 0 )
+				if ( previous_coverage == coverage_array[j] )
 				{
-					previous_coverage = coverage_array[j];
-					local_start = 0;
-					local_end = 0;
+					local_end++;
+					if ( j == length_of_continuous_segment - 1 )
+						print_last_record = 1;
 				}
-				else
+				else //Coverage mismatch
 				{
-					if ( previous_coverage == coverage_array[j] )
-					{
-						local_end++;
-						if ( j == length_of_continuous_segment - 1 )
-							print_last_record = 1;
-					}
-					else //Coverage mismatch
-					{
+					if ( j != 0 )
 						printf ("\n%s\t%d\t%d\t%d local_start %d local_end %d j %d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage , local_start - 1 , local_end , j);
-						if ( j == length_of_continuous_segment - 1 )
-							printf ("Last nucleotide group of cluster");
-						previous_coverage = coverage_array[j];
-						if ( j != length_of_continuous_segment - 1 )
-						{
-							local_start = local_end + 1;
-							local_end++;
-						}
-						else print_last_record = 0;
+					if ( j == length_of_continuous_segment - 1 )
+						printf ("Last nucleotide group of cluster");
+					previous_coverage = coverage_array[j];
+					if ( j != length_of_continuous_segment - 1 )
+					{
+						local_start = local_end + 1;
+						local_end++;
 					}
+					else print_last_record = 0;
 				}
 				//printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 			}
