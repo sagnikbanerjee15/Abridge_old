@@ -408,6 +408,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	{
 		printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome , 0);
 	}
+	fflush (stdout);
 }
 
 int main (int argc, char *argv[])
