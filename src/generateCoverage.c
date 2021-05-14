@@ -147,7 +147,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	coverage_array = NULL;
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
-		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 1;
+		length_of_continuous_segment = abridge_index->end[i] - abridge_index->start[i] + 2;
 		max_bytes_for_current_index_entry = abridge_index->end_byte[i] - abridge_index->start_byte[i];
 		number_of_bytes_read_from_compressed_file = 0;
 		if ( coverage_array != NULL ) free (coverage_array);
