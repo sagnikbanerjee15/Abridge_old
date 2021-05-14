@@ -360,7 +360,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			}
 			else if ( first_position == 0 )
 			{
-				printf ("\n%s\t%d\t%d\t%dThis Location" , abridge_index->chromosome[i] , prev_stopping_location + 1 - 1 , abridge_index->start[i] , 0);
+				printf ("\n%s\t%d\t%d\t%d This Location" , abridge_index->chromosome[i] , prev_stopping_location + 1 - 1 , abridge_index->start[i] , 0);
 			}
 			int local_start, local_end, previous_coverage;
 			int print_last_record = 0;
@@ -398,7 +398,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				printf ("\n%s\t%d\t%d\t%d Last record" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
 			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
-		printf (" Cluster end");
+		printf (" Cluster end Previous stopping location %d " , prev_stopping_location);
 	}
 
 	/*
