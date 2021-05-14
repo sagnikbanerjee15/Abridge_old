@@ -363,6 +363,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , prev_stopping_location + 1 - 1 , abridge_index->start[i] , 0);
 			}
 			int local_start, local_end, previous_coverage;
+			int print_last_record = 0;
 			for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 			{
 				if ( j == 0 )
@@ -374,7 +375,11 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				else
 				{
 					if ( previous_coverage == coverage_array[j] )
+					{
 						local_end++;
+						if ( j == length_of_continuous_segment - 1 )
+							print_last_record = 1;
+					}
 					else //Coverage mismatch
 					{
 						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
@@ -385,7 +390,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				}
 				//printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 			}
-			printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+			if ( print_last_record == 1 )
+				printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
 			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
 	}
