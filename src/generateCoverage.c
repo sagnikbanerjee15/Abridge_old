@@ -185,7 +185,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				}
 				else if ( d == 0 && bg == 0 && bga == 1 )
 					if ( i != 0 ) // Not the first chromosome
-						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome , 0);
+						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 - 1 , last_location_of_current_chromosome , 0);
 				/***********************************************************************************/
 
 				curr_position = 0;
@@ -328,143 +328,86 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		/*
 		 * Print the coverage as requested by user
 		 */
-		if ( split == 0 )
+		if ( d == 1 && bg == 0 && bga == 0 )
 		{
-			if ( d == 1 && bg == 0 && bga == 0 )
+			if ( first_position == 1 )
 			{
-				if ( first_position == 1 )
-				{
-					for ( j = 1 ; j < abridge_index->start[i] ; j++ )
-						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
-					first_position = 0;
-				}
-				else if ( first_position == 0 )
-				{
-					for ( j = prev_stopping_location + 1 ;
-							j < abridge_index->start[i] ; j++ )
-						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
-
-				}
-				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
-					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
-				prev_stopping_location = abridge_index->start[i] + j - 1;
+				for ( j = 1 ; j < abridge_index->start[i] ; j++ )
+					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
+				first_position = 0;
 			}
-			else if ( d == 0 && bg == 1 && bga == 0 )
+			else if ( first_position == 0 )
 			{
+				for ( j = prev_stopping_location + 1 ;
+						j < abridge_index->start[i] ; j++ )
+					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
 
 			}
-			else if ( d == 0 && bg == 0 && bga == 1 )
-			{
-				if ( first_position == 1 )
-				{
-					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , 1 , abridge_index->start[i] , 0);
-					first_position = 0;
-				}
-				else if ( first_position == 0 )
-				{
-					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , prev_stopping_location + 1 , abridge_index->start[i] , 0);
-				}
-				int local_start, local_end, previous_coverage;
-				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
-				{
-					if ( j == 0 )
-					{
-						previous_coverage = coverage_array[j];
-						local_start = 0;
-						local_end = 0;
-					}
-					else
-					{
-						if ( previous_coverage == coverage_array[j] )
-							local_end++;
-						else //Coverage mismatch
-						{
-							printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start , abridge_index->start[i] + local_end , previous_coverage);
-							previous_coverage = coverage_array[j];
-							local_start = local_end + 1;
-							local_end++;
-						}
-					}
-					//printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
-				}
-				prev_stopping_location = abridge_index->start[i] + j - 1;
-			}
+			for ( j = 0 ; j < length_of_continuous_segment ; j++ )
+				printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j - 1 , coverage_array[j]);
+			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
-		else if ( split == 1 )
+		else if ( d == 0 && bg == 1 && bga == 0 )
 		{
-			if ( d == 1 && bg == 0 && bga == 0 )
+
+		}
+		else if ( d == 0 && bg == 0 && bga == 1 )
+		{
+			if ( first_position == 1 )
 			{
-				if ( first_position == 1 )
+				printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , 1 - 1 , abridge_index->start[i] , 0);
+				first_position = 0;
+			}
+			else if ( first_position == 0 )
+			{
+				printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , prev_stopping_location + 1 - 1 , abridge_index->start[i] , 0);
+			}
+			int local_start, local_end, previous_coverage;
+			for ( j = 0 ; j < length_of_continuous_segment ; j++ )
+			{
+				if ( j == 0 )
 				{
-					for ( j = 1 ; j < abridge_index->start[i] ; j++ )
-						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
-					first_position = 0;
+					previous_coverage = coverage_array[j];
+					local_start = 0;
+					local_end = 0;
 				}
-				else if ( first_position == 0 )
+				else
 				{
-					for ( j = prev_stopping_location + 1 ;
-							j < abridge_index->start[i] ; j++ )
-						printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
-
+					if ( previous_coverage == coverage_array[j] )
+						local_end++;
+					else //Coverage mismatch
+					{
+						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+						previous_coverage = coverage_array[j];
+						local_start = local_end + 1;
+						local_end++;
+					}
 				}
-
-				for ( j = 0 ; j < length_of_continuous_segment ; j++ )
-					printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
-				prev_stopping_location = abridge_index->start[i] + j - 1;
+				//printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 			}
-			else if ( d == 0 && bg == 1 && bga == 0 )
-			{
-
-			}
-			else if ( d == 0 && bg == 0 && bga == 1 )
-			{
-
-			}
+			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
 	}
 
 	/*
 	 * Print out the zero entries for the final nucleotides of the last chromosome
 	 */
-	if ( split == 0 )
+	if ( d == 1 && bg == 0 && bga == 0 )
 	{
-		if ( d == 1 && bg == 0 && bga == 0 )
-		{
-			for ( j = prev_stopping_location + 1 ;
-					j <= last_location_of_current_chromosome ; j++ )
-				printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
-		}
-		else if ( d == 0 && bg == 1 && bga == 0 )
-		{
-			/*
-			 * Nucleotides with 0 coverage is skipped
-			 */
-		}
-		else if ( d == 0 && bg == 0 && bga == 1 )
-		{
-			printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome , 0);
-		}
+		for ( j = prev_stopping_location + 1 ;
+				j <= last_location_of_current_chromosome ; j++ )
+			printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
 	}
-	else if ( split == 1 )
+	else if ( d == 0 && bg == 1 && bga == 0 )
 	{
-		if ( d == 1 && bg == 0 && bga == 0 )
-		{
-			for ( j = prev_stopping_location + 1 ;
-					j <= last_location_of_current_chromosome ; j++ )
-				printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , j , 0);
-		}
-		else if ( d == 0 && bg == 1 && bga == 0 )
-		{
-			/*
-			 * Nucleotides with 0 coverage is skipped
-			 */
-		}
-		else if ( d == 0 && bg == 0 && bga == 1 )
-		{
-			printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome , 0);
-		}
+		/*
+		 * Nucleotides with 0 coverage is skipped
+		 */
 	}
-
+	else if ( d == 0 && bg == 0 && bga == 1 )
+	{
+		printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome , 0);
+	}
 }
 
 int main (int argc, char *argv[])
