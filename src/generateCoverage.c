@@ -389,6 +389,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 							local_start = local_end + 1;
 							local_end++;
 						}
+						else print_last_record = 0;
 					}
 				}
 				//printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
@@ -417,7 +418,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	}
 	else if ( d == 0 && bg == 0 && bga == 1 )
 	{
-		printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 , last_location_of_current_chromosome , 0);
+		printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 - 1 , last_location_of_current_chromosome , 0);
 	}
 	fflush (stdout);
 }
