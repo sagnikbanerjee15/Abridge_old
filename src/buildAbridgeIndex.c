@@ -82,7 +82,7 @@ void findFarthestMapping (long long int *start, long long int *end, char **split
 		{
 			if ( print )
 				printf ("\n Start:%lld Length of read:%d End:%lld icigar:%s" , *start , findEndPointOfiCIGAR (split_icigar_and_num_reads[0]) , *start + findEndPointOfiCIGAR (split_icigar_and_num_reads[0]) - 1 , split_icigar_field[i]);
-			if ( *start + findEndPointOfiCIGAR (split_icigar_and_num_reads[0]) - 1 > *end )
+			if ( *start + findEndPointOfiCIGAR (split_icigar_and_num_reads[0]) - 1 >= *end )
 				*end = *start + findEndPointOfiCIGAR (split_icigar_and_num_reads[0]) - 1;
 
 		}
