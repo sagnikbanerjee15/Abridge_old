@@ -364,7 +364,6 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			}
 			int local_start, local_end, previous_coverage;
 			int print_last_record = 0;
-			int change_in_last_coverage = 0;
 			for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 			{
 				if ( j == 0 )
@@ -383,30 +382,23 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					}
 					else //Coverage mismatch
 					{
-						printf ("\n%s\t%d\t%d\t%d j=%d length_of_continous_segment=%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage , j , length_of_continuous_segment);
+						printf ("\n%s\t%d\t%d\t%d j=%d length_of_continous_segment %d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage , length_of_continuous_segment);
 						if ( j == length_of_continuous_segment - 1 )
-							printf (" Last nucleotide group of cluster");
+							printf ("Last nucleotide group of cluster");
 						previous_coverage = coverage_array[j];
 						if ( j != length_of_continuous_segment - 1 )
-							local_start = local_end + 1;
-						else
 						{
-							print_last_record = 0;
-							change_in_last_coverage = 1;
+							local_start = local_end + 1;
+							local_end++;
 						}
-						local_end++;
+						else print_last_record = 0;
 					}
 				}
 				//printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 			}
 			if ( print_last_record == 1 )
 				printf ("\n%s\t%d\t%d\t%d Last record" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
-			if ( change_in_last_coverage == 1 )
-			{
-				printf ("\n%s\t%d\t%d\t%d j=%d length_of_continous_segment=%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage , j , length_of_continuous_segment);
-				local_end++;
-			}
-			prev_stopping_location = abridge_index->start[i] + local_end - 1;
+			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
 		printf (" Cluster end Previous stopping location %d cluster start %d length of continuous segment %d" , prev_stopping_location , abridge_index->start[i] , length_of_continuous_segment);
 	}
