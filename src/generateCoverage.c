@@ -355,7 +355,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 		{
 			if ( first_position == 1 )
 			{
-				printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , 1 - 1 , abridge_index->start[i] , 0);
+				printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , 1 - 1 , abridge_index->start[i] - 1 , 0);
 				first_position = 0;
 			}
 			else if ( first_position == 0 )
