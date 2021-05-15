@@ -364,7 +364,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			else if ( first_position == 0 )
 			{
 				if ( prev_stopping_location + 1 - 1 != abridge_index->start[i] - 1 )
-					printf ("\n%s\t%d\t%d\t%d Pos 0" , abridge_index->chromosome[i] , prev_stopping_location + 1 - 1 , abridge_index->start[i] - 1 , 0);
+					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , prev_stopping_location + 1 - 1 , abridge_index->start[i] - 1 , 0);
 			}
 			int local_start, local_end, previous_coverage;
 			int print_last_record = 0;
@@ -387,7 +387,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else //Coverage mismatch
 					{
 						if ( abridge_index->start[i] + local_start - 1 != abridge_index->start[i] + local_end )
-							printf ("\n%s\t%d\t%d\t%d Pos 1" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+							printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
 						/*
 						 if ( j == length_of_continuous_segment - 1 )
 						 printf ("Last nucleotide group of cluster");
@@ -406,12 +406,12 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			if ( print_last_record == 1 )
 			{
 				if ( abridge_index->start[i] + local_start - 1 != abridge_index->start[i] + local_end )
-					printf ("\n%s\t%d\t%d\t%d Pos 2" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
 			}
 			if ( coverage_array[length_of_continuous_segment - 1] != coverage_array[length_of_continuous_segment - 2] ) // The last nucleotide was a mismatch
 			{
 				if ( abridge_index->start[i] + length_of_continuous_segment - 2 != abridge_index->start[i] + length_of_continuous_segment - 1 )
-					printf ("\n%s\t%d\t%d\t%d Pos 3" , abridge_index->chromosome[i] , abridge_index->start[i] + length_of_continuous_segment - 2 , abridge_index->start[i] + length_of_continuous_segment - 1 , previous_coverage);
+					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + length_of_continuous_segment - 2 , abridge_index->start[i] + length_of_continuous_segment - 1 , previous_coverage);
 			}
 			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
