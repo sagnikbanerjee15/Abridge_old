@@ -382,7 +382,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					}
 					else //Coverage mismatch
 					{
-						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+						printf ("\n%s\t%d\t%d\t%d j=%d length_of_continous_segment=%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage , j , length_of_continuous_segment);
 						if ( j == length_of_continuous_segment - 1 )
 							printf ("Last nucleotide group of cluster");
 						previous_coverage = coverage_array[j];
