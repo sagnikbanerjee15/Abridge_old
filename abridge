@@ -820,13 +820,12 @@ def findEndedness(options,logging):
     """
     """
     endedness = []
-    for file in options.inputsamfilenames:
-        fhr=open(f"{file}","r")
-        for line in fhr:
-            if line[0]!='@':
-                samformatflag = int(line.strip().split()[1])
-                endedness.append(samformatflag % 2)
-                break
+    fhr=open(f"{options.inputsamfilenames}","r")
+    for line in fhr:
+        if line[0]!='@':
+            samformatflag = int(line.strip().split()[1])
+            endedness.append(samformatflag % 2)
+            break
     
     if len(set(endedness))!=1:
         print("A mixture of single and paired ended files is not allowed. Exiting...")
