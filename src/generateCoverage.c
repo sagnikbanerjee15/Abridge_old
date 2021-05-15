@@ -349,19 +349,15 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
-		else if ( d == 0 && bg == 1 && bga == 0 )
-		{
-
-		}
-		else if ( d == 0 && bg == 0 && bga == 1 )
+		else if ( d == 0 && ( bg == 1 || bga == 1 ) )
 		{
 			if ( first_position == 1 )
 			{
-				if ( 1 - 1 != abridge_index->start[i] - 1 )
+				if ( 1 - 1 != abridge_index->start[i] - 1 && bg == 0 && bga == 1 )
 					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , 1 - 1 , abridge_index->start[i] - 1 , 0);
 				first_position = 0;
 			}
-			else if ( first_position == 0 )
+			else if ( first_position == 0 && bg == 0 && bga == 1 )
 			{
 				if ( prev_stopping_location + 1 - 1 != abridge_index->start[i] - 1 )
 					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , prev_stopping_location + 1 - 1 , abridge_index->start[i] - 1 , 0);
@@ -387,7 +383,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					else //Coverage mismatch
 					{
 						if ( abridge_index->start[i] + local_start - 1 != abridge_index->start[i] + local_end )
-							printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+						{
+							if ( ( bg == 1 && previous_coverage != 0 ) || bga == 1 )
+								printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+						}
 						/*
 						 if ( j == length_of_continuous_segment - 1 )
 						 printf ("Last nucleotide group of cluster");
@@ -406,12 +405,14 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			if ( print_last_record == 1 )
 			{
 				if ( abridge_index->start[i] + local_start - 1 != abridge_index->start[i] + local_end )
-					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+					if ( ( bg == 1 && previous_coverage != 0 ) || bga == 1 )
+						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
 			}
 			if ( coverage_array[length_of_continuous_segment - 1] != coverage_array[length_of_continuous_segment - 2] ) // The last nucleotide was a mismatch
 			{
 				if ( abridge_index->start[i] + length_of_continuous_segment - 2 != abridge_index->start[i] + length_of_continuous_segment - 1 )
-					printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + length_of_continuous_segment - 2 , abridge_index->start[i] + length_of_continuous_segment - 1 , previous_coverage);
+					if ( ( bg == 1 && previous_coverage != 0 ) || bga == 1 )
+						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + length_of_continuous_segment - 2 , abridge_index->start[i] + length_of_continuous_segment - 1 , previous_coverage);
 			}
 			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
