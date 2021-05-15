@@ -395,7 +395,14 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				//printf ("\n%s\t%d\t%d" , abridge_index->chromosome[i] , abridge_index->start[i] + j , coverage_array[j]);
 			}
 			if ( print_last_record == 1 )
+			{
 				printf ("\n%s\t%d\t%d\t%d Last record" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
+			}
+			else
+			{
+				printf ("\n%s\t%d\t%d\t%d j=%d length_of_continous_segment=%d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage , j , length_of_continuous_segment);
+				local_end++;
+			}
 			prev_stopping_location = abridge_index->start[i] + local_end - 1;
 		}
 		printf (" Cluster end Previous stopping location %d cluster start %d length of continuous segment %d" , prev_stopping_location , abridge_index->start[i] , length_of_continuous_segment);
