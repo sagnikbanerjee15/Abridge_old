@@ -184,8 +184,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 					 */
 				}
 				else if ( d == 0 && bg == 0 && bga == 1 )
-					if ( i != 0 ) // Not the first chromosome
+				{
+					if ( i != 0 && prev_stopping_location + 1 - 1 != last_location_of_current_chromosome ) // Not the first chromosome
 						printf ("\n%s\t%d\t%d\t%d" , abridge_index->chromosome[i - 1] , prev_stopping_location + 1 - 1 , last_location_of_current_chromosome , 0);
+				}
 				/***********************************************************************************/
 
 				curr_position = 0;
