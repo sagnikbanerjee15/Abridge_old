@@ -1396,7 +1396,7 @@ def main():
         """
         os.system(f"rm -f {options.output_directory}")
     
-    if options.generate_overlapping_coverage is not None or options.generate_non_overlapping_coverage is not None:
+    if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage == True:
         input_filename = options.inputabrfilenames
         name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
         pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
