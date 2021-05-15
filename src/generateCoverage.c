@@ -400,7 +400,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				printf ("\n%s\t%d\t%d\t%d Last record" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage);
 			if ( coverage_array[length_of_continuous_segment - 1] != coverage_array[length_of_continuous_segment - 2] ) // The last nucleotide was a mismatch
 			{
-				printf ("\n%s\t%d\t%d\t%d j=%d length_of_continous_segment %d" , abridge_index->chromosome[i] , abridge_index->start[i] + local_start - 1 , abridge_index->start[i] + local_end , previous_coverage , length_of_continuous_segment);
+				printf ("\n%s\t%d\t%d\t%d j=%d length_of_continous_segment %d" , abridge_index->chromosome[i] , abridge_index->start[i] + length_of_continuous_segment - 1 , abridge_index->start[i] + length_of_continuous_segment , previous_coverage , length_of_continuous_segment);
 			}
 			prev_stopping_location = abridge_index->start[i] + j - 1;
 		}
