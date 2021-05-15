@@ -235,24 +235,24 @@ def validateCommandLineArguments(options):
 def checkSAMAlignments(options,logging):
     """
     """
-    for file in options.inputsamfilenames:
-        if "SO:coordinate" not in open(f"{file}","r").readline():
-            print(f"The file {file} is not sorted. Exiting")
-            if options.quiet == False:
-                logging.info(f"The file {file} is not sorted. Exiting")
-            sys.exit()
+    
+    if "SO:coordinate" not in open(f"{options.inputsamfilenames}","r").readline():
+        print(f"The file {file} is not sorted. Exiting")
+        if options.quiet == False:
+            logging.info(f"The file {file} is not sorted. Exiting")
+        sys.exit()
     
     # Verify that all the headers are exactly same
     headers = []
-    for file in options.inputsamfilenames:
-        fhr=open(f"{file}","r")
-        header=""
-        for line in fhr:
-            if line[:3]=='@SQ' or line[:3]=="@HD":
-                header+=line
-            else:
-                break
-        headers.append(header)
+    
+    fhr=open(f"{options.inputsamfilenames}","r")
+    header=""
+    for line in fhr:
+        if line[:3]=='@SQ' or line[:3]=="@HD":
+            header+=line
+        else:
+            break
+    headers.append(header)
     if len(set(headers))!=1:
         print("All the headers must be same. Please check your bamfile. Exiting...")
         if options.quiet == False:
