@@ -1066,7 +1066,7 @@ void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_g
 		int length_of_read = 0;
 		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
 			if ( cigar_items_instance[cigar_items_instance_index].def == 'M' )
-				length_of_read += cigar_items_instance[cigar_items_instance_index].len;
+				length_of_read += cigar_items_instance[i].len;
 		for ( i = 0 ; i < length_of_read ; i++ )
 		{
 			sam_alignment_instance->seq[i] = 'A';
@@ -1082,9 +1082,9 @@ void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_g
 		int length_of_read = 0;
 		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
 		{
-			printf ("Splits %d %c" , cigar_items_instance[cigar_items_instance_index].len , cigar_items_instance[cigar_items_instance_index].def);
-			if ( cigar_items_instance[cigar_items_instance_index].def == 'M' )
-				length_of_read += cigar_items_instance[cigar_items_instance_index].len;
+			//printf ("Splits %d %c" , cigar_items_instance[cigar_items_instance_index].len , cigar_items_instance[cigar_items_instance_index].def);
+			if ( cigar_items_instance[i].def == 'M' )
+				length_of_read += cigar_items_instance[i].len;
 		}
 		for ( i = 0 ; i < length_of_read ; i++ )
 			sam_alignment_instance->qual[i] = default_quality_value[0];
