@@ -159,6 +159,7 @@ abridge \
 --keep_intermediate_error_files \
 --decompress \
 --cpu $CPU \
+--ignore_sequence \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
 --inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE/SRR13711353_SE.sam.abridge.br \
 --output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE/decompress) \
