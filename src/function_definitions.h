@@ -1077,6 +1077,7 @@ void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_g
 	}
 	if ( flag_ignore_quality_score == 1 )
 	{
+		printf ("\nEntering here flag_ignore_quality_score");
 		splitCigar (sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance);
 		int length_of_read = 0;
 		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
