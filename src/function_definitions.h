@@ -1086,7 +1086,7 @@ void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_g
 		for ( i = 0 ; i < length_of_read ; i++ )
 			sam_alignment_instance->qual[i] = default_quality_value[0];
 		sam_alignment_instance->qual[i] = '\0';
-		printf ("\n%s" , sam_alignment_instance->qual);
+		printf ("\ncigar %s %s" , sam_alignment_instance->cigar , sam_alignment_instance->qual);
 	}
 }
 
