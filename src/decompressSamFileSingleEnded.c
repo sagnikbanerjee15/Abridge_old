@@ -153,6 +153,14 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	flag_save_all_quality_scores = strtol (split_on_tab[4] , &convert_to_int_temp , 10);
 	flag_save_exact_quality_scores = strtol (split_on_tab[5] , &convert_to_int_temp , 10);
 
+	printf ("\nflag_ignore_mismatches %d" , flag_ignore_mismatches);
+	printf ("\nflag_ignore_soft_clippings %d" , flag_ignore_soft_clippings);
+	printf ("\nflag_ignore_unmapped_sequences %d" , flag_ignore_unmapped_sequences);
+	printf ("\nflag_ignore_quality_score %d" , flag_ignore_quality_score);
+	printf ("\nflag_save_all_quality_scores %d" , flag_save_all_quality_scores);
+	printf ("\nflag_save_exact_quality_scores %d" , flag_save_exact_quality_scores);
+	fflush (stdout);
+
 	line_num = 0;
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
@@ -307,6 +315,7 @@ int main (int argc, char *argv[])
 	flag_ignore_sequence_information = strtol (argv[7] , &temp , 10);
 	strcpy(unmapped_filename , argv[8]);
 	strcpy(name_of_file_with_quality_scores , argv[9]);
+
 	/********************************************************************/
 
 	decompressFile (name_of_file_with_quality_scores , abridge_index_filename , genome_filename , output_sam_filename , pass1_filename , genome_prefix , unmapped_filename , default_quality_value , flag_ignore_sequence_information);
