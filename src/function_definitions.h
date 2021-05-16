@@ -1081,8 +1081,11 @@ void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_g
 		splitCigar (sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance);
 		int length_of_read = 0;
 		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
+		{
+			printf ("Splits %d %c" , cigar_items_instance[cigar_items_instance_index].len , cigar_items_instance[cigar_items_instance_index].def);
 			if ( cigar_items_instance[cigar_items_instance_index].def == 'M' )
 				length_of_read += cigar_items_instance[cigar_items_instance_index].len;
+		}
 		for ( i = 0 ; i < length_of_read ; i++ )
 			sam_alignment_instance->qual[i] = default_quality_value[0];
 		sam_alignment_instance->qual[i] = '\0';
