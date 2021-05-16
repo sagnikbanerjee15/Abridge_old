@@ -1,73 +1,91 @@
 
-CPU=40
-
-Abdrige Compression
-===================
-(/usr/bin/time --verbose  \
-abridge \
---compress \
---cpu $CPU \
---keep_intermediate_error_files \
---both \
---save_all_quality_scores \
---genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711356_SE.sam /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711357_SE.sam \
---output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
-1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.output \
-2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.error &
+CPU=1
+SINGLE ENDED
+============
 
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
 --compress \
 --cpu $CPU \
---both \
 --save_all_quality_scores \
---genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam \
---output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge) \
-1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.output \
-2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_compress.error &
+--save_exact_quality_scores \
+--skip_compression \
+--fast \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_all_quality_scores_save_exact_quality_scores) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_all_quality_scores_save_exact_quality_scores.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_all_quality_scores_save_exact_quality_scores.error &
 
-
-Abridge Decompression
-=====================
 (/usr/bin/time --verbose  \
 abridge \
---decompress \
+--keep_intermediate_error_files \
+--compress \
 --cpu $CPU \
---genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711356_SE.sam.abridge.br /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711357_SE.sam.abridge.br \
---output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
-1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.output \
-2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_decompress.error &
+--save_all_quality_scores \
+--fast \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_all_quality_scores_save_approx_quality_scores) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_all_quality_scores_save_approx_quality_scores.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_all_quality_scores_save_approx_quality_scores.error &
 
-
-Abridge Merge
-=============
 (/usr/bin/time --verbose  \
 abridge \
---merge \
+--keep_intermediate_error_files \
+--compress \
 --cpu $CPU \
---genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.7z /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711354_SE.sam.abridge.7z /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.7z \
--o /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/merge) \
-1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.output \
-2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_merge.error &
-
-Abridge random access
-=====================
+--fast \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_only_indels_save_qual_scores) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_only_indels_save_qual_scores.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_only_indels_save_qual_scores.error &
 
 (/usr/bin/time --verbose  \
 abridge \
---random \
---inputabrfilenames /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711355_SE.sam.abridge.7z \
---positions 1:5000-7000 \
---genome /90daydata/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---output_directory /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress \
-) \
-1> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_random.output \
-2> /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/tests_random.error &
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--fast \
+--ignore_quality_scores \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_only_indels_save_qual_scores) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_only_indels_nosave_qual_scores.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/save_only_indels_nosave_qual_scores.error &
+
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--fast \
+--ignore_quality_scores \
+--ignore_soft_clippings \
+--ignore_mismatches \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/ignore_soft_clippings_ignore_mismatches) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/ignore_soft_clippings_ignore_mismatches.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/ignore_soft_clippings_ignore_mismatches.error &
+
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--fast \
+--ignore_quality_scores \
+--ignore_soft_clippings \
+--ignore_mismatches \
+--ignore_quality_scores \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/ignore_soft_clippings_ignore_mismatches_ignore_quality_scores) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/ignore_soft_clippings_ignore_mismatches_ignore_quality_scores.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/ignore_soft_clippings_ignore_mismatches_ignore_quality_scores.error &
 
 
 Abridge paired ended
@@ -76,88 +94,6 @@ ROOT_DIRECTORY=/90daydata/maizegdb/sagnik/ABRIDGE/
 ROOT_DIRECTORY=/project/maizegdb/sagnik/ABRIDGE/
 
 
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---save_all_quality_scores \
---save_exact_quality_scores \
---run_diagnostics \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge) \
-1> $ROOT_DIRECTORY/developing_abridge/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---save_all_quality_scores \
---run_diagnostics \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge) \
-1> $ROOT_DIRECTORY/developing_abridge/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
-
-(/usr/bin/time --verbose  \
-/project/maizegdb/sagnik/softwares/anaconda/bin/python \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---save_all_quality_scores \
---run_diagnostics \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam $ROOT_DIRECTORY/developing_abridge/SRR13711354_PE.sam $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge) \
-1> $ROOT_DIRECTORY/developing_abridge/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/tests_compress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---run_diagnostics \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam $ROOT_DIRECTORY/developing_abridge/SRR13711354_PE.sam $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge) \
-1> $ROOT_DIRECTORY/developing_abridge/tests_compress_no_quality_scores.output \
-2> $ROOT_DIRECTORY/developing_abridge/tests_compress_no_quality_scores.error &
-
-
-
-DECOMPRESS
-==========
-(/usr/bin/time --verbose  \
-abridge \
---decompress \
---cpu $CPU \
---keep_intermediate_error_files \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711355_PE.sam.abridge.br \
---output_directory $ROOT_DIRECTORY/developing_abridge/decompress) \
-1> $ROOT_DIRECTORY/developing_abridge/tests_decompress.output \
-2> $ROOT_DIRECTORY/developing_abridge/tests_decompress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
---decompress \
---cpu $CPU \
---keep_intermediate_error_files \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/SRR13711353_PE.sam.abridge.br \
---output_directory $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/decompress) \
-1> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_decompress.output \
-2> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_decompress.error &
 
 RANDOM
 ======
@@ -176,79 +112,6 @@ abridge \
 
 TESTS WITH ONE RNA-SEQ SAMPLE
 =============================
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---save_all_quality_scores \
---save_exact_quality_scores \
---run_diagnostics \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_exact_quality_scores ) \
-1> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_exact_quality_scores/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_exact_quality_scores/tests_compress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---save_all_quality_scores \
---run_diagnostics \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores ) \
-1> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/save_all_quality_scores_save_approx_quality_scores/tests_compress.error &
-
-
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---run_diagnostics \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge/save_only_indels_save_qual_scores ) \
-1> $ROOT_DIRECTORY/developing_abridge/save_only_indels_save_qual_scores/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/save_only_indels_save_qual_scores/tests_compress.error &
-
-
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---run_diagnostics \
---ignore_quality_scores \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge/save_only_indels_nosave_qual_scores ) \
-1> $ROOT_DIRECTORY/developing_abridge/save_only_indels_nosave_qual_scores/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/save_only_indels_nosave_qual_scores/tests_compress.error &
-
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---both \
---ignore_soft_clippings \
---ignore_mismatches \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames $ROOT_DIRECTORY/developing_abridge/SRR13711353_PE.sam \
---output_directory $ROOT_DIRECTORY/developing_abridge/ignore_soft_clippings_ignore_mismatches ) \
-1> $ROOT_DIRECTORY/developing_abridge/ignore_soft_clippings_ignore_mismatches/tests_compress.output \
-2> $ROOT_DIRECTORY/developing_abridge/ignore_soft_clippings_ignore_mismatches/tests_compress.error &
-
-
 
 COVERAGE GENERATION
 ===================
