@@ -134,12 +134,12 @@ def validateCommandLineArguments(options):
         print("You need to enter at least one location from where reads will be retrieved")
         sys.exit()
         
-    if options.random == True and len(options.inputabrfilenames)!=1:
-        print(f"Length of abrfilename {len(options.inputabrfilenames)}")
+    if options.random == True and options.inputabrfilenames is None:
+        print(f"You need to provide one compressed file for random access")
         sys.exit()
         
     if options.random == True and options.inputsamfilenames is not None:
-        print(f"Length of abrfilename {options.inputsamfilenames}")
+        print(f"You need to provide one compressed file for random access")
         sys.exit()
         
     if options.error_directory == None:
