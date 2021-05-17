@@ -240,11 +240,12 @@ abridge \
 --keep_intermediate_error_files \
 --cpu $CPU \
 -d \
+-split \
 --generate_overlapping_coverage \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
 --inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE/SRR13711353_SE.sam.abridge.br \
 --output_directory  /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE ) \
-1>  /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE/tests_non_overlapping_cov_generation_SE_d.output \
-2>  /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE/tests_non_overlapping_cov_generation_SE_d.error &
+1>  /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE/tests_non_overlapping_cov_generation_SE.output \
+2>  /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE/tests_non_overlapping_cov_generation_SE.error &
 
 
