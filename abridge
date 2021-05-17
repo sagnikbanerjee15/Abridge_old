@@ -1299,7 +1299,7 @@ def main():
     
     validateCommandLineArguments(options)
     #logging.info(options)
-    
+    pprint.pprint(options)
     if options.quiet == False:
         logging.info("Logger has been configured")
     if options.quiet == False:
