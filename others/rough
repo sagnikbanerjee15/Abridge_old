@@ -12,6 +12,9 @@ mkdir -p \
 /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE \
 /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE
 
+===
+ 1
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -26,6 +29,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE.error &
 
+===
+ 2
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -39,6 +45,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_approx_quality_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_approx_quality_scores_SE.error &
 
+===
+ 3
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -51,6 +60,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_save_qual_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_save_qual_scores_SE.error &
 
+===
+ 4
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -64,6 +76,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_nosave_qual_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_nosave_qual_scores_SE.error &
 
+===
+ 5
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -79,6 +94,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE.error &
 
+===
+ 6
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -99,6 +117,9 @@ abridge \
 ==========================
 SINGLE ENDED DECOMPRESSION
 ==========================
+===
+ 1
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -110,6 +131,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_all_quality_scores_save_exact_quality_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_all_quality_scores_save_exact_quality_scores_SE.error &
 
+===
+ 2
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -121,6 +145,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_all_quality_scores_save_approx_quality_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_all_quality_scores_save_approx_quality_scores_SE.error &
 
+===
+ 3
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -132,6 +159,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_only_indels_save_qual_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_only_indels_save_qual_scores_SE.error &
 
+===
+ 4
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -143,6 +173,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_only_indels_nosave_qual_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_only_indels_nosave_qual_scores_SE.error &
 
+===
+ 5
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -154,6 +187,9 @@ abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_SE.error &
 
+===
+ 6
+===
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -165,6 +201,8 @@ abridge \
 --output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE/decompress) \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE.error &
+
+
 
 
 
