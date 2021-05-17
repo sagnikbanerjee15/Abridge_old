@@ -129,6 +129,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 	abridge_index = allocateMemoryAbridge_Index ();
 	last_cigar = ( char* ) malloc (sizeof(char) * 1000);
 	last_cigar[0] = '\0';
+	if ( strcmp (dictionary_name , "dummy") == 0 ) max_reads_in_each_line = -1;
 	/****************************************************************************************************************************************/
 
 	line_len = getline ( &buffer_for_index , &len , fhr_index);
