@@ -237,8 +237,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			}
 			number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
 			if ( max_reads_in_each_line == -1 ) number_of_columns++;
-			printf ("\nmax_reads_in_each_line %d dictionary name %s" , max_reads_in_each_line , dictionary_name);
-			fflush (stdout);
+			//printf ("\nmax_reads_in_each_line %d dictionary name %s" , max_reads_in_each_line , dictionary_name);
+			//fflush (stdout);
 			if ( number_of_columns == 2 )
 			{
 				curr_position++;
@@ -249,7 +249,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 				curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 				ptr_to_icigars = split_on_tab[1];
 			}
-			printf ("\nChromosome=%s curr_position=%d" , abridge_index->chromosome[i] , curr_position);
+			//printf ("\nChromosome=%s curr_position=%d" , abridge_index->chromosome[i] , curr_position);
 			/*
 			 if ( abridge_index->start[i] != 23162 || abridge_index->end[i] != 207509 )
 			 continue;
