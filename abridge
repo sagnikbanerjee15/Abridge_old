@@ -1344,7 +1344,7 @@ def main():
         if options.quiet == False:
             logging.info(f"mergeAbridgeData() execution is complete")
         
-    if options.random==True:
+    if options.random == True:
         print("Random")
         input_filename = options.inputabrfilenames
         name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
