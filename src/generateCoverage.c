@@ -242,6 +242,10 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			}
 			else if ( number_of_columns == 3 )
 			{
+				if ( strtol (split_on_tab[0] , &convert_to_int_temp , 10) < 0 )
+				{
+					printf ("\nValue less than 0 %d" , strtol (split_on_tab[0] , &convert_to_int_temp , 10));
+				}
 				curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 				ptr_to_icigars = split_on_tab[1];
 			}
