@@ -305,6 +305,7 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 							{
 								printf ("\nIncorrect");
 								printf ("\n%d %d" , curr_position - abridge_index->start[i] + l , length_of_continuous_segment);
+								printf ("\nCurrent position=%d, abrdige_start=%d l=%d" , curr_position , abridge_index->start[i] , l);
 								printf ("\niCIGAR: %s j = %d k = %d" , split_on_comma[j] , j , k);
 								fflush (stdout);
 								exit (1);
