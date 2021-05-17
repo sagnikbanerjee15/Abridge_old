@@ -1345,7 +1345,7 @@ def main():
             logging.info(f"mergeAbridgeData() execution is complete")
         
     if options.random==True:
-        input_filename = options.inputabrfilenames[0]
+        input_filename = options.inputabrfilenames
         name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
         pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
         pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
