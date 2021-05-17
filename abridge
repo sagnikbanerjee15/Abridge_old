@@ -1395,7 +1395,7 @@ def main():
         else:
             sortPositions(options.positions)
         """
-        os.system(f"rm -f {options.output_directory}")
+        os.system(f"rm -rf {options.output_directory}")
     
     if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage ==True:
         input_filename = options.inputabrfilenames
