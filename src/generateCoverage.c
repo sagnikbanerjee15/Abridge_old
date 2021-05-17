@@ -236,6 +236,8 @@ void generateCoverageFromCompressedMappedFile (char *pass1_filename, char *abrid
 			}
 			number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
 			if ( max_reads_in_each_line == -1 ) number_of_columns++;
+			printf ("\nmax_reads_in_each_line %d" , max_reads_in_each_line);
+			fflush (stdout);
 			if ( number_of_columns == 2 )
 			{
 				curr_position++;
