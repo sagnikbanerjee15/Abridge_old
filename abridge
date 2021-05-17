@@ -135,11 +135,11 @@ def validateCommandLineArguments(options):
         sys.exit()
         
     if options.random == True and len(options.inputabrfilenames)!=1:
-        print("")
+        print(f"Length of abrfilename {len(options.inputabrfilenames)}")
         sys.exit()
         
     if options.random == True and options.inputsamfilenames is not None:
-        print("")
+        print(f"Length of abrfilename {options.inputsamfilenames}")
         sys.exit()
         
     if options.error_directory == None:
