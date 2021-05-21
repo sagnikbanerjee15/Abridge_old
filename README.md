@@ -15,7 +15,7 @@ conda install -c bioconda abridge
 Please note that the conda version might not be the latest. It will host a stable version though. If you wish to work with the most recent version please execute the following commands
 
 ```bash
-git clone https://github.com/sagnikbanerjee15/abridge.git
+git clone --recursive https://github.com/sagnikbanerjee15/abridge.git
 cd abridge
 ./install.py
 echo "export PATH=\$PATH:$(pwd)" >> ~/.bashrc # Add this path permanently to the bashrc file

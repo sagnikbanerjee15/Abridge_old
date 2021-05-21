@@ -1,0 +1,6 @@
+[submodule "deps/qvz"]
+	path = deps/qvz
+	url = https://github.com/mikelhernaez/qvz
+[submodule "deps/zpaq"]
+	path = deps/zpaq
+	url = https://github.com/zpaq/zpaq
