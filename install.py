@@ -59,10 +59,7 @@ cmd=f"mv {temp_file} {actual_file}"
 os.system(cmd)
 
 os.chdir(pwd+"/src/")
-all_c_programs = glob.glob("*.c")
-for program in all_c_programs:
-    os.system(f"gcc -o {program[:-2]} -Ofast -g {program}")
-os.system("chmod -R a+x *")
+os.system("make")
 os.chdir(pwd)
 
 
