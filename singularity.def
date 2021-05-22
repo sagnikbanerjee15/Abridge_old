@@ -1,0 +1,25 @@
+# singularity build --remote abridge.sif singularity.def
+Bootstrap: docker
+From: python:3.7.10-buster
+
+%environment
+    export PYTHONNOUSERSITE=1
+
+%post
+    apt update
+    apt install -y --no-install-recommends \
+      p7zip-full \
+      samtools \
+      time \
+      zpaq
+    rm -rf /var/lib/apt/lists/*
+
+    curl -L https://github.com/sagnikbanerjee15/Abridge/archive/refs/heads/conda.tar.gz | tar -xzf -
+    cd Abridge-conda/src
+    make -j && make install
+    cd ..
+    mv abridge /usr/local/bin
+    mv scripts /usr/local/lib/python3.7/site-packages
+    cd ..
+    rm -rf Abridge-conda
+
