@@ -16,6 +16,7 @@ import multiprocessing
 import random
 import glob
 import subprocess
+import shutil
 
 
 from scripts.assessMemoryRequirement import *
@@ -77,7 +78,6 @@ def parseCommandLineArguments():
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
     parser.add_argument("--files_for_removal","-files_for_removal",help=argparse.SUPPRESS)# Files will be removed later
-    parser.add_argument("--softwares","-softwares",help=argparse.SUPPRESS) # Software paths
     parser.add_argument("--single_ended","-single_ended",help=argparse.SUPPRESS)
     parser.add_argument("--reference_to_length","-num_of_reference_sequences",help=argparse.SUPPRESS)
     parser.add_argument("--outputfilename","-outputfilena",help=argparse.SUPPRESS) 
@@ -122,7 +122,6 @@ def validateCommandLineArguments(options):
             sys.exit()
     
     options.files_for_removal = []
-    options.softwares = {}
     abridge_location = subprocess.run(['which', 'abridge'], stdout=subprocess.PIPE).stdout.decode('utf-8').split()[-1]
     if options.header==True:
         options.quiet = True
@@ -153,29 +152,6 @@ def validateCommandLineArguments(options):
     if options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
         options.save_all_quality_scores = True
          
-    options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
-    options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
-    options.softwares["compressSamFileSingleEndedPass2"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass2"
-    options.softwares["compressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEnded"
-    options.softwares["splitSamFileIntoEachReferenceSequence"] = "/".join(abridge_location.split("/")[:-1])+"/src/splitSamFileIntoEachReferenceSequence"
-    options.softwares["buildABRIDGEIndex"]= "/".join(abridge_location.split("/")[:-1])+"/src/buildAbridgeIndex"
-    options.softwares["decompressSamFileSingleEnded"]= "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFileSingleEnded"
-    options.softwares["extractSequencesFromReferences"] = "/".join(abridge_location.split("/")[:-1])+"/scripts/extractSequencesFromReferences.py"
-    options.softwares["randomRetrievalSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalSingleEnded"
-    options.softwares["randomRetrievalPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalPairedEnded"
-    options.softwares["mergeCompressedFilesSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/mergeCompressedFilesSingleEnded"
-    options.softwares["addTagToSamFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/addTagToSamFile"
-    options.softwares["maxReadsMappedToSingleNucleotide"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsMappedToSingleNucleotide"
-    options.softwares["compressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressQualityScoresFile"
-    options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
-    #options.softwares["separateReadsMatePairTogetherAndMatePairAway"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateReadsMatePairTogetherAndMatePairAway"
-    #options.softwares["modifyReadNamesPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/modifyReadNamesPairedEnded"
-    options.softwares["compressSamFilePairedEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEndedPass1"
-    options.softwares["decompressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFilePairedEnded"
-    options.softwares["generateCoverage"] = "/".join(abridge_location.split("/")[:-1])+"/src/generateCoverage"
-    options.softwares["findMaximumNumberOfReadsInEachLine"] = "/".join(abridge_location.split("/")[:-1])+"/src/findMaximumNumberOfReadsInEachLine"
-    options.softwares["zpaq"] = "/".join(abridge_location.split("/")[:-1])+"/deps/zpaq/zpaq"
-    
     cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.genome}.temp"
     os.system(cmd)
     cmd = f"mv {options.genome}.temp {options.genome}"
@@ -334,8 +310,8 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"Starting compression for {input_filename}")
     
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f" {maxReadsMappedToSingleNucleotide} "
+        cmd  = f"(env time -v "
+        cmd += f" maxReadsMappedToSingleNucleotide "
         cmd += f" {input_filename} "
         cmd += f" {name_of_max_input_reads_file}"
         cmd += f" {name_of_total_number_of_alignments_file} "
@@ -364,8 +340,8 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"{name_of_input_file_without_location} max_input_reads_in_a_single_nucl_loc = {max_input_reads_in_a_single_nucl_loc}")
             
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f"{compressSamFileSingleEndedPass1}" # argv[0] - name of the program
+        cmd  = f"(env time -v "
+        cmd += f"compressSamFileSingleEndedPass1" # argv[0] - name of the program
         cmd += f" {options.genome}" # argv[1] - genome_filename
         cmd += f" {options.ignore_soft_clippings}" #argv[2]
         cmd += f" {options.ignore_mismatches} " #argv[3]
@@ -406,8 +382,8 @@ def compressSamFile(options):
         ######################################################################################
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
             all_commands = []
-            cmd  = f"(/usr/bin/time --verbose "
-            cmd += f" {compressQualityScoresFile} "
+            cmd  = f"(env time -v "
+            cmd += f" compressQualityScoresFile "
             cmd += f" {name_of_file_with_quality_scores} "
             cmd += f" {name_of_file_with_compressed_quality_scores} "
             if options.save_exact_quality_scores==True:
@@ -432,8 +408,8 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
         
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 0 "
+        cmd  = f"(env time -v "
+        cmd += f"buildABRIDGEIndex {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 0 "
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -460,8 +436,8 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"Starting Pass1 for {input_filename}")
         
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f" {maxReadsMappedToSingleNucleotide} "
+        cmd  = f"(env time -v "
+        cmd += f" maxReadsMappedToSingleNucleotide "
         cmd += f" {input_filename} "
         cmd += f" {name_of_max_input_reads_file} "
         cmd += f" {name_of_total_number_of_alignments_file} "
@@ -511,8 +487,8 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"{name_of_input_file_without_location} max_read_length = {max_read_length}")
         
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f"{compressSamFilePairedEndedPass1}" # argv[0] - name of the program
+        cmd  = f"(env time -v "
+        cmd += f"compressSamFilePairedEndedPass1" # argv[0] - name of the program
         cmd += f" {options.genome}" # argv[1] - genome_filename
         cmd += f" {options.ignore_soft_clippings}" #argv[2]
         cmd += f" {options.ignore_mismatches} " #argv[3]
@@ -557,8 +533,8 @@ def compressSamFile(options):
         # Generate RLE for quality scores
         ######################################################################################
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd  = f"(/usr/bin/time --verbose "
-            cmd += f" {compressQualityScoresFile} "
+            cmd  = f"(env time -v "
+            cmd += f" compressQualityScoresFile "
             cmd += f" {name_of_file_with_quality_scores} "
             cmd += f" {name_of_file_with_compressed_quality_scores} "
             if options.save_exact_quality_scores==True:
@@ -583,8 +559,8 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
         
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 1 "
+        cmd  = f"(env time -v "
+        cmd += f"buildABRIDGEIndex {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 1 "
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -605,7 +581,8 @@ def compressSamFile(options):
     # Generate SHA512 for genome file
     ######################################################################################
     genome_sha512_filename = f"{options.output_directory}/genome_sha512"
-    cmd = f"sha512sum {options.genome} > {genome_sha512_filename}.temp"
+    sha512sum = shutil.which("sha512sum") or shutil.which("shasum") + " -a 512"
+    cmd = f"{sha512sum} {options.genome} > {genome_sha512_filename}.temp"
     os.system(cmd)
     open(genome_sha512_filename,"w").write(open(f"{genome_sha512_filename}.temp","r").read().strip().split()[0])
     os.system(f"rm {genome_sha512_filename}.temp")
@@ -615,7 +592,7 @@ def compressSamFile(options):
     ######################################################################################
     if options.both == True or options.fast == False:
         """
-        cmd  = f"(/usr/bin/time --verbose "
+        cmd  = f"(env time -v "
         cmd += f" 7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 "
         cmd += f" {compressed_abridged_filename_7z} " # Compressed Output filename
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {name_of_file_dictionary} {genome_sha512_filename} "
@@ -633,9 +610,8 @@ def compressSamFile(options):
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
         """
-        zpaq = options.softwares["zpaq"]
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f" {zpaq} a "
+        cmd  = f"(env time -v "
+        cmd += f" zpaq a "
         cmd += f" {compressed_abridged_filename_zpaq} " # Compressed Output filename
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {name_of_file_dictionary} {genome_sha512_filename} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
@@ -654,7 +630,7 @@ def compressSamFile(options):
         os.system(cmd)
             
     if options.both == True or options.fast == True:
-        cmd  = f"(/usr/bin/time --verbose "
+        cmd  = f"(env time -v "
         cmd += f" brotli -9 -f -k -n -o "
         cmd += f" {compressed_abridged_filename_br} " # Compressed Output filename
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {name_of_file_dictionary} {genome_sha512_filename} "
@@ -685,7 +661,7 @@ def compressSamFile(options):
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle.br")
     
     if options.both == True or options.fast == True:
-        cmd  = f"(/usr/bin/time --verbose "
+        cmd  = f"(env time -v "
         cmd += f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt=1 {compressed_abridged_filename_br} {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {genome_sha512_filename} {name_of_file_with_quality_scores}.rle.br {name_of_file_dictionary}"
         cmd += f") "   
         cmd += f"1> /dev/null "
@@ -833,10 +809,6 @@ def decompressSamFile(options):
             logging.info(f"Running cmd - {cmd}")
         os.system(cmd)
     
-    decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
-    decompressSamFilePairedEnded = options.softwares["decompressSamFilePairedEnded"]
-    deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
-    
     # Check the amount memory needed
     if options.ignore_sequence == 0:
         assessMemoryRequirement(f"{options.genome}.fai",options)
@@ -902,8 +874,8 @@ def decompressSamFile(options):
     compressed_abridged_filename = input_filename
     output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
     
-    cmd  = f"(/usr/bin/time --verbose "
-    cmd += f" {deCompressQualityScoresFile} "
+    cmd  = f"(env time -v "
+    cmd += f" deCompressQualityScoresFile "
     cmd += f" {name_of_file_with_quality_scores}.rle "
     cmd += f" {name_of_file_with_quality_scores} "
     cmd += f") "
@@ -940,11 +912,11 @@ def decompressSamFile(options):
                                 dictionary_name,
                                 max_reads_in_each_line_filename])
 
-    cmd  = f"(/usr/bin/time --verbose "
+    cmd  = f"(env time -v "
     if os.path.exists(dictionary_name)==False:
-        cmd += f" {decompressSamFileSingleEnded} " # argv[0] - Name of the program
+        cmd += f" decompressSamFileSingleEnded " # argv[0] - Name of the program
     else:
-        cmd += f" {decompressSamFilePairedEnded} " # argv[0] - Name of the program
+        cmd += f" decompressSamFilePairedEnded " # argv[0] - Name of the program
     cmd += f" {pass1_index_outputfilename} "# argv[1] - Abridge index, pass1_index_outputfilename
     cmd += f" {options.genome} "# argv[2] - genome file
     cmd += f" {output_sam_filename} "# argv[3] - decompressed SAM filename
@@ -985,8 +957,6 @@ def decompressSamFile(options):
     """
     
 def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
-    generateCoverage = options.softwares["generateCoverage"]
-    findMaximumNumberOfReadsInEachLine = options.softwares["findMaximumNumberOfReadsInEachLine"]
     
     if options.d == True:
         options.d = 1
@@ -1022,8 +992,8 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
     max_reads_in_each_line_filename = f"{options.output_directory}/{name_of_input_file_without_location}.max_read_in_each_line"
     
-    cmd  = f"(/usr/bin/time --verbose "
-    cmd += f" {generateCoverage} "
+    cmd  = f"(env time -v "
+    cmd += f" generateCoverage "
     cmd += f" {pass1_outputfilename} " #argv[1]
     cmd += f" {pass1_index_outputfilename} " #argv[2]
     cmd += f" {options.d} " #argv[3]
@@ -1060,10 +1030,6 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     
 def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
-    randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"]
-    randomRetrievalPairedEnded = options.softwares["randomRetrievalPairedEnded"] 
-    deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
-    
     genome_filename = options.genome
     genome_index_filename = options.genome+".fai"
     
@@ -1078,8 +1044,8 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "_" + options.positions.replace(":","_") + ".sam"
     files_to_be_removed = []
     
-    cmd  = f"(/usr/bin/time --verbose "
-    cmd += f" {deCompressQualityScoresFile} "
+    cmd  = f"(env time -v "
+    cmd += f" deCompressQualityScoresFile "
     cmd += f" {name_of_file_with_quality_scores}.rle "
     cmd += f" {name_of_file_with_quality_scores} "
     cmd += f") "
