@@ -313,6 +313,7 @@ def compressSamFile(options):
     """
     pool = multiprocessing.Pool(processes=int(options.cpu))
     files_to_be_removed = []
+    input_filename = options.inputsamfilenames
     name_of_input_file_without_location = input_filename.split("/")[-1] 
     delete_these_files, other_files, error_files, compressed_files = constructFileNames(input_filename,options) 
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
