@@ -323,37 +323,6 @@ def compressSamFile(options):
     if options.single_ended == True:
         # Single ended
         ######################################################################################
-        # Compiling programs - will be removed during final version
-        ######################################################################################
-        compressSamFileSingleEndedPass1 = options.softwares["compressSamFileSingleEndedPass1"]
-        maxReadsMappedToSingleNucleotide = options.softwares["maxReadsMappedToSingleNucleotide"]
-        buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
-        compressQualityScoresFile = options.softwares["compressQualityScoresFile"]
-        deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
-        
-        cmd=f"gcc {compressSamFileSingleEndedPass1}.c -o {compressSamFileSingleEndedPass1} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {buildABRIDGEIndex}.c -o {buildABRIDGEIndex} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {maxReadsMappedToSingleNucleotide}.c -o {maxReadsMappedToSingleNucleotide} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {compressQualityScoresFile}.c -o {compressQualityScoresFile} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        ######################################################################################
-        
-        ######################################################################################
         # Find maximum number of reads mapped to a single location
         # Find maximum read length
         # Find total number of alignments
@@ -480,38 +449,6 @@ def compressSamFile(options):
         
     else:
         # Paired ended
-        ######################################################################################
-        # Compiling programs - will be removed during final version
-        ######################################################################################
-        maxReadsMappedToSingleNucleotide = options.softwares["maxReadsMappedToSingleNucleotide"]
-        compressSamFilePairedEndedPass1 = options.softwares["compressSamFilePairedEndedPass1"]
-        buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
-        compressQualityScoresFile = options.softwares["compressQualityScoresFile"]
-        deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
-        
-        cmd=f"gcc {buildABRIDGEIndex}.c -o {buildABRIDGEIndex} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {maxReadsMappedToSingleNucleotide}.c -o {maxReadsMappedToSingleNucleotide} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {compressQualityScoresFile}.c -o {compressQualityScoresFile} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        cmd=f"gcc {compressSamFilePairedEndedPass1}.c -o {compressSamFilePairedEndedPass1} -Ofast"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-        ######################################################################################
-        
-        
         ######################################################################################
         # Find maximum number of reads mapped to a single location
         # Find maximum read length
@@ -838,19 +775,6 @@ def mergeAbridgeData(options):
                                     unmapped_outputfilename])
     pool.map(runCommand,all_commands)
     
-    ######################################################################################
-    # Compiling programs - will be removed during final version
-    ######################################################################################
-    mergeCompressedFilesSingleEnded = options.softwares["mergeCompressedFilesSingleEnded"]
-    cmd=f"gcc -o {mergeCompressedFilesSingleEnded} {mergeCompressedFilesSingleEnded}.c -g -Ofast"
-    os.system(cmd)
-    
-    #addTagToSamFile = options.softwares["addTagToSamFile"]
-    #cmd=f"gcc -o {addTagToSamFile} {addTagToSamFile}.c -g -Ofast"
-    #os.system(cmd)
-    ######################################################################################
-    
-    
     # Compile a list of all chromosomes in all the files to be merged
     all_chromosomes = []
     for input_filename in options.inputabrfilenames:
@@ -912,24 +836,6 @@ def decompressSamFile(options):
     decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
     decompressSamFilePairedEnded = options.softwares["decompressSamFilePairedEnded"]
     deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
-    ######################################################################################
-    # Compiling programs - will be removed during final version
-    ######################################################################################
-    cmd=f"gcc {decompressSamFileSingleEnded}.c -o {decompressSamFileSingleEnded} -Ofast"
-    if options.quiet == False:
-        logging.info(f"Running command - {cmd}")
-    os.system(cmd)
-    
-    cmd=f"gcc {decompressSamFilePairedEnded}.c -o {decompressSamFilePairedEnded} -Ofast"
-    if options.quiet == False:
-        logging.info(f"Running command - {cmd}")
-    os.system(cmd)
-    
-    cmd=f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
-    if options.quiet == False:
-        logging.info(f"Running command - {cmd}")
-    os.system(cmd)
-    ######################################################################################
     
     # Check the amount memory needed
     if options.ignore_sequence == 0:
@@ -1082,15 +988,6 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     generateCoverage = options.softwares["generateCoverage"]
     findMaximumNumberOfReadsInEachLine = options.softwares["findMaximumNumberOfReadsInEachLine"]
     
-    ######################################################################################
-    # Compiling programs - will be removed during final version
-    ######################################################################################
-    cmd=f"gcc {generateCoverage}.c -o {generateCoverage} -g -Ofast"
-    os.system(cmd)
-    
-    cmd=f"gcc {findMaximumNumberOfReadsInEachLine}.c -o {findMaximumNumberOfReadsInEachLine} -g -Ofast"
-    os.system(cmd)
-    ######################################################################################
     if options.d == True:
         options.d = 1
     else:
@@ -1166,16 +1063,6 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     randomRetrievalSingleEnded = options.softwares["randomRetrievalSingleEnded"]
     randomRetrievalPairedEnded = options.softwares["randomRetrievalPairedEnded"] 
     deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
-    ######################################################################################
-    # Compiling programs - will be removed during final version
-    ######################################################################################
-    cmd=f"gcc {randomRetrievalSingleEnded}.c -o {randomRetrievalSingleEnded} -g -Ofast"
-    os.system(cmd)
-    cmd=f"gcc {randomRetrievalPairedEnded}.c -o {randomRetrievalPairedEnded} -g -Ofast"
-    os.system(cmd)
-    cmd=f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
-    os.system(cmd)
-    ######################################################################################
     
     genome_filename = options.genome
     genome_index_filename = options.genome+".fai"
