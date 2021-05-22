@@ -214,9 +214,9 @@ def checkSAMAlignments(options,logging):
     """
     
     if "SO:coordinate" not in open(f"{options.inputsamfilenames}","r").readline():
-        print(f"The file {file} is not sorted. Exiting")
+        print(f"The file {options.inputsamfilenames} is not sorted. Exiting")
         if options.quiet == False:
-            logging.info(f"The file {file} is not sorted. Exiting")
+            logging.info(f"The file {options.inputsamfilenames} is not sorted. Exiting")
         sys.exit()
     
     # Verify that all the headers are exactly same
