@@ -705,7 +705,7 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" {name_of_file_with_quality_scores_rle} "
+            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
         cmd += f") "   
