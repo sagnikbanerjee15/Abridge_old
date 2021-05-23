@@ -297,6 +297,7 @@ def constructFileNames(input_filename,options):
     error_file_7z_decompression = f"{options.error_directory}/{name_of_input_file_without_location}_7z_decompression.error"
     error_file_zpaq_decompression = f"{options.error_directory}/{name_of_input_file_without_location}_zpaq_decompression.error"
     error_file_brotli_decompression =  f"{options.error_directory}/{name_of_input_file_without_location}_brotli_decompression.error"
+    error_file_name_of_file_with_compressed_quality_scores = f"{options.error_directory}/{name_of_input_file_without_location}_quality_zpaq_compression.error"
     
     compressed_abridged_filename_7z = f"{options.output_directory}/{name_of_input_file_without_location}.abridge.7z"
     compressed_abridged_filename_zpaq = f"{options.output_directory}/{name_of_input_file_without_location}.abridge.zpaq"
@@ -304,7 +305,7 @@ def constructFileNames(input_filename,options):
     
     delete_these_files = [name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename]
     other_files = [pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_zpaq_compressed, name_of_file_with_compressed_quality_scores, name_of_file_dictionary]
-    error_files = [error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression]
+    error_files = [error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression, error_file_name_of_file_with_compressed_quality_scores]
     compressed_files = [compressed_abridged_filename_7z, compressed_abridged_filename_br,compressed_abridged_filename_zpaq]
     return  delete_these_files, other_files, error_files, compressed_files
     
@@ -319,7 +320,7 @@ def compressSamFile(options):
     delete_these_files, other_files, error_files, compressed_files = constructFileNames(input_filename,options) 
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
     pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_zpaq_compressed, name_of_file_with_compressed_quality_scores, name_of_file_dictionary = other_files
-    error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression = error_files
+    error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression, error_file_name_of_file_with_compressed_quality_scores = error_files
     compressed_abridged_filename_7z, compressed_abridged_filename_br,compressed_abridged_filename_zpaq = compressed_files
     
     if options.single_ended == True:
@@ -689,9 +690,14 @@ def compressSamFile(options):
             cmd += f" -m3 -t1 -f "
             cmd += f") "
             cmd += f"1> /dev/null "
-            cmd += f"2> /dev/null"
+            if options.keep_intermediate_error_files == True:
+                cmd += f"2> {error_file_name_of_file_with_compressed_quality_scores}"
+            else:
+                cmd += f"2> /dev/null"
             os.system(cmd)
-        
+            if options.quiet == False:
+                logging.info(f"Running command - {cmd}")
+                
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" 7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 "
         cmd += f" {compressed_abridged_filename_7z} " # Compressed Output filename
@@ -699,7 +705,7 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" {name_of_file_with_quality_scores_compressed} "
+            cmd += f" {name_of_file_with_compressed_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
         cmd += f") "   
