@@ -684,7 +684,7 @@ def compressSamFile(options):
             zpaq = options.softwares["zpaq"]
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f" {zpaq} a "
-            cmd += f" {name_of_file_with_quality_scores_compressed} "
+            cmd += f" {name_of_file_with_compressed_quality_scores} "
             cmd += f" {name_of_file_with_quality_scores} "
             cmd += f" -m3 -t1 -f "
             cmd += f") "
