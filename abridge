@@ -33,11 +33,10 @@ def parseCommandLineArguments():
     input_group.add_argument("-isam","--inputsamfilenames",help="Enter the names of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You may choose to compress multiple alignment files together.")
     input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the names of the compressed alignment files you wish to merge. These files must be compressed using abridge. You may choose to compress multiple files together.")
     required_named.add_argument("-G","--genome",help="Enter a single fasta file for the reference",required=True)
-    required_named.add_argument("-o","--output_directory",help="Enter the prefix of the output directory.",required=True)
     
     compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
     compress_decompress_group.add_argument("-cmp","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
-    compress_decompress_group.add_argument("-m","--merge",help="Set this option if you wish to compress the alignment file",action="store_true")
+    #compress_decompress_group.add_argument("-m","--merge",help="Set this option if you wish to compress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-dcmp","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-r","--random",help="Retrieve alignments from random locations",action="store_true")
     compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
@@ -47,6 +46,13 @@ def parseCommandLineArguments():
     compress_decompress_group.add_argument("-nov","--generate_non_overlapping_coverage",help="Enter the name of the compressed file from which you wish to generate a non-overlapping coverage of reads ", action = "store_true")
     
     # Optional arguments
+    optional_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
+    optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
+    compression_quality_group = parser.add_mutually_exclusive_group(required=True)
+    compression_quality_group.add_argument("-1","--1",help = "Perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast", action = "store_false")
+    compression_quality_group.add_argument("-2","--2",help = "Perform the medium level compression using 7z. Compress will take time but decompression will be fast", action = "store_true")
+    compression_quality_group.add_argument("-3","--3",help = "Perform the best compression using 7paq. Both compression and decompression will take average time to complete", action = "store_false")
+    
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
     optional_named.add_argument("-qual","--quality",help="Enter dummy quality scores while decompressing",default='I')
     optional_named.add_argument("-gsc","--ignore_soft_clippings",help="No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference",action="store_true")
