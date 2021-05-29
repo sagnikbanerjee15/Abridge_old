@@ -70,8 +70,8 @@ def parseCommandLineArguments():
     optional_named.add_argument("-run_diagnostics","--run_diagnostics",help="abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies",action="store_true")
     optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
     optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
-    optional_named.add_argument("--fast","-f",help="Enables faster compression using brotli compressor",action="store_true")
-    optional_named.add_argument("--both","-b",help="Compress using both approaches. This option is reserved for diagnostic purposes",action="store_true")
+    #optional_named.add_argument("--fast","-f",help="Enables faster compression using brotli compressor",action="store_true")
+    #optional_named.add_argument("--both","-b",help="Compress using both approaches. This option is reserved for diagnostic purposes",action="store_true")
     optional_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory",default=None)
     optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
     
