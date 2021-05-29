@@ -24,7 +24,7 @@ from scripts.verifyPositions import *
 from scripts.sortPositionsForRandomAccess import *
 
 def parseCommandLineArguments():
-    parser = argparse.ArgumentParser(prog="abridge",description="Compress reference alignments for storage",formatter_class=RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(prog="abridge",description="Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages",formatter_class=RawTextHelpFormatter)
     required_named = parser.add_argument_group('Required arguments')
     optional_named = parser.add_argument_group('Optional arguments')
     
@@ -32,7 +32,7 @@ def parseCommandLineArguments():
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("-isam","--inputsamfilenames",help="Enter the names of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You may choose to compress multiple alignment files together.")
     input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the names of the compressed alignment files you wish to merge. These files must be compressed using abridge. You may choose to compress multiple files together.")
-    required_named.add_argument("-G","--genome",help="Enter a single fasta file for the reference",required=True)
+    required_named.add_argument("-g","--genome",help="Enter a single fasta file for the reference",required=True)
     
     compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
     compress_decompress_group.add_argument("-cmp","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
@@ -76,10 +76,10 @@ def parseCommandLineArguments():
     optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
     
     # Options for generating coverage
-    optional_named.add_argument("-d","--d",help = "", action = "store_true")
+    optional_named.add_argument("-d","--d",help = "Report the depth at each position in each A feature. Positions reported are one based.  Each position and depth follow the complete A feature.", action = "store_true")
     optional_named.add_argument("-bg","--bg",help = "", action = "store_true")
     optional_named.add_argument("-bga","--bga",help = "", action = "store_true")
-    optional_named.add_argument("-split","--split",help = "", action = "store_true")
+    optional_named.add_argument("-split","--split",help = "Treat \"split\" BAM or BED12 entries as distinct BED intervals.", action = "store_true")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
