@@ -15,6 +15,7 @@ import time
 import multiprocessing
 import random
 import glob
+import time
 import subprocess
 from pprint import pformat
 
@@ -49,9 +50,9 @@ def parseCommandLineArguments():
     optional_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
     optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
     compression_quality_group = parser.add_mutually_exclusive_group(required=True)
-    compression_quality_group.add_argument("-1","--1",help = "Perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast", action = "store_false")
-    compression_quality_group.add_argument("-2","--2",help = "Perform the medium level compression using 7z. Compress will take time but decompression will be fast", action = "store_true")
-    compression_quality_group.add_argument("-3","--3",help = "Perform the best compression using 7paq. Both compression and decompression will take average time to complete", action = "store_false")
+    compression_quality_group.add_argument("-c1","--c1",help = "Perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast", action = "store_false")
+    compression_quality_group.add_argument("-c2","--c2",help = "Perform the medium level compression using 7z. Compress will take time but decompression will be fast", action = "store_true")
+    compression_quality_group.add_argument("-c3","--c3",help = "Perform the best compression using 7paq. Both compression and decompression will take average time to complete", action = "store_false")
     
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
     optional_named.add_argument("-qual","--quality",help="Enter dummy quality scores while decompressing",default='I')
@@ -159,7 +160,7 @@ def validateCommandLineArguments(options):
         
     if options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
         options.save_all_quality_scores = True
-         
+        
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
     options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
     options.softwares["compressSamFileSingleEndedPass2"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass2"
@@ -239,6 +240,9 @@ def validateCommandLineArguments(options):
             if options.quiet == False:
                 logging.info("You can specify only one among -d, -bg or -bga")
             sys.exit()
+            
+    input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
+    options.outputfilename = f"{options.output_directory}/{input_filename}.abridge"
 
 def checkSAMAlignments(options,logging):
     """
@@ -688,46 +692,11 @@ def compressSamFile(options):
     # Compress files
     ######################################################################################
     
-    # Compress the quality scores with zpaq if save_exact_quality_scores is requested
-    if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-        zpaq = options.softwares["zpaq"]
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f" {zpaq} a "
-        cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
-        cmd += f" {name_of_file_with_quality_scores} "
-        cmd += f" -m3 -t1 -f "
-        cmd += f") "
-        cmd += f"1> /dev/null "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_name_of_file_with_quality_scores_compressed}"
-        else:
-            cmd += f"2> /dev/null"
-        os.system(cmd)
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
     
-    if options.both == True or options.fast == False:        
-        cmd  = f"(/usr/bin/time --verbose "
-        cmd += f" 7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 "
-        cmd += f" {compressed_abridged_filename_7z} " # Compressed Output filename
-        cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
-        if options.single_ended == False:
-            cmd += f" {name_of_file_dictionary} "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
-        else:
-            cmd += f" {name_of_file_with_quality_scores}.rle "
-        cmd += f") "   
-        cmd += f"1> /dev/null "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_7z_compression}"
-        else:
-            cmd += f"2> /dev/null"
-        if options.quiet == False:
-            logging.info(f"Running command - {cmd}")
-        os.system(cmd)
-            
-    if options.both == True or options.fast == True:
+    ######################################################################################
+    # Lowest compression (--1) using brotli
+    ######################################################################################
+    if options.c1 == True:
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" brotli -9 -f -k -n "
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
@@ -747,9 +716,13 @@ def compressSamFile(options):
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
         
+        fhw = open(f"{options.output_directory}/compression_method","w")
+        fhw.write("brotli")
+        fhw.close()
+        
         cmd  = f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt=1  "
-        cmd += f" {compressed_abridged_filename_br} " # Compressed Output filename
-        cmd += f" {pass1_outputfilename}.br {unmapped_outputfilename}.br {pass1_index_outputfilename}.br {genome_sha512_filename}.br "
+        cmd += f" {options.outputfilename} " # Compressed Output filename
+        cmd += f" {pass1_outputfilename}.br {unmapped_outputfilename}.br {pass1_index_outputfilename}.br {genome_sha512_filename}.br {options.output_directory}/compression_method "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary}.br "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
@@ -761,6 +734,8 @@ def compressSamFile(options):
             cmd += f"2> {error_file_7z_br}"
         else:
             cmd += f"2> /dev/null"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
         
         files_to_be_removed.append(f"{pass1_outputfilename}.br")
         files_to_be_removed.append(f"{unmapped_outputfilename}.br")
@@ -769,6 +744,80 @@ def compressSamFile(options):
         files_to_be_removed.append(f"{name_of_file_dictionary}.br")
         files_to_be_removed.append(f"{name_of_file_with_quality_scores}.br")
         files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle.br")
+        files_to_be_removed.append(f"{options.output_directory}/compression_method")
+    
+    
+    ######################################################################################
+    # Medium compression (--2) using 7z
+    ######################################################################################
+    if options.c2 == True:
+        fhw = open(f"{options.output_directory}/compression_method","w")
+        fhw.write("7z")
+        fhw.close()
+        
+        cmd  = f"(/usr/bin/time --verbose "
+        cmd += f" 7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 "
+        cmd += f" {options.outputfilename} " # Compressed Output filename
+        cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} {options.output_directory}/compression_method "
+        if options.single_ended == False:
+            cmd += f" {name_of_file_dictionary} "
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
+        else:
+            cmd += f" {name_of_file_with_quality_scores}.rle "
+        cmd += f") "   
+        cmd += f"1> /dev/null "
+        if options.keep_intermediate_error_files == True:
+            cmd += f"2> {error_file_7z_compression}"
+        else:
+            cmd += f"2> /dev/null"
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        os.system(cmd)
+        files_to_be_removed.append(f"{options.output_directory}/compression_method")
+    
+    ######################################################################################
+    # Best compression (--2) using zpaq
+    ######################################################################################
+    
+    # Compress the quality scores with zpaq if save_exact_quality_scores is requested
+    if options.c3 == True:
+        fhw = open(f"{options.output_directory}/compression_method","w")
+        fhw.write("zpaq")
+        fhw.close()
+        
+        zpaq = options.softwares["zpaq"]
+        cmd  = f"(/usr/bin/time --verbose "
+        cmd += f" {zpaq} a "
+        cmd += f" {options.outputfilename} "
+        cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} {options.output_directory}/compression_method "
+        if options.single_ended == False:
+            cmd += f" {name_of_file_dictionary} "
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
+        else:
+            cmd += f" {name_of_file_with_quality_scores}.rle "
+        cmd += f" -m3 -t1 -f "
+        cmd += f") "
+        cmd += f"1> /dev/null "
+        if options.keep_intermediate_error_files == True:
+            cmd += f"2> {error_file_name_of_file_with_quality_scores_compressed}"
+        else:
+            cmd += f"2> /dev/null"
+        os.system(cmd)
+        if options.quiet == False:
+            logging.info(f"Running command - {cmd}")
+        files_to_be_removed.append(f"{options.output_directory}/compression_method")
+    
+            
+    files_to_be_removed.append(f"{pass1_outputfilename}")
+    files_to_be_removed.append(f"{unmapped_outputfilename}")
+    files_to_be_removed.append(f"{pass1_index_outputfilename}")
+    files_to_be_removed.append(f"{genome_sha512_filename}")
+    files_to_be_removed.append(f"{name_of_file_dictionary}")
+    files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
+    files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle")    
+        
     
     files_to_be_removed.extend(delete_these_files)
     files_to_be_removed.extend(other_files)
@@ -1251,8 +1300,16 @@ def main():
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
     
-    options.logfilename = options.output_directory+"/progress.log"
-    os.system("mkdir -p "+options.output_directory)
+    if options.output_directory is None:
+        options.output_directory = "/".join(options.inputsamfilenames.split("/")[:-1])
+        
+    if options.temp_directory is None:
+        input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
+        options.temp_directory = f"{options.output_directory}/{input_filename_without_location}/{time.time()}"
+        os.system(f"mkdir -p {options.temp_directory}")
+    
+    options.logfilename = f"{options.output_directory}/{input_filename_without_location}_progress.log"
+    os.system(f"mkdir -p {options.output_directory}")
     
     if options.quiet == False:
         configureLogger(options)
