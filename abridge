@@ -242,7 +242,7 @@ def validateCommandLineArguments(options):
             sys.exit()
             
     input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
-    options.outputfilename = f"{options.output_directory}/{input_filename}.abridge"
+    options.outputfilename = f"{options.output_directory}/{input_filename_without_location}.abridge"
 
 def checkSAMAlignments(options,logging):
     """

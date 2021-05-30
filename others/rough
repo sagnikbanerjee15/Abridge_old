@@ -22,7 +22,7 @@ abridge \
 --cpu $CPU \
 --save_all_quality_scores \
 --save_exact_quality_scores \
---fast \
+--c1 \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
 --inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
 --output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE) \
