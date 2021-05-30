@@ -1355,13 +1355,6 @@ def main():
         os.system(cmd)
         #print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
         os.system(f"rm -f {options.inputfilename[0][:-3]}.headers")
-    
-    if options.merge == True:
-        """
-        """
-        mergeAbridgeData(options)
-        if options.quiet == False:
-            logging.info(f"mergeAbridgeData() execution is complete")
         
     if options.random == True:
         input_filename = options.inputabrfilenames
