@@ -238,8 +238,8 @@ def validateCommandLineArguments(options):
                 logging.info("You can specify only one among -d, -bg or -bga")
             sys.exit()
             
-    input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
-    options.outputfilename = f"{options.output_directory}/{input_filename_without_location}.abridge"
+    #input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
+    #options.outputfilename = f"{options.output_directory}/{input_filename_without_location}.abridge"
 
 def checkSAMAlignments(options,logging):
     """
