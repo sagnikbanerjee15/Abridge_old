@@ -126,7 +126,7 @@ abridge \
 --cpu $CPU \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
 --inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE/SRR13711353_small_SE.abridge \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_all_quality_scores_save_exact_quality_scores_SE/decompress) \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_all_quality_scores_save_exact_quality_scores_SE) \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_all_quality_scores_save_exact_quality_scores_SE.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_all_quality_scores_save_exact_quality_scores_SE.error &
 

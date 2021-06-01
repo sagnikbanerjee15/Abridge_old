@@ -237,9 +237,12 @@ def validateCommandLineArguments(options):
             if options.quiet == False:
                 logging.info("You can specify only one among -d, -bg or -bga")
             sys.exit()
-            
-    #input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
-    #options.outputfilename = f"{options.output_directory}/{input_filename_without_location}.abridge"
+    
+    if options.inputsamfilenames is not None:
+        input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
+    else:
+        input_filename_without_location = options.inputabrfilenames.split("/")[-1][:-8]
+    options.outputfilename = f"{options.output_directory}/{input_filename_without_location}.abridge"
 
 def checkSAMAlignments(options,logging):
     """
@@ -1292,7 +1295,7 @@ def main():
     if options.inputsamfilenames is not None:
         input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
     else:
-        input_filename_without_location = options.inputabrfilenames.split("/")[-1][:-4]
+        input_filename_without_location = options.inputabrfilenames.split("/")[-1][:-8]
         
     if options.output_directory is None:
         options.output_directory = "/".join(options.inputsamfilenames.split("/")[:-1])
