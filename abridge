@@ -777,7 +777,7 @@ def compressSamFile(options):
         files_to_be_removed.append(f"{options.output_directory}/compression_method")
     
     ######################################################################################
-    # Best compression (--2) using zpaq
+    # Best compression (--3) using zpaq
     ######################################################################################
     
     # Compress the quality scores with zpaq if save_exact_quality_scores is requested
@@ -1309,7 +1309,9 @@ def main():
     
     if options.quiet == False:
         configureLogger(options)
-    
+        
+    for line in pprint.pformat(options).split('\n'):
+        logging.info(line)
     validateCommandLineArguments(options)
     for line in pprint.pformat(options).split('\n'):
         logging.info(line)
