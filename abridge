@@ -1311,7 +1311,7 @@ def main():
         configureLogger(options)
     
     validateCommandLineArguments(options)
-    for line in pprint.pformat(ds).split('\n'):
+    for line in pprint.pformat(options).split('\n'):
         logging.info(line)
 
     if options.quiet == False:
