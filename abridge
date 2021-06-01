@@ -845,8 +845,7 @@ def compressSamFile(options):
     
     for file in files_to_be_removed:
         os.system("rm -f "+file)
-    
-    
+        
 def findEndedness(options,logging):
     """
     """
@@ -985,7 +984,7 @@ def decompressSamFile(options):
     """
     pool = multiprocessing.Pool(processes=int(options.cpu))
     
-    input_filename = options.inputabrfilenames
+    input_filename = options.inputabrfilenames[:-8]
     name_of_input_file_without_location = input_filename.split("/")[-1] 
     delete_these_files, other_files, error_files, compressed_files = constructFileNames(input_filename,options) 
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
@@ -1026,17 +1025,7 @@ def decompressSamFile(options):
         assessMemoryRequirement(f"{options.genome}.fai",options)
     
     files_to_be_removed = []
-    all_commands = []
-    #for input_filename in options.inputabrfilenames:
-    """input_filename = options.inputabrfilenames
-    name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
-    pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
-    pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
-    unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".unmapped"
-    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
-    compressed_abridged_filename = input_filename
-    output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
-    """
+    
     cmd  = f"7za e {input_filename} -y "
     cmd += f" -o{options.output_directory}"
     cmd += f" 1> /dev/null 2>/dev/null"
