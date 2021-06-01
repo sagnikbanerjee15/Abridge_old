@@ -49,10 +49,7 @@ def parseCommandLineArguments():
     # Optional arguments
     optional_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
     optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
-    compression_quality_group = parser.add_mutually_exclusive_group()
-    optional_named.add_argument("-l","--level",help = "Perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast", action = "store_false")
-    optional_named.add_argument("-c2","--c2",help = "Perform the medium level compression using 7z. Compression will take time but decompression will be fast", action = "store_true")
-    optional_named.add_argument("-c3","--c3",help = "Perform the best compression using 7paq. Both compression and decompression will take average time to complete", action = "store_false")
+    optional_named.add_argument("-l","--level",help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", default = '2')
     
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
     optional_named.add_argument("-qual","--quality",help="Enter dummy quality scores while decompressing",default='I')
