@@ -1300,8 +1300,8 @@ def main():
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
     
+    input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
     if options.output_directory is None:
-        input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
         options.output_directory = "/".join(options.inputsamfilenames.split("/")[:-1])
         
     options.logfilename = f"{options.output_directory}/{input_filename_without_location}_progress.log"
