@@ -699,7 +699,7 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
+            cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle " 
         cmd += f") "   
@@ -722,7 +722,7 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary}.br "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed}.br "
+            cmd += f" {name_of_file_with_quality_scores}.br "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle.br " 
         cmd += f") "   
@@ -760,7 +760,7 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
+            cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
         cmd += f") "   
@@ -794,7 +794,7 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" {name_of_file_with_quality_scores_zpaq_compressed} "
+            cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
         cmd += f" -m3 -t1 -f "
