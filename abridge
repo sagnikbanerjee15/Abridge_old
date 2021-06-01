@@ -48,8 +48,8 @@ def parseCommandLineArguments():
     
     # Optional arguments
     optional_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
-    optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
-    optional_named.add_argument("-l","--level",help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", default = '2')
+    #optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
+    optional_named.add_argument("-l","--level",help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", default = 2)
     
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
     optional_named.add_argument("-qual","--quality",help="Enter dummy quality scores while decompressing",default='I')
@@ -693,7 +693,7 @@ def compressSamFile(options):
     ######################################################################################
     # Lowest compression (--1) using brotli
     ######################################################################################
-    if options.c1 == True:
+    if options.level == 1:
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" brotli -9 -f -k -n "
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
@@ -747,7 +747,7 @@ def compressSamFile(options):
     ######################################################################################
     # Medium compression (--2) using 7z
     ######################################################################################
-    if options.c2 == True:
+    if options.level == 2:
         fhw = open(f"{options.output_directory}/compression_method","w")
         fhw.write("7z")
         fhw.close()
@@ -778,7 +778,7 @@ def compressSamFile(options):
     ######################################################################################
     
     # Compress the quality scores with zpaq if save_exact_quality_scores is requested
-    if options.c3 == True:
+    if options.level == 3:
         fhw = open(f"{options.output_directory}/compression_method","w")
         fhw.write("zpaq")
         fhw.close()
