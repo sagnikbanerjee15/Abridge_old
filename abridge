@@ -1412,7 +1412,6 @@ def main():
         os.system(f"rm -rf {options.output_directory}")
     
     cleanUp(options)
-    input_directory = "/".join(options.inputsamfilenames.split("/")[:-1])
     if options.quiet == False:
         logging.info(f"cleanUp() execution is complete")
         
