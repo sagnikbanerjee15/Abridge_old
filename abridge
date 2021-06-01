@@ -51,7 +51,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
     compression_quality_group = parser.add_mutually_exclusive_group()
     compression_quality_group.add_argument("-c1","--c1",help = "Perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast", action = "store_false")
-    compression_quality_group.add_argument("-c2","--c2",help = "Perform the medium level compression using 7z. Compress will take time but decompression will be fast", action = "store_true")
+    compression_quality_group.add_argument("-c2","--c2",help = "Perform the medium level compression using 7z. Compression will take time but decompression will be fast", action = "store_true")
     compression_quality_group.add_argument("-c3","--c3",help = "Perform the best compression using 7paq. Both compression and decompression will take average time to complete", action = "store_false")
     
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
@@ -89,7 +89,7 @@ def parseCommandLineArguments():
     parser.add_argument("--single_ended","-single_ended",help=argparse.SUPPRESS)
     parser.add_argument("--reference_to_length","-num_of_reference_sequences",help=argparse.SUPPRESS)
     parser.add_argument("--outputfilename","-outputfilena",help=argparse.SUPPRESS) 
-    
+    print(parser.parse_args())
     return parser.parse_args()
 
 def configureLogger(options):
@@ -1312,6 +1312,7 @@ def main():
         
     for line in pprint.pformat(options).split('\n'):
         logging.info(line)
+        
     validateCommandLineArguments(options)
     for line in pprint.pformat(options).split('\n'):
         logging.info(line)
