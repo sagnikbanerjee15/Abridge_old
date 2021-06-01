@@ -1289,7 +1289,11 @@ def main():
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
     
-    input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
+    if options.inputsamfilenames is not None:
+        input_filename_without_location = options.inputsamfilenames.split("/")[-1][:-4]
+    else:
+        input_filename_without_location = options.inputabrfilenames.split("/")[-1][:-4]
+        
     if options.output_directory is None:
         options.output_directory = "/".join(options.inputsamfilenames.split("/")[:-1])
         
