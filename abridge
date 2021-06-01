@@ -1073,7 +1073,7 @@ def decompressSamFile(options):
                                 pass1_outputfilename,
                                 unmapped_outputfilename,
                                 name_of_file_with_quality_scores,
-                                dictionary_name,
+                                name_of_file_dictionary,
                                 max_reads_in_each_line_filename])
 
     cmd  = f"(/usr/bin/time --verbose "
@@ -1090,7 +1090,7 @@ def decompressSamFile(options):
     cmd += f" {options.ignore_sequence}" #argv[7] - Whether or not to produce sequences from genome file
     cmd += f" {unmapped_outputfilename}" #argv[8] - Name of file with unmapped reads
     cmd += f" {name_of_file_with_quality_scores} " #argv[9] - Name of file with quality scores
-    if os.path.exists(dictionary_name)==True:
+    if os.path.exists(name_of_file_dictionary)==True:
         cmd += f" {dictionary_name} " #argv[10]
         
         cmd_1  = f"cat "
