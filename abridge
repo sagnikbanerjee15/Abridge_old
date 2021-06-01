@@ -1309,11 +1309,10 @@ def main():
     
     if options.quiet == False:
         configureLogger(options)
-    logging.info(options)
     
     validateCommandLineArguments(options)
-    #logging.info(options)
-    logging.info(pformat(options))
+    for line in pprint.pformat(ds).split('\n'):
+        logging.info(line)
 
     if options.quiet == False:
         logging.info("Logger has been configured")
