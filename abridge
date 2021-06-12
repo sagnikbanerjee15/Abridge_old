@@ -747,7 +747,6 @@ def compressSamFile(options):
         files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle.br")
         files_to_be_removed.append(f"{options.output_directory}/compression_method")
     
-    
     ######################################################################################
     # Medium compression (--2) using 7z
     ######################################################################################
