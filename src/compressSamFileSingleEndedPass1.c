@@ -54,6 +54,7 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 	char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 
 	line_to_be_written_to_file[0] = '\0';
+	list_of_read_names[0] = '\0';
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
 		if ( i == 0 )
