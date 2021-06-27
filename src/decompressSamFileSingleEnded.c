@@ -175,7 +175,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		if ( strstr (buffer , "abridge_") )
 			read_names_stored = 1;
 		else read_names_stored = 0;
-		printf ("Read present? %d" , strstr (buffer , "abridge_"));
+		printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);
 		if ( buffer[0] == '@' )
 		{
 			splitByDelimiter (buffer , '\t' , split_on_tab);
