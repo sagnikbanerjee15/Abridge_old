@@ -1105,7 +1105,7 @@ def decompressSamFile(options):
         max_reads_in_each_line = open(max_reads_in_each_line_filename,"r").readline().strip()
         cmd += f" {max_reads_in_each_line} " #argv[11]
     cmd += f") "   
-    cmd += f"1> /dev/null "
+    #cmd += f"1> /dev/null "
     if options.keep_intermediate_error_files == True:
         cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_decompress.error"
     else:
