@@ -230,7 +230,8 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 			line_len = getline ( &line , &len , fhr_pass1);
 			num_lines_read++;
 			number_of_fields = splitByDelimiter (line , '\t' , split_on_tab);
-			if ( paired == 1 ) number_of_fields--;
+			if ( paired == 1 && strstr (line , "abridge") != NULL )
+				number_of_fields--;
 
 			if ( number_of_fields == 1 )
 			{
