@@ -1025,7 +1025,7 @@ def decompressSamFile(options):
     
     files_to_be_removed = []
     
-    cmd  = f"7za e {input_filename} -y "
+    cmd  = f"7za e {options.inputabrfilenames} -y "
     cmd += f" -o{options.output_directory}"
     cmd += f" 1> /dev/null 2>/dev/null"
     if options.quiet == False:
