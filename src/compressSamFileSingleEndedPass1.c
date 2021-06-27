@@ -189,7 +189,10 @@ void reModeliCIGARSSingleEnded (struct Compressed_DS **compressed_ds_pool, struc
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[i]->num_reads;
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[i]->position;
 		for ( k = 0 ; k < compressed_ds_pool[i]->num_reads ; k++ )
+		{
 			compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] = compressed_ds_pool[i]->pointers_to_qual_scores[k];
+			compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_read_names[k] = compressed_ds_pool[i]->pointers_to_read_names[k];
+		}
 		compressed_ds_pool_rearranged_index++;
 
 		for ( j = i + 1 ; j < compressed_ds_pool_index ; j++ )
@@ -207,7 +210,10 @@ void reModeliCIGARSSingleEnded (struct Compressed_DS **compressed_ds_pool, struc
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[j]->num_reads;
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[j]->position;
 				for ( k = 0 ; k < compressed_ds_pool[j]->num_reads ; k++ )
+				{
 					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] = compressed_ds_pool[j]->pointers_to_qual_scores[k];
+					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_read_names[k] = compressed_ds_pool[j]->pointers_to_read_names[k];
+				}
 				compressed_ds_pool_rearranged_index++;
 				already_processed[j] = 1;
 			}
@@ -238,6 +244,7 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 	FILE *fhw_qual;
 
 	char **qual_scores;
+	char **read_names;
 	char **split_line; // List of strings to store each element of a single alignment
 	char **split_tags; // List of strings to store tag information
 	char **split_reference_info;
@@ -372,6 +379,9 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 	for ( i = 0 ; i < MAX_REFERENCE_SEQUENCES ; i++ )
 		reference_info[i] = allocateMemoryReference_Sequence_Info ();
 
+	read_names = ( char** ) malloc (sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
+	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
+		read_names[i] = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	temp = ( char* ) malloc (sizeof(char) * MAX_GENERAL_LEN);
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
 	qual_scores = ( char** ) malloc (sizeof(char*) * max_input_reads_in_a_single_nucl_loc);
@@ -465,9 +475,11 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 			previous_position = current_position;
 			strcpy(prev_reference_name , curr_reference_name);
 			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+			strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
 			//printf("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			quality_score_index++;
@@ -492,6 +504,7 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
 			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+			strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 			quality_score_index++;
 			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
@@ -513,7 +526,9 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 					{
 						compressed_ds_pool[i]->num_reads++;
 						strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+						strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 						compressed_ds_pool[i]->pointers_to_qual_scores[compressed_ds_pool[i]->num_reads - 1] = qual_scores[quality_score_index];
+						compressed_ds_pool[i]->pointers_to_read_names[compressed_ds_pool[i]->num_reads - 1] = read_names[quality_score_index];
 						quality_score_index++;
 						//printf("\n3. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[i]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, i);
 						break;
@@ -525,7 +540,9 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 					compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 					compressed_ds_pool[compressed_ds_pool_index]->position = compressed_ds_pool[0]->position;
 					strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+					strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 					quality_score_index++;
 					//printf("\n4. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 					compressed_ds_pool_index++;
@@ -542,9 +559,11 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 				compressed_ds_pool_index = 0;
 				quality_score_index = 0;
 				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
+				strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
+				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position - previous_position;
 				quality_score_index++;
 				//printf("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
