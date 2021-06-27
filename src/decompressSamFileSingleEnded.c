@@ -37,6 +37,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	short int flag_save_all_quality_scores;
 	short int flag_save_exact_quality_scores;
 	short int number_of_columns;
+	short int read_names_stored;
 
 	unsigned long long int max_cluster_size;
 	unsigned long long int line_num = 0;
@@ -64,6 +65,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 
 	//char **split_on_newline;
 	char **split_on_tab;
+	char **read_names;
 	char **split_on_dash;
 	char **split_on_comma;
 	char *buffer = NULL;
@@ -122,6 +124,10 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
 		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 
+	read_names = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		read_names[i] = ( char* ) malloc (sizeof(char) * 100);
+
 	output_prefix_without_path = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	sequence_portions_from_reference = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
 	fasta_file_with_expressed_portions = ( char* ) malloc (sizeof(char) * FILENAME_LENGTH);
@@ -166,6 +172,9 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		line_num++;
+		if ( strstr (buffer , "abridge") )
+			read_names_stored = 1;
+		else read_names_stored = 0;
 		if ( buffer[0] == '@' )
 		{
 			splitByDelimiter (buffer , '\t' , split_on_tab);
@@ -216,7 +225,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 		if ( number_of_columns == 1 )
 			curr_position++;
 		else curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
-		convertToAlignmentSingleEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome);
+		convertToAlignmentSingleEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome , read_names , read_names_stored);
 	}
 
 	/*

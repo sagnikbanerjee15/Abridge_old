@@ -2984,7 +2984,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	 */
 }
 
-void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores)
+void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names)
 {
 	int i;
 
@@ -2995,53 +2995,67 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 	size_t len = 0;
 	ssize_t line_len;
 
+	int read_name_index = 0;
+
 	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
-		strcat (line_to_be_written_to_file , read_prefix);
-		strcat (line_to_be_written_to_file , sam_alignment->read_name);
-		sprintf (temp , "%d" , i + 1);
-		strcat (line_to_be_written_to_file , "_");
-		strcat (line_to_be_written_to_file , temp);
+
+		/*
+		 * Set up the read name
+		 */
+		if ( sam_alignment->tags[0].val[0] == '1' && sam_alignment->tags[0].val[1] == '\0' )
+		{
+			strcat (line_to_be_written_to_file , read_prefix);
+			strcat (line_to_be_written_to_file , sam_alignment->read_name);
+			sprintf (temp , "%d" , i + 1);
+			strcat (line_to_be_written_to_file , "_");
+			strcat (line_to_be_written_to_file , temp);
+		}
+		else
+		{
+			strcat (line_to_be_written_to_file , read_names[read_name_index]);
+			read_name_index++;
+		}
 		strcat (line_to_be_written_to_file , "\t");
 
 		sprintf (temp , "%d" , sam_alignment->samflag);
 		strcat (line_to_be_written_to_file , temp);
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		strcat (line_to_be_written_to_file , sam_alignment->reference_name);
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		sprintf (temp , "%d" , sam_alignment->start_position);
 		strcat (line_to_be_written_to_file , temp);
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		strcat (line_to_be_written_to_file , "255");
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		strcat (line_to_be_written_to_file , sam_alignment->cigar);
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		strcat (line_to_be_written_to_file , "*");
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		strcat (line_to_be_written_to_file , "0");
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		strcat (line_to_be_written_to_file , "0");
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		strcat (line_to_be_written_to_file , sam_alignment->seq);
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		if ( flag_save_all_quality_scores == 1 && ( line_len = getline ( &buffer , &len , fhr_qual) ) != -1 )
 		{
 			buffer[strlen (buffer) - 1] = '\0';
 			strcat (line_to_be_written_to_file , buffer);
 		}
 		else strcat (line_to_be_written_to_file , sam_alignment->qual);
-
 		strcat (line_to_be_written_to_file , "\t");
+
 		//Tags
 		strcat (line_to_be_written_to_file , "NH:i:");
 		strcat (line_to_be_written_to_file , sam_alignment->tags[0].val);
@@ -3236,7 +3250,7 @@ void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance
 	}
 }
 
-void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome)
+void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome, char **read_names, short int read_names_stored)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -3251,6 +3265,8 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 	char *temp; //Useless
 	char *distinct_icigars_in_a_line;
 	char *icigar;
+
+	int read_names_index = 0;
 	/********************************************************************/
 
 	/********************************************************************
@@ -3259,14 +3275,21 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 
 	/********************************************************************/
 
-	if ( number_of_columns == 1 )
+	if ( read_names_stored == 1 )
+	{
+		if ( number_of_columns == 2 )
+			splitByDelimiter (split_on_tab[1] , ',' , read_names);
+		else if ( number_of_columns == 3 )
+			splitByDelimiter (split_on_tab[2] , ',' , read_names);
+	}
+	if ( ( number_of_columns == 1 && read_names_stored == 0 ) || ( number_of_columns == 2 && read_names_stored == 1 ) )
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 			if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
 	}
-	else if ( number_of_columns == 2 )
+	else if ( ( number_of_columns == 2 && read_names_stored == 0 ) || ( number_of_columns == 3 && read_names_stored == 1 ) )
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
 		for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
@@ -3317,7 +3340,7 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 			( *read_number )++;
 			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores);
+		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , read_names);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
