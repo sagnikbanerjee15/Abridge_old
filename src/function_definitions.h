@@ -3015,7 +3015,7 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 		else
 		{
 			strcat (line_to_be_written_to_file , read_names[read_name_index]);
-			printf ("\nRead name %s " , read_names[read_name_index]);
+			//printf ("\nRead name %s " , read_names[read_name_index]);
 			read_name_index++;
 		}
 		strcat (line_to_be_written_to_file , "\t");
