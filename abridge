@@ -450,7 +450,7 @@ def compressSamFile(options):
         ######################################################################################
         # Generate RLE for quality scores
         ######################################################################################
-        if options.save_all_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores==False:
             all_commands = []
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f" {compressQualityScoresFile} "
@@ -634,7 +634,7 @@ def compressSamFile(options):
         ######################################################################################
         # Generate RLE for quality scores
         ######################################################################################
-        if options.save_all_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores==False:
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f" {compressQualityScoresFile} "
             cmd += f" {name_of_file_with_quality_scores} "
