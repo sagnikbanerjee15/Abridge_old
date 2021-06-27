@@ -85,7 +85,6 @@ abridge \
 --keep_intermediate_error_files \
 --compress \
 --cpu $CPU \
---fast \
 --ignore_quality_scores \
 --ignore_soft_clippings \
 --ignore_mismatches \

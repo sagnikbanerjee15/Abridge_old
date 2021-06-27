@@ -58,7 +58,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("-gs","--ignore_sequence",help="No nucleotide sequence will be produced during decompression",action="store_true")
     optional_named.add_argument("-gu","--ignore_unmapped_reads",help="Request abridge to discard all reads that are unmapped",action="store_true")
     optional_named.add_argument("-sq","--save_all_quality_scores",help="Request abridge to save all quality scores",action='store_true')
-    optional_named.add_argument("-aq","--save_exact_quality_scores",help="Adjust quality scores for matched bases to achieve better encoding. For more details please check ...",action="store_true")
+    optional_named.add_argument("-aq","--save_adjusted_quality_scores",help="Adjust quality scores for matched bases to achieve better encoding. For more details please check ...",action="store_true")
     #optional_named.add_argument("-dna","--dnaseq",help="Set this parameter if your data is DNA-Seq",action = "store_true")
     #optional_named.add_argument("-o","--outputfilenameprefix",help="Enter the prefix of the output file. If this parameter is not provided then abridge will attempt to write to the directory where the input file is present. Please make sure that the directory has write permissions enabled. This parameter is ignored while decompressing.")
     optional_named.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
@@ -155,7 +155,7 @@ def validateCommandLineArguments(options):
     if options.save_all_quality_scores == True:
         options.ignore_quality_scores = True
         
-    if options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
+    if options.save_all_quality_scores == False and options.save_adjusted_quality_scores == True:
         options.save_all_quality_scores = True
         
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
@@ -426,13 +426,13 @@ def compressSamFile(options):
             cmd += f" 0" # argv[9] - run diagnostics
         cmd += f" {max_input_reads_in_a_single_nucl_loc} " # argv[10] - max_input_reads_in_a_single_nucl_loc
         cmd += f" {name_of_file_with_max_commas} " # argv[11] - name_of_file_with_max_commas
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             cmd += f" 1 1 " # argv[12] and argv[13]
-        elif options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
+        elif options.save_all_quality_scores == True and options.save_adjusted_quality_scores == False:
             cmd += f" 1 0 " # argv[12] and argv[13]
-        elif options.save_all_quality_scores == False and options.save_exact_quality_scores == True: 
+        elif options.save_all_quality_scores == False and options.save_adjusted_quality_scores == True: 
             cmd += f" 0 1 " # argv[12] and argv[13]
-        elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
+        elif options.save_all_quality_scores == False and options.save_adjusted_quality_scores == False:
             cmd += f" 0 0 " # argv[12] and argv[13]
         cmd += f" {name_of_file_with_quality_scores} " # argv[14]
         cmd += f") "
@@ -450,13 +450,13 @@ def compressSamFile(options):
         ######################################################################################
         # Generate RLE for quality scores
         ######################################################################################
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             all_commands = []
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f" {compressQualityScoresFile} "
             cmd += f" {name_of_file_with_quality_scores} "
             cmd += f" {name_of_file_with_quality_scores_rle} "
-            if options.save_exact_quality_scores==True:
+            if options.save_adjusted_quality_scores==True:
                 cmd += " 1 "
             else:
                 cmd += " 0 "
@@ -605,13 +605,13 @@ def compressSamFile(options):
             cmd += f" 0" # argv[9] - run diagnostics
         cmd += f" {max_input_reads_in_a_single_nucl_loc} " # argv[10] - max_input_reads_in_a_single_nucl_loc
         cmd += f" {name_of_file_with_max_commas} " # argv[11] - name_of_file_with_max_commas
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             cmd += f" 1 1 " # argv[12] and argv[13]
-        elif options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
+        elif options.save_all_quality_scores == True and options.save_adjusted_quality_scores == False:
             cmd += f" 1 0 " # argv[12] and argv[13]
-        elif options.save_all_quality_scores == False and options.save_exact_quality_scores == True: 
+        elif options.save_all_quality_scores == False and options.save_adjusted_quality_scores == True: 
             cmd += f" 0 1 " # argv[12] and argv[13]
-        elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
+        elif options.save_all_quality_scores == False and options.save_adjusted_quality_scores == False:
             cmd += f" 0 0 " # argv[12] and argv[13]
         cmd += f" {name_of_file_with_quality_scores} " # argv[14]
         cmd += f" {max_number_of_alignments} " #argv[15]
@@ -634,12 +634,12 @@ def compressSamFile(options):
         ######################################################################################
         # Generate RLE for quality scores
         ######################################################################################
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             cmd  = f"(/usr/bin/time --verbose "
             cmd += f" {compressQualityScoresFile} "
             cmd += f" {name_of_file_with_quality_scores} "
             cmd += f" {name_of_file_with_quality_scores_rle} "
-            if options.save_exact_quality_scores==True:
+            if options.save_adjusted_quality_scores==True:
                 cmd += " 1 "
             else:
                 cmd += " 0 "
@@ -701,7 +701,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle " 
@@ -725,7 +725,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename}.br {unmapped_outputfilename}.br {pass1_index_outputfilename}.br {genome_sha512_filename}.br {options.output_directory}/compression_method "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary}.br "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             cmd += f" {name_of_file_with_quality_scores}.br "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle.br " 
@@ -763,7 +763,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} {options.output_directory}/compression_method "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
@@ -782,7 +782,7 @@ def compressSamFile(options):
     # Best compression (--3) using zpaq
     ######################################################################################
     
-    # Compress the quality scores with zpaq if save_exact_quality_scores is requested
+    # Compress the quality scores with zpaq if save_adjusted_quality_scores is requested
     if options.level == 3:
         if options.quiet == False:
             logging.info("Starting compression with zpaq")
@@ -797,7 +797,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_adjusted_quality_scores == True:
             cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
@@ -1066,7 +1066,7 @@ def decompressSamFile(options):
         logging.info(f"Running command - {cmd}")
     os.system(cmd)
 
-    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores = open(pass1_outputfilename,"rb").readline().split()
+    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_adjusted_quality_scores = open(pass1_outputfilename,"rb").readline().split()
     max_reads_in_each_line_filename = f"{options.output_directory}/max_reads_in_each_line_filename"
     output_sam_filename = f"{options.output_directory}/{name_of_input_file_without_location[:-8]}.decompressed.sam"
     files_to_be_removed.extend([pass1_index_outputfilename,
