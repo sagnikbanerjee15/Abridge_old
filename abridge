@@ -470,6 +470,12 @@ def compressSamFile(options):
                 logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
             os.system(cmd)
+            
+            if options.save_exact_quality_scores==False:
+                cmd  = f" mv "
+                cmd += f" {name_of_file_with_quality_scores_rle} "
+                cmd += f" {name_of_file_with_quality_scores} "
+                os.system(cmd)
         
         ######################################################################################
         # Index generation
@@ -653,6 +659,12 @@ def compressSamFile(options):
                 logging.info(f"Running cmd - {cmd}")
             all_commands.append([cmd,"dummy"])
             os.system(cmd) 
+            
+            if options.save_exact_quality_scores==False:
+                cmd  = f" mv "
+                cmd += f" {name_of_file_with_quality_scores_rle} "
+                cmd += f" {name_of_file_with_quality_scores} "
+                os.system(cmd)
 
         ######################################################################################
         # Index generation
