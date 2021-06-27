@@ -125,7 +125,11 @@ void writeToFile (short int flag_save_all_quality_scores, FILE *fhw_qual, FILE *
 			}
 		}
 	}
-
+	/*
+	 * Check if the last element of list_of_read_names is a comma
+	 */
+	if ( list_of_read_names[strlen (list_of_read_names) - 1] == ',' )
+		list_of_read_names[strlen (list_of_read_names) - 1] = '\0';
 	strcat(line_to_be_written_to_file , "\t");
 	strcat(line_to_be_written_to_file , list_of_read_names);
 	strcat(line_to_be_written_to_file , "\n");
