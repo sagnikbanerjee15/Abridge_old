@@ -119,7 +119,7 @@ void writeToFile (short int flag_save_all_quality_scores, short int flag_save_ex
 						break;
 				}
 				fprintf (fhw_qual , "%s" , qual);
-				if ( flag_save_exact_quality_scores == 1 )
+				if ( flag_save_exact_quality_scores == 0 )
 				{
 					fprintf (fhw_qual , "%s" , "\t");
 					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
