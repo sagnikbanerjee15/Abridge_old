@@ -3279,9 +3279,12 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 	if ( read_names_stored == 1 )
 	{
 		if ( number_of_columns == 2 )
-			splitByDelimiter (split_on_tab[1] , ',' , read_names);
+			read_names_index = splitByDelimiter (split_on_tab[1] , ',' , read_names);
 		else if ( number_of_columns == 3 )
-			splitByDelimiter (split_on_tab[2] , ',' , read_names);
+			read_names_index = splitByDelimiter (split_on_tab[2] , ',' , read_names);
+		printf ("\n Reads read");
+		for ( i = 0 ; i < read_names_index ; i++ )
+			printf ("\n%s" , read_names[i]);
 	}
 	if ( ( number_of_columns == 1 && read_names_stored == 0 ) || ( number_of_columns == 2 && read_names_stored == 1 ) )
 	{
