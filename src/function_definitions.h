@@ -1727,6 +1727,14 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	/*if (XS_tag_index != -1) strcat(curr_alignment->icigar, curr_alignment->tags[XS_tag_index].val);*/
 	if ( NH_tag_index != -1 )
 		strcat (curr_alignment->icigar , curr_alignment->tags[NH_tag_index].val);
+	/*
+	 * Set the read_name to black if the read is uniquely mapped
+	 */
+	if ( curr_alignment->tags[NH_tag_index].val[0] == '1' && curr_alignment->tags[NH_tag_index].val[1] == '\0' )
+	{
+		curr_alignment->read_name[0] = '';
+		curr_alignment->read_name[1] = '\0';
+	}
 
 	/*
 	 * Change the iCIGAR representation to reflect the samformatflag and XS tag
