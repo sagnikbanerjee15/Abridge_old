@@ -1949,6 +1949,7 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	int XS_tag_index;
 	int NH_tag_index;
 	int NM_tag_index;
+	int AS_tag_index;
 	int print_outputs = 0;
 	int perfect_alignment_indicator = 0;
 	int spliced_alignment_indicator = 0;
@@ -2024,6 +2025,7 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	NM_tag_index = -1;
 	nM_tag_index = -1;
 	MD_tag_index = -1;
+	AS_tag_index = -1;
 	for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
 	{
 		if ( strcmp (curr_alignment->tags[i].name , "MD") == 0 )
@@ -2036,6 +2038,8 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 			NM_tag_index = i;
 		if ( strcmp (curr_alignment->tags[i].name , "nM") == 0 )
 			nM_tag_index = i;
+		if ( strcmp (curr_alignment->tags[i].name , "AS") == 0 )
+			AS_tag_index = i;
 	}
 
 	perfect_alignment_indicator = isAlignmentPerfect (curr_alignment->cigar , curr_alignment->tags , MD_tag_index , NM_tag_index , nM_tag_index);
@@ -2201,6 +2205,27 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	 printf ("\nCIGAR %s iCIGAR: %s" , curr_alignment->cigar , curr_alignment->icigar);
 	 fflush (stdout);
 	 */
+
+	/*
+	 * Append the cigar with mapping quality score and the alignment score (if available)
+	 */
+
+	if ( flag_save_scores == 1 )
+	{
+		sprintf (str , "%d" , curr_alignment->mapping_quality_score);
+		strcat (curr_alignment->icigar , "-");
+		strcat (curr_alignment->icigar , str);
+		if ( AS_tag_index != -1 )
+		{
+			strcat (curr_alignment->icigar , "-");
+			strcat (curr_alignment->icigar , curr_alignment->tags[AS_tag_index].val);
+		}
+		else
+		{
+			strcat (curr_alignment->icigar , "-");
+			strcat (curr_alignment->icigar , "X");
+		}
+	}
 
 	/*
 	 * For diagnostics
