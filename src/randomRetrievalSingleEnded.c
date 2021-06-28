@@ -371,7 +371,7 @@ int main (int argc, char *argv[])
 						printf ("\t");
 					}
 					printf ("MD:Z:%s" , sam_alignment->tags[2].val);
-					if ( flag_save_scores == 0 )
+					if ( flag_save_scores == 1 )
 					{
 						printf ("\t");
 						printf ("AS:i:%s" , sam_alignment->tags[3].val);
