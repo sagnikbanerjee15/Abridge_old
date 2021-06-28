@@ -861,6 +861,10 @@ void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_g
 	strcpy (sam_alignment_instance->tags[2].type , "Z");
 	strcpy (sam_alignment_instance->tags[2].val , "dummy");
 
+	strcpy (sam_alignment_instance->tags[3].name , "AS");
+	strcpy (sam_alignment_instance->tags[3].type , "i");
+	strcpy (sam_alignment_instance->tags[3].val , "X");
+
 	sam_alignment_instance->number_of_tag_items = 3;
 	sam_alignment_instance->md_extended[0] = '\0';
 	MD_extended_index = 0;
@@ -3034,7 +3038,7 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	 */
 }
 
-void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names)
+void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names, short int flag_save_scores)
 {
 	int i;
 
@@ -3081,7 +3085,9 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 		strcat (line_to_be_written_to_file , temp);
 		strcat (line_to_be_written_to_file , "\t");
 
-		strcat (line_to_be_written_to_file , "255");
+		if ( flag_save_scores == 0 )
+			strcat (line_to_be_written_to_file , "255");
+		else strcat (line_to_be_written_to_file , sam_alignment->mapping_quality_score);
 		strcat (line_to_be_written_to_file , "\t");
 
 		strcat (line_to_be_written_to_file , sam_alignment->cigar);
@@ -3125,13 +3131,19 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
 			strcat (line_to_be_written_to_file , "\t");
 		}
+		if ( flag_save_scores == 1 && strmp (sam_alignment->tags[3].val , "X") != 0 )
+		{
+			strcat (line_to_be_written_to_file , "AS:i:");
+			strcat (line_to_be_written_to_file , sam_alignment->tags[3].val);
+			strcat (line_to_be_written_to_file , "\t");
+		}
 
 		strcat (line_to_be_written_to_file , "\n");
 		fprintf (fhw , "%s" , line_to_be_written_to_file);
 	}
 }
 
-void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names, int *read_names_index)
+void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names, int *read_names_index, short int flag_save_scores)
 {
 	int i;
 
@@ -3163,7 +3175,9 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 		strcat (line_to_be_written_to_file , temp);
 
 		strcat (line_to_be_written_to_file , "\t");
-		strcat (line_to_be_written_to_file , "255");
+		if ( flag_save_scores == 0 )
+			strcat (line_to_be_written_to_file , "255");
+		else strcat (line_to_be_written_to_file , sam_alignment->mapping_quality_score);
 
 		strcat (line_to_be_written_to_file , "\t");
 		strcat (line_to_be_written_to_file , sam_alignment->cigar);
@@ -3207,13 +3221,19 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
 			//strcat (line_to_be_written_to_file , "\t");
 		}
+		if ( flag_save_scores == 1 && strmp (sam_alignment->tags[3].val , "X") != 0 )
+		{
+			strcat (line_to_be_written_to_file , "AS:i:");
+			strcat (line_to_be_written_to_file , sam_alignment->tags[3].val);
+			strcat (line_to_be_written_to_file , "\t");
+		}
 
 		strcat (line_to_be_written_to_file , "\n");
 		fprintf (fhw , "%s" , line_to_be_written_to_file);
 	}
 }
 
-void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char **read_names, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
+void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char **read_names, char *default_quality_value, short int flag_save_scores, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
 {
 	/********************************************************************
 	 * Variable declaration
@@ -3256,7 +3276,14 @@ void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
-		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+		if ( flag_save_scores == 0 )
+			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+		else
+		{
+			strcpy (sam_alignment_instance->mapping_quality_score , split_on_dash[1]);
+			strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
+			number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+		}
 		sam_alignment_instance->start_position = curr_position;
 
 		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
@@ -3296,12 +3323,12 @@ void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance
 			( *read_number )++;
 			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index);
+		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_save_scores);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
 
-void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome, char **read_names, short int read_names_stored)
+void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_save_scores, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome, char **read_names, short int read_names_stored)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -3355,7 +3382,14 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
-		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+		if ( flag_save_scores == 0 )
+			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+		else
+		{
+			strcpy (sam_alignment_instance->mapping_quality_score , split_on_dash[1]);
+			strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
+			number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+		}
 		sam_alignment_instance->start_position = curr_position;
 
 		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
@@ -3381,7 +3415,6 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 			//fflush (stdout);
 
 			convertIcigarToCigarandMDSingleEnded (whole_genome , sam_alignment_instance , chromosome , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value);
-
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
@@ -3396,7 +3429,7 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 			( *read_number )++;
 			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , read_names);
+		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , read_names , flag_save_scores);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
