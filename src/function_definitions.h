@@ -1843,6 +1843,11 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 			strcat (curr_alignment->icigar , "-");
 			strcat (curr_alignment->icigar , curr_alignment->tags[AS_tag_index].val);
 		}
+		else
+		{
+			strcat (curr_alignment->icigar , "-");
+			strcat (curr_alignment->icigar , "X");
+		}
 	}
 
 	/*

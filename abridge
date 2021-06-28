@@ -485,6 +485,10 @@ def compressSamFile(options):
         
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 0 "
+        if options.save_scores == True:
+            cmd += f"1 "
+        else:
+            cmd += f"0 "
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -672,6 +676,10 @@ def compressSamFile(options):
         
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 1 "
+        if options.save_scores == True:
+            cmd += f"1 "
+        else:
+            cmd += f"0 "
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:

@@ -63,7 +63,7 @@ long long int findEndPointOfiCIGAR (char *icigar)
 	return end_point;
 }
 
-void findFarthestMapping (long long int *start, long long int *end, char **split_icigar_field, int number_of_fields, char **split_icigar_and_num_reads, int print)
+void findFarthestMapping (long long int *start, long long int *end, char **split_icigar_field, int number_of_fields, char **split_icigar_and_num_reads, int print, short int save_scores)
 {
 	int i;
 	*end = -1;
@@ -77,7 +77,10 @@ void findFarthestMapping (long long int *start, long long int *end, char **split
 	 }*/
 	for ( i = 0 ; i < number_of_fields ; i++ )
 	{
-		splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads); // will always have 2 fields
+		splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads); // will always maximum 4 fields
+		if ( save_scores == 1 )
+		strcpy(split_icigar_and_num_reads[1] , split_icigar_and_num_reads[3]);
+
 		if ( strlen (split_icigar_and_num_reads[0]) != 1 )
 		{
 			if ( print )
@@ -88,7 +91,7 @@ void findFarthestMapping (long long int *start, long long int *end, char **split
 	}
 }
 
-void findContinousClusters (char *input_pass1_filename, char *input_qual_filename, char *output_filename, long long int max_input_reads_in_a_single_nucl_loc, int paired)
+void findContinousClusters (char *input_pass1_filename, char *input_qual_filename, char *output_filename, long long int max_input_reads_in_a_single_nucl_loc, int paired, short int save_scores)
 {
 	/*
 	 *
@@ -185,7 +188,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 	while ( ( line_len = getline ( &line , &len , fhr_pass1) ) != -1 )
 	{
 		num_lines_read++;
-		printf ("\nLines read %d" , num_lines_read);
+		//printf ("\nLines read %d" , num_lines_read);
 		if ( num_lines_read == 1 )
 		{
 			fprintf (fhw , "%s" , line);
@@ -244,7 +247,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 				 */
-				findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0);
+				findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
 				byte_number_start_cluster = file_position;
@@ -276,7 +279,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 				 */
-				findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0);
+				findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
 				byte_number_start_cluster = file_position;
@@ -340,7 +343,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 			 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 			 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 			 */
-			findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0);
+			findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
 			// New cluster is found
 			if ( start_position_of_read > end_position_of_cluster + 1 )
 			{
@@ -448,6 +451,8 @@ int main (int argc, char *argv[])
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 
+	short int save_scores;
+
 	int paired;
 	/********************************************************************/
 
@@ -459,10 +464,11 @@ int main (int argc, char *argv[])
 	strcpy(output_filename , argv[3]);
 	max_input_reads_in_a_single_nucl_loc = strtol (argv[4] , &temp , 10);
 	paired = strtol (argv[5] , &temp , 10);
+	save_scores = strtol (argv[6] , &temp , 10);
 	/********************************************************************/
 
 	//printf ( "\n max_input_reads_in_a_single_nucl_loc = %d\n" , max_input_reads_in_a_single_nucl_loc );
 	//fflush ( stdout );
-	findContinousClusters (input_pass1_filename , input_qual_filename , output_filename , max_input_reads_in_a_single_nucl_loc , paired);
+	findContinousClusters (input_pass1_filename , input_qual_filename , output_filename , max_input_reads_in_a_single_nucl_loc , paired , save_scores);
 	return 0;
 }
