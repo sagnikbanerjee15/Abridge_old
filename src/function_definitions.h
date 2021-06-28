@@ -3087,7 +3087,11 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 
 		if ( flag_save_scores == 0 )
 			strcat (line_to_be_written_to_file , "255");
-		else strcat (line_to_be_written_to_file , sam_alignment->mapping_quality_score);
+		else
+		{
+			sprintf (temp , "%d" , sam_alignment->mapping_quality_score);
+			strcat (line_to_be_written_to_file , temp);
+		}
 		strcat (line_to_be_written_to_file , "\t");
 
 		strcat (line_to_be_written_to_file , sam_alignment->cigar);
@@ -3177,7 +3181,11 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 		strcat (line_to_be_written_to_file , "\t");
 		if ( flag_save_scores == 0 )
 			strcat (line_to_be_written_to_file , "255");
-		else strcat (line_to_be_written_to_file , sam_alignment->mapping_quality_score);
+		else
+		{
+			sprintf (temp , "%d" , sam_alignment->mapping_quality_score);
+			strcat (line_to_be_written_to_file , temp);
+		}
 
 		strcat (line_to_be_written_to_file , "\t");
 		strcat (line_to_be_written_to_file , sam_alignment->cigar);
