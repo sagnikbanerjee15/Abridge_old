@@ -1841,8 +1841,7 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 		if ( AS_tag_index != -1 )
 		{
 			strcat (curr_alignment->icigar , "-");
-			sprintf (str , "%d" , curr_alignment->tags[AS_tag_index].val);
-			strcat (curr_alignment->icigar , str);
+			strcat (curr_alignment->icigar , curr_alignment->tags[AS_tag_index].val);
 		}
 	}
 
