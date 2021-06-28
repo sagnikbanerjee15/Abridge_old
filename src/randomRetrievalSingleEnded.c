@@ -324,7 +324,9 @@ int main (int argc, char *argv[])
 					printf ("%d" , sam_alignment->start_position);
 					printf ("\t");
 
-					printf ("255");
+					if ( flag_save_scores == 0 )
+						printf ("255");
+					else printf ("%d" , sam_alignment->mapping_quality_score);
 					printf ("\t");
 
 					printf ("%s" , sam_alignment->cigar);
@@ -369,6 +371,11 @@ int main (int argc, char *argv[])
 						printf ("\t");
 					}
 					printf ("MD:Z:%s" , sam_alignment->tags[2].val);
+					if ( flag_save_scores == 0 )
+					{
+						printf ("\t");
+						printf ("AS:i:%s" , sam_alignment->tags[3].val);
+					}
 
 					printf ("\n");
 					fflush (stdout);
