@@ -574,6 +574,10 @@ void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_g
 	strcpy (sam_alignment_instance->tags[2].type , "Z");
 	strcpy (sam_alignment_instance->tags[2].val , "dummy");
 
+	strcpy (sam_alignment_instance->tags[3].name , "AS");
+	strcpy (sam_alignment_instance->tags[3].type , "i");
+	//strcpy (sam_alignment_instance->tags[3].val , "X");
+
 	sam_alignment_instance->number_of_tag_items = 3;
 	sam_alignment_instance->md_extended[0] = '\0';
 	MD_extended_index = 0;
@@ -863,7 +867,7 @@ void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_g
 
 	strcpy (sam_alignment_instance->tags[3].name , "AS");
 	strcpy (sam_alignment_instance->tags[3].type , "i");
-	strcpy (sam_alignment_instance->tags[3].val , "X");
+	//strcpy (sam_alignment_instance->tags[3].val , "X");
 
 	sam_alignment_instance->number_of_tag_items = 3;
 	sam_alignment_instance->md_extended[0] = '\0';
@@ -3395,7 +3399,6 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 		else
 		{
 			sam_alignment_instance->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
-			printf ("\n%s %d" , split_on_dash[1] , sam_alignment_instance->mapping_quality_score);
 			strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
 		}
