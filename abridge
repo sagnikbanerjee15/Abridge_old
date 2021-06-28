@@ -1285,8 +1285,8 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     cmd += f" {name_of_file_with_quality_scores}" #argv[12]
     if os.path.exists(dictionary_name)==True:
         cmd += f" {dictionary_name} " # argv[13]
-    #print(cmd)
-    #sys.stdout.flush()
+    print(cmd)
+    sys.stdout.flush()
     os.system(cmd)
     
     
