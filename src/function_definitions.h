@@ -1485,7 +1485,7 @@ int isAlignmentPerfect (char *cigar, struct Sam_Tags *tags, int MD_tag_index, in
 	return 1;
 }
 
-void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics)
+void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, short int flag_save_scores, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics)
 {
 	/*
 	 * Creates the integrated cigar
@@ -1502,6 +1502,7 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	int XS_tag_index;
 	int NH_tag_index;
 	int NM_tag_index;
+	int AS_tag_index;
 	int print_outputs = 0;
 	int perfect_alignment_indicator = 0;
 	int spliced_alignment_indicator = 0;
@@ -1577,6 +1578,7 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	NM_tag_index = -1;
 	nM_tag_index = -1;
 	MD_tag_index = -1;
+	AS_tag_index = -1;
 	for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
 	{
 		if ( strcmp (curr_alignment->tags[i].name , "MD") == 0 )
@@ -1589,6 +1591,8 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 			NM_tag_index = i;
 		if ( strcmp (curr_alignment->tags[i].name , "nM") == 0 )
 			nM_tag_index = i;
+		if ( strcmp (curr_alignment->tags[i].name , "AS") == 0 )
+			AS_tag_index = i;
 	}
 
 	perfect_alignment_indicator = isAlignmentPerfect (curr_alignment->cigar , curr_alignment->tags , MD_tag_index , NM_tag_index , nM_tag_index);
@@ -1826,6 +1830,23 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	}
 
 	/*
+	 * Append the cigar with mapping quality score and the alignment score (if available)
+	 */
+
+	if ( flag_save_scores == 1 )
+	{
+		sprintf (str , "%d" , curr_alignment->mapping_quality_score);
+		strcpy (curr_alignment->icigar , "-");
+		strcpy (curr_alignment->icigar , str);
+		if ( AS_tag_index != -1 )
+		{
+			strcpy (curr_alignment->icigar , "-");
+			sprintf (str , "%d" , curr_alignment->tags[AS_tag_index].val);
+			strcpy (curr_alignment->icigar , str);
+		}
+	}
+
+	/*
 	 * For diagnostics
 	 */
 
@@ -1907,7 +1928,7 @@ char findReplamentCharacterForPairedEndedReads (int samflag, struct Paired_Ended
 
 }
 
-void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
+void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_save_scores, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
 {
 	/*
 	 * Creates the integrated cigar
