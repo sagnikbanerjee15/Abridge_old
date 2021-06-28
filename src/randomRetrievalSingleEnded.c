@@ -46,8 +46,10 @@ int main (int argc, char *argv[])
 	short int flag_ignore_sequence_information;
 	short int flag_save_all_quality_scores;
 	short int flag_save_exact_quality_scores;
+	short int flag_save_scores;
 	short int number_of_columns;
 	short int first_record;
+	short int read_names_stored;
 
 	int i, j, k, l;
 	int fseek_ret_val;
@@ -148,7 +150,7 @@ int main (int argc, char *argv[])
 	sam_alignment = allocateMemorySam_Alignment ();
 
 	/****************************************************************************************************************************************/
-	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
+	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores , &flag_save_scores);
 	readGenomeIndex (genome_index , genome_index_filename , split_on_newline);
 	//readInGenomeSequenceSingleChromosome (single_genome_sequence , chromosome , genome_filename , genome_index);
 	readInEachChromosome (genome_filename , single_genome_sequence , chromosome);
@@ -217,28 +219,48 @@ int main (int argc, char *argv[])
 		 */
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
+			if ( strstr (split_on_newline[j] , "abridge_") )
+				read_names_stored = 1;
+			else read_names_stored = 0;
+
 			number_of_columns = splitByDelimiter (split_on_newline[j] , '\t' , split_on_tab);
-			if ( number_of_columns == 1 )
+
+			if ( read_names_stored == 0 )
 			{
-				/*
-				 int max_number_of_commas = 0, number_of_commas = 0;
-				 for ( k = 0 ; split_on_tab[0][k] != '\0' ; k++ )
-				 if ( split_on_tab[0][k] == ',' ) number_of_commas++;
-				 */
+				if ( number_of_columns == 1 )
+					curr_position++;
+				else if ( number_of_columns == 2 )
+				{
+					if ( j != 0 )
+						curr_position += strtol (split_on_tab[0] , &temp , 10);
+				}
+			}
+			else if ( read_names_stored == 1 )
+			{
+				if ( number_of_columns == 2 )
+					curr_position++;
+				else if ( number_of_columns == 2 )
+				{
+					if ( j != 0 )
+						curr_position += strtol (split_on_tab[0] , &temp , 10);
+				}
+			}
+
+			if ( ( number_of_columns == 1 && read_names_stored == 0 ) || ( number_of_columns == 2 && read_names_stored == 1 ) )
+			{
+				int max_number_of_commas = 0, number_of_commas = 0;
+				for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
+					if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
-				curr_position++;
 			}
-			else if ( number_of_columns == 2 )
+			else if ( ( number_of_columns == 2 && read_names_stored == 0 ) || ( number_of_columns == 3 && read_names_stored == 1 ) )
 			{
-				/*
-				 int max_number_of_commas = 0, number_of_commas = 0;
-				 for ( k = 0 ; split_on_tab[1][k] != '\0' ; k++ )
-				 if ( split_on_tab[1][k] == ',' ) number_of_commas++;
-				 */
+				int max_number_of_commas = 0, number_of_commas = 0;
+				for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
+					if ( split_on_tab[1][i] == ',' ) number_of_commas++;
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
-				if ( j != 0 )
-					curr_position += strtol (split_on_tab[0] , &temp , 10);
 			}
+
 			/*
 			 printf ("\ncurr_position %d\n" , curr_position);
 			 */
@@ -246,7 +268,18 @@ int main (int argc, char *argv[])
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
 				splitByDelimiter (split_on_comma[k] , '-' , split_on_dash);
-				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+				if ( flag_save_scores == 0 )
+					number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+				else
+				{
+					if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
+					{
+						sam_alignment->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
+						strcpy(sam_alignment->tags[3].val , split_on_dash[2]);
+						number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+					}
+				}
+
 				sam_alignment->start_position = curr_position;
 				if ( curr_position > end || curr_position < start ) continue;
 				if ( split_on_comma[k][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )

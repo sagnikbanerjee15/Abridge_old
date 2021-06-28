@@ -2615,7 +2615,7 @@ void readGenomeIndex (struct Abridge_Index *genome_index, char *genome_index_fil
 	}
 }
 
-void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score, short int *flag_save_all_quality_scores, short int *flag_save_exact_quality_scores)
+void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score, short int *flag_save_all_quality_scores, short int *flag_save_exact_quality_scores, short int *flag_save_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2655,6 +2655,7 @@ void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_
 			*flag_ignore_quality_score = strtol (split_line[3] , &temp , 10);
 			*flag_save_all_quality_scores = strtol (split_line[4] , &temp , 10);
 			*flag_save_exact_quality_scores = strtol (split_line[5] , &temp , 10);
+			*flag_save_scores = strtol (split_line[6] , &temp , 10);
 			continue;
 		}
 		//printf("\n%d %s", abridge_index->number_of_items, split_line[0]);
@@ -3292,9 +3293,12 @@ void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 		else
 		{
-			sam_alignment_instance->mapping_quality_score , strtol (split_on_dash[1] , &temp , 10);
-			strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
-			number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+			if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
+			{
+				sam_alignment_instance->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
+				strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
+				number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+			}
 		}
 		sam_alignment_instance->start_position = curr_position;
 

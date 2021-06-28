@@ -49,6 +49,7 @@ int main (int argc, char *argv[])
 	short int flag_ignore_sequence_information;
 	short int flag_save_all_quality_scores;
 	short int flag_save_exact_quality_scores;
+	short int flag_save_scores;
 	short int number_of_columns;
 	short int first_record;
 
@@ -168,7 +169,7 @@ int main (int argc, char *argv[])
 	number_of_unique_samformatflags /= 2;
 
 	/****************************************************************************************************************************************/
-	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores);
+	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores , &flag_save_scores);
 	readGenomeIndex (genome_index , genome_index_filename , split_on_newline);
 	//readInGenomeSequenceSingleChromosome (single_genome_sequence , chromosome , genome_filename , genome_index);
 	readInEachChromosome (genome_filename , single_genome_sequence , chromosome);
@@ -308,7 +309,17 @@ int main (int argc, char *argv[])
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
 				splitByDelimiter (split_on_comma[k] , '-' , split_on_dash);
-				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+				if ( flag_save_scores == 0 )
+					number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+				else
+				{
+					if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
+					{
+						sam_alignment->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
+						strcpy(sam_alignment->tags[3].val , split_on_dash[2]);
+						number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+					}
+				}
 				sam_alignment->start_position = curr_position;
 				if ( curr_position > end || curr_position < start ) continue;
 				if ( split_on_comma[k][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
