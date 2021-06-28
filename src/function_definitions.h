@@ -1836,13 +1836,13 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	if ( flag_save_scores == 1 )
 	{
 		sprintf (str , "%d" , curr_alignment->mapping_quality_score);
-		strcpy (curr_alignment->icigar , "-");
-		strcpy (curr_alignment->icigar , str);
+		strcat (curr_alignment->icigar , "-");
+		strcat (curr_alignment->icigar , str);
 		if ( AS_tag_index != -1 )
 		{
-			strcpy (curr_alignment->icigar , "-");
+			strcat (curr_alignment->icigar , "-");
 			sprintf (str , "%d" , curr_alignment->tags[AS_tag_index].val);
-			strcpy (curr_alignment->icigar , str);
+			strcat (curr_alignment->icigar , str);
 		}
 	}
 
