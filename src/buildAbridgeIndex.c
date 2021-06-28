@@ -256,6 +256,8 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				for ( i = 0 ; i < number_of_fields ; i++ )
 				{
 					splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads);
+					if ( save_scores == 1 )
+						strcpy(split_icigar_and_num_reads[1] , split_icigar_and_num_reads[3]);
 					number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
 				}
 				/*
@@ -288,6 +290,8 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 				for ( i = 0 ; i < number_of_fields ; i++ )
 				{
 					splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads);
+					if ( save_scores == 1 )
+						strcpy(split_icigar_and_num_reads[1] , split_icigar_and_num_reads[3]);
 					number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
 				}
 				/*
@@ -322,6 +326,8 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 			for ( i = 0 ; i < number_of_fields ; i++ )
 			{
 				splitByDelimiter (split_icigar_field[i] , '-' , split_icigar_and_num_reads);
+				if ( save_scores == 1 )
+					strcpy(split_icigar_and_num_reads[1] , split_icigar_and_num_reads[3]);
 				number_of_reads_per_line_in_pass1_file += strtol (split_icigar_and_num_reads[1] , &temp , 10);
 			}
 			/*
