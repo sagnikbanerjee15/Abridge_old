@@ -1060,7 +1060,7 @@ def decompressSamFile(options):
         # No need to decompress further
         pass
     elif compressor == "zpaq":
-        filename = options.inputabrfilenames.split("/")[-1]
+        filename = options.inputabrfilenames.split("/")[-1][:-8]
         zpaq = options.softwares["zpaq"]
         cmd = f"{zpaq} x {options.output_directory}/{filename}.zpaq -to {options.output_directory} -t1"
         os.system(cmd)
