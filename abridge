@@ -1060,7 +1060,8 @@ def decompressSamFile(options):
         # No need to decompress further
         pass
     elif compressor == "zpaq":
-        cmd = f"zpaq x -t1 {options.inputabrfilenames}.zpaq -to {options.output_directory}"
+        zpaq = options.softwares["zpaq"]
+        cmd = f"{zpaq} x -t1 {options.inputabrfilenames}.zpaq -to {options.output_directory}"
         os.system(cmd)
         
     files_to_be_removed.extend([name_of_input_file_without_location,
