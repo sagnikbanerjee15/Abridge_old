@@ -858,10 +858,10 @@ def compressSamFile(options):
     
     files_to_be_removed.extend(delete_these_files)
     files_to_be_removed.extend(other_files)
-    """
+    
     for file in files_to_be_removed:
         os.system("rm -f "+file)
-    """
+    
       
 def findEndedness(options,logging):
     """
@@ -1043,6 +1043,7 @@ def decompressSamFile(options):
     
     files_to_be_removed = []
     
+    # Use 7za to unpack the single compressed file
     cmd  = f"7za e {options.inputabrfilenames} -y "
     cmd += f" -o{options.output_directory}"
     cmd += f" 1> /dev/null 2>/dev/null"
@@ -1056,9 +1057,11 @@ def decompressSamFile(options):
         files_to_be_removed.extend(f"{pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br".split())
         os.system(cmd)
     elif compressor == "7z":
+        # No need to decompress further
         pass
     elif compressor == "zpaq":
-        pass
+        cmd = f"zpaq x -t1 {options.inputabrfilenames}.zpaq -to {options.output_directory}"
+        os.system(cmd)
         
     files_to_be_removed.extend([name_of_input_file_without_location,
                                 pass1_outputfilename,
