@@ -1074,7 +1074,9 @@ def decompressSamFile(options):
         cmd = f"{zpaq} x {options.output_directory}/{filename}.zpaq > {options.output_directory}/file_list"
         os.system(cmd)
         fhr = open(f"{options.output_directory}/file_list","r")
-        for line_num,line in enumerate(fhr):
+        line_num = 0
+        for line in fhr:
+            line_num = 1
             if line_num == 4:
                 compression_directory = line.strip().split()[-1]
                 break
