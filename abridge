@@ -1129,6 +1129,7 @@ def decompressSamFile(options):
                                 name_of_file_dictionary,
                                 max_reads_in_each_line_filename])
 
+    print(name_of_file_dictionary)
     cmd  = f"(/usr/bin/time --verbose "
     if os.path.exists(name_of_file_dictionary)==False:
         cmd += f" {decompressSamFileSingleEnded} " # argv[0] - Name of the program
