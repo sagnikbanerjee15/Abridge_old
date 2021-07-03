@@ -1077,7 +1077,7 @@ def decompressSamFile(options):
         line_num = 0
         for line in fhr:
             line_num += 1
-            if line_num == 4:
+            if line_num == 6:
                 compression_directory = line.strip().split()[-1]
                 break
             
