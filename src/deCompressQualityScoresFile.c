@@ -144,6 +144,11 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 			rle_quality_scores[i][quality_score_position_index[i]].frequency--;
 			if ( rle_quality_scores[i][quality_score_position_index[i]].frequency == 0 )
 				quality_score_position_index[i]++;
+			if ( quality_score_position_index[i] > quality_score_position_max[i] )
+			{
+				printf ("\nTrouble %d %d" , quality_score_position_index[i] , quality_score_position_max[i]);
+				fflush (stdout);
+			}
 			checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
 		}
 		printf ("\nChecker flag %d" , checker_flag);
