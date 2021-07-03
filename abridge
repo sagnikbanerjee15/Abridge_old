@@ -1053,7 +1053,14 @@ def decompressSamFile(options):
     
     compressor = open(f"{options.output_directory}/compression_method","r").read()
     if compressor == "brotli":
-        cmd = f"brotli -d -k -f {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br {name_of_file_with_quality_scores}.br "
+        cmd  = f"brotli -d -k -f "
+        cmd += f"{pass1_outputfilename}.br "
+        cmd += f"{pass1_index_outputfilename}.br "
+        cmd += f"{unmapped_outputfilename}.br "
+        if os.path.exists(f"{name_of_file_with_quality_scores}.rle.br") == True:
+            cmd += f"{name_of_file_with_quality_scores}.rle.br "
+        if os.path.exists(f"{name_of_file_with_quality_scores}.br") == True:
+            cmd += f"{name_of_file_with_quality_scores}.br "
         files_to_be_removed.extend(f"{pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br".split())
         os.system(cmd)
     elif compressor == "7z":
