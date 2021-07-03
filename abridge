@@ -1145,7 +1145,7 @@ def decompressSamFile(options):
     cmd += f" {unmapped_outputfilename}" #argv[8] - Name of file with unmapped reads
     cmd += f" {name_of_file_with_quality_scores} " #argv[9] - Name of file with quality scores
     if os.path.exists(name_of_file_dictionary)==True:
-        cmd += f" {dictionary_name} " #argv[10]
+        cmd += f" {name_of_file_dictionary} " #argv[10]
         
         cmd_1  = f"cat "
         cmd_1 += f" {pass1_outputfilename} "
