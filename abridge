@@ -1094,8 +1094,7 @@ def decompressSamFile(options):
             logging.info(f"Running command - {cmd}")
         files_to_be_removed.extend(f"{options.output_directory}/{compression_directory}")
         
-    files_to_be_removed.extend([name_of_input_file_without_location,
-                                pass1_outputfilename,
+    files_to_be_removed.extend([pass1_outputfilename,
                                 pass1_index_outputfilename,
                                 unmapped_outputfilename,
                                 name_of_file_with_quality_scores,
