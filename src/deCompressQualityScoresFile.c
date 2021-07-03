@@ -153,7 +153,8 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 		fprintf (fhw , "%s" , "\n");
 		if ( checker_flag == 0 ) break;
 	}
-
+	printf ("\nReturning...");
+	fflush ( stdout);
 	fclose (fhr);
 	fclose (fhw);
 }
