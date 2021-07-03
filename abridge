@@ -1063,7 +1063,7 @@ def decompressSamFile(options):
             cmd += f"{name_of_file_with_quality_scores}.rle.br "
         if os.path.exists(f"{name_of_file_with_quality_scores}.br") == True:
             cmd += f"{name_of_file_with_quality_scores}.br "
-        if os.path.exists(f"{}") == True:
+        if os.path.exists(f"{name_of_file_dictionary}.br") == True:
             cmd += f"{name_of_file_dictionary}.br "
         files_to_be_removed.extend(f"{pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br".split())
         os.system(cmd)
