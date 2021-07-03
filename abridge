@@ -819,6 +819,7 @@ def compressSamFile(options):
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
         cmd += f" -m3 -t1 -f "
+        cmd += f" -noattributes "
         cmd += f") "
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
