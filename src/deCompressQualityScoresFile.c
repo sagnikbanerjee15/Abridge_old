@@ -17,6 +17,8 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 	size_t len = 0;
 	ssize_t line_len;
 
+	short int line_number = 0;
+
 	int i, j, k;
 	int num;
 	int max_read_length;
@@ -63,6 +65,8 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 	max_read_length = 0;
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
+		line_number++;
+		printf ("\nProcessing line %d" , line_number);
 		number_of_quality_scores_in_current_position = 0;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
