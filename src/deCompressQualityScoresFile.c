@@ -123,7 +123,7 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 
 		rle_quality_scores_index++;
 	}
-
+	printf ("\nComing out of this loop");
 	max_read_length = rle_quality_scores_index;
 	quality_score_of_read = ( char* ) malloc (sizeof(char) * max_read_length);
 
