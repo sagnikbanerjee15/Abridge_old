@@ -105,10 +105,10 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 		}
 
 		quality_score_position_max[rle_quality_scores_index] = number_of_quality_scores_in_current_position_index;
-		/*
-		 printf ( "\n%d quality_score_position_max %d i=%d" , rle_quality_scores_index , quality_score_position_max[rle_quality_scores_index] , i );
-		 fflush ( stdout );
-		 */
+
+		printf ("\n%d quality_score_position_max %d i=%d" , rle_quality_scores_index , quality_score_position_max[rle_quality_scores_index] , i);
+		fflush ( stdout);
+
 		num = 0;
 		for ( j = 0 ; j < quality_score_position_max[rle_quality_scores_index] ;
 				j++ )
@@ -117,9 +117,10 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 		 *
 		 *
 		 * Calculate sum of each position
-		 printf ( "\nSum Position %d %lld" , rle_quality_scores_index , num );
-		 fflush ( stdout );
 		 */
+		printf ("\nSum Position %d %lld" , rle_quality_scores_index , num);
+		fflush ( stdout);
+
 		rle_quality_scores_index++;
 	}
 
