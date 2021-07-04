@@ -143,7 +143,7 @@ abridge \
 --cpu $CPU \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
 --inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_PE.abridge \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/decompress) \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &
 
@@ -152,20 +152,37 @@ abridge \
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-==========================
-SINGLE ENDED COMPRESSION 3
-==========================
+========================================================================================================
+SINGLE ENDED COMPRESSION 3 compress_save_only_indels_save_qual_scores_SE
+========================================================================================================
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
 --compress \
 --cpu $CPU \
---fast \
+--level 2 \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_save_qual_scores_SE) \
-1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_save_qual_scores_SE.output \
-2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_save_qual_scores_SE.error &
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_small_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.error &
+
+========================================================================================================
+SINGLE ENDED DECOMPRESSION 3 compress_save_only_indels_save_qual_scores_SE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--decompress \
+--cpu $CPU \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_SE.abridge \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ==========================
 SINGLE ENDED COMPRESSION 4
@@ -221,19 +238,7 @@ abridge \
 
 
 
-============================
-SINGLE ENDED DECOMPRESSION 3
-============================
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---decompress \
---cpu $CPU \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_save_qual_scores_SE/SRR13711353_SE.sam.abridge.br \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_save_only_indels_save_qual_scores_SE/decompress) \
-1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_only_indels_save_qual_scores_SE.output \
-2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_save_only_indels_save_qual_scores_SE.error &
+
 
 ============================
 SINGLE ENDED DECOMPRESSION 4
