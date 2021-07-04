@@ -24,6 +24,7 @@ from scripts.assessMemoryRequirement import *
 from scripts.verifyPositions import *
 from scripts.sortPositionsForRandomAccess import *
 from threading import enumerate
+from builtins import True, False
 
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser(prog="abridge",description="Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages",formatter_class=RawTextHelpFormatter)
@@ -322,7 +323,6 @@ def constructFileNames(input_filename,options):
     error_files = [error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression, error_file_name_of_file_with_quality_scores_compressed, error_file_7z_br]
     compressed_files = [compressed_abridged_filename_7z, compressed_abridged_filename_br,compressed_abridged_filename_zpaq]
     return  delete_these_files, other_files, error_files, compressed_files
-    
 
 def compressSamFile(options):
     """
@@ -863,8 +863,7 @@ def compressSamFile(options):
     
     for file in files_to_be_removed:
         os.system("rm -f "+file)
-    
-      
+          
 def findEndedness(options,logging):
     """
     """
@@ -1102,7 +1101,37 @@ def decompressSamFile(options):
                                 name_of_file_with_quality_scores,
                                 f"{name_of_file_with_quality_scores}.rle",
                                 f"{options.output_directory}/file_list"])
-
+    
+    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores,save_scores = list(map(int,open(pass1_outputfilename,"rb").readline().split()))
+    if flag_ignore_mismatches == 1:
+        options.ignore_mismatches = True
+    else:
+        options.ignore_mismatches = False
+    if flag_ignore_soft_clippings == 1:
+        options.ignore_soft_clippings = True
+    else:
+        options.ignore_soft_clippings = False
+    if flag_ignore_unmapped_sequences == 1:
+        options.ignore_unmapped_sequences = True
+    else:
+        options.ignore_unmapped_sequences = False
+    if flag_ignore_quality_score == 1:
+        options.ignore_quality_score = True
+    else:
+        options.ignore_quality_score = False
+    if flag_save_all_quality_scores == 1:
+        options.save_all_quality_scores = True
+    else:
+        options.save_all_quality_scores = False
+    if save_exact_quality_scores == 1:
+        options.save_exact_quality_scores = True
+    else:
+        options.save_exact_quality_scores = False
+    if save_scores == 1:
+        options.save_scores = True
+    else:
+        options.save_scores = False
+    
     ######################################################################################
     # Convert RLE back to quality scores
     ######################################################################################
@@ -1124,7 +1153,7 @@ def decompressSamFile(options):
         cmd = f"touch {name_of_file_with_quality_scores}"
         os.system(cmd)
 
-    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores,save_scores = open(pass1_outputfilename,"rb").readline().split()
+    
     max_reads_in_each_line_filename = f"{options.output_directory}/max_reads_in_each_line_filename"
     output_sam_filename = f"{options.output_directory}/{name_of_input_file_without_location[:-4]}.decompressed.sam"
     files_to_be_removed.extend([pass1_index_outputfilename,
