@@ -808,6 +808,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
 			if ( cigar_items_instance[i].def == 'M' || cigar_items_instance[i].def == 'S' || cigar_items_instance[i].def == 'I' )
 				length_of_read += cigar_items_instance[i].len;
+		printf ("\nEntering here Length of read %d cigar %s" , length_of_read , sam_alignment_instance->cigar);
 		for ( i = 0 ; i < length_of_read ; i++ )
 		{
 			sam_alignment_instance->seq[i] = 'A';
