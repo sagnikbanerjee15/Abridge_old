@@ -241,6 +241,7 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	}
 
 	printf ("\nTotal mapped reads: %d" , *total_mapped_reads);
+	fflush (stdout);
 	/*
 	 * Write all unmapped reads to samfile
 	 */
