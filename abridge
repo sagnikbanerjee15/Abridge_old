@@ -23,8 +23,6 @@ from pprint import pformat
 from scripts.assessMemoryRequirement import *
 from scripts.verifyPositions import *
 from scripts.sortPositionsForRandomAccess import *
-from threading import enumerate
-from builtins import True, False
 
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser(prog="abridge",description="Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages",formatter_class=RawTextHelpFormatter)
