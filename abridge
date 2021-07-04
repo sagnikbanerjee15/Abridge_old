@@ -1120,6 +1120,9 @@ def decompressSamFile(options):
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
+    elif options.save_all_quality_scores == False and options.save_exact_quality_scores==False:
+        cmd = f"touch {name_of_file_with_quality_scores}"
+        os.system(cmd)
 
     flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores,save_scores = open(pass1_outputfilename,"rb").readline().split()
     max_reads_in_each_line_filename = f"{options.output_directory}/max_reads_in_each_line_filename"
