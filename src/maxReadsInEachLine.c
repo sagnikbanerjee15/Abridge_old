@@ -53,6 +53,7 @@ void findMaximumNumberOfReadsInEachLine (char *pass1filename, char *output_filen
 	max_reads_in_each_line = 0;
 	do
 	{
+		number_of_commas_in_each_line = 1;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 			if ( line[i] == ',' ) number_of_commas_in_each_line++;
 		if ( max_number_of_commas < number_of_commas_in_each_line )
