@@ -1117,7 +1117,7 @@ def decompressSamFile(options):
         options.ignore_quality_score = True
     else:
         options.ignore_quality_score = False
-    if flag_save_all_quality_scores == 1:
+    if save_all_quality_scores == 1:
         options.save_all_quality_scores = True
     else:
         options.save_all_quality_scores = False
