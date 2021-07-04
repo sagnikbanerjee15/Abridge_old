@@ -92,19 +92,19 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 	fhr = fopen (pass1_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File %s not found" , pass1_filename);
 		exit (1);
 	}
 	fhr_qual = fopen (name_of_file_with_quality_scores , "r");
 	if ( fhr_qual == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File %s not found" , name_of_file_with_quality_scores);
 		exit (1);
 	}
 	fhw = fopen (output_sam_filename , "w");
 	if ( fhw == NULL )
 	{
-		printf ("Error! File cannot be opened for writing");
+		printf ("Error! File %s cannot be opened for writing" , output_sam_filename);
 		exit (1);
 	}
 
