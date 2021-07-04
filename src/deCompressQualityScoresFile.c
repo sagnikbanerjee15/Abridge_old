@@ -152,7 +152,7 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 			checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
 			printf ("\n Frequency being added %d" , rle_quality_scores[i][quality_score_position_index[i]].frequency);
 		}
-		//printf ("\nChecker flag %d" , checker_flag);
+		printf ("\nChecker flag %d" , checker_flag);
 		quality_score_of_read[i] = '\0';
 		//printf ( "\n%s" , quality_score_of_read );
 		//fflush ( stdout );
