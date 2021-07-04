@@ -136,13 +136,13 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 	/*
 	 * Print first line
 	 */
-	for ( i = 0 ; i < max_read_length ; i++ )
-	{
-		for ( j = 0 ; j < quality_score_position_max[i] ; j++ )
-			printf ("\n%d %c" , rle_quality_scores[i][j].frequency , rle_quality_scores[i][j].quality_score);
-	}
+	/*
+	 for ( i = 0 ; i < max_read_length ; i++ )
+	 {
+	 for ( j = 0 ; j < quality_score_position_max[i] ; j++ )
+	 printf ("\n%d %c" , rle_quality_scores[i][j].frequency , rle_quality_scores[i][j].quality_score);
+	 }*/
 
-	return;
 	/*
 	 * Start constructing the quality scores
 	 */
