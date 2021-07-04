@@ -66,17 +66,17 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
 		line_number++;
-		printf ("\nProcessing line %d" , line_number);
+		//printf ("\nProcessing line %d" , line_number);
 		number_of_quality_scores_in_current_position = 0;
 		for ( i = 0 ; line[i] != '\0' ; i++ )
 		{
 			if ( isdigit (line[i]) == 0 )
 				number_of_quality_scores_in_current_position++;
 		}
-
-		printf ("\n%d %d" , rle_quality_scores_index , number_of_quality_scores_in_current_position);
-		fflush ( stdout);
-
+		/*
+		 printf ("\n%d %d" , rle_quality_scores_index , number_of_quality_scores_in_current_position);
+		 fflush ( stdout);
+		 */
 		rle_quality_scores[rle_quality_scores_index] = ( struct RLE_Quality_Scores* ) malloc (sizeof(struct RLE_Quality_Scores) * ( number_of_quality_scores_in_current_position + 10 ));
 
 		number_of_quality_scores_in_current_position_index = 0;
@@ -109,10 +109,10 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 		}
 
 		quality_score_position_max[rle_quality_scores_index] = number_of_quality_scores_in_current_position_index;
-
-		printf ("\n%d quality_score_position_max %d i=%d" , rle_quality_scores_index , quality_score_position_max[rle_quality_scores_index] , i);
-		fflush ( stdout);
-
+		/*
+		 printf ("\n%d quality_score_position_max %d i=%d" , rle_quality_scores_index , quality_score_position_max[rle_quality_scores_index] , i);
+		 fflush ( stdout);
+		 */
 		num = 0;
 		for ( j = 0 ; j < quality_score_position_max[rle_quality_scores_index] ;
 				j++ )
@@ -122,23 +122,27 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 		 *
 		 * Calculate sum of each position
 		 */
-		printf ("\nSum Position %d %lld" , rle_quality_scores_index , num);
-		fflush ( stdout);
-
+		/*
+		 printf ("\nSum Position %d %lld" , rle_quality_scores_index , num);
+		 fflush ( stdout);
+		 */
 		rle_quality_scores_index++;
 	}
-	printf ("\nComing out of this loop");
-	fflush ( stdout);
+	//printf ("\nComing out of this loop");
+	//fflush ( stdout);
 	max_read_length = rle_quality_scores_index;
 	quality_score_of_read = ( char* ) malloc (sizeof(char) * max_read_length);
 
 	/*
 	 * Print first line
 	 */
-	for ( j = 0 ; j < quality_score_position_max[0] ; j++ )
-		printf ("\n%d %c" , rle_quality_scores[0][j].frequency , rle_quality_scores[0][j].quality_score);
+	for ( i = 0 ; i < max_read_length ; i++ )
+	{
+		for ( j = 0 ; j < quality_score_position_max[i] ; j++ )
+			printf ("\n%d %c" , rle_quality_scores[i][j].frequency , rle_quality_scores[i][j].quality_score);
+	}
 
-	//return;
+	return;
 	/*
 	 * Start constructing the quality scores
 	 */
