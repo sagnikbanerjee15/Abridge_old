@@ -133,6 +133,13 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 	quality_score_of_read = ( char* ) malloc (sizeof(char) * max_read_length);
 
 	/*
+	 * Print first line
+	 */
+	for ( j = 0 ; j < quality_score_position_max[0] ; j++ )
+		printf ("\n%d %c" , rle_quality_scores[0][j].quality_score , rle_quality_scores[0][j].frequency);
+
+	return;
+	/*
 	 * Start constructing the quality scores
 	 */
 	while ( 1 )
