@@ -806,8 +806,8 @@ void convertIcigarToCigarandMDPairedEnded (
 		splitCigar (sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance);
 		int length_of_read = 0;
 		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
-			if ( cigar_items_instance[cigar_items_instance_index].def == 'M' )
-				length_of_read += cigar_items_instance[cigar_items_instance_index].len;
+			if ( cigar_items_instance[i].def == 'M' || cigar_items_instance[i].def == 'S' || cigar_items_instance[i].def == 'I' )
+				length_of_read += cigar_items_instance[i].len;
 		for ( i = 0 ; i < length_of_read ; i++ )
 		{
 			sam_alignment_instance->seq[i] = 'A';
@@ -832,7 +832,6 @@ void convertIcigarToCigarandMDPairedEnded (
 		sam_alignment_instance->qual[i] = '\0';
 		//printf ("\ncigar %s cigar_items_instance_index = %d length_of_read = %d %s" , sam_alignment_instance->cigar , cigar_items_instance_index , length_of_read , sam_alignment_instance->qual);
 	}
-
 }
 
 void convertIcigarToCigarandMDSingleEnded (

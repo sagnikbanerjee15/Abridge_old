@@ -288,9 +288,9 @@ abridge \
 
 
 
-==========================
-SINGLE ENDED COMPRESSION 5
-==========================
+========================================================================================================
+SINGLE ENDED COMPRESSION 5 compress_ignore_soft_clippings_ignore_mismatches_SE
+========================================================================================================
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -300,53 +300,86 @@ abridge \
 --ignore_soft_clippings \
 --ignore_mismatches \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE) \
-1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE.output \
-2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE.error &
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_small_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.error &
 
-==========================
-SINGLE ENDED COMPRESSION 6
-==========================
-(/usr/bin/time --verbose  \
-abridge \
---keep_intermediate_error_files \
---compress \
---cpu $CPU \
---fast \
---ignore_quality_scores \
---ignore_soft_clippings \
---ignore_mismatches \
---ignore_quality_scores \
---genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_SE.sam \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE) \
-1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE.output \
-2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE.error &
-
-
-
-
-
-
-
-============================
-SINGLE ENDED DECOMPRESSION 5
-============================
+========================================================================================================
+SINGLE ENDED DECOMPRESSION 5 compress_ignore_soft_clippings_ignore_mismatches_SE
+========================================================================================================
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
 --decompress \
 --cpu $CPU \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE/SRR13711353_SE.sam.abridge.br \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_SE/decompress) \
-1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_SE.output \
-2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_SE.error &
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_SE.abridge \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &
 
-============================
-SINGLE ENDED DECOMPRESSION 6
-============================
+========================================================================================================
+PAIRED ENDED COMPRESSION 5 compress_ignore_soft_clippings_ignore_mismatches_SE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--ignore_quality_scores \
+--level 2 \
+--ignore_soft_clippings \
+--ignore_mismatches \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_small_PE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.error &
+
+========================================================================================================
+PAIRED ENDED DECOMPRESSION 5 compress_ignore_soft_clippings_ignore_mismatches_SE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--decompress \
+--cpu $CPU \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_PE.abridge \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+========================================================================================================
+SINGLE ENDED COMPRESSION 6 compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--level 2 \
+--ignore_quality_scores \
+--ignore_soft_clippings \
+--ignore_mismatches \
+--ignore_quality_scores \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_small_SE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.error &
+
+
+========================================================================================================
+SINGLE ENDED DECOMPRESSION 6 compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE
+========================================================================================================
 (/usr/bin/time --verbose  \
 abridge \
 --keep_intermediate_error_files \
@@ -354,10 +387,51 @@ abridge \
 --cpu $CPU \
 --ignore_sequence \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE/SRR13711353_SE.sam.abridge.br \
---output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE/decompress) \
-1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE.output \
-2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_SE.error &
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_SE.abridge \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &
+
+========================================================================================================
+PAIRED ENDED COMPRESSION 6 compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_PE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--level 2 \
+--ignore_quality_scores \
+--ignore_soft_clippings \
+--ignore_mismatches \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_small_PE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.error &
+
+
+========================================================================================================
+PAIRED ENDED DECOMPRESSION 6 compress_ignore_soft_clippings_ignore_mismatches_ignore_quality_scores_PE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--decompress \
+--cpu $CPU \
+--ignore_sequence \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_PE.abridge \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &
+
+
+
+
+
+
+
 
 
 
