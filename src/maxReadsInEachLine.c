@@ -60,6 +60,7 @@ void findMaximumNumberOfReadsInEachLine (char *pass1filename, char *output_filen
 			max_number_of_commas = number_of_commas_in_each_line;
 
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
+
 	sprintf(str , "%lld" , max_number_of_commas);
 	strcat(str , "\n");
 	fprintf (fhw , "%s" , str);

@@ -219,6 +219,8 @@ abridge \
 
 
 
+
+
 ========================================================================================================
 SINGLE ENDED COMPRESSION 4 compress_save_only_indels_nosave_qual_scores_SE
 ========================================================================================================
@@ -244,7 +246,37 @@ abridge \
 --decompress \
 --cpu $CPU \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
---inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_SE.abridge \
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_SE.abridge \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &
+
+========================================================================================================
+PAIRED ENDED COMPRESSION 4 compress_save_only_indels_nosave_qual_scores_PE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--compress \
+--cpu $CPU \
+--level 2 \
+--ignore_quality_scores \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR13711353_small_PE.sam \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress) \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress.error &
+
+========================================================================================================
+PAIRED ENDED DECOMPRESSION 4 compress_save_only_indels_nosave_qual_scores_PE
+========================================================================================================
+(/usr/bin/time --verbose  \
+abridge \
+--keep_intermediate_error_files \
+--decompress \
+--cpu $CPU \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  \
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/compress/SRR13711353_small_PE.abridge \
 --output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress) \
 1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.output \
 2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/decompress.error &

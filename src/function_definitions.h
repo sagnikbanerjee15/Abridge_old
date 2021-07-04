@@ -63,7 +63,8 @@ struct Sam_Alignment* allocateMemorySam_Alignment ()
 	return s;
 }
 
-struct Paired_Ended_Flag_to_Single_Character* allocateMemoryPaired_Ended_Flag_to_Single_Character (int size)
+struct Paired_Ended_Flag_to_Single_Character* allocateMemoryPaired_Ended_Flag_to_Single_Character (
+		int size)
 {
 	struct Paired_Ended_Flag_to_Single_Character *s;
 	s = ( struct Paired_Ended_Flag_to_Single_Character* ) malloc (sizeof(struct Paired_Ended_Flag_to_Single_Character));
@@ -105,7 +106,8 @@ struct Pass3_Compression_Symbol_icigar_Mapping* allocateMemoryPass3_Compression_
 	return s;
 }
 
-struct Compressed_DS* allocateMemoryCompressed_DS (long long int max_input_reads_in_a_single_nucl_loc)
+struct Compressed_DS* allocateMemoryCompressed_DS (
+		long long int max_input_reads_in_a_single_nucl_loc)
 {
 	struct Compressed_DS *s;
 	int i;
@@ -238,7 +240,8 @@ struct Old_Read_ID_to_New_Read_ID_Circular_Linked_list* allocateMemoryOld_Read_I
 	return s;
 }
 
-struct All_Relevant_Info_PE_per_Alignment* allocateMemoryAll_Relevant_Info_PE_per_Alignment (int max_read_length)
+struct All_Relevant_Info_PE_per_Alignment* allocateMemoryAll_Relevant_Info_PE_per_Alignment (
+		int max_read_length)
 {
 	struct All_Relevant_Info_PE_per_Alignment *s;
 	s = ( struct All_Relevant_Info_PE_per_Alignment* ) malloc (sizeof(struct All_Relevant_Info_PE_per_Alignment));
@@ -353,7 +356,11 @@ void freeSamAlignmentInstance (struct Sam_Alignment *s)
 	free (s->temp);
 }
 
-void populateSamAlignmentInstance (struct Sam_Alignment *dest, char **src, int number_of_fields, char **split_tags)
+void populateSamAlignmentInstance (
+		struct Sam_Alignment *dest,
+		char **src,
+		int number_of_fields,
+		char **split_tags)
 {
 	/********************************************************************
 	 * Variable declarations
@@ -396,7 +403,9 @@ void populateSamAlignmentInstance (struct Sam_Alignment *dest, char **src, int n
 	dest->number_of_tag_items = number_of_fields - 11;
 }
 
-void printSamAlignmentInstance (struct Sam_Alignment *s, short int print_everything)
+void printSamAlignmentInstance (
+		struct Sam_Alignment *s,
+		short int print_everything)
 {
 	int i;
 	printf ("\n");
@@ -456,7 +465,10 @@ void printSamAlignmentInstance (struct Sam_Alignment *s, short int print_everyth
 	printf ("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
 
-int fillUpDictionary (struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, FILE *fhr, int max_lines)
+int fillUpDictionary (
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		FILE *fhr,
+		int max_lines)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -502,7 +514,19 @@ int isSequenceSoftClipped (char *cigar)
 	return 0;
 }
 
-void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
+void convertIcigarToCigarandMDPairedEnded (
+		struct Whole_Genome_Sequence *whole_genome,
+		struct Sam_Alignment *sam_alignment_instance,
+		char *chromosome,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		short int flag_ignore_sequence_information,
+		char *default_quality_value,
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		int number_of_unique_samformatflags,
+		char samformatflag_replacer_characters[])
 {
 	/*
 	 * Coverts the iCIGAR into CIGAR and MD
@@ -792,10 +816,35 @@ void convertIcigarToCigarandMDPairedEnded (struct Whole_Genome_Sequence *whole_g
 		sam_alignment_instance->seq[i] = '\0';
 		sam_alignment_instance->qual[i] = '\0';
 	}
+	if ( flag_ignore_quality_score == 1 )
+	{
+		cigar_items_instance_index = 0;
+		splitCigar (sam_alignment_instance->cigar , &cigar_items_instance_index , cigar_items_instance);
+		int length_of_read = 0;
+		for ( i = 0 ; i < cigar_items_instance_index ; i++ )
+		{
+			//printf ("Splits %d %c" , cigar_items_instance[cigar_items_instance_index].len , cigar_items_instance[cigar_items_instance_index].def);
+			if ( cigar_items_instance[i].def == 'M' || cigar_items_instance[i].def == 'S' || cigar_items_instance[i].def == 'I' )
+				length_of_read += cigar_items_instance[i].len;
+		}
+		for ( i = 0 ; i < length_of_read ; i++ )
+			sam_alignment_instance->qual[i] = default_quality_value[0];
+		sam_alignment_instance->qual[i] = '\0';
+		//printf ("\ncigar %s cigar_items_instance_index = %d length_of_read = %d %s" , sam_alignment_instance->cigar , cigar_items_instance_index , length_of_read , sam_alignment_instance->qual);
+	}
 
 }
 
-void convertIcigarToCigarandMDSingleEnded (struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance, char *chromosome, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, char *default_quality_value)
+void convertIcigarToCigarandMDSingleEnded (
+		struct Whole_Genome_Sequence *whole_genome,
+		struct Sam_Alignment *sam_alignment_instance,
+		char *chromosome,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		short int flag_ignore_sequence_information,
+		char *default_quality_value)
 {
 	/*
 	 * Coverts the iCIGAR into CIGAR and MD
@@ -1122,7 +1171,10 @@ void extractSubString (char *str, char *substr, int start_index, int end_index)
 
 }
 
-void splitCigar (char *cigar, int *num_of_types, struct Cigar_Items *cigar_items_instance)
+void splitCigar (
+		char *cigar,
+		int *num_of_types,
+		struct Cigar_Items *cigar_items_instance)
 {
 	/********************************************************************
 	 * Variable declarations
@@ -1165,7 +1217,12 @@ int isNumber (char *str)
 	return 1;
 }
 
-void insertCharacterInString (char *str, int *str_length, char ins, int loc, int number_of_insertions_to_be_made)
+void insertCharacterInString (
+		char *str,
+		int *str_length,
+		char ins,
+		int loc,
+		int number_of_insertions_to_be_made)
 {
 	/*
 	 * Inserts a character. Assumes that a large
@@ -1178,7 +1235,11 @@ void insertCharacterInString (char *str, int *str_length, char ins, int loc, int
 		str[i++ ] = ins;
 }
 
-void replaceNucleotidesInSeqWithInsertSymbols (char *seq, int *seq_length, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items)
+void replaceNucleotidesInSeqWithInsertSymbols (
+		char *seq,
+		int *seq_length,
+		struct Cigar_Items *cigar_items_instance,
+		int number_of_cigar_items)
 {
 	int i;
 	int j;
@@ -1219,7 +1280,10 @@ void replaceNucleotidesInSeqWithInsertSymbols (char *seq, int *seq_length, struc
 	}
 }
 
-void convertRegularCIGARToStringRepresentation (struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar_extended)
+void convertRegularCIGARToStringRepresentation (
+		struct Cigar_Items *cigar_items_instance,
+		int number_of_cigar_items,
+		char *cigar_extended)
 {
 	int i;
 	int j;
@@ -1242,7 +1306,20 @@ void convertRegularCIGARToStringRepresentation (struct Cigar_Items *cigar_items_
 	cigar_extended[cigar_extended_index++ ] = '\0';
 }
 
-void designIntegratedCIGARS (char *md, char *seq, int *seq_length, char *soft_clips_removed_qual, struct Cigar_Items *cigar_items_instance, int number_of_cigar_items, char *cigar, char *cigar_extended, char *md_extended, char *icigar, char **splices, short int flag_ignore_quality_score, short int flag_ignore_mismatches)
+void designIntegratedCIGARS (
+		char *md,
+		char *seq,
+		int *seq_length,
+		char *soft_clips_removed_qual,
+		struct Cigar_Items *cigar_items_instance,
+		int number_of_cigar_items,
+		char *cigar,
+		char *cigar_extended,
+		char *md_extended,
+		char *icigar,
+		char **splices,
+		short int flag_ignore_quality_score,
+		short int flag_ignore_mismatches)
 {
 	int i;
 	int num;
@@ -1467,7 +1544,12 @@ void designIntegratedCIGARS (char *md, char *seq, int *seq_length, char *soft_cl
 	strcat (icigar , "M");
 }
 
-int isAlignmentPerfect (char *cigar, struct Sam_Tags *tags, int MD_tag_index, int NM_tag_index, int nM_tag_index)
+int isAlignmentPerfect (
+		char *cigar,
+		struct Sam_Tags *tags,
+		int MD_tag_index,
+		int NM_tag_index,
+		int nM_tag_index)
 {
 	int i;
 	if ( NM_tag_index != -1 && nM_tag_index != -1 )
@@ -1493,7 +1575,17 @@ int isAlignmentPerfect (char *cigar, struct Sam_Tags *tags, int MD_tag_index, in
 	return 1;
 }
 
-void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, short int flag_save_scores, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics)
+void generateIntegratedCigarSingleEnded (
+		struct Sam_Alignment *curr_alignment,
+		short int flag_save_scores,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		struct Whole_Genome_Sequence *whole_genome,
+		struct Sam_Alignment *sam_alignment_instance_diagnostics,
+		long long int number_of_records_read,
+		short int run_diagnostics)
 {
 	/*
 	 * Creates the integrated cigar
@@ -1907,7 +1999,12 @@ void generateIntegratedCigarSingleEnded (struct Sam_Alignment *curr_alignment, s
 	}
 }
 
-char findReplamentCharacterForPairedEndedReads (int samflag, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, int XS_tag_index, struct Sam_Tags *tags)
+char findReplamentCharacterForPairedEndedReads (
+		int samflag,
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		int number_of_unique_samformatflags,
+		int XS_tag_index,
+		struct Sam_Tags *tags)
 {
 	int i, j, k;
 	char replacement_character;
@@ -1940,7 +2037,20 @@ char findReplamentCharacterForPairedEndedReads (int samflag, struct Paired_Ended
 
 }
 
-void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, short int flag_save_scores, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, struct Whole_Genome_Sequence *whole_genome, struct Sam_Alignment *sam_alignment_instance_diagnostics, long long int number_of_records_read, short int run_diagnostics, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
+void generateIntegratedCigarPairedEnded (
+		struct Sam_Alignment *curr_alignment,
+		short int flag_save_scores,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		struct Whole_Genome_Sequence *whole_genome,
+		struct Sam_Alignment *sam_alignment_instance_diagnostics,
+		long long int number_of_records_read,
+		short int run_diagnostics,
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		int number_of_unique_samformatflags,
+		char samformatflag_replacer_characters[])
 {
 	/*
 	 * Creates the integrated cigar
@@ -2284,7 +2394,8 @@ void generateIntegratedCigarPairedEnded (struct Sam_Alignment *curr_alignment, s
 	}
 }
 
-void initializePass3_Compression_Symbol_icigar_MappingPool (struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping)
+void initializePass3_Compression_Symbol_icigar_MappingPool (
+		struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping)
 {
 	int i;
 	int j;
@@ -2307,7 +2418,10 @@ void initializePass3_Compression_Symbol_icigar_MappingPool (struct Pass3_Compres
 	 */
 }
 
-void assignicigarsToSymbols (struct Cigar_Frequency **cigar_freq_pool, int cigar_freq_pool_index, struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping)
+void assignicigarsToSymbols (
+		struct Cigar_Frequency **cigar_freq_pool,
+		int cigar_freq_pool_index,
+		struct Pass3_Compression_Symbol_icigar_Mapping **symbol_icigar_mapping)
 {
 	int i;
 	for ( i = 0 ; i < cigar_freq_pool_index ; i++ )
@@ -2318,7 +2432,10 @@ void assignicigarsToSymbols (struct Cigar_Frequency **cigar_freq_pool, int cigar
 	 */
 }
 
-void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome, char *chromosome)
+void readInEachChromosome (
+		char *genome_filename,
+		struct Whole_Genome_Sequence *whole_genome,
+		char *chromosome)
 {
 	FILE *fhr;
 	char *buffer = NULL;
@@ -2383,7 +2500,9 @@ void readInEachChromosome (char *genome_filename, struct Whole_Genome_Sequence *
 	 */
 }
 
-void readInTheEntireGenome (char *genome_filename, struct Whole_Genome_Sequence *whole_genome)
+void readInTheEntireGenome (
+		char *genome_filename,
+		struct Whole_Genome_Sequence *whole_genome)
 {
 	FILE *fhr;
 	char *buffer = NULL;
@@ -2467,7 +2586,11 @@ void reverseComplement (char *seq, char *rev_seq)
 	rev_seq[j++ ] = '\0';
 }
 
-void readInGenomeSequenceSingleChromosome (struct Whole_Genome_Sequence *single_genome_sequence, char *chromosome, char *genome_filename, struct Abridge_Index *genome_index)
+void readInGenomeSequenceSingleChromosome (
+		struct Whole_Genome_Sequence *single_genome_sequence,
+		char *chromosome,
+		char *genome_filename,
+		struct Abridge_Index *genome_index)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2519,7 +2642,13 @@ void readInGenomeSequenceSingleChromosome (struct Whole_Genome_Sequence *single_
 	fclose (fhr);
 }
 
-int findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char *chromosome, long long int start, long long int end, long long int *abridge_match_start_index, long long int *abridge_match_end_index)
+int findReadClusterFromAbridgeIndex (
+		struct Abridge_Index *abridge_index,
+		char *chromosome,
+		long long int start,
+		long long int end,
+		long long int *abridge_match_start_index,
+		long long int *abridge_match_end_index)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2574,7 +2703,10 @@ int findReadClusterFromAbridgeIndex (struct Abridge_Index *abridge_index, char *
 	return first_record;
 }
 
-void readGenomeIndex (struct Abridge_Index *genome_index, char *genome_index_filename, char **split_line)
+void readGenomeIndex (
+		struct Abridge_Index *genome_index,
+		char *genome_index_filename,
+		char **split_line)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2615,7 +2747,17 @@ void readGenomeIndex (struct Abridge_Index *genome_index, char *genome_index_fil
 	}
 }
 
-void readAbridgeIndex (struct Abridge_Index *abridge_index, char *abridge_index_filename, char **split_line, short int *flag_ignore_mismatches, short int *flag_ignore_soft_clippings, short int *flag_ignore_unmapped_sequences, short int *flag_ignore_quality_score, short int *flag_save_all_quality_scores, short int *flag_save_exact_quality_scores, short int *flag_save_scores)
+void readAbridgeIndex (
+		struct Abridge_Index *abridge_index,
+		char *abridge_index_filename,
+		char **split_line,
+		short int *flag_ignore_mismatches,
+		short int *flag_ignore_soft_clippings,
+		short int *flag_ignore_unmapped_sequences,
+		short int *flag_ignore_quality_score,
+		short int *flag_save_all_quality_scores,
+		short int *flag_save_exact_quality_scores,
+		short int *flag_save_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2742,14 +2884,25 @@ long long int extractNHfromicigar (char *icigar, int icigar_length)
 	return nh_val;
 }
 
-void replaceCharacterInString (char *str, char ch_to_be_replaced, char replace_with, int str_length)
+void replaceCharacterInString (
+		char *str,
+		char ch_to_be_replaced,
+		char replace_with,
+		int str_length)
 {
 	int i;
 	for ( i = 0 ; i < str_length ; i++ )
 		if ( str[i] == ch_to_be_replaced ) str[i] = replace_with;
 }
 
-int findSamFormatFlagPairedEnded (char *icigar, int icigar_length, char *XS, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[], char *character_to_be_replaced)
+int findSamFormatFlagPairedEnded (
+		char *icigar,
+		int icigar_length,
+		char *XS,
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		int number_of_unique_samformatflags,
+		char samformatflag_replacer_characters[],
+		char *character_to_be_replaced)
 {
 	int i, j;
 	int samformatflag = -1;
@@ -2856,7 +3009,9 @@ int findSamFormatFlagSingleEnded (char *icigar, int icigar_length, char *XS)
 	return samformatflag;
 }
 
-void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome)
+void generateReadSequenceAndMDString (
+		struct Sam_Alignment *sam_alignment_instance,
+		struct Whole_Genome_Sequence *whole_genome)
 {
 	int i;
 	int j;
@@ -3043,7 +3198,16 @@ void generateReadSequenceAndMDString (struct Sam_Alignment *sam_alignment_instan
 	 */
 }
 
-void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names, short int flag_save_scores)
+void writeAlignmentToFileSingleEnded (
+		struct Sam_Alignment *sam_alignment,
+		short int flag_ignore_sequence_information,
+		int number_of_repititions_of_the_same_reads,
+		char *read_prefix,
+		FILE *fhw,
+		FILE *fhr_qual,
+		short int flag_save_all_quality_scores,
+		char **read_names,
+		short int flag_save_scores)
 {
 	int i;
 
@@ -3152,7 +3316,16 @@ void writeAlignmentToFileSingleEnded (struct Sam_Alignment *sam_alignment, short
 	}
 }
 
-void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short int flag_ignore_sequence_information, int number_of_repititions_of_the_same_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, char **read_names, int *read_names_index, short int flag_save_scores)
+void writeAlignmentToFilePairedEnded (
+		struct Sam_Alignment *sam_alignment,
+		short int flag_ignore_sequence_information,
+		int number_of_repititions_of_the_same_reads,
+		FILE *fhw,
+		FILE *fhr_qual,
+		short int flag_save_all_quality_scores,
+		char **read_names,
+		int *read_names_index,
+		short int flag_save_scores)
 {
 	int i;
 
@@ -3248,7 +3421,31 @@ void writeAlignmentToFilePairedEnded (struct Sam_Alignment *sam_alignment, short
 	}
 }
 
-void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char **read_names, char *default_quality_value, short int flag_save_scores, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags, char samformatflag_replacer_characters[])
+void convertToAlignmentPairedEnded (
+		struct Sam_Alignment *sam_alignment_instance,
+		struct Whole_Genome_Sequence *whole_genome,
+		char **split_on_tab,
+		char **split_on_dash,
+		char **split_on_comma,
+		char **read_names,
+		char *default_quality_value,
+		short int flag_save_scores,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		short int flag_ignore_sequence_information,
+		unsigned long long int *read_number,
+		unsigned long long int *total_mapped_reads,
+		FILE *fhw,
+		FILE *fhr_qual,
+		short int flag_save_all_quality_scores,
+		short int number_of_columns,
+		unsigned long long int curr_position,
+		char *chromosome,
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		int number_of_unique_samformatflags,
+		char samformatflag_replacer_characters[])
 {
 	/********************************************************************
 	 * Variable declaration
@@ -3350,7 +3547,30 @@ void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance
 	}
 }
 
-void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance, struct Whole_Genome_Sequence *whole_genome, char **split_on_tab, char **split_on_dash, char **split_on_comma, char *default_quality_value, short int flag_save_scores, short int flag_ignore_mismatches, short int flag_ignore_soft_clippings, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int flag_ignore_sequence_information, unsigned long long int *read_number, unsigned long long int *total_mapped_reads, char *read_prefix, FILE *fhw, FILE *fhr_qual, short int flag_save_all_quality_scores, short int number_of_columns, unsigned long long int curr_position, char *chromosome, char **read_names, short int read_names_stored)
+void convertToAlignmentSingleEnded (
+		struct Sam_Alignment *sam_alignment_instance,
+		struct Whole_Genome_Sequence *whole_genome,
+		char **split_on_tab,
+		char **split_on_dash,
+		char **split_on_comma,
+		char *default_quality_value,
+		short int flag_save_scores,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		short int flag_ignore_sequence_information,
+		unsigned long long int *read_number,
+		unsigned long long int *total_mapped_reads,
+		char *read_prefix,
+		FILE *fhw,
+		FILE *fhr_qual,
+		short int flag_save_all_quality_scores,
+		short int number_of_columns,
+		unsigned long long int curr_position,
+		char *chromosome,
+		char **read_names,
+		short int read_names_stored)
 {
 	/********************************************************************
 	 * Variable declaration
