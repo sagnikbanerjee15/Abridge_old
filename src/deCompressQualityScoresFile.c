@@ -159,11 +159,11 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 				quality_score_position_index[i]++;
 			if ( quality_score_position_index[i] >= quality_score_position_max[i] )
 			{
-				printf ("\nTrouble %d %d" , quality_score_position_index[i] , quality_score_position_max[i]);
+				//printf ("\nTrouble %d %d" , quality_score_position_index[i] , quality_score_position_max[i]);
 				fflush (stdout);
 			}
 		}
-		printf ("\nChecker flag %d" , checker_flag);
+		//printf ("\nChecker flag %d" , checker_flag);
 		quality_score_of_read[i] = '\0';
 		//printf ( "\n%s" , quality_score_of_read );
 		//fflush ( stdout );
