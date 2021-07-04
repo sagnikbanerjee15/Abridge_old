@@ -3301,6 +3301,10 @@ void convertToAlignmentPairedEnded (struct Sam_Alignment *sam_alignment_instance
 				strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
 			}
+			else
+			{
+				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+			}
 		}
 		sam_alignment_instance->start_position = curr_position;
 
@@ -3415,7 +3419,7 @@ void convertToAlignmentSingleEnded (struct Sam_Alignment *sam_alignment_instance
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 			}
 		}
-		printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
+		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
 		sam_alignment_instance->start_position = curr_position;
 
 		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
