@@ -152,12 +152,14 @@ def validateCommandLineArguments(options):
         options.error_directory = options.output_directory
     else:
         os.system(f"mkdir -p {options.error_directory}")
-        
+    
+    # save_all_quality_scores has higher precedence over ignore_quality_scores
     if options.save_all_quality_scores == True:
         options.ignore_quality_scores = True
         
     if options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
         options.save_all_quality_scores = True
+        options.ignore_quality_scores = True
         
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
     options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
