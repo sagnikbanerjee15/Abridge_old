@@ -719,7 +719,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
             cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle " 
@@ -743,7 +743,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename}.br {unmapped_outputfilename}.br {pass1_index_outputfilename}.br {genome_sha512_filename}.br {options.output_directory}/compression_method "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary}.br "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
             cmd += f" {name_of_file_with_quality_scores}.br "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle.br " 
@@ -781,7 +781,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} {options.output_directory}/compression_method "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
             cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
@@ -815,7 +815,7 @@ def compressSamFile(options):
         cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
+        if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
             cmd += f" {name_of_file_with_quality_scores} "
         else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
