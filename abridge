@@ -858,7 +858,7 @@ def compressSamFile(options):
     files_to_be_removed.append(f"{genome_sha512_filename}")
     files_to_be_removed.append(f"{name_of_file_dictionary}")
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
-    files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle")    
+    files_to_be_removed.append(f"{name_of_file_with_quality_scores_rle}")    
         
     
     files_to_be_removed.extend(delete_these_files)
