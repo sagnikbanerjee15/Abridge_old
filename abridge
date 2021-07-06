@@ -287,42 +287,39 @@ def runCommand(eachpinput):
     
 def constructFileNames(input_filename,options):
     name_of_input_file_without_location = input_filename.split("/")[-1] 
-    name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}.max_input_reads"
-    name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}.max_commas"
-    name_of_file_max_read_length = f"{options.output_directory}/{name_of_input_file_without_location}.max_read_size"
-    name_of_total_number_of_alignments_file = f"{options.output_directory}/{name_of_input_file_without_location}.total_number_of_alignments"
-    frequency_of_flags_filename = f"{options.output_directory}/{name_of_input_file_without_location}.frequency_of_flags"
     
-    pass1_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.pass1"
-    pass1_index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.pass1.index"
-    unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}.unmapped"
-    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.qual"
-    name_of_file_with_quality_scores_zpaq_compressed = f"{options.output_directory}/{name_of_input_file_without_location}.qual.zpaq"
-    name_of_file_with_quality_scores_rle = f"{options.output_directory}/{name_of_input_file_without_location}.qual.rle"
+    name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}_max_input_reads"
+    name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}_max_commas"
+    name_of_file_max_read_length = f"{options.output_directory}/{name_of_input_file_without_location}_max_read_size"
+    name_of_total_number_of_alignments_file = f"{options.output_directory}/{name_of_input_file_without_location}_total_number_of_alignments"
+    frequency_of_flags_filename = f"{options.output_directory}/{name_of_input_file_without_location}_frequency_of_flags"
+    
+    pass1_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_pass1"
+    pass1_index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_pass1_index"
+    unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_unmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}_qual"
+    name_of_file_with_quality_scores_rle = f"{options.output_directory}/{name_of_input_file_without_location}_qual_rle"
     name_of_file_dictionary = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
     
-    error_file_max_input_reads = f"{options.error_directory}/{name_of_input_file_without_location}_max_input_reads.error"
-    error_file_compress_pass1 = f"{options.error_directory}/{name_of_input_file_without_location}_compress_pass1.error"
-    error_file_qual_rle = f"{options.error_directory}/{name_of_input_file_without_location}_qual_rle.error"
-    error_file_qual = f"{options.error_directory}/{name_of_input_file_without_location}_qual.error"
-    error_file_prep_abridge_index = f"{options.error_directory}/{name_of_input_file_without_location}_prep_abridge_index.error"
+    error_file_max_input_reads = f"{name_of_max_input_reads_file}.error"
+    error_file_compress_pass1 = f"{pass1_outputfilename}_compress.error"
+    error_file_prep_abridge_index = f"{pass1_index_outputfilename}.error"
+    error_file_qual_rle = f"{name_of_file_with_quality_scores_rle}.error"
+    
     error_file_7z_compression = f"{options.error_directory}/{name_of_input_file_without_location}_7z_compression.error"
     error_file_zpaq_compression = f"{options.error_directory}/{name_of_input_file_without_location}_zpaq_compression.error"
     error_file_brotli_compression =  f"{options.error_directory}/{name_of_input_file_without_location}_brotli_compression.error"
+    
+    # Decompression
     error_file_7z_decompression = f"{options.error_directory}/{name_of_input_file_without_location}_7z_decompression.error"
     error_file_zpaq_decompression = f"{options.error_directory}/{name_of_input_file_without_location}_zpaq_decompression.error"
     error_file_brotli_decompression =  f"{options.error_directory}/{name_of_input_file_without_location}_brotli_decompression.error"
-    error_file_name_of_file_with_quality_scores_compressed = f"{options.error_directory}/{name_of_input_file_without_location}_quality_zpaq_compression.error"
-    error_file_7z_br = f"{options.error_directory}/{name_of_input_file_without_location}_7z_of_br_files.error"
     
-    compressed_abridged_filename_7z = f"{options.output_directory}/{name_of_input_file_without_location}.abridge.7z"
-    compressed_abridged_filename_zpaq = f"{options.output_directory}/{name_of_input_file_without_location}.abridge.zpaq"
-    compressed_abridged_filename_br = f"{options.output_directory}/{name_of_input_file_without_location}.abridge.br"
     
     delete_these_files = [name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename]
-    other_files = [pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_zpaq_compressed, name_of_file_with_quality_scores_rle, name_of_file_dictionary]
-    error_files = [error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression, error_file_name_of_file_with_quality_scores_compressed, error_file_7z_br]
-    compressed_files = [compressed_abridged_filename_7z, compressed_abridged_filename_br,compressed_abridged_filename_zpaq]
+    other_files = [pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary]
+    error_files = [error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression]
+    #compressed_files = [compressed_abridged_filename_br,compressed_abridged_filename_zpaq]
     return  delete_these_files, other_files, error_files, compressed_files
 
 def compressSamFile(options):
@@ -332,11 +329,11 @@ def compressSamFile(options):
     files_to_be_removed = []
     input_filename = options.inputsamfilenames
     name_of_input_file_without_location = input_filename.split("/")[-1] 
-    delete_these_files, other_files, error_files, compressed_files = constructFileNames(input_filename,options) 
+    delete_these_files, other_files, error_files = constructFileNames(input_filename,options) 
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
-    pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_zpaq_compressed, name_of_file_with_quality_scores_rle, name_of_file_dictionary = other_files
-    error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression, error_file_name_of_file_with_quality_scores_compressed, error_file_7z_br = error_files
-    compressed_abridged_filename_7z, compressed_abridged_filename_br,compressed_abridged_filename_zpaq = compressed_files
+    pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary = other_files
+    error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression = error_files
+    #compressed_abridged_filename_7z, compressed_abridged_filename_br,compressed_abridged_filename_zpaq = compressed_files
     
     if options.single_ended == True:
         # Single ended
@@ -722,9 +719,9 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores} "
+            cmd += f" {name_of_file_with_quality_scores}.rle "
         else:
-            cmd += f" {name_of_file_with_quality_scores}.rle " 
+            cmd += f" {name_of_file_with_quality_scores} " 
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -746,12 +743,12 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary}.br "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores}.br "
+            cmd += f" {name_of_file_with_quality_scores}.rle.br "
         else:
-            cmd += f" {name_of_file_with_quality_scores}.rle.br " 
+            cmd += f" {name_of_file_with_quality_scores}.br " 
         cmd += f") "   
         if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_7z_br}"
+            cmd += f"2> {error_file_7z_compression}"
         else:
             cmd += f"2> /dev/null"
         os.system(cmd)
@@ -784,9 +781,9 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores} "
-        else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
+        else:
+            cmd += f" {name_of_file_with_quality_scores} "
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -818,15 +815,15 @@ def compressSamFile(options):
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores} "
-        else:
             cmd += f" {name_of_file_with_quality_scores}.rle "
+        else:
+            cmd += f" {name_of_file_with_quality_scores} "
         cmd += f" -m3 -t1 -f "
         cmd += f" -noattributes "
         cmd += f") "
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_name_of_file_with_quality_scores_compressed}"
+            cmd += f"2> {error_file_zpaq_compression}"
         else:
             cmd += f"2> /dev/null"
         os.system(cmd)
@@ -840,7 +837,7 @@ def compressSamFile(options):
         cmd += f" {options.outputfilename}.zpaq {options.output_directory}/compression_method "
         cmd += f") "   
         if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_7z_br}"
+            cmd += f"2> {error_file_7z_compression}"
         else:
             cmd += f"2> /dev/null"
         os.system(cmd)
