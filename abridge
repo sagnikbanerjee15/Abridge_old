@@ -185,10 +185,14 @@ def validateCommandLineArguments(options):
     options.softwares["maxReadsInEachLine"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsInEachLine"
     options.softwares["zpaq"] = "/".join(abridge_location.split("/")[:-1])+"/deps/zpaq/zpaq"
     
-    cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.genome}.temp"
+    genome_filename_without_location = options.genome.split("/")[-1]
+    cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.output_directory}/{genome_filename_without_location}"
     os.system(cmd)
+    options.genome = f"{options.output_directory}/{genome_filename_without_location}"
+    """
     cmd = f"mv {options.genome}.temp {options.genome}"
     os.system(cmd)
+    """
     
     if options.decompress==True:
         if options.inputabrfilenames[-8:]!=".abridge":
