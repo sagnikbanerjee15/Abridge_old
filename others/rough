@@ -453,14 +453,12 @@ cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_compress_level_2*
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_compress_level_2*/*pass1_compress.error|grep Exit|sort|uniq
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_compress_level_2*/*pass1_index.error|grep Exit|sort|uniq
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_compress_level_2*/*qual_rle.error|grep Exit|sort|uniq
-cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_compress_level_2*/*brotli_compression.error|grep Exit|sort|uniq
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_compress_level_2*/*7z_compression.error|grep Exit|sort|uniq
 
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_2*/*max_input_reads.error|grep Exit|sort|uniq
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_2*/*pass1_compress.error|grep Exit|sort|uniq
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_2*/*pass1_index.error|grep Exit|sort|uniq
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_2*/*qual_rle.error|grep Exit|sort|uniq
-cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_2*/*brotli_compression.error|grep Exit|sort|uniq
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_2*/*7z_compression.error|grep Exit|sort|uniq
 
 
