@@ -198,6 +198,9 @@ void decompressFile (
 				line_len = getline ( &buffer , &len , fhr);
 			} while ( buffer[0] == '@' );
 			curr_position = 0;
+			if ( strstr (buffer , "abridge_") )
+				read_names_stored = 1;
+			else read_names_stored = 0;
 		}
 		number_of_commas_in_each_line = 0;
 		for ( i = 0 ; buffer[i] != '\0' ; i++ )
