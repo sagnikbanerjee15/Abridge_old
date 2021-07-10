@@ -3595,6 +3595,12 @@ void convertToAlignmentSingleEnded (
 
 	/********************************************************************/
 
+	if ( strcmp (chromosome , "Pt" == 0) )
+	{
+		printf ("Processed till here");
+		fflush (stdout);
+	}
+
 	if ( read_names_stored == 1 )
 	{
 		if ( number_of_columns == 2 )
@@ -3606,11 +3612,6 @@ void convertToAlignmentSingleEnded (
 		 for ( i = 0 ; i < read_names_index ; i++ )
 		 printf ("\n%s" , read_names[i]);
 		 */
-	}
-	if ( strcmp (chromosome , "Pt" == 0) )
-	{
-		printf ("Processed till here");
-		fflush (stdout);
 	}
 
 	if ( ( number_of_columns == 1 && read_names_stored == 0 ) || ( number_of_columns == 2 && read_names_stored == 1 ) )
