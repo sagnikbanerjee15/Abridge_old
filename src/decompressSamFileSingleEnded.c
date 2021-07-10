@@ -9,7 +9,16 @@
 
 long long int total_mapped_reads = 0;
 
-void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass1_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information)
+void decompressFile (
+		char *name_of_file_with_quality_scores,
+		char *abridge_index_filename,
+		char *genome_filename,
+		char *output_sam_filename,
+		char *pass1_filename,
+		char *genome_prefix,
+		char *unmapped_filename,
+		char *default_quality_value,
+		short int flag_ignore_sequence_information)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -236,6 +245,10 @@ void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index
 			if ( number_of_columns == 2 )
 				curr_position++;
 			else curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
+		}
+		if ( strcmp (current_chromosome , "Pt") == 0 )
+		{
+			printf ("\nCurrent position: %lld" , curr_position);
 		}
 		convertToAlignmentSingleEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , default_quality_value , flag_save_scores , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome , read_names , read_names_stored);
 	}
