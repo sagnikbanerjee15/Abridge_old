@@ -9,7 +9,18 @@
 
 long long int total_mapped_reads = 0;
 
-void decompressFile (char *name_of_file_with_quality_scores, char *abridge_index_filename, char *genome_filename, char *output_sam_filename, char *pass1_filename, char *genome_prefix, char *unmapped_filename, char *default_quality_value, short int flag_ignore_sequence_information, char *dictionary_name, int max_reads_in_each_line)
+void decompressFile (
+		char *name_of_file_with_quality_scores,
+		char *abridge_index_filename,
+		char *genome_filename,
+		char *output_sam_filename,
+		char *pass1_filename,
+		char *genome_prefix,
+		char *unmapped_filename,
+		char *default_quality_value,
+		short int flag_ignore_sequence_information,
+		char *dictionary_name,
+		int max_reads_in_each_line)
 {
 	/********************************************************************
 	 * Variable declaration
