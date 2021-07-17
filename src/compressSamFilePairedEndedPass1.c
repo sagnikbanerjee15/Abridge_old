@@ -180,6 +180,7 @@ void writeToFile (
 			}
 		}
 	}
+	// dummy comment
 	strcat(line_to_be_written_to_file , "\t");
 	strcat(line_to_be_written_to_file , list_of_read_names);
 	strcat(line_to_be_written_to_file , "\n");
