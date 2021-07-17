@@ -136,6 +136,27 @@ void writeToFile (
 				{
 					fprintf (fhw_qual , "%s" , "\t");
 					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->cigar);
+					fprintf (fhw_qual , "%s" , "\t");
+					// Print whether the read was mapped in forward or the reverse direction
+					switch ( findMatchCharacterIcigar (compressed_ds_pool[i]->icigar) )
+					{
+						case 'B':
+						case 'F':
+						case 'J':
+						case 'L':
+						case 'P':
+						case 'R':
+							fprintf (fhw_qual , "%s" , "1");
+							break;
+						case 'E':
+						case 'H':
+						case 'K':
+						case 'O':
+						case 'Q':
+						case 'U':
+							fprintf (fhw_qual , "%s" , "2");
+							break;
+					}
 				}
 				fprintf (fhw_qual , "%s" , "\n");
 			}
@@ -153,9 +174,9 @@ void writeToFile (
 	fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
 	*count = compressed_ds_pool_total;
 
-	//strcat(line_to_be_written_to_file , "\n");
-	//fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
-	//*count = compressed_ds_pool_total;
+//strcat(line_to_be_written_to_file , "\n");
+//fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
+//*count = compressed_ds_pool_total;
 }
 
 void prepareIcigarForComparison (char *icigar1, char *icigar)
@@ -208,8 +229,8 @@ void reModeliCIGARSSingleEnded (
 	int i, j, k;
 	int compressed_ds_pool_rearranged_index = 0;
 
-	//char icigar1[MAX_SEQ_LEN];
-	//char icigar2[MAX_SEQ_LEN];
+//char icigar1[MAX_SEQ_LEN];
+//char icigar2[MAX_SEQ_LEN];
 	/********************************************************************/
 
 	/********************************************************************

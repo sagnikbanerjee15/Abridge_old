@@ -175,6 +175,10 @@ void writeToFile (
 				{
 					fprintf (fhw_qual , "%s" , "\t");
 					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->cigar);
+
+					if ( returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar , samformatflag_replacer_characters) , samflag_dictionary , number_of_unique_samformatflags) == '-' )
+						fprintf (fhw_qual , "%s" , "2");
+					else fprintf (fhw_qual , "%s" , "1");
 				}
 				fprintf (fhw_qual , "%s" , "\n");
 			}
@@ -224,8 +228,8 @@ void reModeliCIGARSPairedEnded (
 	int i, j, k;
 	int compressed_ds_pool_rearranged_index = 0;
 
-	//char icigar1[MAX_SEQ_LEN];
-	//char icigar2[MAX_SEQ_LEN];
+//char icigar1[MAX_SEQ_LEN];
+//char icigar2[MAX_SEQ_LEN];
 	/********************************************************************/
 
 	/********************************************************************
@@ -395,9 +399,9 @@ void compressPairedEndedAlignments (
 	struct Whole_Genome_Sequence *whole_genome;
 	struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary;
 
-	//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
+//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
 
-	//printf ("\nSize of mega array %d" , sizeof ( mega_array ));
+//printf ("\nSize of mega array %d" , sizeof ( mega_array ));
 
 	/********************************************************************/
 
