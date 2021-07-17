@@ -140,7 +140,7 @@ void writeToFile (
 					fprintf (fhw_qual , "%s" , "\t");
 					if ( flag_ignore_soft_clippings == 1 )
 					{
-						splitCigar (compressed_ds_pool[i]->cigar , num_of_types , cigar_items_instance);
+						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
 						if ( cigar_items_instance[0].def == 'S' ) // Left soft clip exists
 						{
 							sprintf(str , "%ld" , cigar_items_instance[0].len);
