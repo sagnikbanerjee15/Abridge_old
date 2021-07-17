@@ -45,7 +45,20 @@ char findMatchCharacterIcigar (char *icigar)
 	return ' ';
 }
 
-void writeToFile (short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, FILE *fhw_qual, FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string, long long int *count, char **qual_Scores, int quality_score_index)
+void writeToFile (
+		short int flag_save_all_quality_scores,
+		short int flag_save_exact_quality_scores,
+		FILE *fhw_qual,
+		FILE *fhw_pass1,
+		struct Compressed_DS **compressed_ds_pool,
+		int compressed_ds_pool_total,
+		char *write_to_file_col1,
+		char *write_to_file_col2,
+		char *write_to_file_col3,
+		char *encoded_string,
+		long long int *count,
+		char **qual_Scores,
+		int quality_score_index)
 {
 	int i, j, k;
 	char str[1000];
@@ -122,7 +135,7 @@ void writeToFile (short int flag_save_all_quality_scores, short int flag_save_ex
 				if ( flag_save_exact_quality_scores == 0 )
 				{
 					fprintf (fhw_qual , "%s" , "\t");
-					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
+					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->cigar);
 				}
 				fprintf (fhw_qual , "%s" , "\n");
 			}
@@ -182,7 +195,12 @@ void prepareIcigarForComparison (char *icigar1, char *icigar)
 	icigar1[i] = '\0';
 }
 
-void reModeliCIGARSSingleEnded (struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **modified_icigars)
+void reModeliCIGARSSingleEnded (
+		struct Compressed_DS **compressed_ds_pool,
+		struct Compressed_DS **compressed_ds_pool_rearranged,
+		short *already_processed,
+		int compressed_ds_pool_index,
+		char **modified_icigars)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -260,7 +278,22 @@ void reModeliCIGARSSingleEnded (struct Compressed_DS **compressed_ds_pool, struc
 	 */
 }
 
-void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc, short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, short int flag_save_scores)
+void readAlignmentsAndCompress (
+		char *name_of_file_with_quality_scores,
+		char *name_of_file_with_max_commas,
+		char *input_samfilename,
+		char *output_abridgefilename,
+		char *unmapped_filename,
+		char *genome_filename,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		short int run_diagnostics,
+		long long int max_input_reads_in_a_single_nucl_loc,
+		short int flag_save_all_quality_scores,
+		short int flag_save_exact_quality_scores,
+		short int flag_save_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -508,6 +541,7 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
 			strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+			strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
@@ -532,6 +566,7 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 			previous_position = current_position;
 			strcpy(prev_reference_name , curr_reference_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+			strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
 			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
@@ -568,6 +603,7 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 				if ( i == compressed_ds_pool_index ) // New icigar encountered
 				{
 					strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+					strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 					compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 					compressed_ds_pool[compressed_ds_pool_index]->position = compressed_ds_pool[0]->position;
 					strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
@@ -592,6 +628,7 @@ void readAlignmentsAndCompress (char *name_of_file_with_quality_scores, char *na
 				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
 				strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+				strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];

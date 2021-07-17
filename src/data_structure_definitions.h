@@ -86,6 +86,7 @@ struct Compressed_DS
 	/*
 	 * Template to store the compressed icigars
 	 */
+	char *cigar;
 	char *icigar;
 	char **pointers_to_qual_scores;
 	long int num_reads;
@@ -254,7 +255,9 @@ struct Paired_Ended_Flag_to_Single_Character
 int isCharacterInString (char*, char);
 void splitCigar (char*, int*, struct Cigar_Items*);
 long long int extractNHfromicigar (char*, int);
-void generateReadSequenceAndMDString (struct Sam_Alignment*, struct Whole_Genome_Sequence*);
+void generateReadSequenceAndMDString (
+		struct Sam_Alignment*,
+		struct Whole_Genome_Sequence*);
 int findSamFormatFlag (char*, int, char*);
 
 #endif /* _ABRIDGE_SRC_DATA_STRUCTURE_DEFINITIONS_H_ */

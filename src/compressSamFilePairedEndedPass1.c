@@ -8,7 +8,9 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-char findMatchCharacterIcigar (char *icigar, char samformatflag_replacer_characters[])
+char findMatchCharacterIcigar (
+		char *icigar,
+		char samformatflag_replacer_characters[])
 {
 	int i;
 
@@ -71,7 +73,11 @@ void generateNextReadID (char *alphabets, int *read_id, int *read_length)
 	}
 }
 
-void convertReadIdToString (int *read_id, char *read_id_string, int read_length, char *alphabets)
+void convertReadIdToString (
+		int *read_id,
+		char *read_id_string,
+		int read_length,
+		char *alphabets)
 {
 	int i;
 	for ( i = 0 ; i < read_length ; i++ )
@@ -79,7 +85,10 @@ void convertReadIdToString (int *read_id, char *read_id_string, int read_length,
 	read_id_string[i] = '\0';
 }
 
-char returnDirection (char character, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary, int number_of_unique_samformatflags)
+char returnDirection (
+		char character,
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		int number_of_unique_samformatflags)
 {
 	int i;
 	for ( i = 0 ; i < number_of_unique_samformatflags * 2 ; i++ )
@@ -90,7 +99,23 @@ char returnDirection (char character, struct Paired_Ended_Flag_to_Single_Charact
 	return ' ';
 }
 
-void writeToFile (short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, FILE *fhw_qual, FILE *fhw_pass1, struct Compressed_DS **compressed_ds_pool, int compressed_ds_pool_total, char *write_to_file_col1, char *write_to_file_col2, char *write_to_file_col3, char *encoded_string, long long int *count, char **qual_Scores, int quality_score_index, char samformatflag_replacer_characters[], int number_of_unique_samformatflags, struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary)
+void writeToFile (
+		short int flag_save_all_quality_scores,
+		short int flag_save_exact_quality_scores,
+		FILE *fhw_qual,
+		FILE *fhw_pass1,
+		struct Compressed_DS **compressed_ds_pool,
+		int compressed_ds_pool_total,
+		char *write_to_file_col1,
+		char *write_to_file_col2,
+		char *write_to_file_col3,
+		char *encoded_string,
+		long long int *count,
+		char **qual_Scores,
+		int quality_score_index,
+		char samformatflag_replacer_characters[],
+		int number_of_unique_samformatflags,
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary)
 {
 	int i, j, k;
 	char str[1000];
@@ -149,7 +174,7 @@ void writeToFile (short int flag_save_all_quality_scores, short int flag_save_ex
 				if ( flag_save_exact_quality_scores == 0 )
 				{
 					fprintf (fhw_qual , "%s" , "\t");
-					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
+					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->cigar);
 				}
 				fprintf (fhw_qual , "%s" , "\n");
 			}
@@ -162,7 +187,10 @@ void writeToFile (short int flag_save_all_quality_scores, short int flag_save_ex
 	*count = compressed_ds_pool_total;
 }
 
-void prepareIcigarForComparison (char *icigar1, char *icigar, char samformatflag_replacer_characters[])
+void prepareIcigarForComparison (
+		char *icigar1,
+		char *icigar,
+		char samformatflag_replacer_characters[])
 {
 	/********************************************************************
 	 * Variable declaration
@@ -182,7 +210,13 @@ void prepareIcigarForComparison (char *icigar1, char *icigar, char samformatflag
 	icigar1[i] = '\0';
 }
 
-void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struct Compressed_DS **compressed_ds_pool_rearranged, short *already_processed, int compressed_ds_pool_index, char **modified_icigars, char samformatflag_replacer_characters[])
+void reModeliCIGARSPairedEnded (
+		struct Compressed_DS **compressed_ds_pool,
+		struct Compressed_DS **compressed_ds_pool_rearranged,
+		short *already_processed,
+		int compressed_ds_pool_index,
+		char **modified_icigars,
+		char samformatflag_replacer_characters[])
 {
 	/********************************************************************
 	 * Variable declaration
@@ -260,7 +294,26 @@ void reModeliCIGARSPairedEnded (struct Compressed_DS **compressed_ds_pool, struc
 	 */
 }
 
-void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *name_of_file_with_quality_scores, char *name_of_file_with_max_commas, char *input_samfilename, char *output_abridgefilename, char *unmapped_filename, char *genome_filename, short int flag_ignore_soft_clippings, short int flag_ignore_mismatches, short int flag_ignore_unmapped_sequences, short int flag_ignore_quality_score, short int run_diagnostics, long long int max_input_reads_in_a_single_nucl_loc, short int flag_save_all_quality_scores, short int flag_save_exact_quality_scores, long long int max_number_of_alignments, int max_read_length, char *dictionary_filename, short int flag_save_scores)
+void compressPairedEndedAlignments (
+		char *frequency_of_flags_filename,
+		char *name_of_file_with_quality_scores,
+		char *name_of_file_with_max_commas,
+		char *input_samfilename,
+		char *output_abridgefilename,
+		char *unmapped_filename,
+		char *genome_filename,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_score,
+		short int run_diagnostics,
+		long long int max_input_reads_in_a_single_nucl_loc,
+		short int flag_save_all_quality_scores,
+		short int flag_save_exact_quality_scores,
+		long long int max_number_of_alignments,
+		int max_read_length,
+		char *dictionary_filename,
+		short int flag_save_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -581,6 +634,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
 			strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+			strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
@@ -605,6 +659,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 			previous_position = current_position;
 			strcpy(prev_reference_name , curr_reference_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+			strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 			compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
 			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
@@ -640,6 +695,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 				if ( i == compressed_ds_pool_index ) // New icigar encountered
 				{
 					strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+					strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 					compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 					compressed_ds_pool[compressed_ds_pool_index]->position = compressed_ds_pool[0]->position;
 					strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
@@ -664,6 +720,7 @@ void compressPairedEndedAlignments (char *frequency_of_flags_filename, char *nam
 				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
 				strcpy(read_names[quality_score_index] , curr_alignment->read_name);
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
+				strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
