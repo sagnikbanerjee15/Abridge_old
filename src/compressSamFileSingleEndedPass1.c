@@ -402,7 +402,7 @@ void readAlignmentsAndCompress (
 	struct Compressed_DS **compressed_ds_pool_rearranged;
 	struct Reference_Sequence_Info **reference_info;
 	struct Whole_Genome_Sequence *whole_genome;
-	struct Cigar_Items *cigar_items_instance
+	struct Cigar_Items *cigar_items_instance;
 	/********************************************************************/
 
 	/********************************************************************
