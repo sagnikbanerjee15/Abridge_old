@@ -155,7 +155,7 @@ void convertRLEtoQualValues (
 		{
 			quality_score_of_read[i] = rle_quality_scores[i][quality_score_position_index[i]].quality_score;
 			rle_quality_scores[i][quality_score_position_index[i]].frequency--;
-			//checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
+			checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
 			//printf ("\n Frequency being added %d i=%d j=%d" , rle_quality_scores[i][quality_score_position_index[i]].frequency , i , quality_score_position_index[i]);
 			if ( rle_quality_scores[i][quality_score_position_index[i]].frequency == 0 )
 				quality_score_position_index[i]++;
