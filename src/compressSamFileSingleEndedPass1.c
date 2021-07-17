@@ -232,6 +232,7 @@ void reModeliCIGARSSingleEnded (
 		 */
 		//icigar1 = modified_icigars[i];
 		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar);
+		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->cigar , compressed_ds_pool[i]->cigar);
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[i]->num_reads;
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[i]->position;
 		for ( k = 0 ; k < compressed_ds_pool[i]->num_reads ; k++ )

@@ -180,7 +180,6 @@ void writeToFile (
 			}
 		}
 	}
-	// dummy comment
 	strcat(line_to_be_written_to_file , "\t");
 	strcat(line_to_be_written_to_file , list_of_read_names);
 	strcat(line_to_be_written_to_file , "\n");
@@ -248,6 +247,7 @@ void reModeliCIGARSPairedEnded (
 		 * Copy the icigar entry into the rearranged pool
 		 */
 		//icigar1 = modified_icigars[i];
+		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar);
 		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar);
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[i]->num_reads;
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[i]->position;
