@@ -1151,7 +1151,7 @@ def decompressSamFile(options):
     if options.save_all_quality_scores == True and options.save_exact_quality_scores==False:
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" {deCompressQualityScoresFile} "
-        cmd += f" {name_of_file_with_quality_scores}.rle "
+        cmd += f" {name_of_file_with_quality_scores_rle} "
         cmd += f" {name_of_file_with_quality_scores} "
         cmd += f") "
         cmd += f"1> /dev/null "
