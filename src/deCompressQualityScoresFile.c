@@ -6,7 +6,9 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_quality_score_filename)
+void convertRLEtoQualValues (
+		char *input_qualityscore_filename,
+		char *output_quality_score_filename)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -122,10 +124,10 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 		 *
 		 * Calculate sum of each position
 		 */
-		/*
-		 printf ("\nSum Position %d %lld" , rle_quality_scores_index , num);
-		 fflush ( stdout);
-		 */
+
+		printf ("\nSum Position %d %lld" , rle_quality_scores_index , num);
+		fflush ( stdout);
+
 		rle_quality_scores_index++;
 	}
 	//printf ("\nComing out of this loop");
@@ -153,13 +155,13 @@ void convertRLEtoQualValues (char *input_qualityscore_filename, char *output_qua
 		{
 			quality_score_of_read[i] = rle_quality_scores[i][quality_score_position_index[i]].quality_score;
 			rle_quality_scores[i][quality_score_position_index[i]].frequency--;
-			checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
+			//checker_flag += rle_quality_scores[i][quality_score_position_index[i]].frequency;
 			//printf ("\n Frequency being added %d i=%d j=%d" , rle_quality_scores[i][quality_score_position_index[i]].frequency , i , quality_score_position_index[i]);
 			if ( rle_quality_scores[i][quality_score_position_index[i]].frequency == 0 )
 				quality_score_position_index[i]++;
 			if ( quality_score_position_index[i] >= quality_score_position_max[i] )
 			{
-				//printf ("\nTrouble %d %d" , quality_score_position_index[i] , quality_score_position_max[i]);
+				printf ("\nTrouble %d %d" , quality_score_position_index[i] , quality_score_position_max[i]);
 				fflush (stdout);
 			}
 		}
