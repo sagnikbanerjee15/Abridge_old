@@ -74,7 +74,11 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	}
 	change_indicator[change_indicator_index++ ] = '\0';
 	if ( val == 3540189 )
+	{
 		printf ("\n6.change_indicator_index = %d %s" , change_indicator_index , icigar);
+		printf ("\nReturning");
+	}
+
 }
 
 void performColumnWiseRLE (
@@ -167,7 +171,6 @@ void performColumnWiseRLE (
 		line_number++;
 		printf ("\nProcessing line number %d" , line_number);
 		splitByDelimiter (line , '\t' , split_on_tab);
-		continue;
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
 		continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
