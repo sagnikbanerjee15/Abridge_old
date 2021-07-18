@@ -156,7 +156,6 @@ void performColumnWiseRLE (
 				change_indicator[i++ ] = change_indicator[j];
 				change_indicator[j-- ] = temp;
 			}
-			change_indicator = strrev (change_indicator);
 		}
 
 		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
