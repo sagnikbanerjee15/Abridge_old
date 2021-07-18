@@ -119,8 +119,8 @@ void performColumnWiseRLE (
 		lines_to_be_written_to_file_index[i] = 0;
 	}
 
-	split_on_tab = ( char** ) malloc (sizeof(char*) * 3);
-	for ( i = 0 ; i < 3 ; i++ )
+	split_on_tab = ( char** ) malloc (sizeof(char*) * 5);
+	for ( i = 0 ; i < 5 ; i++ )
 		split_on_tab[i] = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	change_indicator = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * MAX_SEQ_LEN);
