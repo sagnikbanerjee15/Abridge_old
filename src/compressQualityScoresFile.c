@@ -165,7 +165,6 @@ void performColumnWiseRLE (
 	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * MAX_SEQ_LEN);
 	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
 		count_max_reads_each_position[i] = 0;
-	line = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	/********************************************************************/
 
 	line_len = getline ( &line , &len , fhr);
@@ -189,7 +188,7 @@ void performColumnWiseRLE (
 			printf ("\nProcessing line number %d" , line_number);
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
-		continue;
+		//continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
 			i = 0;
