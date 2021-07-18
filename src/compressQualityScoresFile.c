@@ -80,11 +80,13 @@ void performColumnWiseRLE (
 	char **lines_to_be_written_to_file;
 	char **split_on_tab;
 	char *change_indicator;
+	char temp;
 
 	int i, j, k;
 	int max_len_sequence = 0;
 	int *lines_to_be_written_to_file_index;
 	int *count_max_reads_each_position;
+	int line_number;
 
 	long long int number_of_records_read = 0;
 
@@ -139,10 +141,13 @@ void performColumnWiseRLE (
 
 	//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 	//fflush ( stdout );
+	line_number = 1;
 
 	line_len = getline ( &line , &len , fhr);
 	do
 	{
+		line_number++;
+		printf ("\nProcessing line number %d" , line_number);
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator);
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
@@ -151,7 +156,6 @@ void performColumnWiseRLE (
 			j = strlen (change_indicator) - 1;
 			while ( i < j )
 			{
-				char temp;
 				temp = change_indicator[i];
 				change_indicator[i++ ] = change_indicator[j];
 				change_indicator[j-- ] = temp;
