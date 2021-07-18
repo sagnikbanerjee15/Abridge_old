@@ -78,7 +78,6 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 		printf ("\n6.change_indicator_index = %d %s" , change_indicator_index , icigar);
 		printf ("\nReturning");
 	}
-
 }
 
 void performColumnWiseRLE (
@@ -169,7 +168,7 @@ void performColumnWiseRLE (
 	do
 	{
 		line_number++;
-		if ( line_number % 100 == 0 )
+		if ( line_number % 1000 == 0 )
 			printf ("\nProcessing line number %d" , line_number);
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
