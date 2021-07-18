@@ -22,7 +22,7 @@ void expandMDString (char *icigar, char *change_indicator)
 	 ********************************************************************/
 
 	/********************************************************************/
-	extractNHfromicigar (icigar , strlen (icigar));
+	//extractNHfromicigar (icigar , strlen (icigar));
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
 	{
@@ -52,6 +52,7 @@ void expandMDString (char *icigar, char *change_indicator)
 						change_indicator[change_indicator_index++ ] = '1';
 				}
 			}
+			printf ("\nchange_indicator_index = %d" , change_indicator_index);
 		}
 		else if ( isCharacterInString (insert_characters , icigar[i]) || isCharacterInString (mismatch_characters , icigar[i]) )
 			change_indicator[change_indicator_index++ ] = '0';
