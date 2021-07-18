@@ -87,13 +87,13 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 			}
 		}
 	}
-	//change_indicator[change_indicator_index++ ] = '\0';
-	if ( val == 3540189 )
-	{
-		printf ("\n6.change_indicator_index = %d %s" , change_indicator_index , icigar);
-		fflush (stdout);
-		printf ("\nReturning");
-	}
+	change_indicator[change_indicator_index++ ] = '\0';
+	/*if ( val == 3540189 )
+	 {
+	 printf ("\n6.change_indicator_index = %d %s" , change_indicator_index , icigar);
+	 fflush (stdout);
+	 printf ("\nReturning");
+	 }*/
 }
 
 void performColumnWiseRLE (
