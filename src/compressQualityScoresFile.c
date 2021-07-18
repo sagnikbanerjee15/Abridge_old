@@ -146,7 +146,18 @@ void performColumnWiseRLE (
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator);
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
+		{
+			i = 0;
+			j = strlen (change_indicator) - 1;
+			while ( i < j )
+			{
+				char temp;
+				temp = change_indicator[i];
+				change_indicator[i++ ] = change_indicator[j];
+				change_indicator[j-- ] = temp;
+			}
 			change_indicator = strrev (change_indicator);
+		}
 
 		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 		//fflush ( stdout );
