@@ -149,8 +149,17 @@ void writeToFile (
 						}
 					}
 					if ( compressed_ds_pool[i]->icigar[1] != '\0' )
-						fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
-					else fprintf (fhw_qual , "%s" , compressed_ds_pool[i - 1]->icigar);
+					{
+						for ( int k ; compressed_ds_pool[i]->cigar[k] != '~' ;
+								k++ )
+							fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar[k]);
+					}
+					else
+					{
+						for ( int k ; compressed_ds_pool[i]->cigar[k] != '~' ;
+								k++ )
+							fprintf (fhw_qual , "%s" , compressed_ds_pool[i - 1]->icigar[k]);
+					}
 					if ( flag_ignore_soft_clippings == 1 )
 					{
 						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
@@ -254,8 +263,8 @@ void reModeliCIGARSSingleEnded (
 	int i, j, k;
 	int compressed_ds_pool_rearranged_index = 0;
 
-//char icigar1[MAX_SEQ_LEN];
-//char icigar2[MAX_SEQ_LEN];
+	//char icigar1[MAX_SEQ_LEN];
+	//char icigar2[MAX_SEQ_LEN];
 	/********************************************************************/
 
 	/********************************************************************

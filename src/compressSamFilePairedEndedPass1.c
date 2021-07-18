@@ -115,13 +115,16 @@ void writeToFile (
 		int quality_score_index,
 		char samformatflag_replacer_characters[],
 		int number_of_unique_samformatflags,
-		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary)
+		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
+		short int flag_ignore_soft_clippings,
+		struct Cigar_Items *cigar_items_instance)
 {
 	int i, j, k;
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
 	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 	char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
+	int num_of_types;
 
 	line_to_be_written_to_file[0] = '\0';
 	list_of_read_names[0] = '\0';
@@ -174,8 +177,29 @@ void writeToFile (
 				if ( flag_save_exact_quality_scores == 0 )
 				{
 					fprintf (fhw_qual , "%s" , "\t");
-					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->cigar);
-
+					if ( flag_ignore_soft_clippings == 1 )
+					{
+						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+						if ( cigar_items_instance[0].def == 'S' ) // Left soft clip exists
+						{
+							sprintf(str , "%ld" , cigar_items_instance[0].len);
+							fprintf (fhw_qual , "%s" , str);
+							fprintf (fhw_qual , "%s" , "S");
+						}
+					}
+					if ( compressed_ds_pool[i]->icigar[1] != '\0' )
+						fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
+					else fprintf (fhw_qual , "%s" , compressed_ds_pool[i - 1]->icigar);
+					if ( flag_ignore_soft_clippings == 1 )
+					{
+						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+						if ( cigar_items_instance[num_of_types - 1].def == 'S' ) // Right soft clip exists
+						{
+							sprintf(str , "%ld" , cigar_items_instance[num_of_types - 1].len);
+							fprintf (fhw_qual , "%s" , str);
+							fprintf (fhw_qual , "%s" , "S");
+						}
+					}
 					if ( returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar , samformatflag_replacer_characters) , samflag_dictionary , number_of_unique_samformatflags) == '-' )
 						fprintf (fhw_qual , "%s" , "2");
 					else fprintf (fhw_qual , "%s" , "1");
@@ -228,8 +252,8 @@ void reModeliCIGARSPairedEnded (
 	int i, j, k;
 	int compressed_ds_pool_rearranged_index = 0;
 
-//char icigar1[MAX_SEQ_LEN];
-//char icigar2[MAX_SEQ_LEN];
+	//char icigar1[MAX_SEQ_LEN];
+	//char icigar2[MAX_SEQ_LEN];
 	/********************************************************************/
 
 	/********************************************************************
@@ -252,7 +276,7 @@ void reModeliCIGARSPairedEnded (
 		 */
 		//icigar1 = modified_icigars[i];
 		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar);
-		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar);
+		strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->cigar , compressed_ds_pool[i]->cigar);
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[i]->num_reads;
 		compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[i]->position;
 		for ( k = 0 ; k < compressed_ds_pool[i]->num_reads ; k++ )
@@ -398,10 +422,11 @@ void compressPairedEndedAlignments (
 	struct Reference_Sequence_Info **reference_info;
 	struct Whole_Genome_Sequence *whole_genome;
 	struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary;
+	struct Cigar_Items *cigar_items_instance;
+	cigar_items_instance = ( struct Cigar_Items* ) malloc (sizeof(struct Cigar_Items) * 50);
+	//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
 
-//printf ("\nmax_number_of_alignments %d" , max_number_of_alignments);
-
-//printf ("\nSize of mega array %d" , sizeof ( mega_array ));
+	//printf ("\nSize of mega array %d" , sizeof ( mega_array ));
 
 	/********************************************************************/
 
@@ -657,7 +682,7 @@ void compressPairedEndedAlignments (
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
 			reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
-			writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary);
+			writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance);
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
 			//printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
@@ -717,7 +742,7 @@ void compressPairedEndedAlignments (
 				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
 				reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
-				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary);
+				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance);
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
@@ -741,7 +766,7 @@ void compressPairedEndedAlignments (
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
-	writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary);
+	writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance);
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
 	sprintf(temp , "%lld" , max_commas);
 	strcat(temp , "\n");
