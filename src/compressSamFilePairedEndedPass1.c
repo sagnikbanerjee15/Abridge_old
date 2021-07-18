@@ -188,8 +188,19 @@ void writeToFile (
 						}
 					}
 					if ( compressed_ds_pool[i]->icigar[1] != '\0' )
-						fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
-					else fprintf (fhw_qual , "%s" , compressed_ds_pool[i - 1]->icigar);
+					{
+						for ( k = 0 ;
+								compressed_ds_pool[i]->icigar[k + 1] != '~' ;
+								k++ )
+							fputc (compressed_ds_pool[i]->icigar[k] , fhw_qual);
+					}
+					else
+					{
+						for ( k = 0 ;
+								compressed_ds_pool[i]->icigar[k + 1] != '~' ;
+								k++ )
+							fputc (compressed_ds_pool[i - 1]->icigar[k] , fhw_qual);
+					}
 					if ( flag_ignore_soft_clippings == 1 )
 					{
 						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
