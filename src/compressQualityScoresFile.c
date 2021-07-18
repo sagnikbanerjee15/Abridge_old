@@ -53,7 +53,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 						change_indicator[change_indicator_index++ ] = '0';
 						if ( val == 3540189 )
 						{
-							printf ("\n2.change_indicator_index = %d %s" , change_indicator_index , icigar);
+							printf ("\n2.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
 							fflush (stdout);
 						}
 					}
@@ -65,7 +65,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 						change_indicator[change_indicator_index++ ] = '1';
 						if ( val == 3540189 )
 						{
-							printf ("\n3.change_indicator_index = %d %s" , change_indicator_index , icigar);
+							printf ("\n3.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
 							fflush (stdout);
 						}
 					}
@@ -73,7 +73,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 			}
 			if ( val == 3540189 )
 			{
-				printf ("\n4.change_indicator_index = %d %s" , change_indicator_index , icigar);
+				printf ("\n4.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
 				fflush (stdout);
 			}
 		}
@@ -82,18 +82,18 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 			change_indicator[change_indicator_index++ ] = '0';
 			if ( val == 3540189 )
 			{
-				printf ("\n5.change_indicator_index = %d %s" , change_indicator_index , icigar);
+				printf ("\n5.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
 				fflush (stdout);
 			}
 		}
 	}
 	change_indicator[change_indicator_index++ ] = '\0';
-	/*if ( val == 3540189 )
-	 {
-	 printf ("\n6.change_indicator_index = %d %s" , change_indicator_index , icigar);
-	 fflush (stdout);
-	 printf ("\nReturning");
-	 }*/
+	if ( val == 3540189 )
+	{
+		printf ("\n6.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+		fflush (stdout);
+		printf ("\nReturning");
+	}
 }
 
 void performColumnWiseRLE (
