@@ -149,8 +149,9 @@ void performColumnWiseRLE (
 		line_number++;
 		printf ("\nProcessing line number %d" , line_number);
 		splitByDelimiter (line , '\t' , split_on_tab);
-		expandMDString (split_on_tab[1] , change_indicator);
 		continue;
+		expandMDString (split_on_tab[1] , change_indicator);
+
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
 			i = 0;
