@@ -6,7 +6,7 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void expandMDString (char *icigar, char *change_indicator)
+void expandMDString (char *icigar, char *change_indicator, int val)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -29,7 +29,8 @@ void expandMDString (char *icigar, char *change_indicator)
 		if ( isCharacterInString ("atgcn" , icigar[i]) )
 		{
 			change_indicator[change_indicator_index++ ] = '0';
-			printf ("\nchange_indicator_index = %d" , change_indicator_index);
+			//if (val==)
+			//printf ("\nchange_indicator_index = %d" , change_indicator_index);
 		}
 		else if ( isdigit (icigar[i]) != 0 )
 		{
@@ -47,7 +48,8 @@ void expandMDString (char *icigar, char *change_indicator)
 					while ( num-- )
 					{
 						change_indicator[change_indicator_index++ ] = '0';
-						printf ("\nchange_indicator_index = %d" , change_indicator_index);
+						//if (val==)
+						//printf ("\nchange_indicator_index = %d" , change_indicator_index);
 					}
 				}
 				else
@@ -55,16 +57,19 @@ void expandMDString (char *icigar, char *change_indicator)
 					while ( num-- )
 					{
 						change_indicator[change_indicator_index++ ] = '1';
-						printf ("\nchange_indicator_index = %d" , change_indicator_index);
+						//if (val==)
+						//printf ("\nchange_indicator_index = %d" , change_indicator_index);
 					}
 				}
 			}
-			printf ("\nchange_indicator_index = %d" , change_indicator_index);
+			//if (val==)
+			//printf ("\nchange_indicator_index = %d" , change_indicator_index);
 		}
 		else if ( isCharacterInString (insert_characters , icigar[i]) || isCharacterInString (mismatch_characters , icigar[i]) )
 		{
 			change_indicator[change_indicator_index++ ] = '0';
-			printf ("\nchange_indicator_index = %d" , change_indicator_index);
+			//if (val==)
+			//printf ("\nchange_indicator_index = %d" , change_indicator_index);
 		}
 	}
 	change_indicator[change_indicator_index++ ] = '\0';
