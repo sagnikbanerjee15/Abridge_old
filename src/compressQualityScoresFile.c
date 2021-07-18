@@ -29,8 +29,8 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 		if ( isCharacterInString ("atgcn" , icigar[i]) )
 		{
 			change_indicator[change_indicator_index++ ] = '0';
-			//if (val==)
-			//printf ("\nchange_indicator_index = %d" , change_indicator_index);
+			if ( val == 3540189 )
+				printf ("\nchange_indicator_index = %d" , change_indicator_index);
 		}
 		else if ( isdigit (icigar[i]) != 0 )
 		{
@@ -48,8 +48,8 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 					while ( num-- )
 					{
 						change_indicator[change_indicator_index++ ] = '0';
-						//if (val==)
-						//printf ("\nchange_indicator_index = %d" , change_indicator_index);
+						if ( val == 3540189 )
+							printf ("\nchange_indicator_index = %d" , change_indicator_index);
 					}
 				}
 				else
@@ -57,19 +57,19 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 					while ( num-- )
 					{
 						change_indicator[change_indicator_index++ ] = '1';
-						//if (val==)
-						//printf ("\nchange_indicator_index = %d" , change_indicator_index);
+						if ( val == 3540189 )
+							printf ("\nchange_indicator_index = %d" , change_indicator_index);
 					}
 				}
 			}
-			//if (val==)
-			//printf ("\nchange_indicator_index = %d" , change_indicator_index);
+			if ( val == 3540189 )
+				printf ("\nchange_indicator_index = %d" , change_indicator_index);
 		}
 		else if ( isCharacterInString (insert_characters , icigar[i]) || isCharacterInString (mismatch_characters , icigar[i]) )
 		{
 			change_indicator[change_indicator_index++ ] = '0';
-			//if (val==)
-			//printf ("\nchange_indicator_index = %d" , change_indicator_index);
+			if ( val == 3540189 )
+				printf ("\nchange_indicator_index = %d" , change_indicator_index);
 		}
 	}
 	change_indicator[change_indicator_index++ ] = '\0';
