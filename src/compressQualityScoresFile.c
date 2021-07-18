@@ -41,11 +41,16 @@ void expandMDString (char *icigar, char *change_indicator)
 			}
 			if ( icigar[i] != 'N' && icigar[i] != 'D' )
 			{
-				if ( icigar[i] == 'I' )
+				if ( icigar[i] == 'I' || icigar[i] == 'S' )
+				{
 					while ( num-- )
 						change_indicator[change_indicator_index++ ] = '0';
-				else while ( num-- )
-					change_indicator[change_indicator_index++ ] = '1';
+				}
+				else
+				{
+					while ( num-- )
+						change_indicator[change_indicator_index++ ] = '1';
+				}
 			}
 		}
 		else if ( isCharacterInString (insert_characters , icigar[i]) || isCharacterInString (mismatch_characters , icigar[i]) )
@@ -54,7 +59,10 @@ void expandMDString (char *icigar, char *change_indicator)
 	change_indicator[change_indicator_index++ ] = '\0';
 }
 
-void performColumnWiseRLE (char *input_qualityscore_filename, char *output_quality_score_filename, short int save_exact_quality_scores)
+void performColumnWiseRLE (
+		char *input_qualityscore_filename,
+		char *output_quality_score_filename,
+		short int save_exact_quality_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -137,6 +145,9 @@ void performColumnWiseRLE (char *input_qualityscore_filename, char *output_quali
 	{
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator);
+		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
+			change_indicator = strrev (change_indicator);
+
 		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 		//fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
