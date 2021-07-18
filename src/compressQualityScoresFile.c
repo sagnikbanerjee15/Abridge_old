@@ -186,7 +186,7 @@ void performColumnWiseRLE (
 	{
 		line_number++;
 		if ( line_number % 10000 == 0 )
-			printf ("\nProcessing line number %d" , line_number);
+			printf ("\nProcessing line number %d %s" , line_number , line);
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
 		continue;
