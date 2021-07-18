@@ -148,7 +148,9 @@ void writeToFile (
 							fprintf (fhw_qual , "%s" , "S");
 						}
 					}
-					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
+					if ( compressed_ds_pool[i]->icigar[1] != '\0' )
+						fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
+					else fprintf (fhw_qual , "%s" , compressed_ds_pool[i - 1]->icigar);
 					if ( flag_ignore_soft_clippings == 1 )
 					{
 						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
