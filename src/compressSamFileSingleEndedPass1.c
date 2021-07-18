@@ -145,6 +145,7 @@ void writeToFile (
 						{
 							sprintf(str , "%ld" , cigar_items_instance[0].len);
 							fprintf (fhw_qual , "%s" , str);
+							fprintf (fhw_qual , "%s" , "S");
 						}
 					}
 					fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar);
@@ -155,6 +156,7 @@ void writeToFile (
 						{
 							sprintf(str , "%ld" , cigar_items_instance[num_of_types - 1].len);
 							fprintf (fhw_qual , "%s" , str);
+							fprintf (fhw_qual , "%s" , "S");
 						}
 					}
 					fprintf (fhw_qual , "%s" , "\t");
