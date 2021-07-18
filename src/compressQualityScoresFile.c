@@ -153,7 +153,7 @@ void performColumnWiseRLE (
 	lines_to_be_written_to_file = ( char** ) malloc (sizeof(char*) * MAX_SEQ_LEN);
 	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
 	{
-		lines_to_be_written_to_file[i] = ( char* ) malloc (sizeof(char) * 100000000);
+		lines_to_be_written_to_file[i] = ( char* ) malloc (sizeof(char) * 1000000);
 		lines_to_be_written_to_file[i][0] = '\0';
 		lines_to_be_written_to_file_index[i] = 0;
 	}
@@ -188,7 +188,7 @@ void performColumnWiseRLE (
 			printf ("\nProcessing line number %d" , line_number);
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
-		//continue;
+		continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
 			i = 0;
