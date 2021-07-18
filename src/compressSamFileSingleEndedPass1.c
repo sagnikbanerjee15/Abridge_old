@@ -152,13 +152,13 @@ void writeToFile (
 					{
 						for ( k = 0 ; compressed_ds_pool[i]->cigar[k] != '~' ;
 								k++ )
-							fprintf (fhw_qual , "%s" , compressed_ds_pool[i]->icigar[k]);
+							fputc (compressed_ds_pool[i]->icigar[k] , fhw_qual);
 					}
 					else
 					{
 						for ( k = 0 ; compressed_ds_pool[i]->cigar[k] != '~' ;
 								k++ )
-							fprintf (fhw_qual , "%s" , compressed_ds_pool[i - 1]->icigar[k]);
+							fputc (compressed_ds_pool[i - 1]->icigar[k] , fhw_qual);
 					}
 					if ( flag_ignore_soft_clippings == 1 )
 					{
