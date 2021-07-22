@@ -119,7 +119,7 @@ void writeToFile (
 		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance)
 {
-	int i, j, k;
+	int i, j, k, l;
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
 	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
@@ -196,10 +196,21 @@ void writeToFile (
 					}
 					else
 					{
+						/*
+						 * Find the icigar before the ith one which is not compressed
+						 */
+						l = i - 1;
+						while ( l != 0 )
+						{
+							if ( compressed_ds_pool[l]->icigar[1] != '\0' )
+								break;
+							else l--;
+						}
+
 						for ( k = 0 ;
-								compressed_ds_pool[i]->icigar[k + 1] != '~' ;
+								compressed_ds_pool[l]->icigar[k + 1] != '~' ;
 								k++ )
-							fputc (compressed_ds_pool[i - 1]->icigar[k] , fhw_qual);
+							fputc (compressed_ds_pool[l]->icigar[k] , fhw_qual);
 					}
 					if ( flag_ignore_soft_clippings == 1 )
 					{

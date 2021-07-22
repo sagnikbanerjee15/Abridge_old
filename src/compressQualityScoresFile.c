@@ -226,7 +226,6 @@ void performColumnWiseRLE (
 			}
 		}
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
-	return;
 
 	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
