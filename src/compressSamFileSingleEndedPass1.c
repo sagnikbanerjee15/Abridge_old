@@ -150,6 +150,7 @@ void writeToFile (
 					}
 					if ( compressed_ds_pool[i]->icigar[1] != '\0' )
 					{
+						fprintf (fhw_qual , "%s" , "Entering here");
 						for ( k = 0 ;
 								compressed_ds_pool[i]->icigar[k + 1] != '~' ;
 								k++ )
