@@ -161,7 +161,7 @@ void writeToFile (
 						 * Find the icigar before the ith one which is not compressed
 						 */
 						l = i - 1;
-						while ( l != 0 )
+						while ( l >= 0 )
 						{
 							if ( compressed_ds_pool[l]->icigar[1] != '\0' )
 								break;
