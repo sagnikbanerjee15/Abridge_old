@@ -208,7 +208,7 @@ void writeToFile (
 						}
 
 						for ( k = 0 ;
-								compressed_ds_pool[i]->icigar[k] != '~' || compressed_ds_pool[i]->icigar[k] != '\0' ;
+								compressed_ds_pool[i]->icigar[k] != '~' && compressed_ds_pool[i]->icigar[k] != '\0' ;
 								k++ )
 							fputc (compressed_ds_pool[l]->icigar[k] , fhw_qual);
 					}
