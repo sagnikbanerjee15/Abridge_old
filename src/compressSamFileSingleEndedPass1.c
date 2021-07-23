@@ -713,7 +713,7 @@ void readAlignmentsAndCompress (
 		//printf("\nMax_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 		reInitializeSamAlignmentInstance (curr_alignment);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
-	return;
+
 	/*
 	 *Write final data to file
 	 */
