@@ -150,17 +150,10 @@ void writeToFile (
 					}
 					if ( compressed_ds_pool[i]->icigar[1] != '\0' )
 					{
-						printf ("\nEntering here");
-						fflush (stdout);
 						for ( k = 0 ;
-								compressed_ds_pool[i]->icigar[k + 1] != '~' ;
+								compressed_ds_pool[i]->icigar[k] != '~' || compressed_ds_pool[i]->icigar[k] != '\0' ;
 								k++ )
-						{
-							printf ("\nk=%d %c %c" , k , compressed_ds_pool[i]->icigar[k] , compressed_ds_pool[i]->icigar[k + 1]);
-							fflush (stdout);
 							fputc (compressed_ds_pool[i]->icigar[k] , fhw_qual);
-						}
-						fprintf (fhw_qual , "%s" , "String writing complete");
 					}
 					else
 					{
