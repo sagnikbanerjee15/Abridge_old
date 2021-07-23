@@ -156,7 +156,7 @@ void writeToFile (
 								compressed_ds_pool[i]->icigar[k + 1] != '~' ;
 								k++ )
 						{
-							printf ("\nk=%d" , k);
+							printf ("\nk=%d %c %c" , k , compressed_ds_pool[i]->icigar[k] , compressed_ds_pool[i]->icigar[k + 1]);
 							fflush (stdout);
 							fputc (compressed_ds_pool[i]->icigar[k] , fhw_qual);
 						}
