@@ -155,6 +155,7 @@ void writeToFile (
 								compressed_ds_pool[i]->icigar[k + 1] != '~' ;
 								k++ )
 							fputc (compressed_ds_pool[i]->icigar[k] , fhw_qual);
+						fprintf (fhw_qual , "%s" , "String writing complete");
 					}
 					else
 					{
