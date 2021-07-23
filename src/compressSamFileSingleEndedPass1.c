@@ -559,6 +559,7 @@ void readAlignmentsAndCompress (
 	/*
 	 * Read in the reference sequence information
 	 */
+	return;
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
 		if ( line[0] == '@' )
