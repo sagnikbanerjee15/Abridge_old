@@ -197,6 +197,7 @@ void performColumnWiseRLE (
 	do
 	{
 		line_number++;
+		printf ("\nProcessing line number %d %s" , line_number , line);
 		/*
 		 if ( line_number % 10000 == 0 )
 		 printf ("\nProcessing line number %d" , line_number);
@@ -215,7 +216,7 @@ void performColumnWiseRLE (
 				change_indicator[j-- ] = temp;
 			}
 		}
-		continue;
+
 		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 		//fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
