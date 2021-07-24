@@ -238,7 +238,7 @@ void performColumnWiseRLE (
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
-				printf ("\n%f" , ( float ) lines_to_be_written_to_file_index[i] / 1000000);
+				printf ("\ni=%d ratio=%f" , i , ( float ) lines_to_be_written_to_file_index[i] / 1000000);
 			}
 		}
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
