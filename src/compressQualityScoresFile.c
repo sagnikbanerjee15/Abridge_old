@@ -191,7 +191,6 @@ void performColumnWiseRLE (
 
 	//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 	//fflush ( stdout );
-	return;
 	line_number = 1;
 
 	line_len = getline ( &line , &len , fhr);
@@ -204,7 +203,7 @@ void performColumnWiseRLE (
 		 */
 		splitByDelimiter (line , '\t' , split_on_tab);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
-		//continue;
+		continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
 			i = 0;
@@ -242,6 +241,7 @@ void performColumnWiseRLE (
 		}
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
+	return;
 	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
 		if ( qsRLE[i]->frequency > 1 )
