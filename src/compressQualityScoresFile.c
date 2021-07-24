@@ -197,7 +197,6 @@ void performColumnWiseRLE (
 	do
 	{
 		line_number++;
-		printf ("\nProcessing line number %d %s" , line_number , line);
 		/*
 		 if ( line_number % 10000 == 0 )
 		 printf ("\nProcessing line number %d" , line_number);
@@ -239,6 +238,7 @@ void performColumnWiseRLE (
 				str[0] = '\0';
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
+				printf ("\n%f" , ( float ) lines_to_be_written_to_file_index[i] / 1000000);
 			}
 		}
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
