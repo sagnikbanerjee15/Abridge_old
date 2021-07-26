@@ -219,8 +219,8 @@ void performColumnWiseRLE (
 	//fflush ( stdout );
 	line_number = 1;
 
-	line_len = getline ( &line , &len , fhr);
-	do
+	//line_len = getline ( &line , &len , fhr);
+	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
 		line_number++;
 		/*
@@ -275,7 +275,7 @@ void performColumnWiseRLE (
 				i++;
 			}
 		}
-	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
+	}
 
 	/*
 	 * Processing the last line
