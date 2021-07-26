@@ -269,16 +269,16 @@ void performColumnWiseRLE (
 			if ( i == 0 )
 				printf ("\nline=%d %d End of loop" , line_number , count_max_reads_each_position[i]);
 		}
-		if ( i < max_read_length )
-		{
-			printf ("\nEntering here");
-			while ( i < max_read_length )
-			{
-				count_max_reads_each_position[i]++;
-				fputc ('X' , fhw_each_position[i]);
-				i++;
-			}
-		}
+		/*if ( i < max_read_length )
+		 {
+		 printf ("\nEntering here");
+		 while ( i < max_read_length )
+		 {
+		 count_max_reads_each_position[i]++;
+		 fputc ('X' , fhw_each_position[i]);
+		 i++;
+		 }
+		 }*/
 	}
 
 	/*
