@@ -242,8 +242,10 @@ void performColumnWiseRLE (
 			}
 		}
 
+		printf ("\n");
 		for ( i = 0 ; i < max_read_length ; i++ )
 			printf ("\t B=%d" , count_max_reads_each_position[i]);
+		printf ("\n");
 		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 		//fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
@@ -271,8 +273,10 @@ void performColumnWiseRLE (
 			if ( i == 0 )
 				printf ("\nline=%d %d End of loop" , line_number , count_max_reads_each_position[i]);
 		}
+		printf ("\n");
 		for ( i = 0 ; i < max_read_length ; i++ )
 			printf ("\t A=%d" , count_max_reads_each_position[i]);
+		printf ("\n");
 		/*if ( i < max_read_length )
 		 {
 		 printf ("\nEntering here");
