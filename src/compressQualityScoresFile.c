@@ -250,7 +250,7 @@ void performColumnWiseRLE (
 				printf ("\nPrev=%d" , count_max_reads_each_position[i]);
 			count_max_reads_each_position[i]++;
 			if ( i == 0 )
-				printf ("\nline=%d %d" , line_number , count_max_reads_each_position[i]);
+				printf ("\nline=%d %d Qual=%s" , line_number , count_max_reads_each_position[i] , split_on_tab[0]);
 			//printf ( "\ni=%d split_on_tab[0][i]=%c qsRLE[i]->score_character=%c " , i , split_on_tab[0][i] , qsRLE[i]->score_character );
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
 				qsRLE[i]->frequency++;
