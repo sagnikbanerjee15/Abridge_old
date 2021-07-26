@@ -177,7 +177,7 @@ void performColumnWiseRLE (
 			exit (1);
 		}
 	}
-
+	return;
 	qsRLE = ( struct Quality_Score_RLE** ) malloc (sizeof(struct Quality_Score_RLE*) * max_read_length);
 	for ( i = 0 ; i < max_read_length ; i++ )
 		qsRLE[i] = allocateMemoryQuality_Score_RLE ();
