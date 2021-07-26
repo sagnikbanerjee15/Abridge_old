@@ -162,6 +162,7 @@ void performColumnWiseRLE (
 		exit (1);
 	}
 	fhw_each_position = ( FILE** ) malloc (sizeof(FILE*) * max_read_length);
+	return;
 	/*
 	 * Create quality score files for each position of read
 	 */
