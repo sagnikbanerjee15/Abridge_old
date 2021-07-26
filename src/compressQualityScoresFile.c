@@ -129,6 +129,7 @@ void performColumnWiseRLE (
 
 	char str[1000];
 	char *line;
+	char *output_filename_for_each_position;
 	//char **lines_to_be_written_to_file;
 	char **split_on_tab;
 	char *change_indicator;
@@ -147,6 +148,7 @@ void performColumnWiseRLE (
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
+	output_filename_for_each_position = ( char* ) malloc (sizeof(char) * 1000);
 	fhr = fopen (input_qualityscore_filename , "r");
 	if ( fhr == NULL )
 	{
@@ -166,7 +168,9 @@ void performColumnWiseRLE (
 	for ( i = 0 ; i < max_read_length ; i++ )
 	{
 		sprintf(str , "%ld" , i);
-		fhw_each_position[i] = fopen (strcat(output_quality_score_filename , str) , "w");
+		strcpy(output_filename_for_each_position , output_quality_score_filename);
+		strcat(output_filename_for_each_position , str);
+		fhw_each_position[i] = fopen (output_filename_for_each_position , "w");
 		if ( fhw_each_position[i] == NULL )
 		{
 			printf ("%s File cannot be created" , strcat(output_quality_score_filename , str));
