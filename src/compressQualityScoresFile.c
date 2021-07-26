@@ -245,11 +245,11 @@ void performColumnWiseRLE (
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
 			count_max_reads_each_position[i]++;
+			if ( i == 0 && line_number % 1000 == 0 )
+				printf ("\n%d" , count_max_reads_each_position[i]);
 			//printf ( "\ni=%d split_on_tab[0][i]=%c qsRLE[i]->score_character=%c " , i , split_on_tab[0][i] , qsRLE[i]->score_character );
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
-			{
 				qsRLE[i]->frequency++;
-			}
 			else
 			{
 				if ( qsRLE[i]->frequency > 1 )
@@ -276,30 +276,30 @@ void performColumnWiseRLE (
 
 	/*
 	 * Processing the last line
-	 */
-	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
-	{
-		count_max_reads_each_position[i]++;
-		if ( qsRLE[i]->frequency > 1 )
-		{
-			sprintf(str , "%lld" , qsRLE[i]->frequency);
-			fprintf (fhw_each_position[i] , "%s" , str);
-		}
-		//count_max_reads_each_position[i] += qsRLE[i]->frequency;
-		fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
-		qsRLE[i]->frequency = 0;
-		qsRLE[i]->score_character = 'X';
-	}
-	if ( i < max_read_length )
-	{
-		while ( i < max_read_length )
-		{
-			count_max_reads_each_position[i]++;
-			fputc ('X' , fhw_each_position[i]);
-			//count_max_reads_each_position[i] += 1;
-			i++;
-		}
-	}
+
+	 for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
+	 {
+	 count_max_reads_each_position[i]++;
+	 if ( qsRLE[i]->frequency > 1 )
+	 {
+	 sprintf(str , "%lld" , qsRLE[i]->frequency);
+	 fprintf (fhw_each_position[i] , "%s" , str);
+	 }
+	 //count_max_reads_each_position[i] += qsRLE[i]->frequency;
+	 fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
+	 qsRLE[i]->frequency = 0;
+	 qsRLE[i]->score_character = 'X';
+	 }
+	 if ( i < max_read_length )
+	 {
+	 while ( i < max_read_length )
+	 {
+	 count_max_reads_each_position[i]++;
+	 fputc ('X' , fhw_each_position[i]);
+	 //count_max_reads_each_position[i] += 1;
+	 i++;
+	 }
+	 }*/
 
 	for ( i = 0 ; i < max_read_length ; i++ )
 		printf ("\nMAX NUM READS IN POS %d %d" , i + 1 , count_max_reads_each_position[i]);
