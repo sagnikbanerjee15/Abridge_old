@@ -26,7 +26,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
 	{
-		if ( isCharacterInString ("atgcn" , icigar[i]) )
+		if ( isCharacterInString (icigar[i] , 'a') || isCharacterInString (icigar[i] , 't') || isCharacterInString (icigar[i] , 'g') || isCharacterInString (icigar[i] , 'c') || isCharacterInString (icigar[i] , 'n') )
 		{
 			change_indicator[change_indicator_index++ ] = '0';
 			/*
