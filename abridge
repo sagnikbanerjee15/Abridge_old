@@ -459,6 +459,9 @@ def compressSamFile(options):
         ######################################################################################
         # Generate RLE for quality scores
         ######################################################################################
+        max_read_length = int(open(name_of_file_max_read_length,"r").read().strip())
+        if options.quiet == False:
+            logging.info(f"{name_of_input_file_without_location} max_read_length = {max_read_length}")
         if options.save_all_quality_scores == True and options.save_exact_quality_scores==False:
             all_commands = []
             cmd  = f"(/usr/bin/time --verbose "
