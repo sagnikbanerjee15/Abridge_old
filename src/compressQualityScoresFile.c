@@ -217,7 +217,7 @@ void performColumnWiseRLE (
 
 	//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 	//fflush ( stdout );
-	line_number = 1;
+	//line_number = 1;
 
 	//line_len = getline ( &line , &len , fhr);
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
