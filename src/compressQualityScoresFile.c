@@ -229,19 +229,19 @@ void performColumnWiseRLE (
 		 printf ("\nProcessing line number %d" , line_number);
 		 */
 		splitByDelimiter (line , '\t' , split_on_tab);
-		expandMDString (split_on_tab[1] , change_indicator , line_number);
+		/*expandMDString (split_on_tab[1] , change_indicator , line_number);
 
-		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
-		{
-			i = 0;
-			j = strlen (change_indicator) - 1;
-			while ( i < j )
-			{
-				temp = change_indicator[i];
-				change_indicator[i++ ] = change_indicator[j];
-				change_indicator[j-- ] = temp;
-			}
-		}
+		 if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
+		 {
+		 i = 0;
+		 j = strlen (change_indicator) - 1;
+		 while ( i < j )
+		 {
+		 temp = change_indicator[i];
+		 change_indicator[i++ ] = change_indicator[j];
+		 change_indicator[j-- ] = temp;
+		 }
+		 }*/
 
 		printf ("\n");
 		for ( i = 0 ; i < max_read_length ; i++ )
@@ -279,8 +279,8 @@ void performColumnWiseRLE (
 			printf ("\t A=%d" , count_max_reads_each_position[i]);
 		printf ("\n");
 
-		printf ("=================================================================================================================================================================");
-		printf ("=================================================================================================================================================================");
+		printf ("=================================================================================================================================================================\n");
+		printf ("=================================================================================================================================================================\n");
 		/*if ( i < max_read_length )
 		 {
 		 printf ("\nEntering here");
