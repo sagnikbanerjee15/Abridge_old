@@ -266,6 +266,8 @@ void performColumnWiseRLE (
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
 			}
+			if ( i == 0 )
+				printf ("\nline=%d %d End of loop" , line_number , count_max_reads_each_position[i]);
 		}
 		if ( i < max_read_length )
 		{
