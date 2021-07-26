@@ -246,9 +246,11 @@ void performColumnWiseRLE (
 		//fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
+			if ( i == 0 )
+				printf ("\nPrev=%d" , count_max_reads_each_position[i]);
 			count_max_reads_each_position[i]++;
 			if ( i == 0 )
-				printf ("\nline=%d %d length_of_read = %d" , line_number , count_max_reads_each_position[i] , strlen (split_on_tab[0]));
+				printf ("\nline=%d %d" , line_number , count_max_reads_each_position[i]);
 			//printf ( "\ni=%d split_on_tab[0][i]=%c qsRLE[i]->score_character=%c " , i , split_on_tab[0][i] , qsRLE[i]->score_character );
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
 				qsRLE[i]->frequency++;
@@ -275,7 +277,6 @@ void performColumnWiseRLE (
 				i++;
 			}
 		}
-		printf ("\ni=%d" , i);
 	}
 
 	/*
