@@ -242,6 +242,8 @@ void performColumnWiseRLE (
 			}
 		}
 
+		for ( i = 0 ; i < max_read_length ; i++ )
+			printf ("\t %d" , count_max_reads_each_position[i]);
 		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
 		//fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
