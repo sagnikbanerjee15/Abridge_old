@@ -275,6 +275,7 @@ void performColumnWiseRLE (
 				i++;
 			}
 		}
+		print ("\ni=%d" , i);
 	}
 
 	/*
