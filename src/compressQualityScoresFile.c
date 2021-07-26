@@ -215,10 +215,6 @@ void performColumnWiseRLE (
 		count_max_reads_each_position[i]++;
 	}
 
-	//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
-	//fflush ( stdout );
-
-	//line_len = getline ( &line , &len , fhr);
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
 		line_number++;
@@ -237,26 +233,8 @@ void performColumnWiseRLE (
 				change_indicator[j-- ] = temp;
 			}
 		}
-		/*
-		 printf ("\n");
-		 for ( i = 0 ; i < max_read_length ; i++ )
-		 printf ("\t B=%d" , count_max_reads_each_position[i]);
-		 printf ("\n");
-		 */
-		//printf ( "\n%s\t%s\n%s" , split_on_tab[0] , split_on_tab[1] , change_indicator );
-		//fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
-			/*
-			 if ( i == 0 )
-			 printf ("\nPrev=%d" , count_max_reads_each_position[i]);
-			 */
-			//count_max_reads_each_position[i]++;
-			/*
-			 if ( i == 0 )
-			 printf ("\nline=%d %d Qual=%s" , line_number , count_max_reads_each_position[i] , split_on_tab[0]);
-			 */
-			//printf ( "\ni=%d split_on_tab[0][i]=%c qsRLE[i]->score_character=%c " , i , split_on_tab[0][i] , qsRLE[i]->score_character );
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
 				qsRLE[i]->frequency++;
 			else
@@ -271,20 +249,7 @@ void performColumnWiseRLE (
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
 			}
-			/*
-			 if ( i == 0 )
-			 printf ("\nline=%d %d End of loop" , line_number , count_max_reads_each_position[i]);
-			 */
 		}
-		/*
-		 printf ("\n");
-		 for ( i = 0 ; i < max_read_length ; i++ )
-		 printf ("\t A=%d" , count_max_reads_each_position[i]);
-		 printf ("\n");
-
-		 printf ("=================================================================================================================================================================\n");
-		 printf ("=================================================================================================================================================================\n");
-		 */
 		if ( i < max_read_length )
 		{
 			while ( i < max_read_length )
@@ -295,35 +260,6 @@ void performColumnWiseRLE (
 			}
 		}
 	}
-	printf ("\n%s" , line);
-
-	/*
-	 * Processing the last line
-
-	 for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
-	 {
-	 count_max_reads_each_position[i]++;
-	 if ( qsRLE[i]->frequency > 1 )
-	 {
-	 sprintf(str , "%lld" , qsRLE[i]->frequency);
-	 fprintf (fhw_each_position[i] , "%s" , str);
-	 }
-	 //count_max_reads_each_position[i] += qsRLE[i]->frequency;
-	 fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
-	 qsRLE[i]->frequency = 0;
-	 qsRLE[i]->score_character = 'X';
-	 }
-	 if ( i < max_read_length )
-	 {
-	 while ( i < max_read_length )
-	 {
-	 count_max_reads_each_position[i]++;
-	 fputc ('X' , fhw_each_position[i]);
-	 //count_max_reads_each_position[i] += 1;
-	 i++;
-	 }
-	 }*/
-
 	for ( i = 0 ; i < max_read_length ; i++ )
 		printf ("\nMAX NUM READS IN POS %d %d" , i + 1 , count_max_reads_each_position[i]);
 
