@@ -297,17 +297,8 @@ void performColumnWiseRLE (
 	}
 
 	for ( i = 0 ; i < max_read_length ; i++ )
-		printf ("\nMAX LEN %d %d" , i + 1 , count_max_reads_each_position[i]);
+		printf ("\nMAX NUM READS IN POS %d %d" , i + 1 , count_max_reads_each_position[i]);
 
-	/*
-	 //max_len_sequence = 151;
-	 for ( i = 0 ; i < max_len_sequence ; i++ )
-	 {
-	 fprintf (fhw , "%s" , lines_to_be_written_to_file[i]);
-	 fprintf (fhw , "%s" , "\n");
-	 printf ("\nPosition %d Index position %d Length of string %d" , i , lines_to_be_written_to_file_index[i] , strlen (lines_to_be_written_to_file[i]));
-	 }
-	 */
 	for ( i = 0 ; i < max_read_length ; i++ )
 		fclose (fhw_each_position[i]);
 	fclose (fhr);
