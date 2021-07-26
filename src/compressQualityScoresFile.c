@@ -305,16 +305,18 @@ void performColumnWiseRLE (
 	}
 	if ( i < max_read_length )
 	{
-		while ( i < max_read_length )
+		i++;
+		do
 		{
 			fputc ('X' , fhw_each_position[i]);
+			count_max_reads_each_position[i] += 1;
 			i++;
-		}
+		} while ( i < max_read_length );
 	}
 
 	max_len_sequence++;
 	for ( i = 0 ; i < max_len_sequence ; i++ )
-		printf ("\nMAX LEN %d %d" , i , count_max_reads_each_position[i]);
+		printf ("\nMAX LEN %d %d" , i + 1 , count_max_reads_each_position[i]);
 
 	/*
 	 //max_len_sequence = 151;
