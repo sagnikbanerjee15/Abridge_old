@@ -26,18 +26,19 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
 	{
-		if ( isCharacterInString (icigar[i] , 'a') || isCharacterInString (icigar[i] , 't') || isCharacterInString (icigar[i] , 'g') || isCharacterInString (icigar[i] , 'c') || isCharacterInString (icigar[i] , 'n') )
+		switch ( icigar[i] )
 		{
-			change_indicator[change_indicator_index++ ] = '0';
-			/*
-			 if ( val == 3540189 )
-			 {
-			 printf ("\n1.change_indicator_index = %d %s" , change_indicator_index , icigar);
-			 fflush (stdout);
-			 }
-			 */
+			case 'a':
+			case 't':
+			case 'g':
+			case 'c':
+			case 'n':
+				change_indicator[change_indicator_index++ ] = '0';
+				break;
+			default:
+				continue;
 		}
-		else if ( isdigit (icigar[i]) != 0 )
+		if ( isdigit (icigar[i]) != 0 )
 		{
 			num = icigar[i] - 48;
 			i++;
