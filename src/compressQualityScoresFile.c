@@ -243,7 +243,7 @@ void performColumnWiseRLE (
 		//fflush ( stdout );
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
-			if ( i > max_len_sequence ) max_len_sequence = i;
+			//if ( i > max_len_sequence ) max_len_sequence = i;
 			//printf ( "\ni=%d split_on_tab[0][i]=%c qsRLE[i]->score_character=%c " , i , split_on_tab[0][i] , qsRLE[i]->score_character );
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
 				qsRLE[i]->frequency++;
@@ -253,18 +253,9 @@ void performColumnWiseRLE (
 				{
 					sprintf(str , "%lld" , qsRLE[i]->frequency);
 					fprintf (fhw_each_position[i] , "%s" , str);
-					/*
-					 for ( j = 0 ; str[j] != '\0' ; j++ )
-					 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
-					 */
 				}
 				count_max_reads_each_position[i] += qsRLE[i]->frequency;
 				fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
-				/*
-				 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
-				 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
-				 str[0] = '\0';
-				 */
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
 			}
@@ -288,18 +279,9 @@ void performColumnWiseRLE (
 		{
 			sprintf(str , "%lld" , qsRLE[i]->frequency);
 			fprintf (fhw_each_position[i] , "%s" , str);
-			/*
-			 for ( j = 0 ; str[j] != '\0' ; j++ )
-			 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
-			 */
 		}
 		count_max_reads_each_position[i] += qsRLE[i]->frequency;
 		fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
-		/*
-		 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
-		 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
-		 str[0] = '\0';
-		 */
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
 	}
@@ -314,8 +296,7 @@ void performColumnWiseRLE (
 		} while ( i < max_read_length );
 	}
 
-	max_len_sequence++;
-	for ( i = 0 ; i < max_len_sequence ; i++ )
+	for ( i = 0 ; i < max_read_length ; i++ )
 		printf ("\nMAX LEN %d %d" , i + 1 , count_max_reads_each_position[i]);
 
 	/*
