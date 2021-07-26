@@ -120,7 +120,7 @@ void performColumnWiseRLE (
 	 ********************************************************************/
 	FILE *fhr;
 	FILE *fhw;
-	FILE *fhw_each_position;
+	FILE **fhw_each_position;
 
 	struct Quality_Score_RLE **qsRLE;
 
@@ -161,7 +161,7 @@ void performColumnWiseRLE (
 		printf ("%s File cannot be created" , output_quality_score_filename);
 		exit (1);
 	}
-	fhw_each_position = ( FILE* ) malloc (sizeof(FILE*) * max_read_length);
+	fhw_each_position = ( FILE** ) malloc (sizeof(FILE*) * max_read_length);
 	/*
 	 * Create quality score files for each position of read
 	 */
