@@ -465,6 +465,7 @@ def compressSamFile(options):
             cmd += f" {compressQualityScoresFile} "
             cmd += f" {name_of_file_with_quality_scores} "
             cmd += f" {name_of_file_with_quality_scores_rle} "
+            cmd += f" {max_read_length} "
             if options.save_exact_quality_scores==True:
                 cmd += " 1 "
             else:
@@ -657,6 +658,7 @@ def compressSamFile(options):
             cmd += f" {compressQualityScoresFile} "
             cmd += f" {name_of_file_with_quality_scores} "
             cmd += f" {name_of_file_with_quality_scores_rle} "
+            cmd += f" {max_read_length} "
             if options.save_exact_quality_scores==True:
                 cmd += " 1 "
             else:

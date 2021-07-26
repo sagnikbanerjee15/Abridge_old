@@ -112,13 +112,15 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 void performColumnWiseRLE (
 		char *input_qualityscore_filename,
 		char *output_quality_score_filename,
-		short int save_exact_quality_scores)
+		short int save_exact_quality_scores,
+		int max_read_length)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
 	FILE *fhr;
 	FILE *fhw;
+	FILE *fhw_each_position;
 
 	struct Quality_Score_RLE **qsRLE;
 
@@ -127,7 +129,7 @@ void performColumnWiseRLE (
 
 	char str[1000];
 	char *line;
-	char **lines_to_be_written_to_file;
+	//char **lines_to_be_written_to_file;
 	char **split_on_tab;
 	char *change_indicator;
 	char temp;
@@ -157,26 +159,41 @@ void performColumnWiseRLE (
 		printf ("%s File cannot be created" , output_quality_score_filename);
 		exit (1);
 	}
+	fhw_each_position = ( FILE* ) malloc (sizeof(FILE*) * max_read_length);
+	/*
+	 * Create quality score files for each position of read
+	 */
+	for ( i = 0 ; i < max_read_length ; i++ )
+	{
+		sprintf(str , "%ld" , i);
+		fhw_each_position[i] = fopen (strcat(output_quality_score_filename , str) , "w");
+		if ( fhw_each_position[i] == NULL )
+		{
+			printf ("%s File cannot be created" , strcat(output_quality_score_filename , str));
+			exit (1);
+		}
+	}
 
-	qsRLE = ( struct Quality_Score_RLE** ) malloc (sizeof(struct Quality_Score_RLE*) * MAX_SEQ_LEN);
-	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
+	qsRLE = ( struct Quality_Score_RLE** ) malloc (sizeof(struct Quality_Score_RLE*) * max_read_length);
+	for ( i = 0 ; i < max_read_length ; i++ )
 		qsRLE[i] = allocateMemoryQuality_Score_RLE ();
 
-	lines_to_be_written_to_file_index = ( int* ) malloc (sizeof(int) * MAX_SEQ_LEN);
-	lines_to_be_written_to_file = ( char** ) malloc (sizeof(char*) * MAX_SEQ_LEN);
-	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
-	{
-		lines_to_be_written_to_file[i] = ( char* ) malloc (sizeof(char) * 1000000);
-		lines_to_be_written_to_file[i][0] = '\0';
-		lines_to_be_written_to_file_index[i] = 0;
-	}
+	/*
+	 lines_to_be_written_to_file_index = ( int* ) malloc (sizeof(int) * max_read_length);
+	 lines_to_be_written_to_file = ( char** ) malloc (sizeof(char*) * max_read_length);
+	 for ( i = 0 ; i < max_read_length ; i++ )
+	 {
+	 lines_to_be_written_to_file[i] = ( char* ) malloc (sizeof(char) * 1000000);
+	 lines_to_be_written_to_file[i][0] = '\0';
+	 lines_to_be_written_to_file_index[i] = 0;
+	 }*/
 
 	split_on_tab = ( char** ) malloc (sizeof(char*) * 5);
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_tab[i] = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
-	change_indicator = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
-	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * MAX_SEQ_LEN);
-	for ( i = 0 ; i < MAX_SEQ_LEN ; i++ )
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * max_read_length);
+	change_indicator = ( char* ) malloc (sizeof(char) * max_read_length);
+	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * max_read_length);
+	for ( i = 0 ; i < max_read_length ; i++ )
 		count_max_reads_each_position[i] = 0;
 	/********************************************************************/
 
@@ -229,48 +246,81 @@ void performColumnWiseRLE (
 				if ( qsRLE[i]->frequency > 1 )
 				{
 					sprintf(str , "%lld" , qsRLE[i]->frequency);
-					for ( j = 0 ; str[j] != '\0' ; j++ )
-						lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+					fprintf (fhw_each_position[i] , "%s" , str);
+					/*
+					 for ( j = 0 ; str[j] != '\0' ; j++ )
+					 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+					 */
 				}
 				count_max_reads_each_position[i] += qsRLE[i]->frequency;
-				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
-				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
-				str[0] = '\0';
+				fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
+				/*
+				 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
+				 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
+				 str[0] = '\0';
+				 */
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
-				if ( ( float ) lines_to_be_written_to_file_index[i] / 1000000 > 0.75 )
-					printf ("\nline_number=%d i=%d ratio=%f" , line_number , i , ( float ) lines_to_be_written_to_file_index[i] / 1000000);
+			}
+		}
+		if ( i < max_read_length )
+		{
+			while ( i < max_read_length )
+			{
+				fputc ('X' , fhw_each_position[i]);
+				i++;
 			}
 		}
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
-	return;
+	/*
+	 * Processing the last line
+	 */
 	for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 	{
 		if ( qsRLE[i]->frequency > 1 )
 		{
 			sprintf(str , "%lld" , qsRLE[i]->frequency);
-			for ( j = 0 ; str[j] != '\0' ; j++ )
-				lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+			fprintf (fhw_each_position[i] , "%s" , str);
+			/*
+			 for ( j = 0 ; str[j] != '\0' ; j++ )
+			 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = str[j];
+			 */
 		}
 		count_max_reads_each_position[i] += qsRLE[i]->frequency;
-		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
-		lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
-		str[0] = '\0';
+		fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
+		/*
+		 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]++ ] = qsRLE[i]->score_character + 30;// Done to avoid ambiguity between numeric quality scores and frequency value
+		 lines_to_be_written_to_file[i][lines_to_be_written_to_file_index[i]] = '\0';
+		 str[0] = '\0';
+		 */
 		qsRLE[i]->frequency = 0;
 		qsRLE[i]->score_character = 'X';
 	}
+	if ( i < max_read_length )
+	{
+		while ( i < max_read_length )
+		{
+			fputc ('X' , fhw_each_position[i]);
+			i++;
+		}
+	}
+
 	max_len_sequence++;
 	for ( i = 0 ; i < max_len_sequence ; i++ )
 		printf ("\nMAX LEN %d %d" , i , count_max_reads_each_position[i]);
 
-	//max_len_sequence = 151;
-	for ( i = 0 ; i < max_len_sequence ; i++ )
-	{
-		fprintf (fhw , "%s" , lines_to_be_written_to_file[i]);
-		fprintf (fhw , "%s" , "\n");
-		printf ("\nPosition %d Index position %d Length of string %d" , i , lines_to_be_written_to_file_index[i] , strlen (lines_to_be_written_to_file[i]));
-	}
+	/*
+	 //max_len_sequence = 151;
+	 for ( i = 0 ; i < max_len_sequence ; i++ )
+	 {
+	 fprintf (fhw , "%s" , lines_to_be_written_to_file[i]);
+	 fprintf (fhw , "%s" , "\n");
+	 printf ("\nPosition %d Index position %d Length of string %d" , i , lines_to_be_written_to_file_index[i] , strlen (lines_to_be_written_to_file[i]));
+	 }
+	 */
+	for ( i = 0 ; i < max_read_length ; i++ )
+		fclose (fhw_each_position[i]);
 	fclose (fhr);
 	fclose (fhw);
 }
@@ -283,6 +333,7 @@ int main (int argc, char *argv[])
 	char *temp;
 	char input_qualityscore_filename[FILENAME_LENGTH];
 	char output_quality_score_filename[FILENAME_LENGTH];
+	int max_read_length;
 
 	short int save_exact_quality_scores;
 	/********************************************************************/
@@ -292,8 +343,10 @@ int main (int argc, char *argv[])
 	 ********************************************************************/
 	strcpy(input_qualityscore_filename , argv[1]);
 	strcpy(output_quality_score_filename , argv[2]);
-	save_exact_quality_scores = strtol (argv[3] , &temp , 10);
+	max_read_length = strtol (argv[3] , &temp , 10);
+	save_exact_quality_scores = strtol (argv[4] , &temp , 10);
+
 	/********************************************************************/
 
-	performColumnWiseRLE (input_qualityscore_filename , output_quality_score_filename , save_exact_quality_scores);
+	performColumnWiseRLE (input_qualityscore_filename , output_quality_score_filename , save_exact_quality_scores , max_read_length);
 }
