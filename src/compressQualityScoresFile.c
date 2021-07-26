@@ -161,6 +161,7 @@ void performColumnWiseRLE (
 		printf ("%s File cannot be created" , output_quality_score_filename);
 		exit (1);
 	}
+	return;
 	fhw_each_position = ( FILE** ) malloc (sizeof(FILE*) * max_read_length);
 	return;
 	/*
