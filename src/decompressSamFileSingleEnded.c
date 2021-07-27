@@ -201,6 +201,7 @@ void decompressFile (
 			if ( strstr (buffer , "abridge_") )
 				read_names_stored = 1;
 			else read_names_stored = 0;
+			continue;
 		}
 		number_of_commas_in_each_line = 0;
 		for ( i = 0 ; buffer[i] != '\0' ; i++ )

@@ -125,9 +125,8 @@ void convertRLEtoQualValues (
 		 * Calculate sum of each position
 		 */
 
-		printf ("\nSum Position %d %lld" , rle_quality_scores_index , num);
-		fflush ( stdout);
-
+		//printf ("\nSum Position %d %lld" , rle_quality_scores_index , num);
+		//fflush ( stdout);
 		rle_quality_scores_index++;
 	}
 	//printf ("\nComing out of this loop");
@@ -173,7 +172,7 @@ void convertRLEtoQualValues (
 		fprintf (fhw , "%s" , "\n");
 		if ( checker_flag == 0 ) break;
 	}
-	printf ("\nReturning...");
+	//printf ("\nReturning...");
 	fflush ( stdout);
 	fclose (fhr);
 	fclose (fhw);
