@@ -678,7 +678,6 @@ void compressPairedEndedAlignments (
 
 		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
 		{
-			continue;
 			//printf("\n1. compressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
 			previous_position = current_position;
@@ -720,7 +719,6 @@ void compressPairedEndedAlignments (
 			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
 			printf ("\nquality_score_index %lld compressed_ds_pool_index %lld" , quality_score_index , compressed_ds_pool_index);
-			continue;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
@@ -729,7 +727,6 @@ void compressPairedEndedAlignments (
 		}
 		else // Same chromosome
 		{
-			continue;
 			if ( previous_position == current_position )
 			{
 				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
@@ -791,7 +788,6 @@ void compressPairedEndedAlignments (
 		reInitializeSamAlignmentInstance (curr_alignment);
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
-	return;
 	reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
 	writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance);
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
