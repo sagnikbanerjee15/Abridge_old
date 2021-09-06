@@ -678,7 +678,7 @@ void compressPairedEndedAlignments (
 
 		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
 		{
-			//continue;
+			continue;
 			//printf("\n1. compressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
 			previous_position = current_position;
