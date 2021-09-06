@@ -676,6 +676,7 @@ void compressPairedEndedAlignments (
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 				NH_tag_index = i;
 
+		continue;
 		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
 		{
 			//printf("\n1. compressed_ds_pool_index %d", compressed_ds_pool_index);
