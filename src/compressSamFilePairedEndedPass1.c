@@ -709,6 +709,7 @@ void compressPairedEndedAlignments (
 			//printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
 			previous_position = current_position;
+			continue;
 			strcpy(prev_reference_name , curr_reference_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
@@ -723,7 +724,7 @@ void compressPairedEndedAlignments (
 			//fflush(stdout);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
 			reference_sequence_index++;
-			continue;
+
 		}
 		else // Same chromosome
 		{
