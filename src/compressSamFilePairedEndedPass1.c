@@ -677,7 +677,6 @@ void compressPairedEndedAlignments (
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 				NH_tag_index = i;
 
-		continue;
 		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
 		{
 			//printf("\n1. compressed_ds_pool_index %d", compressed_ds_pool_index);
@@ -699,9 +698,11 @@ void compressPairedEndedAlignments (
 			//fflush(stdout);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
 			reference_sequence_index++;
+
 		}
 		else if ( strcmp (prev_reference_name , curr_reference_name) != 0 ) // New chromosome
 		{
+			continue;
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
 			reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
@@ -727,6 +728,7 @@ void compressPairedEndedAlignments (
 		}
 		else // Same chromosome
 		{
+			continue;
 			if ( previous_position == current_position )
 			{
 				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
