@@ -719,6 +719,7 @@ void compressPairedEndedAlignments (
 			quality_score_index++;
 			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
+			printf ("\nquality_score_index %lld compressed_ds_pool_index %lld" , quality_score_index , compressed_ds_pool_index);
 			continue;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
