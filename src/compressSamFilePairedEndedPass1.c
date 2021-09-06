@@ -664,7 +664,6 @@ void compressPairedEndedAlignments (
 				fprintf (fhw_unmapped , "%s" , curr_alignment->qual);
 				fprintf (fhw_unmapped , "%s" , "\n");
 			}
-			continue;
 		}
 		current_position = curr_alignment->start_position;
 		/*
@@ -698,7 +697,7 @@ void compressPairedEndedAlignments (
 			//fflush(stdout);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
 			reference_sequence_index++;
-
+			continue;
 		}
 		else if ( strcmp (prev_reference_name , curr_reference_name) != 0 ) // New chromosome
 		{
