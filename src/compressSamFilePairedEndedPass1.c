@@ -709,7 +709,6 @@ void compressPairedEndedAlignments (
 			//printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
 			previous_position = current_position;
-			continue;
 			strcpy(prev_reference_name , curr_reference_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
@@ -720,6 +719,7 @@ void compressPairedEndedAlignments (
 			quality_score_index++;
 			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
+			continue;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
