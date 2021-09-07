@@ -654,7 +654,7 @@ void compressPairedEndedAlignments (
 	{
 		line_number++;
 		if ( line_number > 55398570 ) continue;
-		if ( line_number > 55398100 )
+		if ( line_number > 0 )
 		{
 			printf ("\nline number %llu" , line_number);
 			fflush (stdout);
