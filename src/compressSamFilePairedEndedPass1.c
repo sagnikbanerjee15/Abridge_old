@@ -654,7 +654,7 @@ void compressPairedEndedAlignments (
 	{
 		line_number++;
 		if ( line_number > 55398570 ) continue;
-		if ( line_number > 5539800 )
+		if ( line_number > 55398100 )
 			printf ("\nline number %llu" , line_number);
 
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
