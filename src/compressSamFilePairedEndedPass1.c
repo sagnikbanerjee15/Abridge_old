@@ -654,6 +654,7 @@ void compressPairedEndedAlignments (
 	{
 		line_number++;
 		printf ("\nline number %llu" , line_number);
+		if ( line_number > 55398570 ) continue;
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
 		strcpy(curr_reference_name , curr_alignment->reference_name);
