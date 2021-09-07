@@ -737,7 +737,6 @@ void compressPairedEndedAlignments (
 		}
 		else // Same chromosome
 		{
-			continue;
 			if ( previous_position == current_position )
 			{
 				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
