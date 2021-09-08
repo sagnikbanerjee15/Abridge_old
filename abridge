@@ -607,7 +607,6 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"{name_of_input_file_without_location} max_read_length = {max_read_length}")
         
-        print(input_filename)
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" {compressSamFilePairedEndedPass1}" # argv[0] - name of the program
         cmd += f" {options.genome}" # argv[1] - genome_filename

@@ -653,7 +653,6 @@ void compressPairedEndedAlignments (
 	}
 	do
 	{
-		line_number++;
 		if ( line_number > 55398570 ) continue;
 		if ( line_number > 0 )
 		{
@@ -800,6 +799,7 @@ void compressPairedEndedAlignments (
 		}
 		//printf("\nMax_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 		reInitializeSamAlignmentInstance (curr_alignment);
+		line_number++;
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
