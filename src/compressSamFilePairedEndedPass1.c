@@ -637,6 +637,7 @@ void compressPairedEndedAlignments (
 	line_number = 0;
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
+		line_number++;
 		if ( line[0] == '@' )
 		{
 			if ( line[1] == 'S' && line[2] == 'Q' )
@@ -645,7 +646,7 @@ void compressPairedEndedAlignments (
 				//fflush(stdout);
 				strcpy(reference_info[number_of_reference_sequences]->line , line);
 				number_of_reference_sequences++;
-				line_number++;
+
 			}
 		}
 		else break;
