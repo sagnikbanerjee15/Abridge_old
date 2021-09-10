@@ -653,12 +653,13 @@ void compressPairedEndedAlignments (
 	}
 	do
 	{
-		if ( line_number > 55398570 ) continue;
-		if ( line_number > 0 )
-		{
-			printf ("\nline number %llu" , line_number);
-			fflush (stdout);
-		}
+		//if ( line_number > 55398570 ) continue;
+		/*
+		 if ( line_number > 0 )
+		 {
+		 printf ("\nline number %llu" , line_number);
+		 fflush (stdout);
+		 }*/
 
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
@@ -683,7 +684,7 @@ void compressPairedEndedAlignments (
 		 */
 
 		generateIntegratedCigarPairedEnded (curr_alignment , flag_save_scores , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
-		continue;
+		//continue;
 		NH_tag_index = -1;
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
 			if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
