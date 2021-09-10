@@ -675,8 +675,8 @@ void compressPairedEndedAlignments (
 					curr_alignment->qual[i] -= 90;
 				fprintf (fhw_unmapped , "%s" , curr_alignment->qual);
 				fprintf (fhw_unmapped , "%s" , "\n");
-				continue;
 			}
+			continue;
 		}
 		current_position = curr_alignment->start_position;
 		/*
