@@ -441,9 +441,9 @@ def compressSamFile(options):
             cmd += f" 0 0 " # argv[12] and argv[13]
         cmd += f" {name_of_file_with_quality_scores} " # argv[14]
         if options.ignore_scores == True:
-            cmd += f" 0 " #argv[15] - save_scores = False
+            cmd += f" 1 " #argv[15] - save_scores = False
         else:
-            cmd += f" 1 " #argv[15] - save_scores = True
+            cmd += f" 0 " #argv[15] - save_scores = True
         cmd += f") "
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -494,9 +494,9 @@ def compressSamFile(options):
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 0 "
         if options.ignore_scores == True:
-            cmd += f" 0 " #argv[15] - save_scores = False
+            cmd += f" 1 " #argv[15] - save_scores = False
         else:
-            cmd += f" 1 " #argv[15] - save_scores = True
+            cmd += f" 0 " #argv[15] - save_scores = True
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -637,9 +637,9 @@ def compressSamFile(options):
         cmd += f" {frequency_of_flags_filename} " #argv[17]
         cmd += f" {name_of_file_dictionary} " #argv[18]
         if options.ignore_scores == True:
-            cmd += f" 0 " #argv[19] - save_scores = False
+            cmd += f" 1 " #argv[19] - save_scores = False
         else:
-            cmd += f" 1 " #argv[19] - save_scores = True
+            cmd += f" 0 " #argv[19] - save_scores = True
         cmd += f") "
         #cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -687,9 +687,9 @@ def compressSamFile(options):
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 1 "
         if options.ignore_scores == True:
-            cmd += f" 0 " 
-        else:
             cmd += f" 1 " 
+        else:
+            cmd += f" 0 " 
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:

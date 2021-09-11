@@ -362,7 +362,7 @@ void readAlignmentsAndCompress (
 		long long int max_input_reads_in_a_single_nucl_loc,
 		short int flag_save_all_quality_scores,
 		short int flag_save_exact_quality_scores,
-		short int flag_save_scores)
+		short int flag_ignore_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -546,7 +546,7 @@ void readAlignmentsAndCompress (
 	sprintf(str , "%lld" , flag_save_exact_quality_scores);
 	strcat(temp , str);
 	strcat(temp , "\t");
-	sprintf(str , "%lld" , flag_save_scores);
+	sprintf(str , "%lld" , flag_ignore_scores);
 	strcat(temp , str);
 	strcat(temp , "\n");
 	fprintf (fhw_pass1 , "%s" , temp);
@@ -601,7 +601,7 @@ void readAlignmentsAndCompress (
 		}
 		current_position = curr_alignment->start_position;
 		//printSamAlignmentInstance(curr_alignment,0);
-		generateIntegratedCigarSingleEnded (curr_alignment , flag_save_scores , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics);
+		generateIntegratedCigarSingleEnded (curr_alignment , flag_ignore_scores , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics);
 		//printf ("\n Position:%lld iCIGAR: %s" , curr_alignment->start_position , curr_alignment->icigar);
 		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
 		{
@@ -750,7 +750,7 @@ int main (int argc, char *argv[])
 	short int run_diagnostics;
 	short int save_all_quality_scores;
 	short int save_exact_quality_scores;
-	short int save_scores;
+	short int ignore_scores;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 	/********************************************************************/
@@ -772,12 +772,12 @@ int main (int argc, char *argv[])
 	save_all_quality_scores = strtol (argv[12] , &temp , 10);
 	save_exact_quality_scores = strtol (argv[13] , &temp , 10);
 	strcpy(name_of_file_with_quality_scores , argv[14]);
-	save_scores = strtol (argv[15] , &temp , 10);
+	ignore_scores = strtol (argv[15] , &temp , 10);
 	/********************************************************************/
 
 	/*
 	 * If user requests no sequence information then everything else is also ignored
 	 */
-	readAlignmentsAndCompress (name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , save_scores);
+	readAlignmentsAndCompress (name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , ignore_scores);
 	return 0;
 }

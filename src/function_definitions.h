@@ -1578,7 +1578,7 @@ int isAlignmentPerfect (
 
 void generateIntegratedCigarSingleEnded (
 		struct Sam_Alignment *curr_alignment,
-		short int flag_save_scores,
+		short int flag_ignore_scores,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_unmapped_sequences,
@@ -1934,7 +1934,7 @@ void generateIntegratedCigarSingleEnded (
 	 * Append the cigar with mapping quality score and the alignment score (if available)
 	 */
 
-	if ( flag_save_scores == 1 )
+	if ( flag_ignore_scores == 0 )
 	{
 		sprintf (str , "%d" , curr_alignment->mapping_quality_score);
 		strcat (curr_alignment->icigar , "~");
@@ -2040,7 +2040,7 @@ char findReplamentCharacterForPairedEndedReads (
 
 void generateIntegratedCigarPairedEnded (
 		struct Sam_Alignment *curr_alignment,
-		short int flag_save_scores,
+		short int flag_ignore_scores,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_unmapped_sequences,
@@ -2329,7 +2329,7 @@ void generateIntegratedCigarPairedEnded (
 	 * Append the cigar with mapping quality score and the alignment score (if available)
 	 */
 
-	if ( flag_save_scores == 1 )
+	if ( flag_ignore_scores == 1 )
 	{
 		sprintf (str , "%d" , curr_alignment->mapping_quality_score);
 		strcat (curr_alignment->icigar , "-");
@@ -2758,7 +2758,7 @@ void readAbridgeIndex (
 		short int *flag_ignore_quality_score,
 		short int *flag_save_all_quality_scores,
 		short int *flag_save_exact_quality_scores,
-		short int *flag_save_scores)
+		short int *flag_ignore_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -2798,7 +2798,7 @@ void readAbridgeIndex (
 			*flag_ignore_quality_score = strtol (split_line[3] , &temp , 10);
 			*flag_save_all_quality_scores = strtol (split_line[4] , &temp , 10);
 			*flag_save_exact_quality_scores = strtol (split_line[5] , &temp , 10);
-			*flag_save_scores = strtol (split_line[6] , &temp , 10);
+			*flag_ignore_scores = strtol (split_line[6] , &temp , 10);
 			continue;
 		}
 		//printf("\n%d %s", abridge_index->number_of_items, split_line[0]);
@@ -3208,7 +3208,7 @@ void writeAlignmentToFileSingleEnded (
 		FILE *fhr_qual,
 		short int flag_save_all_quality_scores,
 		char **read_names,
-		short int flag_save_scores)
+		short int flag_ignore_scores)
 {
 	int i;
 
@@ -3255,7 +3255,7 @@ void writeAlignmentToFileSingleEnded (
 		strcat (line_to_be_written_to_file , temp);
 		strcat (line_to_be_written_to_file , "\t");
 
-		if ( flag_save_scores == 0 )
+		if ( flag_ignore_scores == 1 )
 			strcat (line_to_be_written_to_file , "255");
 		else
 		{
@@ -3305,7 +3305,7 @@ void writeAlignmentToFileSingleEnded (
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
 			strcat (line_to_be_written_to_file , "\t");
 		}
-		if ( flag_save_scores == 1 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
+		if ( flag_ignore_scores == 1 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
 		{
 			strcat (line_to_be_written_to_file , "AS:i:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[3].val);
@@ -3326,7 +3326,7 @@ void writeAlignmentToFilePairedEnded (
 		short int flag_save_all_quality_scores,
 		char **read_names,
 		int *read_names_index,
-		short int flag_save_scores)
+		short int flag_ignore_scores)
 {
 	int i;
 
@@ -3358,7 +3358,7 @@ void writeAlignmentToFilePairedEnded (
 		strcat (line_to_be_written_to_file , temp);
 
 		strcat (line_to_be_written_to_file , "\t");
-		if ( flag_save_scores == 0 )
+		if ( flag_ignore_scores == 1 )
 			strcat (line_to_be_written_to_file , "255");
 		else
 		{
@@ -3408,7 +3408,7 @@ void writeAlignmentToFilePairedEnded (
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
 			strcat (line_to_be_written_to_file , "\t");
 		}
-		if ( flag_save_scores == 1 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
+		if ( flag_ignore_scores == 1 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
 		{
 			strcat (line_to_be_written_to_file , "AS:i:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[3].val);
@@ -3431,7 +3431,7 @@ void convertToAlignmentPairedEnded (
 		char **split_on_tilde,
 		char **read_names,
 		char *default_quality_value,
-		short int flag_save_scores,
+		short int flag_ignore_scores,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
@@ -3490,7 +3490,7 @@ void convertToAlignmentPairedEnded (
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
-		if ( flag_save_scores == 0 )
+		if ( flag_ignore_scores == 0 )
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 		else
 		{
@@ -3544,7 +3544,7 @@ void convertToAlignmentPairedEnded (
 			( *read_number )++;
 			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_save_scores);
+		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
@@ -3557,7 +3557,7 @@ void convertToAlignmentSingleEnded (
 		char **split_on_comma,
 		char **split_on_tilde,
 		char *default_quality_value,
-		short int flag_save_scores,
+		short int flag_ignore_scores,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
@@ -3688,7 +3688,7 @@ void convertToAlignmentSingleEnded (
 		 }*/
 		fflush (stdout);
 		printSamAlignmentInstance (sam_alignment_instance , 0);
-		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , read_names , flag_save_scores);
+		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , read_names , flag_ignore_scores);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
