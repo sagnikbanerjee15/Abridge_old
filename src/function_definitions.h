@@ -3661,7 +3661,7 @@ void convertToAlignmentSingleEnded (
 		}
 		else
 		{
-			strcpy (sam_alignment_instance->icigar , split_on_comma[j]);
+			strcpy (sam_alignment_instance->icigar , split_on_tilde[0]);
 			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
 			//fflush (stdout);
 
