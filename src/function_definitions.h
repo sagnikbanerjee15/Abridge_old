@@ -3630,7 +3630,6 @@ void convertToAlignmentSingleEnded (
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 		splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
-		strcpy (sam_alignment_instance->tags[0].val , split_on_dash[1]);
 
 		if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
 		{
