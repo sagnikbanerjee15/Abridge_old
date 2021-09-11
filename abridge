@@ -51,7 +51,7 @@ def parseCommandLineArguments():
     #optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
     optional_named.add_argument("-l","--level",help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type=int, default = 2)
     
-    optional_named.add_argument("-ss","--save_scores",help = "Request abrigde to store the quality scores and the alignment score",action="store_false")
+    optional_named.add_argument("-ss","--ignore_scores",help = "Request abrigde to store the quality scores and the alignment score",action="store_true")
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
     optional_named.add_argument("-qual","--quality",help="Enter dummy quality scores while decompressing",default='I')
     optional_named.add_argument("-gsc","--ignore_soft_clippings",help="No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference",action="store_true")
@@ -440,10 +440,10 @@ def compressSamFile(options):
         elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
             cmd += f" 0 0 " # argv[12] and argv[13]
         cmd += f" {name_of_file_with_quality_scores} " # argv[14]
-        if options.save_scores == True:
-            cmd += f" 1 " #argv[15]
+        if options.ignore_scores == True:
+            cmd += f" 0 " #argv[15] - save_scores = False
         else:
-            cmd += f" 0 " #argv[15]
+            cmd += f" 1 " #argv[15] - save_scores = True
         cmd += f") "
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -493,10 +493,10 @@ def compressSamFile(options):
         
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 0 "
-        if options.save_scores == True:
-            cmd += f"1 "
+        if options.ignore_scores == True:
+            cmd += f" 0 " #argv[15] - save_scores = False
         else:
-            cmd += f"0 "
+            cmd += f" 1 " #argv[15] - save_scores = True
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -636,10 +636,10 @@ def compressSamFile(options):
         cmd += f" {max_read_length} " #argv[16]
         cmd += f" {frequency_of_flags_filename} " #argv[17]
         cmd += f" {name_of_file_dictionary} " #argv[18]
-        if options.save_scores == True:
-            cmd += f" 1 " #argv[19]
+        if options.ignore_scores == True:
+            cmd += f" 0 " #argv[19] - save_scores = False
         else:
-            cmd += f" 0 " #argv[19]
+            cmd += f" 1 " #argv[19] - save_scores = True
         cmd += f") "
         #cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -686,10 +686,10 @@ def compressSamFile(options):
         
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 1 "
-        if options.save_scores == True:
-            cmd += f"1 "
+        if options.ignore_scores == True:
+            cmd += f" 0 " 
         else:
-            cmd += f"0 "
+            cmd += f" 1 " 
         cmd += f") "   
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -1122,7 +1122,7 @@ def decompressSamFile(options):
                                 f"{name_of_file_with_quality_scores}.rle",
                                 f"{options.output_directory}/file_list"])
     
-    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores,save_scores = list(map(int,open(pass1_outputfilename,"rb").readline().split()))
+    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores,ignore_scores = list(map(int,open(pass1_outputfilename,"rb").readline().split()))
     if flag_ignore_mismatches == 1:
         options.ignore_mismatches = True
     else:
@@ -1147,10 +1147,10 @@ def decompressSamFile(options):
         options.save_exact_quality_scores = True
     else:
         options.save_exact_quality_scores = False
-    if save_scores == 1:
-        options.save_scores = True
+    if ignore_scores == 1:
+        options.ignore_scores = True
     else:
-        options.save_scores = False
+        options.ignore_scores = False
     
     ######################################################################################
     # Convert RLE back to quality scores
