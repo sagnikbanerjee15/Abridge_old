@@ -3686,6 +3686,7 @@ void convertToAlignmentSingleEnded (
 		 fflush (stdout);
 		 }*/
 		fflush (stdout);
+		printSamAlignmentInstance (sam_alignment_instance , 1);
 		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , read_names , flag_save_scores);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
