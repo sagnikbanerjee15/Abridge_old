@@ -3554,6 +3554,7 @@ void convertToAlignmentSingleEnded (
 		char **split_on_tab,
 		char **split_on_dash,
 		char **split_on_comma,
+		char **split_on_tilde,
 		char *default_quality_value,
 		short int flag_save_scores,
 		short int flag_ignore_mismatches,
@@ -3627,21 +3628,16 @@ void convertToAlignmentSingleEnded (
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
-		if ( flag_save_scores == 0 )
-			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
-		else
+		splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
+		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+
+		if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
 		{
-			if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
-			{
-				sam_alignment_instance->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
-				strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
-				number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
-			}
-			else
-			{
-				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
-			}
+			sam_alignment_instance->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
+			strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
+			number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
 		}
+
 		printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
 		sam_alignment_instance->start_position = curr_position;
 
