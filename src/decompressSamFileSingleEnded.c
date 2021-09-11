@@ -186,7 +186,7 @@ void decompressFile (
 		if ( strstr (buffer , "abridge_") )
 			read_names_stored = 1;
 		else read_names_stored = 0;
-		printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);
+		//printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);
 		if ( buffer[0] == '@' )
 		{
 			splitByDelimiter (buffer , '\t' , split_on_tab);
