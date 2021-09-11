@@ -3428,6 +3428,7 @@ void convertToAlignmentPairedEnded (
 		char **split_on_tab,
 		char **split_on_dash,
 		char **split_on_comma,
+		char **split_on_tilde,
 		char **read_names,
 		char *default_quality_value,
 		short int flag_save_scores,
