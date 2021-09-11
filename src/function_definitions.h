@@ -3636,6 +3636,7 @@ void convertToAlignmentSingleEnded (
 			sam_alignment_instance->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
 			strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+			printf ("\nEntering here");
 		}
 
 		printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
