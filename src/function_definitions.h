@@ -919,7 +919,7 @@ void convertIcigarToCigarandMDSingleEnded (
 	strcpy (sam_alignment_instance->tags[3].type , "i");
 	//strcpy (sam_alignment_instance->tags[3].val , "X");
 
-	sam_alignment_instance->number_of_tag_items = 3;
+	sam_alignment_instance->number_of_tag_items = 4;
 	sam_alignment_instance->md_extended[0] = '\0';
 	MD_extended_index = 0;
 
@@ -3631,7 +3631,6 @@ void convertToAlignmentSingleEnded (
 		splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 		strcpy (sam_alignment_instance->tags[0].val , split_on_dash[1]);
-		sam_alignment_instance->number_of_tag_items = 4;
 
 		if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
 		{
