@@ -3642,7 +3642,7 @@ void convertToAlignmentSingleEnded (
 				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 			}
 		}
-		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
+		printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
 		sam_alignment_instance->start_position = curr_position;
 
 		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
