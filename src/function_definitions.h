@@ -3305,7 +3305,7 @@ void writeAlignmentToFileSingleEnded (
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
 			strcat (line_to_be_written_to_file , "\t");
 		}
-		if ( flag_ignore_scores == 1 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
+		if ( flag_ignore_scores == 0 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
 		{
 			strcat (line_to_be_written_to_file , "AS:i:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[3].val);
@@ -3491,18 +3491,21 @@ void convertToAlignmentPairedEnded (
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 		if ( flag_ignore_scores == 0 )
-			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
-		else
+			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
+		else strcpy (split_on_tilde[0] , split_on_dash[0]);
+		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+
+		if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
 		{
-			if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
+			if ( flag_ignore_scores == 0 )
 			{
-				sam_alignment_instance->mapping_quality_score = strtol (split_on_dash[1] , &temp , 10);
-				strcpy (sam_alignment_instance->tags[3].val , split_on_dash[2]);
-				number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
+				sam_alignment_instance->mapping_quality_score = strtol (split_on_tilde[1] , &temp , 10);
+				strcpy (sam_alignment_instance->tags[3].val , split_on_tilde[2]);
 			}
 			else
 			{
-				number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
+				strcpy (sam_alignment_instance->mapping_quality_score , "255");
+				strcpy (sam_alignment_instance->tags[3].val , "X");
 			}
 		}
 		sam_alignment_instance->start_position = curr_position;
@@ -3525,7 +3528,7 @@ void convertToAlignmentPairedEnded (
 		}
 		else
 		{
-			strcpy (sam_alignment_instance->icigar , split_on_dash[0]);
+			strcpy (sam_alignment_instance->icigar , split_on_tilde[0]);
 			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
 			//fflush (stdout);
 			convertIcigarToCigarandMDPairedEnded (whole_genome , sam_alignment_instance , chromosome , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , default_quality_value , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
@@ -3629,15 +3632,23 @@ void convertToAlignmentSingleEnded (
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
-		splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
+		if ( flag_ignore_scores == 0 )
+			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
+		else strcpy (split_on_tilde[0] , split_on_dash[0]);
 		number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] , &temp , 10);
 
 		if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
 		{
-			sam_alignment_instance->mapping_quality_score = strtol (split_on_tilde[1] , &temp , 10);
-			strcpy (sam_alignment_instance->tags[3].val , split_on_tilde[2]);
-			//number_of_repititions_of_the_same_reads = strtol (split_on_dash[3] , &temp , 10);
-			//printf ("\nEntering here");
+			if ( flag_ignore_scores == 0 )
+			{
+				sam_alignment_instance->mapping_quality_score = strtol (split_on_tilde[1] , &temp , 10);
+				strcpy (sam_alignment_instance->tags[3].val , split_on_tilde[2]);
+			}
+			else
+			{
+				strcpy (sam_alignment_instance->mapping_quality_score , "255");
+				strcpy (sam_alignment_instance->tags[3].val , "X");
+			}
 		}
 
 		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
@@ -3680,12 +3691,6 @@ void convertToAlignmentSingleEnded (
 			( *read_number )++;
 			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		/*
-		 if ( strcmp (chromosome , "Pt" == 0) )
-		 {
-		 printSamAlignmentInstance (sam_alignment_instance , 0);
-		 fflush (stdout);
-		 }*/
 		fflush (stdout);
 		//printSamAlignmentInstance (sam_alignment_instance , 0);
 		writeAlignmentToFileSingleEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , read_names , flag_ignore_scores);
