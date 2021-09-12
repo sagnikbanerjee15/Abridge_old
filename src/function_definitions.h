@@ -3504,7 +3504,7 @@ void convertToAlignmentPairedEnded (
 			}
 			else
 			{
-				strcpy (sam_alignment_instance->mapping_quality_score , "255");
+				sam_alignment_instance->mapping_quality_score = 255;
 				strcpy (sam_alignment_instance->tags[3].val , "X");
 			}
 		}
@@ -3646,7 +3646,7 @@ void convertToAlignmentSingleEnded (
 			}
 			else
 			{
-				strcpy (sam_alignment_instance->mapping_quality_score , "255");
+				sam_alignment_instance->mapping_quality_score = 255;
 				strcpy (sam_alignment_instance->tags[3].val , "X");
 			}
 		}
