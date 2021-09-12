@@ -276,7 +276,7 @@ void performColumnWiseRLE (
 	 * Merge the RLE together and remove the intermediate files
 	 */
 
-	fhw = open (output_quality_score_filename , "w");
+	fhw = fopen (output_quality_score_filename , "w");
 	for ( i = 0 ; i < max_read_length ; i++ )
 	{
 		sprintf(str , "%ld" , i);
