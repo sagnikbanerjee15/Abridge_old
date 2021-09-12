@@ -280,6 +280,11 @@ def checkSAMAlignments(options,logging):
             sys.exit()
 
 def cleanUp(options):
+    # Remove the genome files
+    genome_filename_without_location = options.genome.split("/")[-1]
+    options.genome = f"{options.output_directory}/{genome_filename_without_location}"
+    os.system(f"rm -rf {options.genome}*")
+    
     return
     for file in options.files_for_removal:
         cmd=f"rm -rf {file}"
@@ -765,14 +770,6 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         
-        files_to_be_removed.append(f"{pass1_outputfilename}.br")
-        files_to_be_removed.append(f"{unmapped_outputfilename}.br")
-        files_to_be_removed.append(f"{pass1_index_outputfilename}.br")
-        files_to_be_removed.append(f"{genome_sha512_filename}.br")
-        files_to_be_removed.append(f"{name_of_file_dictionary}.br")
-        files_to_be_removed.append(f"{name_of_file_with_quality_scores}.br")
-        files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle.br")
-        files_to_be_removed.append(f"{options.output_directory}/compression_method")
     
     ######################################################################################
     # Medium compression (--2) using 7z
@@ -803,7 +800,6 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
-        files_to_be_removed.append(f"{options.output_directory}/compression_method")
     
     ######################################################################################
     # Best compression (--3) using zpaq
@@ -854,9 +850,18 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
             
-        files_to_be_removed.append(f"{options.output_directory}/compression_method")
-        files_to_be_removed.append(f"{options.outputfilename}.zpaq")
+    files_to_be_removed.append(f"{options.output_directory}/compression_method")
+    files_to_be_removed.append(f"{options.outputfilename}.zpaq")
     
+    files_to_be_removed.append(f"{pass1_outputfilename}.br")
+    files_to_be_removed.append(f"{unmapped_outputfilename}.br")
+    files_to_be_removed.append(f"{pass1_index_outputfilename}.br")
+    files_to_be_removed.append(f"{genome_sha512_filename}.br")
+    files_to_be_removed.append(f"{name_of_file_dictionary}.br")
+    files_to_be_removed.append(f"{name_of_file_with_quality_scores}.br")
+    files_to_be_removed.append(f"{name_of_file_with_quality_scores}.rle.br")
+    files_to_be_removed.append(f"{options.output_directory}/compression_method")
+    files_to_be_removed.append(f"{name_of_file_with_quality_scores_rle}.br")
             
     files_to_be_removed.append(f"{pass1_outputfilename}")
     files_to_be_removed.append(f"{unmapped_outputfilename}")
