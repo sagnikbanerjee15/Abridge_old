@@ -257,11 +257,6 @@ void performColumnWiseRLE (
 				qsRLE[i]->frequency++;
 			else
 			{
-				/*if ( line_number == 11 )
-				 {
-				 printf ("\nEntering here when i=%d" , i);
-				 }*/
-
 				if ( qsRLE[i]->frequency > 1 )
 				{
 					sprintf(str , "%lld" , qsRLE[i]->frequency);
@@ -269,10 +264,7 @@ void performColumnWiseRLE (
 				}
 				count_max_reads_each_position[i] += qsRLE[i]->frequency;
 				fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
-				/*if ( line_number == 11 )
-				 {
-				 printf ("\nWriting to file i=%d %c" , i , qsRLE[i]->score_character + 31);
-				 }*/
+				printf ("\n %c %c" , qsRLE[i]->score_character , qsRLE[i]->score_character + 26);
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = qual_score[i];
 			}
