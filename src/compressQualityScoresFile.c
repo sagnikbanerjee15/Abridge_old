@@ -243,24 +243,27 @@ void performColumnWiseRLE (
 				qsRLE[i]->frequency++;
 			else
 			{
-				if ( line_number == 11 )
+				/*if ( line_number == 11 )
+				 {
+				 printf ("\nEntering here when i=%d" , i);
+				 }*/
+				if ( qsRLE[i]->score_character != 'z' )
 				{
-					printf ("\nEntering here when i=%d" , i);
+					if ( qsRLE[i]->frequency > 1 )
+					{
+						sprintf(str , "%lld" , qsRLE[i]->frequency);
+						fprintf (fhw_each_position[i] , "%s" , str);
+					}
+					count_max_reads_each_position[i] += qsRLE[i]->frequency;
+					fputc (qsRLE[i]->score_character + 31 , fhw_each_position[i]);
 				}
-				if ( qsRLE[i]->frequency > 1 )
-				{
-					sprintf(str , "%lld" , qsRLE[i]->frequency);
-					fprintf (fhw_each_position[i] , "%s" , str);
-				}
-				count_max_reads_each_position[i] += qsRLE[i]->frequency;
-				fputc (qsRLE[i]->score_character + 31 , fhw_each_position[i]);
-
-				if ( line_number == 11 )
-				{
-					printf ("\nWriting to file i=%d %c" , i , qsRLE[i]->score_character + 31);
-				}
+				/*if ( line_number == 11 )
+				 {
+				 printf ("\nWriting to file i=%d %c" , i , qsRLE[i]->score_character + 31);
+				 }*/
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
+
 				if ( qsRLE[i]->score_character + 31 == 'z' )
 					printf ("\nz found %c" , qsRLE[i]->score_character);
 			}
@@ -270,6 +273,17 @@ void performColumnWiseRLE (
 			printf ("\nZeros found in line_number %d i=%d" , line_number , i);
 			while ( i < max_read_length )
 			{
+				if ( qsRLE[i]->frequency > 1 )
+				{
+					sprintf(str , "%lld" , qsRLE[i]->frequency);
+					fprintf (fhw_each_position[i] , "%s" , str);
+				}
+				count_max_reads_each_position[i] += qsRLE[i]->frequency;
+				fputc (qsRLE[i]->score_character + 31 , fhw_each_position[i]);
+
+				qsRLE[i]->frequency = 1;
+				qsRLE[i]->score_character = 'z';
+
 				count_max_reads_each_position[i]++;
 				fputc ('z' , fhw_each_position[i]);
 				i++;
