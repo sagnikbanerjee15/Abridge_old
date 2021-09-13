@@ -218,79 +218,78 @@ void performColumnWiseRLE (
 		count_max_reads_each_position[i]++;
 	}
 
-	/*
-	 while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
-	 {
-	 //if ( line_number == 100 ) break;
-	 line_number++;
-	 splitByDelimiter (line , '\t' , split_on_tab);
-	 strcpy(qual_score , split_on_tab[0]);
-	 //printf ("\nCIGAR = %s" , split_on_tab[1]);
-	 expandMDString (split_on_tab[1] , change_indicator , line_number);
+	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
+	{
+		//if ( line_number == 100 ) break;
+		line_number++;
+		splitByDelimiter (line , '\t' , split_on_tab);
+		strcpy(qual_score , split_on_tab[0]);
+		//printf ("\nCIGAR = %s" , split_on_tab[1]);
+		expandMDString (split_on_tab[1] , change_indicator , line_number);
 
-	 if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
-	 {
-	 i = 0;
-	 j = strlen (change_indicator) - 1;
-	 while ( i < j )
-	 {
-	 temp = change_indicator[i];
-	 change_indicator[i++ ] = change_indicator[j];
-	 change_indicator[j-- ] = temp;
-	 }
-	 }
+		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
+		{
+			i = 0;
+			j = strlen (change_indicator) - 1;
+			while ( i < j )
+			{
+				temp = change_indicator[i];
+				change_indicator[i++ ] = change_indicator[j];
+				change_indicator[j-- ] = temp;
+			}
+		}
 
-	 //printf ("\n%s %d %s" , change_indicator , line_number , split_on_tab[1]);
+		//printf ("\n%s %d %s" , change_indicator , line_number , split_on_tab[1]);
 
-	 if ( strlen (qual_score) < max_read_length )
-	 {
-	 for ( i = strlen (qual_score) ; i < max_read_length ; i++ )
-	 {
-	 qual_score[i] = ' ';
-	 change_indicator[i] = '0';
-	 }
-	 qual_score[i] = '\0';
-	 change_indicator[i] = '\0';
-	 }
+		if ( strlen (qual_score) < max_read_length )
+		{
+			for ( i = strlen (qual_score) ; i < max_read_length ; i++ )
+			{
+				qual_score[i] = ' ';
+				change_indicator[i] = '0';
+			}
+			qual_score[i] = '\0';
+			change_indicator[i] = '\0';
+		}
 
-	 for ( i = 0 ; qual_score[i] != '\0' ; i++ )
-	 {
-	 if ( qual_score[i] != ' ' && qsRLE[i]->score_character == ' ' )
-	 change_indicator[i] = '0';
+		for ( i = 0 ; qual_score[i] != '\0' ; i++ )
+		{
+			if ( qual_score[i] != ' ' && qsRLE[i]->score_character == ' ' )
+				change_indicator[i] = '0';
 
-	 if ( qual_score[i] == ' ' && qsRLE[i]->score_character == ' ' )
-	 qsRLE[i]->frequency++;
-	 else if ( qual_score[i] != ' ' && ( qual_score[i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) ) )
-	 qsRLE[i]->frequency++;
-	 else
-	 {
-	 if ( qsRLE[i]->frequency > 1 )
-	 {
-	 sprintf(str , "%lld" , qsRLE[i]->frequency);
-	 fprintf (fhw_each_position[i] , "%s" , str);
-	 }
-	 count_max_reads_each_position[i] += qsRLE[i]->frequency;
-	 fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
-	 //printf ("\n %c %c" , qsRLE[i]->score_character , qsRLE[i]->score_character + 26);
-	 qsRLE[i]->frequency = 1;
-	 qsRLE[i]->score_character = qual_score[i];
-	 }
-	 }
-	 }
+			if ( qual_score[i] == ' ' && qsRLE[i]->score_character == ' ' )
+				qsRLE[i]->frequency++;
+			else if ( qual_score[i] != ' ' && ( qual_score[i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) ) )
+				qsRLE[i]->frequency++;
+			else
+			{
+				if ( qsRLE[i]->frequency > 1 )
+				{
+					sprintf(str , "%lld" , qsRLE[i]->frequency);
+					fprintf (fhw_each_position[i] , "%s" , str);
+				}
+				count_max_reads_each_position[i] += qsRLE[i]->frequency;
+				fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
+				//printf ("\n %c %c" , qsRLE[i]->score_character , qsRLE[i]->score_character + 26);
+				qsRLE[i]->frequency = 1;
+				qsRLE[i]->score_character = qual_score[i];
+			}
+		}
+	}
 
-	 for ( i = 0 ; i < max_read_length ; i++ )
-	 {
-	 if ( qsRLE[i]->frequency > 1 )
-	 {
-	 sprintf(str , "%lld" , qsRLE[i]->frequency);
-	 fprintf (fhw_each_position[i] , "%s" , str);
-	 }
-	 count_max_reads_each_position[i] += qsRLE[i]->frequency;
-	 fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
-	 fputc ('\n' , fhw_each_position[i]);
+	for ( i = 0 ; i < max_read_length ; i++ )
+	{
+		if ( qsRLE[i]->frequency > 1 )
+		{
+			sprintf(str , "%lld" , qsRLE[i]->frequency);
+			fprintf (fhw_each_position[i] , "%s" , str);
+		}
+		count_max_reads_each_position[i] += qsRLE[i]->frequency;
+		fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
+		fputc ('\n' , fhw_each_position[i]);
 
-	 }
-	 */
+	}
+
 	/*
 	 for ( i = 0 ; i < max_read_length ; i++ )
 	 printf ("\nMAX NUM READS IN POS %d %d" , i + 1 , count_max_reads_each_position[i]);
