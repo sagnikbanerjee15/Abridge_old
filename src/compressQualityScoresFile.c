@@ -302,28 +302,29 @@ void performColumnWiseRLE (
 	/*
 	 * Merge the RLE together and remove the intermediate files
 	 */
+	/*
+	 fhw = fopen (output_quality_score_filename , "w");
+	 for ( i = 0 ; i < max_read_length ; i++ )
+	 {
+	 sprintf(str , "%ld" , i);
+	 strcpy(output_filename_for_each_position , output_quality_score_filename);
+	 strcat(output_filename_for_each_position , str);
+	 //printf ("\nAttempting to read from %s" , output_filename_for_each_position);
+	 fhr = fopen (output_filename_for_each_position , "r");
+	 if ( fhr == NULL )
+	 {
+	 printf ("%s File cannot be opened for reading" , strcat(output_filename_for_each_position , str));
+	 exit (1);
+	 }
 
-	fhw = fopen (output_quality_score_filename , "w");
-	for ( i = 0 ; i < max_read_length ; i++ )
-	{
-		sprintf(str , "%ld" , i);
-		strcpy(output_filename_for_each_position , output_quality_score_filename);
-		strcat(output_filename_for_each_position , str);
-		//printf ("\nAttempting to read from %s" , output_filename_for_each_position);
-		fhr = fopen (output_filename_for_each_position , "r");
-		if ( fhr == NULL )
-		{
-			printf ("%s File cannot be opened for reading" , strcat(output_filename_for_each_position , str));
-			exit (1);
-		}
-
-		//Read the whole file
-		while ( ( temp = fgetc (fhr) ) != EOF )
-			fputc (temp , fhw);
-		fclose (fhr);
-		remove (output_filename_for_each_position);
-	}
-	fclose (fhw);
+	 //Read the whole file
+	 while ( ( temp = fgetc (fhr) ) != EOF )
+	 fputc (temp , fhw);
+	 fclose (fhr);
+	 remove (output_filename_for_each_position);
+	 }
+	 fclose (fhw);
+	 */
 
 }
 
