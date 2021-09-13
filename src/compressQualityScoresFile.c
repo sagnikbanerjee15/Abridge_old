@@ -236,7 +236,7 @@ void performColumnWiseRLE (
 			}
 		}
 
-		printf ("\n%d %s %s length = %d" , line_number , split_on_tab[1] , change_indicator , strlen (change_indicator));
+		printf ("\n%s %d %s length = %d" , change_indicator , line_number , split_on_tab[1] , strlen (change_indicator));
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
