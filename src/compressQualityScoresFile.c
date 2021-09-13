@@ -247,7 +247,7 @@ void performColumnWiseRLE (
 					fprintf (fhw_each_position[i] , "%s" , str);
 				}
 				count_max_reads_each_position[i] += qsRLE[i]->frequency;
-				fputc (qsRLE[i]->score_character + 30 , fhw_each_position[i]);
+				fputc (qsRLE[i]->score_character + 31 , fhw_each_position[i]);
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
 			}
@@ -257,7 +257,7 @@ void performColumnWiseRLE (
 			while ( i < max_read_length )
 			{
 				count_max_reads_each_position[i]++;
-				fputc ('X' , fhw_each_position[i]);
+				fputc ('z' , fhw_each_position[i]);
 				i++;
 			}
 		}
