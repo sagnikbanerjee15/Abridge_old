@@ -23,7 +23,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 
 	/********************************************************************/
 
-	printf ("\n%d %s" , val , icigar);
+	if ( val > 700000 ) printf ("\n%d %s" , val , icigar);
 	//extractNHfromicigar (icigar , strlen (icigar));
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
