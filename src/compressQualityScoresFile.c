@@ -318,13 +318,15 @@ void performColumnWiseRLE (
 		}
 
 		//Read the whole file
-		line = NULL;
-		len = 0;
-		line_len = getline ( &line , &len , fhr);
+		//line = NULL;
+		//len = 0;
+		//line_len = getline ( &line , &len , fhr);
 		//printf ("\nLine read: %s" , line);
 		//strcat(line , "\n");
-		fprintf (fhw , "%s" , line);
-		fprintf (fhw , "%s" , "\n");
+		while ( ( temp = fgetc (fhr) ) != EOF )
+			fputc (temp , fhw);
+		//fprintf (fhw , "%s" , line);
+		//fprintf (fhw , "%s" , "\n");
 		fclose (fhr);
 		//remove (output_filename_for_each_position);
 	}
