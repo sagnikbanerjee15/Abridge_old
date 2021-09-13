@@ -218,11 +218,12 @@ void performColumnWiseRLE (
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
+		if ( line_number == 100 ) break;
 		line_number++;
 		splitByDelimiter (line , '\t' , split_on_tab);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
-		//printf ("\n%d %s %s length = %d" , line_number , split_on_tab[1] , change_indicator , strlen (change_indicator));
+		printf ("\n%d %s %s length = %d" , line_number , split_on_tab[1] , change_indicator , strlen (change_indicator));
 
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
