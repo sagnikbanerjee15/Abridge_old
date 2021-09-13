@@ -239,14 +239,14 @@ void performColumnWiseRLE (
 			}
 		}
 
-		printf ("\n%s %d %s" , change_indicator , line_number , split_on_tab[1]);
+		//printf ("\n%s %d %s" , change_indicator , line_number , split_on_tab[1]);
 
 		/*
 		 * Append blank spaces of short sized reads
 		 */
 		if ( strlen (qual_score) < max_read_length )
 		{
-			printf ("\nAltering score for %d" , line_number);
+			//printf ("\nAltering score for %d" , line_number);
 			for ( i = strlen (qual_score) ; i < max_read_length ; i++ )
 				qual_score[i] = ' ';
 			qual_score[i] = '\0';
@@ -265,7 +265,7 @@ void performColumnWiseRLE (
 				}
 				count_max_reads_each_position[i] += qsRLE[i]->frequency;
 				fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
-				printf ("\n %c %c" , qsRLE[i]->score_character , qsRLE[i]->score_character + 26);
+				//printf ("\n %c %c" , qsRLE[i]->score_character , qsRLE[i]->score_character + 26);
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = qual_score[i];
 			}
