@@ -292,7 +292,7 @@ void performColumnWiseRLE (
 		strcat(line , "\n");
 		fprintf (fhw , "%s" , line);
 		fclose (fhr_each_position[i]);
-		remove (output_filename_for_each_position);
+		//remove (output_filename_for_each_position);
 	}
 	fclose (fhw);
 }
