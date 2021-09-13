@@ -259,7 +259,7 @@ void performColumnWiseRLE (
 
 		for ( i = 0 ; qual_score[i] != '\0' ; i++ )
 		{
-			if ( qual_score[i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
+			if ( qual_score[i] != ' ' && ( qual_score[i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) ) )
 				qsRLE[i]->frequency++;
 			else
 			{
