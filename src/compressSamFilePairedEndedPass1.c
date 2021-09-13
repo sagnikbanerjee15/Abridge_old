@@ -226,7 +226,6 @@ void writeToFile (
 					if ( returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar , samformatflag_replacer_characters) , samflag_dictionary , number_of_unique_samformatflags) == '-' )
 						fprintf (fhw_qual , "%s" , "2");
 					else fprintf (fhw_qual , "%s" , "1");
-					printf ("\nI am here %c" , returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar , samformatflag_replacer_characters) , samflag_dictionary , number_of_unique_samformatflags));
 				}
 				fprintf (fhw_qual , "%s" , "\n");
 			}
