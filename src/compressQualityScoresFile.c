@@ -45,6 +45,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 				num = num * 10 + icigar[i] - 48;
 				i++;
 			}
+			if ( icigar[i] == '\0' ) break;
 			if ( icigar[i] != 'N' && icigar[i] != 'D' )
 			{
 				if ( icigar[i] == 'I' || icigar[i] == 'S' )
