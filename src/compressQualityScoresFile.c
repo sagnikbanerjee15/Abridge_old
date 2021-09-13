@@ -223,7 +223,7 @@ void performColumnWiseRLE (
 		splitByDelimiter (line , '\t' , split_on_tab);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
-		printf ("\n%d %s" , line_number , change_indicator);
+		printf ("\n%d %s length = %d" , line_number , change_indicator , strlen (change_indicator));
 
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
