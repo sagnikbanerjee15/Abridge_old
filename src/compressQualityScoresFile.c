@@ -236,13 +236,17 @@ void performColumnWiseRLE (
 			}
 		}
 
-		printf ("\n%s %d %s length = %d" , change_indicator , line_number , split_on_tab[1] , strlen (change_indicator));
+		printf ("\n%s %d %s" , change_indicator , line_number , split_on_tab[1]);
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
 				qsRLE[i]->frequency++;
 			else
 			{
+				if ( line_number == 11 )
+				{
+					printf ("\nEntering here when i=%d" , i);
+				}
 				if ( qsRLE[i]->frequency > 1 )
 				{
 					sprintf(str , "%lld" , qsRLE[i]->frequency);
@@ -252,6 +256,7 @@ void performColumnWiseRLE (
 				fputc (qsRLE[i]->score_character + 31 , fhw_each_position[i]);
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
+
 				if ( qsRLE[i]->score_character + 31 == 'z' )
 					printf ("\nz found %c" , qsRLE[i]->score_character);
 			}
