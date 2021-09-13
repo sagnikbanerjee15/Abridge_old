@@ -218,7 +218,7 @@ void performColumnWiseRLE (
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
-		if ( line_number == 100 ) break;
+		//if ( line_number == 100 ) break;
 		line_number++;
 		splitByDelimiter (line , '\t' , split_on_tab);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
