@@ -183,7 +183,7 @@ void performColumnWiseRLE (
 		}
 	}
 
-	qsRLE = ( struct Quality_Score_RLE** ) malloc (sizeof(struct Quality_Score_RLE*) * max_read_length);
+	qsRLE = ( struct Quality_Score_RLE** ) malloc (sizeof(struct Quality_Score_RLE*) * ( max_read_length + 5 ));
 	for ( i = 0 ; i < max_read_length ; i++ )
 		qsRLE[i] = allocateMemoryQuality_Score_RLE ();
 
@@ -199,9 +199,9 @@ void performColumnWiseRLE (
 
 	split_on_tab = ( char** ) malloc (sizeof(char*) * 5);
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_tab[i] = ( char* ) malloc (sizeof(char) * max_read_length);
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * ( max_read_length + 5 ));
 	change_indicator = ( char* ) malloc (sizeof(char) * ( max_read_length + 5 ));
-	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * max_read_length);
+	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * ( max_read_length + 5 ));
 	for ( i = 0 ; i < max_read_length ; i++ )
 		count_max_reads_each_position[i] = 0;
 	/********************************************************************/
@@ -279,18 +279,18 @@ void performColumnWiseRLE (
 			}
 		}
 	}
+	/*
+	 for ( i = 0 ; i < max_read_length ; i++ )
+	 {
+	 if ( qsRLE[i]->frequency > 1 )
+	 {
+	 sprintf(str , "%lld" , qsRLE[i]->frequency);
+	 fprintf (fhw_each_position[i] , "%s" , str);
+	 }
+	 count_max_reads_each_position[i] += qsRLE[i]->frequency;
+	 fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
 
-	for ( i = 0 ; i < max_read_length ; i++ )
-	{
-		if ( qsRLE[i]->frequency > 1 )
-		{
-			sprintf(str , "%lld" , qsRLE[i]->frequency);
-			fprintf (fhw_each_position[i] , "%s" , str);
-		}
-		count_max_reads_each_position[i] += qsRLE[i]->frequency;
-		fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
-
-	}
+	 }*/
 	/*
 	 for ( i = 0 ; i < max_read_length ; i++ )
 	 printf ("\nMAX NUM READS IN POS %d %d" , i + 1 , count_max_reads_each_position[i]);
