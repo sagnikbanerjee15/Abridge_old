@@ -109,7 +109,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	 fflush (stdout);
 	 }
 	 */
-	if ( val > 700000 ) printf (" Returning %d" , val);
+	//if ( val > 700000 ) printf (" Returning %d" , val);
 }
 
 void performColumnWiseRLE (
