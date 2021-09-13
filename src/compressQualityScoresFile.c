@@ -220,6 +220,7 @@ void performColumnWiseRLE (
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
+		printf ("\nProcessing line %s" , line);
 		//if ( line_number == 100 ) break;
 		line_number++;
 		splitByDelimiter (line , '\t' , split_on_tab);
