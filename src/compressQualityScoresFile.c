@@ -40,7 +40,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 		{
 			num = icigar[i] - 48;
 			i++;
-			while ( isdigit (icigar[i]) != 0 )
+			while ( isdigit (icigar[i]) != 0 && icigar[i] != '\0' )
 			{
 				num = num * 10 + icigar[i] - 48;
 				i++;
