@@ -279,18 +279,18 @@ void performColumnWiseRLE (
 			}
 		}
 	}
-	/*
-	 for ( i = 0 ; i < max_read_length ; i++ )
-	 {
-	 if ( qsRLE[i]->frequency > 1 )
-	 {
-	 sprintf(str , "%lld" , qsRLE[i]->frequency);
-	 fprintf (fhw_each_position[i] , "%s" , str);
-	 }
-	 count_max_reads_each_position[i] += qsRLE[i]->frequency;
-	 fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
 
-	 }*/
+	for ( i = 0 ; i < max_read_length ; i++ )
+	{
+		if ( qsRLE[i]->frequency > 1 )
+		{
+			sprintf(str , "%lld" , qsRLE[i]->frequency);
+			fprintf (fhw_each_position[i] , "%s" , str);
+		}
+		count_max_reads_each_position[i] += qsRLE[i]->frequency;
+		fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
+
+	}
 	/*
 	 for ( i = 0 ; i < max_read_length ; i++ )
 	 printf ("\nMAX NUM READS IN POS %d %d" , i + 1 , count_max_reads_each_position[i]);
