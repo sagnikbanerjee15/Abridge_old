@@ -248,8 +248,12 @@ void performColumnWiseRLE (
 		{
 			printf ("\nAltering score for %d" , line_number);
 			for ( i = strlen (qual_score) ; i < max_read_length ; i++ )
+			{
 				qual_score[i] = ' ';
+				change_indicator[i] = '0';
+			}
 			qual_score[i] = '\0';
+			change_indicator[i] = '\0';
 			printf ("\n%s %d" , qual_score , strlen (qual_score));
 		}
 
