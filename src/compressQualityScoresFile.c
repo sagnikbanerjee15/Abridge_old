@@ -252,6 +252,8 @@ void performColumnWiseRLE (
 				fputc (qsRLE[i]->score_character + 31 , fhw_each_position[i]);
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
+				if ( qsRLE[i]->score_character + 31 == 'z' )
+					printf ("\nz found %c" , qsRLE[i]->score_character);
 			}
 		}
 		if ( i < max_read_length )
