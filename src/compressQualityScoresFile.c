@@ -38,7 +38,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 			default:
 				continue;
 		}
-		if ( isdigit (icigar[i]) != 0 )
+		if ( isdigit (icigar[i]) != 0 ) // icigar[i] is numeric
 		{
 			num = icigar[i] - 48;
 			i++;
@@ -223,6 +223,7 @@ void performColumnWiseRLE (
 		splitByDelimiter (line , '\t' , split_on_tab);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
+		printf ("\n%d %s" , line_number , change_indicator);
 
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
