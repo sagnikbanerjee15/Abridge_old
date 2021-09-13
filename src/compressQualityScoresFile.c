@@ -319,7 +319,7 @@ void performColumnWiseRLE (
 		}
 
 		//Read the whole file
-		line_len = getline ( &line , &len , fhr);
+		//line_len = getline ( &line , &len , fhr);
 		printf ("\nLine read: %s" , line);
 		//strcat(line , "\n");
 		fprintf (fhw , "%s" , line);
