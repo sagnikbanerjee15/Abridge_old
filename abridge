@@ -874,10 +874,10 @@ def compressSamFile(options):
     
     files_to_be_removed.extend(delete_these_files)
     files_to_be_removed.extend(other_files)
-    
+    """
     for file in files_to_be_removed:
         os.system("rm -f "+file)
-    
+    """
         
           
 def findEndedness(options,logging):
