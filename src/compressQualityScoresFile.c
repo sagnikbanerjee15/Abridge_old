@@ -227,7 +227,7 @@ void performColumnWiseRLE (
 		strcpy(qual_score , split_on_tab[0]);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
-
+		continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
 			i = 0;
