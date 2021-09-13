@@ -254,9 +254,13 @@ void performColumnWiseRLE (
 				}
 				count_max_reads_each_position[i] += qsRLE[i]->frequency;
 				fputc (qsRLE[i]->score_character + 31 , fhw_each_position[i]);
+
+				if ( line_number == 11 )
+				{
+					printf ("\nWriting to file i=%d %c" , i , qsRLE[i]->score_character + 31);
+				}
 				qsRLE[i]->frequency = 1;
 				qsRLE[i]->score_character = split_on_tab[0][i];
-
 				if ( qsRLE[i]->score_character + 31 == 'z' )
 					printf ("\nz found %c" , qsRLE[i]->score_character);
 			}
