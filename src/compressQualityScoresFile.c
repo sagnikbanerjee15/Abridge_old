@@ -223,6 +223,7 @@ void performColumnWiseRLE (
 		line_number++;
 		splitByDelimiter (line , '\t' , split_on_tab);
 		strcpy(qual_score , split_on_tab[0]);
+		printf ("\n%s" , qual_score);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
 
