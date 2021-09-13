@@ -322,7 +322,7 @@ void performColumnWiseRLE (
 		long fsize = ftell (fhr);
 		rewind (fhr);
 
-		char *string_from_file = malloc (fsize + 1);
+		char *string_from_file = ( char* ) malloc (sizeof(char) * ( fsize + 1 ));
 		fread (string_from_file , 1 , fsize , fhr);
 		fclose (fhr);
 
