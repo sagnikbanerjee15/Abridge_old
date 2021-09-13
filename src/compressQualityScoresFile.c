@@ -245,6 +245,7 @@ void performColumnWiseRLE (
 		 */
 		if ( strlen (qual_score) < max_read_length )
 		{
+			printf ("\nAltering score for %d" , line_number);
 			for ( i = strlen (qual_score) ; i < max_read_length ; i++ )
 				qual_score[i] = ' ';
 			qual_score[i] = '\0';
