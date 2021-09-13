@@ -256,6 +256,7 @@ void performColumnWiseRLE (
 		}
 		if ( i < max_read_length )
 		{
+			printf ("\nZeros found in line_number %d i=%d" , line_number , i);
 			while ( i < max_read_length )
 			{
 				count_max_reads_each_position[i]++;
