@@ -22,6 +22,8 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	 ********************************************************************/
 
 	/********************************************************************/
+
+	printf ("\n%s" , icigar);
 	//extractNHfromicigar (icigar , strlen (icigar));
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
