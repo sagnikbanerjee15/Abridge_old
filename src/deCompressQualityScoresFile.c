@@ -95,7 +95,7 @@ void convertRLEtoQualValues (
 					num = num * 10 + line[i] - 48;
 					i++;
 				}
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 26;
 				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = num;
 				number_of_quality_scores_in_current_position_index++;
 				//quality_score_position_max[i]++;
@@ -103,7 +103,7 @@ void convertRLEtoQualValues (
 			}
 			else
 			{
-				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 30;
+				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].quality_score = line[i] - 26;
 				rle_quality_scores[rle_quality_scores_index][number_of_quality_scores_in_current_position_index].frequency = 1;
 				number_of_quality_scores_in_current_position_index++;
 				//quality_score_position_max[i]++;
