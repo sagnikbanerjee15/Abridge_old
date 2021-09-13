@@ -320,7 +320,7 @@ void performColumnWiseRLE (
 		//Read the whole file
 		fseek (fhr , 0 , SEEK_END);
 		long fsize = ftell (fhr);
-		rewinf (fhr);
+		rewind (fhr);
 
 		char *string_from_file = malloc (fsize + 1);
 		fread (string_from_file , 1 , fsize , fhr);
