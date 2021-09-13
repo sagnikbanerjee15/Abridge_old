@@ -289,6 +289,7 @@ void performColumnWiseRLE (
 		}
 		count_max_reads_each_position[i] += qsRLE[i]->frequency;
 		fputc (qsRLE[i]->score_character + 26 , fhw_each_position[i]);
+		fputc ('\n' , fhw_each_position[i]);
 
 	}
 	/*
@@ -318,19 +319,9 @@ void performColumnWiseRLE (
 		}
 
 		//Read the whole file
-		fseek (fhr , 0 , SEEK_END);
-		long fsize = ftell (fhr);
-		rewind (fhr);
-
-		char *string_from_file = ( char* ) malloc (sizeof(char) * ( fsize + 1 ));
-		fread (string_from_file , 1 , fsize , fhr);
-		fclose (fhr);
-
-		string_from_file[fsize] = '\0';
-
-		//getline ( &line , &len , fhr);
+		getline ( &line , &len , fhr);
 		//strcat(line , "\n");
-		fprintf (fhw , "%s" , string_from_file);
+		fprintf (fhw , "%s" , line);
 		fprintf (fhw , "%s" , "\n");
 		fclose (fhr);
 		remove (output_filename_for_each_position);
