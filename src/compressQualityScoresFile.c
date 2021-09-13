@@ -109,6 +109,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	 fflush (stdout);
 	 }
 	 */
+	printf (" Returning %s" , val);
 }
 
 void performColumnWiseRLE (
