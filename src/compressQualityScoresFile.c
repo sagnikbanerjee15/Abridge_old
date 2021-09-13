@@ -223,7 +223,6 @@ void performColumnWiseRLE (
 		splitByDelimiter (line , '\t' , split_on_tab);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		expandMDString (split_on_tab[1] , change_indicator , line_number);
-		printf ("\n%d %s %s length = %d" , line_number , split_on_tab[1] , change_indicator , strlen (change_indicator));
 
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
@@ -236,6 +235,8 @@ void performColumnWiseRLE (
 				change_indicator[j-- ] = temp;
 			}
 		}
+
+		printf ("\n%d %s %s length = %d" , line_number , split_on_tab[1] , change_indicator , strlen (change_indicator));
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 		{
 			if ( split_on_tab[0][i] == qsRLE[i]->score_character || ( save_exact_quality_scores == 0 && change_indicator[i] == '1' ) )
