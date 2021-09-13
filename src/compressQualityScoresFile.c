@@ -311,6 +311,7 @@ void performColumnWiseRLE (
 		sprintf(str , "%ld" , i);
 		strcpy(output_filename_for_each_position , output_quality_score_filename);
 		strcat(output_filename_for_each_position , str);
+		printf ("\nAttempting to read from %s" , output_filename_for_each_position);
 		fhr = fopen (output_filename_for_each_position , "r");
 		if ( fhr == NULL )
 		{
