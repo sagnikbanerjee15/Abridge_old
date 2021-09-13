@@ -35,8 +35,6 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 			case 'n':
 				change_indicator[change_indicator_index++ ] = '0';
 				break;
-			default:
-				continue;
 		}
 		if ( isdigit (icigar[i]) != 0 ) // icigar[i] is numeric
 		{
