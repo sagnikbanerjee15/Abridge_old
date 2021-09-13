@@ -316,9 +316,22 @@ void performColumnWiseRLE (
 			printf ("%s File cannot be opened for reading" , strcat(output_filename_for_each_position , str));
 			exit (1);
 		}
-		getline ( &line , &len , fhr);
+
+		//Read the whole file
+		fseek (fhr , 0 , SEEK_END);
+		long fsize = ftell (fhr);
+		rewinf (fhr);
+
+		char *string_from_file = malloc (fsize + 1);
+		fread (string_from_file , 1 , fsize , fhr);
+		fclose (fhr);
+
+		string_from_file[fsize] = '\0';
+
+		//getline ( &line , &len , fhr);
 		//strcat(line , "\n");
-		fprintf (fhw , "%s" , line);
+		fprintf (fhw , "%s" , string_from_file);
+		fprintf (fhw , "%s" , "\n");
 		fclose (fhr);
 		remove (output_filename_for_each_position);
 	}
