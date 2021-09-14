@@ -125,6 +125,7 @@ void writeToFile (
 	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 	char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 	int num_of_types;
+	char investigate_qual[1000] = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFF:FFFFFFFFFFFFFFFF,FFFFFFFFF:FFFFFFFF:FFFFFFFFFF";
 
 	line_to_be_written_to_file[0] = '\0';
 	list_of_read_names[0] = '\0';
@@ -179,6 +180,10 @@ void writeToFile (
 					fprintf (fhw_qual , "%s" , "\t");
 					if ( flag_ignore_soft_clippings == 1 )
 					{
+						if ( strcmp (qual , investigate_qual) == 0 )
+						{
+							printSamAlignmentInstance (compressed_ds_pool[i] , 0);
+						}
 						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
 						if ( cigar_items_instance[0].def == 'S' ) // Left soft clip exists
 						{
