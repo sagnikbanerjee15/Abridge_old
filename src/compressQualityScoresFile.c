@@ -6,7 +6,11 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void expandMDString (char *icigar, char *change_indicator, int val)
+void expandMDString (
+		char *icigar,
+		char *change_indicator,
+		int val,
+		int max_read_length)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -28,7 +32,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
 	{
-		if ( i >= change_indicator_index )
+		if ( change_indicator_index > max_read_length )
 		{
 			printf ("\n%s change_indicator_index=%d i=%d" , icigar , change_indicator_index , i);
 			return;
@@ -235,7 +239,7 @@ void performColumnWiseRLE (
 		strcpy(qual_score , split_on_tab[0]);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 
-		expandMDString (split_on_tab[1] , change_indicator , line_number);
+		expandMDString (split_on_tab[1] , change_indicator , line_number , max_read_length);
 		//continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
