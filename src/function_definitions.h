@@ -1390,6 +1390,7 @@ void designIntegratedCIGARS (
 	{
 		printf ("\nInside designIntegratedCIGARS");
 		printf ("\nLengths do not match %d %d %d %s" , strlen (soft_clips_removed_qual) , strlen (md_extended) , strlen (seq) , cigar);
+		printf ("\n%s" , md);
 		printf ("\n%s" , seq);
 		printf ("\n");
 		for ( i = 0 ; soft_clips_removed_qual[i] != '\0' ; i++ )
