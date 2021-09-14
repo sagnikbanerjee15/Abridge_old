@@ -90,6 +90,7 @@ void reInitializeSamAlignmentInstance (struct Sam_Alignment *s)
 	s->temp[0] = '\0';
 	s->cigar_extended[0] = '\0';
 	s->icigar[0] = '\0';
+	s->cigar[0] = '\0';
 	s->md_extended[0] = '\0';
 	s->soft_clips_removed_seq[0] = '\0';
 	s->soft_clippings.left[0] = '\0';
