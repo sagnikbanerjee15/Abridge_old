@@ -28,9 +28,9 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
 	{
-		if ( i >= strlen (change_indicator) )
+		if ( i >= change_indicator_index )
 		{
-			printf ("\n%s %d" , icigar , i);
+			printf ("\n%s change_indicator_index=%d i=%d" , icigar , change_indicator_index , i);
 			return;
 		}
 		switch ( icigar[i] )
