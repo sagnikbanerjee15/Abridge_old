@@ -28,6 +28,11 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	num = 0;
 	for ( i = 0 ; icigar[i] != '\0' ; i++ )
 	{
+		if ( i >= strlen (change_indicator) )
+		{
+			printf ("\n%s %d" , icigar , i);
+			return;
+		}
 		switch ( icigar[i] )
 		{
 			case 'a':
@@ -109,7 +114,7 @@ void expandMDString (char *icigar, char *change_indicator, int val)
 	 fflush (stdout);
 	 }
 	 */
-	//if ( val > 700000 ) printf (" Returning %d" , val);
+//if ( val > 700000 ) printf (" Returning %d" , val);
 }
 
 void performColumnWiseRLE (
@@ -134,7 +139,7 @@ void performColumnWiseRLE (
 	char str[1000];
 	char *line;
 	char *output_filename_for_each_position;
-	//char **lines_to_be_written_to_file;
+//char **lines_to_be_written_to_file;
 	char **split_on_tab;
 	char *change_indicator;
 	char *qual_score;
@@ -223,7 +228,7 @@ void performColumnWiseRLE (
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
-		printf ("%d Processing line %s" , line_number , line);
+		//printf ("%d Processing line %s" , line_number , line);
 		//if ( line_number == 100 ) break;
 		line_number++;
 		splitByDelimiter (line , '\t' , split_on_tab);
