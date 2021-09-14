@@ -34,7 +34,7 @@ void expandMDString (
 	{
 		if ( change_indicator_index > max_read_length )
 		{
-			printf ("\n%s change_indicator_index=%d i=%d" , icigar , change_indicator_index , i);
+			printf ("\n%s change_indicator_index=%d i=%d line_number=%d" , icigar , change_indicator_index , i , val);
 			return;
 		}
 		switch ( icigar[i] )
