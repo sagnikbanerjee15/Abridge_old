@@ -238,7 +238,7 @@ void performColumnWiseRLE (
 		splitByDelimiter (line , '\t' , split_on_tab);
 		strcpy(qual_score , split_on_tab[0]);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
-
+		continue;
 		expandMDString (split_on_tab[1] , change_indicator , line_number , max_read_length);
 		continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
