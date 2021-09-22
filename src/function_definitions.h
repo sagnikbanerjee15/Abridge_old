@@ -297,12 +297,12 @@ int splitByDelimiter (char *line, char delimiter, char **new_string)
 
 	for ( i = 0 ; line[i] != '\0' ; i++ )
 	{
-		printf ("\nsplitByDelimiter i=%i" , i);
+		//printf ("\nsplitByDelimiter i=%i" , i);
 		// if space or NULL found, assign NULL into new_string[ctr]
 		if ( line[i] == delimiter )
 		{
 			new_string[ctr][j] = '\0';
-			printf ("\nsplitByDelimiter ctr=%i" , ctr);
+			//printf ("\nsplitByDelimiter ctr=%i" , ctr);
 			ctr++; //for next word
 			j = 0; //for next word, init index to 0
 		}
@@ -310,7 +310,7 @@ int splitByDelimiter (char *line, char delimiter, char **new_string)
 			continue;
 		else
 		{
-			printf ("\nsplitByDelimiter j=%i" , j);
+			//printf ("\nsplitByDelimiter j=%i" , j);
 			new_string[ctr][j] = line[i];
 			j++;
 		}
