@@ -229,7 +229,11 @@ void performColumnWiseRLE (
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
-		if ( line_number != 7392981 ) continue;
+		if ( line_number != 7392981 )
+		{
+			line_number++;
+			continue;
+		}
 		printf ("Entering");
 		if ( line_number > 7392900 )
 		{
