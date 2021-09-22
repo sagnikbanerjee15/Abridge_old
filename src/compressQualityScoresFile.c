@@ -229,7 +229,7 @@ void performColumnWiseRLE (
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
-		if ( line_number != 7392981 )
+		if ( line_number < 7392900 )
 		{
 			line_number++;
 			continue;
