@@ -208,10 +208,10 @@ void performColumnWiseRLE (
 
 	split_on_tab = ( char** ) malloc (sizeof(char*) * 5);
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_tab[i] = ( char* ) malloc (sizeof(char) * ( max_read_length + 50 ));
-	change_indicator = ( char* ) malloc (sizeof(char) * ( max_read_length + 5 ));
-	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * ( max_read_length + 5 ));
-	for ( i = 0 ; i < max_read_length ; i++ )
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * ( max_read_length * 5 ));
+	change_indicator = ( char* ) malloc (sizeof(char) * ( max_read_length * 5 ));
+	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * ( max_read_length * 5 ));
+	for ( i = 0 ; i < max_read_length * 5 ; i++ )
 		count_max_reads_each_position[i] = 0;
 	/********************************************************************/
 
