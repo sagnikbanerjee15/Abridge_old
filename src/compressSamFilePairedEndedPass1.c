@@ -185,6 +185,7 @@ void writeToFile (
 							printf ("\nMatch found");
 							printf ("\nCIGAR: %s" , compressed_ds_pool[i]->cigar);
 							printf ("\niCIGAR: %s" , compressed_ds_pool[i]->icigar);
+							fflush (stdout);
 						}
 						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
 						if ( cigar_items_instance[0].def == 'S' ) // Left soft clip exists
