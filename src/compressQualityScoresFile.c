@@ -235,12 +235,12 @@ void performColumnWiseRLE (
 		if ( line_number > 7392900 )
 			printf ("\n%d Processing line %s" , line_number , line);
 		//if ( line_number == 100 ) break;
-		line_number++;
 		splitByDelimiter (line , '\t' , split_on_tab);
 		strcpy(qual_score , split_on_tab[0]);
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		expandMDString (split_on_tab[1] , change_indicator , line_number , max_read_length);
 		if ( line_number > 7392900 ) printf ("\nReturning %d" , line_number);
+		line_number++;
 		continue;
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
