@@ -476,7 +476,9 @@ cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_3*
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_3*/*7z_compression.error|grep Exit|sort|uniq
 
 
+Compression
 
+(/usr/bin/time --verbose  abridge  --keep_intermediate_error_files  --compress  --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa  --inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge//SRR12077404_PE.sam  --output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge//SRR12077404_PE_compress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_1_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_1_save_exact_quality_scores_0  --level 1  --ignore_soft_clippings  --save_all_quality_scores )  1>> /project/maizegdb/sagnik/ABRIDGE/developing_abridge//SRR12077404_PE_compress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_1_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_1_save_exact_quality_scores_0.output  2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge//SRR12077404_PE_compress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_1_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_1_save_exact_quality_scores_0.error 
 
 =====================
 SINGLE ENDED RANDOM 1
