@@ -182,7 +182,8 @@ void writeToFile (
 					{
 						if ( strcmp (qual , investigate_qual) == 0 )
 						{
-							printSamAlignmentInstance (compressed_ds_pool[i] , 0);
+							printf ("\nCIGAR: %s" , compressed_ds_pool[i]->cigar);
+							printf ("\niCIGAR: %s" , compressed_ds_pool[i]->icigar);
 						}
 						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
 						if ( cigar_items_instance[0].def == 'S' ) // Left soft clip exists
