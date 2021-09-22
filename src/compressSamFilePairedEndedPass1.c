@@ -188,7 +188,7 @@ void writeToFile (
 							fflush (stdout);
 						}
 						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-						if ( cigar_items_instance[0].def == 'S' ) // Left soft clip exists
+						if ( cigar_items_instance[0].def == 'S' && compressed_ds_pool[i]->icigar[1] != '\0' ) // Left soft clip exists
 						{
 							sprintf(str , "%ld" , cigar_items_instance[0].len);
 							fprintf (fhw_qual , "%s" , str);
@@ -223,7 +223,7 @@ void writeToFile (
 					if ( flag_ignore_soft_clippings == 1 )
 					{
 						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-						if ( cigar_items_instance[num_of_types - 1].def == 'S' ) // Right soft clip exists
+						if ( cigar_items_instance[num_of_types - 1].def == 'S' && compressed_ds_pool[i]->icigar[1] != '\0' ) // Right soft clip exists
 						{
 							sprintf(str , "%ld" , cigar_items_instance[num_of_types - 1].len);
 							fprintf (fhw_qual , "%s" , str);
