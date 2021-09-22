@@ -64,13 +64,13 @@ void expandMDString (
 					while ( num-- )
 					{
 						change_indicator[change_indicator_index++ ] = '0';
-						/*
-						 if ( val == 3540189 )
-						 {
-						 printf ("\n2.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-						 fflush (stdout);
-						 }
-						 */
+
+						if ( val == 7392981 )
+						{
+							printf ("\n2.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+							fflush (stdout);
+						}
+
 					}
 				}
 				else
@@ -78,46 +78,46 @@ void expandMDString (
 					while ( num-- )
 					{
 						change_indicator[change_indicator_index++ ] = '1';
-						/*
-						 if ( val == 3540189 )
-						 {
-						 printf ("\n3.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-						 fflush (stdout);
-						 }
-						 */
+
+						if ( val == 7392981 )
+						{
+							printf ("\n3.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+							fflush (stdout);
+						}
+
 					}
 				}
 			}
-			/*
-			 if ( val == 3540189 )
-			 {
-			 printf ("\n4.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-			 fflush (stdout);
-			 }
-			 */
+
+			if ( val == 7392981 )
+			{
+				printf ("\n4.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+				fflush (stdout);
+			}
+
 		}
 		else if ( isCharacterInString (insert_characters , icigar[i]) || isCharacterInString (mismatch_characters , icigar[i]) )
 		{
 			change_indicator[change_indicator_index++ ] = '0';
-			/*
-			 if ( val == 3540189 )
-			 {
-			 printf ("\n5.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-			 fflush (stdout);
-			 }
-			 */
+
+			if ( val == 7392981 )
+			{
+				printf ("\n5.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+				fflush (stdout);
+			}
+
 		}
 	}
 	change_indicator[change_indicator_index++ ] = '\0';
-	/*
-	 if ( val == 3540189 )
-	 {
-	 printf ("\n6.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-	 fflush (stdout);
-	 printf ("\nReturning");
-	 fflush (stdout);
-	 }
-	 */
+
+	if ( val == 7392981 )
+	{
+		printf ("\n6.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+		fflush (stdout);
+		printf ("\nReturning");
+		fflush (stdout);
+	}
+
 //if ( val > 700000 ) printf (" Returning %d" , val);
 }
 
