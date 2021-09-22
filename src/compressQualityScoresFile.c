@@ -117,8 +117,6 @@ void expandMDString (
 		printf ("\nReturning");
 		fflush (stdout);
 	}
-
-//if ( val > 700000 ) printf (" Returning %d" , val);
 }
 
 void performColumnWiseRLE (
@@ -143,7 +141,6 @@ void performColumnWiseRLE (
 	char str[1000];
 	char *line;
 	char *output_filename_for_each_position;
-//char **lines_to_be_written_to_file;
 	char **split_on_tab;
 	char *change_indicator;
 	char *qual_score;
@@ -232,6 +229,7 @@ void performColumnWiseRLE (
 
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
 	{
+		if ( line_number != 7392981 ) continue;
 		if ( line_number > 7392900 )
 		{
 			printf ("\n%d Processing line %s" , line_number , line);
