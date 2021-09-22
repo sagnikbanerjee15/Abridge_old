@@ -208,7 +208,7 @@ void performColumnWiseRLE (
 
 	split_on_tab = ( char** ) malloc (sizeof(char*) * 5);
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_tab[i] = ( char* ) malloc (sizeof(char) * ( max_read_length + 5 ));
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * ( max_read_length * 20 ));
 	change_indicator = ( char* ) malloc (sizeof(char) * ( max_read_length + 5 ));
 	count_max_reads_each_position = ( int* ) malloc (sizeof(int) * ( max_read_length + 5 ));
 	for ( i = 0 ; i < max_read_length ; i++ )
@@ -239,7 +239,7 @@ void performColumnWiseRLE (
 			printf ("\n%d Processing line %s" , line_number , line);
 			fflush (stdout);
 		}
-		//splitByDelimiter (line , '\t' , split_on_tab);
+		splitByDelimiter (line , '\t' , split_on_tab);
 		//strcpy(qual_score , split_on_tab[0]);
 
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
