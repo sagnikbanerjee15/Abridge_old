@@ -182,6 +182,7 @@ void writeToFile (
 					{
 						if ( strcmp (qual , investigate_qual) == 0 )
 						{
+							printf ("\nMatch found");
 							printf ("\nCIGAR: %s" , compressed_ds_pool[i]->cigar);
 							printf ("\niCIGAR: %s" , compressed_ds_pool[i]->icigar);
 						}
