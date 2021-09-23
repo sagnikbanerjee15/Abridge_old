@@ -112,8 +112,8 @@ void expandMDString (
 
 	if ( val == 7392981 )
 	{
-		printf ("\n6.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-		printf ("\nChange indicator %s" , change_indicator);
+		printf ("\n6.change_indicator_index = %d %s i=%d " , change_indicator_index , icigar , i);
+		printf ("\nChange indicator %s length %d" , change_indicator , strlen (change_indicator));
 		fflush (stdout);
 	}
 }
@@ -244,9 +244,9 @@ void performColumnWiseRLE (
 		//strcpy(qual_score , split_on_tab[0]);
 		if ( line_number > 7392900 )
 		{
-			printf ("\nsplit_on_tab[0] = %s" , split_on_tab[0]);
-			printf ("\nsplit_on_tab[1] = %s" , split_on_tab[1]);
-			printf ("\nsplit_on_tab[2] = %s" , split_on_tab[2]);
+			printf ("\nsplit_on_tab[0] = %s %d" , split_on_tab[0] , strlen (split_on_tab[0]));
+			printf ("\nsplit_on_tab[1] = %s %d" , split_on_tab[1] , strlen (split_on_tab[1]));
+			printf ("\nsplit_on_tab[2] = %s %d" , split_on_tab[2] , strlen (split_on_tab[2]));
 		}
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		change_indicator[0] = '\0';
