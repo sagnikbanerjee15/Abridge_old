@@ -241,9 +241,14 @@ void performColumnWiseRLE (
 			printf ("\n%d Processing line %s" , line_number , line);
 			fflush (stdout);
 		}
-		//splitByDelimiter (line , '\t' , split_on_tab);
+		splitByDelimiter (line , '\t' , split_on_tab);
 		//strcpy(qual_score , split_on_tab[0]);
-
+		if ( line_number > 7392900 )
+		{
+			printf ("\nsplit_on_tab[0] = %s" , split_on_tab[0]);
+			printf ("\nsplit_on_tab[1] = %s" , split_on_tab[1]);
+			printf ("\nsplit_on_tab[2] = %s" , split_on_tab[2]);
+		}
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		change_indicator[0] = '\0';
 		expandMDString (split_on_tab[1] , change_indicator , line_number , max_read_length);
