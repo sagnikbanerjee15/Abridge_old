@@ -246,7 +246,7 @@ void performColumnWiseRLE (
 
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		change_indicator[0] = '\0';
-		expandMDString (split_on_tab[1] , change_indicator , line_number , max_read_length);
+		//expandMDString (split_on_tab[1] , change_indicator , line_number , max_read_length);
 		if ( line_number > 7392900 )
 		{
 			printf ("\nReturning %d" , line_number);
