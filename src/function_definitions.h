@@ -318,6 +318,10 @@ int splitByDelimiter (char *line, char delimiter, char **new_string)
 		{
 			printf ("\nctr exceeded 5 ctr = %d" , ctr);
 		}
+		if ( j >= 150 * 5 )
+		{
+			printf ("\nj exceeded j = %d" , j);
+		}
 	}
 	new_string[ctr][j] = '\0';
 	return ctr + 1;
