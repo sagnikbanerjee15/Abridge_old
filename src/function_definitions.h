@@ -314,6 +314,10 @@ int splitByDelimiter (char *line, char delimiter, char **new_string)
 			new_string[ctr][j] = line[i];
 			j++;
 		}
+		if ( ctr > 5 )
+		{
+			printf ("\nctr exceeded 5 ctr = %d" , ctr);
+		}
 	}
 	new_string[ctr][j] = '\0';
 	return ctr + 1;
