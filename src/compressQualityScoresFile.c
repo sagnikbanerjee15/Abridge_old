@@ -241,7 +241,7 @@ void performColumnWiseRLE (
 			printf ("\n%d Processing line %s" , line_number , line);
 			fflush (stdout);
 		}
-		//splitByDelimiter (line , '\t' , split_on_tab);
+		splitByDelimiter (line , '\t' , split_on_tab);
 		//strcpy(qual_score , split_on_tab[0]);
 
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
