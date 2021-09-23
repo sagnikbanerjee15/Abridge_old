@@ -113,8 +113,7 @@ void expandMDString (
 	if ( val == 7392981 )
 	{
 		printf ("\n6.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-		fflush (stdout);
-		printf ("\nReturning");
+		printf ("\nChange indicator %s" , change_indicator);
 		fflush (stdout);
 	}
 }
@@ -259,6 +258,7 @@ void performColumnWiseRLE (
 		}
 		line_number++;
 		continue;
+
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
 			i = 0;
