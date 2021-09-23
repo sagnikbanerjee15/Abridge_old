@@ -254,6 +254,7 @@ void performColumnWiseRLE (
 		if ( line_number > 7392900 )
 		{
 			printf ("\nReturning %d" , line_number);
+			printf ("\n======================================================================");
 			fflush (stdout);
 		}
 		line_number++;
