@@ -180,13 +180,13 @@ void writeToFile (
 					fprintf (fhw_qual , "%s" , "\t");
 					if ( flag_ignore_soft_clippings == 1 )
 					{
-						if ( strcmp (qual , investigate_qual) == 0 )
-						{
-							printf ("\nMatch found");
-							printf ("\nCIGAR: %s" , compressed_ds_pool[i]->cigar);
-							printf ("\niCIGAR: %s" , compressed_ds_pool[i]->icigar);
-							fflush (stdout);
-						}
+						/*if ( strcmp (qual , investigate_qual) == 0 )
+						 {
+						 printf ("\nMatch found");
+						 printf ("\nCIGAR: %s" , compressed_ds_pool[i]->cigar);
+						 printf ("\niCIGAR: %s" , compressed_ds_pool[i]->icigar);
+						 fflush (stdout);
+						 }*/
 						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
 						if ( cigar_items_instance[0].def == 'S' && compressed_ds_pool[i]->icigar[1] != '\0' ) // Left soft clip exists
 						{

@@ -65,11 +65,11 @@ void expandMDString (
 					{
 						change_indicator[change_indicator_index++ ] = '0';
 
-						if ( val == 7392981 )
-						{
-							printf ("\n2.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-							fflush (stdout);
-						}
+						/*if ( val == 7392981 )
+						 {
+						 printf ("\n2.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+						 fflush (stdout);
+						 }*/
 
 					}
 				}
@@ -79,43 +79,42 @@ void expandMDString (
 					{
 						change_indicator[change_indicator_index++ ] = '1';
 
-						if ( val == 7392981 )
-						{
-							printf ("\n3.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-							fflush (stdout);
-						}
-
+						/*if ( val == 7392981 )
+						 {
+						 printf ("\n3.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+						 fflush (stdout);
+						 }*/
 					}
 				}
 			}
 
-			if ( val == 7392981 )
-			{
-				printf ("\n4.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-				fflush (stdout);
-			}
+			/*if ( val == 7392981 )
+			 {
+			 printf ("\n4.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+			 fflush (stdout);
+			 }*/
 
 		}
 		else if ( isCharacterInString (insert_characters , icigar[i]) || isCharacterInString (mismatch_characters , icigar[i]) )
 		{
 			change_indicator[change_indicator_index++ ] = '0';
 
-			if ( val == 7392981 )
-			{
-				printf ("\n5.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
-				fflush (stdout);
-			}
+			/*if ( val == 7392981 )
+			 {
+			 printf ("\n5.change_indicator_index = %d %s i=%d" , change_indicator_index , icigar , i);
+			 fflush (stdout);
+			 }*/
 
 		}
 	}
 	change_indicator[change_indicator_index++ ] = '\0';
 
-	if ( val == 7392981 )
-	{
-		printf ("\n6.change_indicator_index = %d %s i=%d " , change_indicator_index , icigar , i);
-		printf ("\nChange indicator %s length %d" , change_indicator , strlen (change_indicator));
-		fflush (stdout);
-	}
+	/*if ( val == 7392981 )
+	 {
+	 printf ("\n6.change_indicator_index = %d %s i=%d " , change_indicator_index , icigar , i);
+	 printf ("\nChange indicator %s length %d" , change_indicator , strlen (change_indicator));
+	 fflush (stdout);
+	 }*/
 }
 
 void performColumnWiseRLE (
@@ -235,19 +234,19 @@ void performColumnWiseRLE (
 		 continue;
 		 }*/
 
-		if ( line_number > 7392900 )
-		{
-			printf ("\n%d Processing line %s" , line_number , line);
-			fflush (stdout);
-		}
+		/*if ( line_number > 7392900 )
+		 {
+		 printf ("\n%d Processing line %s" , line_number , line);
+		 fflush (stdout);
+		 }*/
 		splitByDelimiter (line , '\t' , split_on_tab);
-		//strcpy(qual_score , split_on_tab[0]);
-		if ( line_number > 7392900 )
-		{
-			printf ("\nsplit_on_tab[0] = %s %d" , split_on_tab[0] , strlen (split_on_tab[0]));
-			printf ("\nsplit_on_tab[1] = %s %d" , split_on_tab[1] , strlen (split_on_tab[1]));
-			printf ("\nsplit_on_tab[2] = %s %d" , split_on_tab[2] , strlen (split_on_tab[2]));
-		}
+		strcpy(qual_score , split_on_tab[0]);
+		/*if ( line_number > 7392900 )
+		 {
+		 printf ("\nsplit_on_tab[0] = %s %d" , split_on_tab[0] , strlen (split_on_tab[0]));
+		 printf ("\nsplit_on_tab[1] = %s %d" , split_on_tab[1] , strlen (split_on_tab[1]));
+		 printf ("\nsplit_on_tab[2] = %s %d" , split_on_tab[2] , strlen (split_on_tab[2]));
+		 }*/
 		//printf ("\nCIGAR = %s" , split_on_tab[1]);
 		change_indicator[0] = '\0';
 		expandMDString (split_on_tab[1] , change_indicator , line_number , max_read_length);
@@ -258,7 +257,7 @@ void performColumnWiseRLE (
 			fflush (stdout);
 		}
 		line_number++;
-		continue;
+		//continue;
 
 		if ( strcmp (split_on_tab[2] , "2") == 0 ) // Reverse the change indicator
 		{
