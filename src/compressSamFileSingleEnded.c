@@ -354,8 +354,22 @@ void reModeliCIGARSSingleEnded (
 			}
 		}
 	}
-	if ( compressed_ds_pool_rearranged_index != compressed_ds_pool_index )
-		printf ("Trouble");
+	if ( change_flag == 1 )
+	{
+		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+		{
+			printf ("\n%s %s" , compressed_ds_pool[i]->cigar , compressed_ds_pool_rearranged[i]->cigar);
+			printf ("\n%s %s" , compressed_ds_pool[i]->icigar , compressed_ds_pool_rearranged[i]->icigar);
+			printf ("\n%d %d" , compressed_ds_pool[i]->num_reads , compressed_ds_pool_rearranged[i]->num_reads);
+			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
+				printf ("\n%s" , compressed_ds_pool[i]->pointers_to_qual_scores[j]);
+			printf ("\n----------------------------------------------------------------------------");
+			for ( j = 0 ; j < compressed_ds_pool_rearranged[i]->num_reads ;
+					j++ )
+				printf ("\n%s" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]);
+		}
+		printf ("\n=============================================================================");
+	}
 	/*
 	 printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
 	 if ( compressed_ds_pool_index > 25000 )
