@@ -345,6 +345,7 @@ void reModeliCIGARSSingleEnded (
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[j]->position;
 				for ( k = 0 ; k < compressed_ds_pool[j]->num_reads ; k++ )
 				{
+					printf ("\nEntering here");
 					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] = compressed_ds_pool[j]->pointers_to_qual_scores[k];
 					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_read_names[k] = compressed_ds_pool[j]->pointers_to_read_names[k];
 				}
