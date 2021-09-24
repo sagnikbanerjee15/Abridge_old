@@ -90,7 +90,7 @@ struct Compressed_DS
 	char *icigar;
 	char **pointers_to_qual_scores;
 	long int num_reads;
-	long long int position;
+	unsigned long long int position;
 	char **pointers_to_read_names;
 };
 

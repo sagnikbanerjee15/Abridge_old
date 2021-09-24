@@ -62,15 +62,18 @@ void writeToFile (
 		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance)
 {
-	int i, j, k, l;
+	int i, j, k, l, m;
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
 	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 	char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
+	char list_of_qual_scores[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 	int num_of_types;
+	int qual_score_length, cigar_length;
 
 	line_to_be_written_to_file[0] = '\0';
 	list_of_read_names[0] = '\0';
+	list_of_qual_scores[0] = '\0';
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
 		if ( i == 0 )
@@ -105,6 +108,8 @@ void writeToFile (
 		{
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 			{
+				qual_score_length = 0;
+				cigar_length = 0;
 				switch ( findMatchCharacterIcigar (compressed_ds_pool[i]->icigar) )
 				{
 					case 'B':
@@ -135,8 +140,13 @@ void writeToFile (
 						break;
 				}
 				fprintf (fhw_qual , "%s" , qual);
+				qual_score_length = strlen (qual);
 				if ( flag_save_exact_quality_scores == 0 )
 				{
+					splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+					for ( m = 0 ; m < num_of_types ; m++ )
+						cigar_length = cigar_items_instance[m].len;
+
 					fprintf (fhw_qual , "%s" , "\t");
 					if ( flag_ignore_soft_clippings == 1 )
 					{

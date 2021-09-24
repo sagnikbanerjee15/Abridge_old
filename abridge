@@ -162,7 +162,7 @@ def validateCommandLineArguments(options):
         options.ignore_quality_scores = True
         
     options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
-    options.softwares["compressSamFileSingleEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass1"
+    options.softwares["compressSamFileSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEnded"
     options.softwares["compressSamFileSingleEndedPass2"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass2"
     options.softwares["compressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEnded"
     options.softwares["splitSamFileIntoEachReferenceSequence"] = "/".join(abridge_location.split("/")[:-1])+"/src/splitSamFileIntoEachReferenceSequence"
@@ -178,7 +178,7 @@ def validateCommandLineArguments(options):
     options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
     #options.softwares["separateReadsMatePairTogetherAndMatePairAway"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateReadsMatePairTogetherAndMatePairAway"
     #options.softwares["modifyReadNamesPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/modifyReadNamesPairedEnded"
-    options.softwares["compressSamFilePairedEndedPass1"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEndedPass1"
+    options.softwares["compressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEnded"
     options.softwares["decompressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFilePairedEnded"
     options.softwares["generateCoverage"] = "/".join(abridge_location.split("/")[:-1])+"/src/generateCoverage"
     options.softwares["findMaximumNumberOfReadsInEachLine"] = "/".join(abridge_location.split("/")[:-1])+"/src/findMaximumNumberOfReadsInEachLine"
@@ -303,16 +303,16 @@ def constructFileNames(input_filename,options):
     name_of_total_number_of_alignments_file = f"{options.output_directory}/{name_of_input_file_without_location}_total_number_of_alignments"
     frequency_of_flags_filename = f"{options.output_directory}/{name_of_input_file_without_location}_frequency_of_flags"
     
-    pass1_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_pass1"
-    pass1_index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_pass1_index"
+    _outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_"
+    _index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}__index"
     unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_unmapped"
     name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}_qual"
     name_of_file_with_quality_scores_rle = f"{options.output_directory}/{name_of_input_file_without_location}_qual_rle"
     name_of_file_dictionary = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
     
     error_file_max_input_reads = f"{name_of_max_input_reads_file}.error"
-    error_file_compress_pass1 = f"{pass1_outputfilename}_compress.error"
-    error_file_prep_abridge_index = f"{pass1_index_outputfilename}.error"
+    error_file_compress_ = f"{_outputfilename}_compress.error"
+    error_file_prep_abridge_index = f"{_index_outputfilename}.error"
     error_file_qual_rle = f"{name_of_file_with_quality_scores_rle}.error"
     
     error_file_7z_compression = f"{options.error_directory}/{name_of_input_file_without_location}_7z_compression.error"
@@ -326,8 +326,8 @@ def constructFileNames(input_filename,options):
     
     
     delete_these_files = [name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename]
-    other_files = [pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary]
-    error_files = [error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression]
+    other_files = [_outputfilename, _index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary]
+    error_files = [error_file_max_input_reads, error_file_compress_, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression]
     #compressed_files = [compressed_abridged_filename_br,compressed_abridged_filename_zpaq]
     return  delete_these_files, other_files, error_files
 
@@ -340,8 +340,8 @@ def compressSamFile(options):
     name_of_input_file_without_location = input_filename.split("/")[-1] 
     delete_these_files, other_files, error_files = constructFileNames(input_filename,options) 
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
-    pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary = other_files
-    error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression = error_files
+    _outputfilename, _index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary = other_files
+    error_file_max_input_reads, error_file_compress_, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression = error_files
     #compressed_abridged_filename_7z, compressed_abridged_filename_br,compressed_abridged_filename_zpaq = compressed_files
     
     if options.single_ended == True:
@@ -349,14 +349,14 @@ def compressSamFile(options):
         ######################################################################################
         # Compiling programs - will be removed during final version
         ######################################################################################
-        compressSamFileSingleEndedPass1 = options.softwares["compressSamFileSingleEndedPass1"]
+        compressSamFileSingleEnded = options.softwares["compressSamFileSingleEnded"]
         maxReadsMappedToSingleNucleotide = options.softwares["maxReadsMappedToSingleNucleotide"]
         buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
         compressQualityScoresFile = options.softwares["compressQualityScoresFile"]
         deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
         
         if options.compile_programs == True:
-            cmd=f"gcc {compressSamFileSingleEndedPass1}.c -o {compressSamFileSingleEndedPass1} -Ofast"
+            cmd=f"gcc {compressSamFileSingleEnded}.c -o {compressSamFileSingleEnded} -Ofast"
             if options.quiet == False:
                 logging.info(f"Running command - {cmd}")
             os.system(cmd)
@@ -409,26 +409,26 @@ def compressSamFile(options):
         #pool.map(runCommand,all_commands)
         
         ######################################################################################
-        # Pass1 run
+        #  run
         ######################################################################################
         all_commands = []
         #for input_filename in options.inputsamfilenames:
         input_filename = options.inputsamfilenames
         if options.quiet == False:
-            logging.info(f"Starting Pass1 for {input_filename}")
+            logging.info(f"Starting  for {input_filename}")
         max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
         if options.quiet == False:
             logging.info(f"{name_of_input_file_without_location} max_input_reads_in_a_single_nucl_loc = {max_input_reads_in_a_single_nucl_loc}")
             
         cmd  = f"(/usr/bin/time --verbose "
-        cmd += f"{compressSamFileSingleEndedPass1}" # argv[0] - name of the program
+        cmd += f"{compressSamFileSingleEnded}" # argv[0] - name of the program
         cmd += f" {options.genome}" # argv[1] - genome_filename
         cmd += f" {options.ignore_soft_clippings}" #argv[2]
         cmd += f" {options.ignore_mismatches} " #argv[3]
         cmd += f" {options.ignore_quality_score_flag} " #argv[4]
         cmd += f" {options.ignore_unmapped_reads} " #argv[5]
         cmd += f" {input_filename} " #argv[6] - Input samfile
-        cmd += f" {pass1_outputfilename} " #argv[7] - Output filename
+        cmd += f" {_outputfilename} " #argv[7] - Output filename
         cmd += f" {unmapped_outputfilename} " #argv[8] - Filename for unmapped reads
         if options.run_diagnostics==True:
             cmd += f" 1" # argv[9] - run diagnostics
@@ -452,7 +452,7 @@ def compressSamFile(options):
         cmd += f") "
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_compress_pass1}"
+            cmd += f"2> {error_file_compress_}"
         else:
             cmd += f"2> /dev/null"
         
@@ -497,7 +497,7 @@ def compressSamFile(options):
             logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
         
         cmd  = f"(/usr/bin/time --verbose "
-        cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 0 "
+        cmd += f"{buildABRIDGEIndex} {_outputfilename} {name_of_file_with_quality_scores} {_index_outputfilename} {max_commas} 0 "
         if options.ignore_scores == True:
             cmd += f" 1 " #argv[15] - save_scores = False
         else:
@@ -521,7 +521,7 @@ def compressSamFile(options):
         # Compiling programs - will be removed during final version
         ######################################################################################
         maxReadsMappedToSingleNucleotide = options.softwares["maxReadsMappedToSingleNucleotide"]
-        compressSamFilePairedEndedPass1 = options.softwares["compressSamFilePairedEndedPass1"]
+        compressSamFilePairedEnded = options.softwares["compressSamFilePairedEnded"]
         buildABRIDGEIndex = options.softwares["buildABRIDGEIndex"]
         compressQualityScoresFile = options.softwares["compressQualityScoresFile"]
         deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
@@ -543,7 +543,7 @@ def compressSamFile(options):
             if options.quiet == False:
                 logging.info(f"Running command - {cmd}")
             os.system(cmd)
-            cmd=f"gcc {compressSamFilePairedEndedPass1}.c -o {compressSamFilePairedEndedPass1} -Ofast"
+            cmd=f"gcc {compressSamFilePairedEnded}.c -o {compressSamFilePairedEnded} -Ofast"
             if options.quiet == False:
                 logging.info(f"Running command - {cmd}")
             os.system(cmd)
@@ -559,7 +559,7 @@ def compressSamFile(options):
         #for input_filename in options.inputsamfilenames:
         input_filename = options.inputsamfilenames
         if options.quiet == False:
-            logging.info(f"Starting Pass1 for {input_filename}")
+            logging.info(f"Starting  for {input_filename}")
         
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" {maxReadsMappedToSingleNucleotide} "
@@ -598,7 +598,7 @@ def compressSamFile(options):
         #for input_filename in options.inputsamfilenames:
         input_filename = options.inputsamfilenames
         if options.quiet == False:
-            logging.info(f"Starting Pass1 for {input_filename}")
+            logging.info(f"Starting  for {input_filename}")
         
         max_input_reads_in_a_single_nucl_loc = int(open(name_of_max_input_reads_file,"r").read().strip())
         if options.quiet == False:
@@ -613,14 +613,14 @@ def compressSamFile(options):
             logging.info(f"{name_of_input_file_without_location} max_read_length = {max_read_length}")
         
         cmd  = f"(/usr/bin/time --verbose "
-        cmd += f" {compressSamFilePairedEndedPass1}" # argv[0] - name of the program
+        cmd += f" {compressSamFilePairedEnded}" # argv[0] - name of the program
         cmd += f" {options.genome}" # argv[1] - genome_filename
         cmd += f" {options.ignore_soft_clippings}" #argv[2]
         cmd += f" {options.ignore_mismatches} " #argv[3]
         cmd += f" {options.ignore_quality_score_flag} " #argv[4]
         cmd += f" {options.ignore_unmapped_reads} " #argv[5]
         cmd += f" {input_filename} " #argv[6] - Input samfile
-        cmd += f" {pass1_outputfilename} " #argv[7] - Output filename
+        cmd += f" {_outputfilename} " #argv[7] - Output filename
         cmd += f" {unmapped_outputfilename} " #argv[8] - Filename for unmapped reads
         if options.run_diagnostics==True:
             cmd += f" 1" # argv[9] - run diagnostics
@@ -648,7 +648,7 @@ def compressSamFile(options):
         cmd += f") "
         #cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_compress_pass1}"
+            cmd += f"2> {error_file_compress_}"
         else:
             cmd += f"2> /dev/null"
         
@@ -690,7 +690,7 @@ def compressSamFile(options):
             logging.info(f"{name_of_input_file_without_location} max_commas = {max_commas}")
         
         cmd  = f"(/usr/bin/time --verbose "
-        cmd += f"{buildABRIDGEIndex} {pass1_outputfilename} {name_of_file_with_quality_scores} {pass1_index_outputfilename} {max_commas} 1 "
+        cmd += f"{buildABRIDGEIndex} {_outputfilename} {name_of_file_with_quality_scores} {_index_outputfilename} {max_commas} 1 "
         if options.ignore_scores == True:
             cmd += f" 1 " 
         else:
@@ -730,7 +730,7 @@ def compressSamFile(options):
             logging.info("Starting compression with brotli")
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" brotli -9 -f -k -n "
-        cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
+        cmd += f" {_outputfilename} {unmapped_outputfilename} {_index_outputfilename} {genome_sha512_filename} "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
@@ -754,7 +754,7 @@ def compressSamFile(options):
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt=1  "
         cmd += f" {options.outputfilename} " # Compressed Output filename
-        cmd += f" {pass1_outputfilename}.br {unmapped_outputfilename}.br {pass1_index_outputfilename}.br {genome_sha512_filename}.br {options.output_directory}/compression_method "
+        cmd += f" {_outputfilename}.br {unmapped_outputfilename}.br {_index_outputfilename}.br {genome_sha512_filename}.br {options.output_directory}/compression_method "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary}.br "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
@@ -784,7 +784,7 @@ def compressSamFile(options):
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" 7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt=1 "
         cmd += f" {options.outputfilename} " # Compressed Output filename
-        cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} {options.output_directory}/compression_method "
+        cmd += f" {_outputfilename} {unmapped_outputfilename} {_index_outputfilename} {genome_sha512_filename} {options.output_directory}/compression_method "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
@@ -817,7 +817,7 @@ def compressSamFile(options):
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" {zpaq} a "
         cmd += f" {options.outputfilename}.zpaq "
-        cmd += f" {pass1_outputfilename} {unmapped_outputfilename} {pass1_index_outputfilename} {genome_sha512_filename} "
+        cmd += f" {_outputfilename} {unmapped_outputfilename} {_index_outputfilename} {genome_sha512_filename} "
         if options.single_ended == False:
             cmd += f" {name_of_file_dictionary} "
         if options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
@@ -853,9 +853,9 @@ def compressSamFile(options):
     files_to_be_removed.append(f"{options.output_directory}/compression_method")
     files_to_be_removed.append(f"{options.outputfilename}.zpaq")
     
-    files_to_be_removed.append(f"{pass1_outputfilename}.br")
+    files_to_be_removed.append(f"{_outputfilename}.br")
     files_to_be_removed.append(f"{unmapped_outputfilename}.br")
-    files_to_be_removed.append(f"{pass1_index_outputfilename}.br")
+    files_to_be_removed.append(f"{_index_outputfilename}.br")
     files_to_be_removed.append(f"{genome_sha512_filename}.br")
     files_to_be_removed.append(f"{name_of_file_dictionary}.br")
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}.br")
@@ -863,9 +863,9 @@ def compressSamFile(options):
     files_to_be_removed.append(f"{options.output_directory}/compression_method")
     files_to_be_removed.append(f"{name_of_file_with_quality_scores_rle}.br")
             
-    files_to_be_removed.append(f"{pass1_outputfilename}")
+    files_to_be_removed.append(f"{_outputfilename}")
     files_to_be_removed.append(f"{unmapped_outputfilename}")
-    files_to_be_removed.append(f"{pass1_index_outputfilename}")
+    files_to_be_removed.append(f"{_index_outputfilename}")
     files_to_be_removed.append(f"{genome_sha512_filename}")
     files_to_be_removed.append(f"{name_of_file_dictionary}")
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
@@ -937,8 +937,8 @@ def mergeAbridgeData(options):
     all_commands = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-11]
-        pass1_filename = options.output_directory + "/" + input_filename_without_extension + ".pass1"
-        pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
+        _filename = options.output_directory + "/" + input_filename_without_extension + "."
+        _index_filename = options.output_directory + "/" + input_filename_without_extension+ "..index"
         unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
         compressed_abridged_filename = input_filename
         
@@ -949,8 +949,8 @@ def mergeAbridgeData(options):
         all_commands.append([cmd,"dummy"])
     
         files_to_be_removed.extend([input_filename_without_extension,
-                                    pass1_filename,
-                                    pass1_index_filename,
+                                    _filename,
+                                    _index_filename,
                                     unmapped_outputfilename])
     pool.map(runCommand,all_commands)
     
@@ -971,8 +971,8 @@ def mergeAbridgeData(options):
     all_chromosomes = []
     for input_filename in options.inputabrfilenames:
         input_filename_without_extension = input_filename.split("/")[-1][:-11]
-        pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
-        all_chromosomes.extend(findChromosomes(pass1_index_filename))
+        _index_filename = options.output_directory + "/" + input_filename_without_extension+ "..index"
+        all_chromosomes.extend(findChromosomes(_index_filename))
     all_chromosomes=list(set(all_chromosomes))
     all_chromosomes=sorted(all_chromosomes)
     """print(all_chromosomes)
@@ -984,12 +984,12 @@ def mergeAbridgeData(options):
         cmd=mergeCompressedFilesSingleEnded
         for input_filename in options.inputabrfilenames:
             input_filename_without_extension = input_filename.split("/")[-1][:-11]
-            pass1_filename = options.output_directory + "/" + input_filename_without_extension + ".pass1"
-            pass1_index_filename = options.output_directory + "/" + input_filename_without_extension+ ".pass1.index"
+            _filename = options.output_directory + "/" + input_filename_without_extension + "."
+            _index_filename = options.output_directory + "/" + input_filename_without_extension+ "..index"
             unmapped_outputfilename = options.output_directory + "/" + input_filename_without_extension + ".unmapped"
             compressed_abridged_filename = input_filename
             
-            cmd+=" "+pass1_filename
+            cmd+=" "+_filename
         cmd+=" "+merged_output_filename
         cmd+=" "+chromosome
         all_commands.append([cmd,"dummy"]) 
@@ -1022,8 +1022,8 @@ def decompressSamFile(options):
     name_of_input_file_without_location = input_filename.split("/")[-1] 
     delete_these_files, other_files, error_files = constructFileNames(input_filename,options) 
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
-    pass1_outputfilename, pass1_index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary = other_files
-    error_file_max_input_reads, error_file_compress_pass1, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression = error_files
+    _outputfilename, _index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary = other_files
+    error_file_max_input_reads, error_file_compress_, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression = error_files
     
     cmd=f"samtools faidx {options.genome}"
     if os.path.exists(f"{options.genome}.fai")==False:
@@ -1078,8 +1078,8 @@ def decompressSamFile(options):
     compressor = open(f"{options.output_directory}/compression_method","r").read()
     if compressor == "brotli":
         cmd  = f"brotli -d -k -f "
-        cmd += f"{pass1_outputfilename}.br "
-        cmd += f"{pass1_index_outputfilename}.br "
+        cmd += f"{_outputfilename}.br "
+        cmd += f"{_index_outputfilename}.br "
         cmd += f"{unmapped_outputfilename}.br "
         if os.path.exists(f"{name_of_file_with_quality_scores_rle}.br") == True:
             cmd += f"{name_of_file_with_quality_scores_rle}.br "
@@ -1087,7 +1087,7 @@ def decompressSamFile(options):
             cmd += f"{name_of_file_with_quality_scores}.br "
         if os.path.exists(f"{name_of_file_dictionary}.br") == True:
             cmd += f"{name_of_file_dictionary}.br "
-        files_to_be_removed.extend(f"{pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br".split())
+        files_to_be_removed.extend(f"{_outputfilename}.br {_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br".split())
         os.system(cmd)
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
@@ -1120,14 +1120,14 @@ def decompressSamFile(options):
             logging.info(f"Running command - {cmd}")
         files_to_be_removed.extend(f"{options.output_directory}/{compression_directory}")
         
-    files_to_be_removed.extend([pass1_outputfilename,
-                                pass1_index_outputfilename,
+    files_to_be_removed.extend([_outputfilename,
+                                _index_outputfilename,
                                 unmapped_outputfilename,
                                 name_of_file_with_quality_scores,
                                 f"{name_of_file_with_quality_scores}.rle",
                                 f"{options.output_directory}/file_list"])
     
-    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores,ignore_scores = list(map(int,open(pass1_outputfilename,"rb").readline().split()))
+    flag_ignore_mismatches,flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, save_all_quality_scores, save_exact_quality_scores,ignore_scores = list(map(int,open(_outputfilename,"rb").readline().split()))
     if flag_ignore_mismatches == 1:
         options.ignore_mismatches = True
     else:
@@ -1181,8 +1181,8 @@ def decompressSamFile(options):
     
     max_reads_in_each_line_filename = f"{options.output_directory}/max_reads_in_each_line_filename"
     output_sam_filename = f"{options.output_directory}/{name_of_input_file_without_location[:-4]}.decompressed.sam"
-    files_to_be_removed.extend([pass1_index_outputfilename,
-                                pass1_outputfilename,
+    files_to_be_removed.extend([_index_outputfilename,
+                                _outputfilename,
                                 unmapped_outputfilename,
                                 name_of_file_with_quality_scores,
                                 name_of_file_dictionary,
@@ -1193,10 +1193,10 @@ def decompressSamFile(options):
         cmd += f" {decompressSamFileSingleEnded} " # argv[0] - Name of the program
     else:
         cmd += f" {decompressSamFilePairedEnded} " # argv[0] - Name of the program
-    cmd += f" {pass1_index_outputfilename} "# argv[1] - Abridge index, pass1_index_outputfilename
+    cmd += f" {_index_outputfilename} "# argv[1] - Abridge index, _index_outputfilename
     cmd += f" {options.genome} "# argv[2] - genome file
     cmd += f" {output_sam_filename} "# argv[3] - decompressed SAM filename
-    cmd += f" {pass1_outputfilename} "# argv[4] - Name of the pass1 filename
+    cmd += f" {_outputfilename} "# argv[4] - Name of the  filename
     cmd += f" dummy "# argv[5] - Dummy
     cmd += f" {options.quality} "# argv[6] - Quality of reads
     cmd += f" {options.ignore_sequence}" #argv[7] - Whether or not to produce sequences from genome file
@@ -1206,7 +1206,7 @@ def decompressSamFile(options):
         cmd += f" {name_of_file_dictionary} " #argv[10]
         
         cmd_1  = f" {maxReadsInEachLine} "
-        cmd_1 += f" {pass1_outputfilename} "
+        cmd_1 += f" {_outputfilename} "
         cmd_1 += f" {max_reads_in_each_line_filename} "
         if options.quiet == False:
             logging.info(f"Running command - {cmd_1}")
@@ -1230,7 +1230,7 @@ def decompressSamFile(options):
         os.system("rm -f "+file)
     
     
-def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
+def generateCoverage(_outputfilename,_index_outputfilename,options):
     generateCoverage = options.softwares["generateCoverage"]
     findMaximumNumberOfReadsInEachLine = options.softwares["findMaximumNumberOfReadsInEachLine"]
     
@@ -1280,8 +1280,8 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     
     cmd  = f"(/usr/bin/time --verbose "
     cmd += f" {generateCoverage} "
-    cmd += f" {pass1_outputfilename} " #argv[1]
-    cmd += f" {pass1_index_outputfilename} " #argv[2]
+    cmd += f" {_outputfilename} " #argv[1]
+    cmd += f" {_index_outputfilename} " #argv[2]
     cmd += f" {options.d} " #argv[3]
     cmd += f" {options.bg} " #argv[4]
     cmd += f" {options.bga} " #argv[5]
@@ -1292,7 +1292,7 @@ def generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options):
     if os.path.exists(dictionary_name)==True:
         cmd += f" {dictionary_name} " #argv[10]
         cmd_1  = f" {findMaximumNumberOfReadsInEachLine} "
-        cmd_1 += f" {pass1_outputfilename} "
+        cmd_1 += f" {_outputfilename} "
         cmd_1 += f" 1> {max_reads_in_each_line_filename} "
         cmd_1 += f" 2> /dev/null "
         if options.quiet == False:
@@ -1336,8 +1336,8 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
     input_filename = options.inputabrfilenames
     name_of_input_file_without_location = input_filename.split("/")[-1][:-8]
-    pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.pass1"
-    pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.pass1.index"
+    _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam."
+    _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam..index"
     unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.unmapped"
     name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam.qual"
     compressed_abridged_filename = input_filename
@@ -1363,11 +1363,11 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
         cmd  = f" {randomRetrievalSingleEnded} " #argv[0]
     else:
         cmd  = f" {randomRetrievalPairedEnded} " #argv[0]
-    cmd += f" {pass1_index_outputfilename} " #argv[1]
+    cmd += f" {_index_outputfilename} " #argv[1]
     cmd += f" {genome_filename} " #argv[2]
     cmd += f" {genome_index_filename} " #argv[3]
     cmd += f" {chromosome} " #argv[4]
-    cmd += f" {pass1_outputfilename}  " #argv[5]
+    cmd += f" {_outputfilename}  " #argv[5]
     cmd += f" {start} " #argv[6]
     cmd += f" {end} " #argv[7]
     cmd += f" {outputfilename}" #argv[8]
@@ -1455,8 +1455,8 @@ def main():
     if options.random == True:
         input_filename = options.inputabrfilenames
         name_of_input_file_without_location = input_filename.split("/")[-1][:-8]
-        pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.pass1"
-        pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.pass1.index"
+        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam."
+        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam..index"
         unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.unmapped"
         name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam.qual"
         compressed_abridged_filename = input_filename
@@ -1470,10 +1470,10 @@ def main():
         os.system(cmd)
         
         if options.inputabrfilenames[-3:]==".br":
-            cmd = f"brotli -d -k -f {pass1_outputfilename}.br {pass1_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br"
+            cmd = f"brotli -d -k -f {_outputfilename}.br {_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br"
             os.system(cmd)
         
-        cmd=f"cat {pass1_outputfilename}|grep ^@ > {options.output_directory}/{name_of_input_file_without_location}.headers"
+        cmd=f"cat {_outputfilename}|grep ^@ > {options.output_directory}/{name_of_input_file_without_location}.headers"
         os.system(cmd)
         chromosome_to_length = {}
         fhr=open(f"{options.output_directory}/{name_of_input_file_without_location}.headers","r")
@@ -1508,8 +1508,8 @@ def main():
     if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage ==True:
         input_filename = options.inputabrfilenames
         name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
-        pass1_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1"
-        pass1_index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".pass1.index"
+        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "."
+        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "..index"
         
         cmd  = f"7za e {input_filename} -y "
         cmd += f" -o{options.output_directory}"
@@ -1519,10 +1519,10 @@ def main():
         os.system(cmd)
         
         if options.inputabrfilenames[-3:]==".br":
-            cmd = f"brotli -d -k -f {pass1_outputfilename}.br {pass1_index_outputfilename}.br"
+            cmd = f"brotli -d -k -f {_outputfilename}.br {_index_outputfilename}.br"
             os.system(cmd)
         
-        generateCoverage(pass1_outputfilename,pass1_index_outputfilename,options)
+        generateCoverage(_outputfilename,_index_outputfilename,options)
         os.system(f"rm -rf {options.output_directory}")
     
     cleanUp(options)
