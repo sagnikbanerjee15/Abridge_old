@@ -141,20 +141,20 @@ void writeToFile (
 				}
 				fprintf (fhw_qual , "%s" , qual);
 				qual_score_length = strlen (qual);
+
+				splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+				for ( m = 0 ; m < num_of_types ; m++ )
+					cigar_length = cigar_items_instance[m].len;
+
+				if ( qual_score_length != cigar_length )
+				{
+					printf ("\nUNEQUAL LENGTHS");
+					printf ("\ncigar %s" , compressed_ds_pool[i]->cigar);
+					printf ("\nqual score $s" , qual);
+					printf ("\ncigar length %d qual score length %d" , cigar_length , qual_score_length);
+				}
 				if ( flag_save_exact_quality_scores == 0 )
 				{
-					splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-					for ( m = 0 ; m < num_of_types ; m++ )
-						cigar_length = cigar_items_instance[m].len;
-
-					if ( qual_score_length != cigar_length )
-					{
-						printf ("\nUNEQUAL LENGTHS");
-						printf ("\ncigar %s" , compressed_ds_pool[i]->cigar);
-						printf ("\nqual score $s" , qual);
-						printf ("\ncigar length %d qual score length %d" , cigar_length , qual_score_length);
-					}
-
 					fprintf (fhw_qual , "%s" , "\t");
 					if ( flag_ignore_soft_clippings == 1 )
 					{

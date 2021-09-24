@@ -481,6 +481,19 @@ cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_decompress_level_
 
 abridge \
 --keep_intermediate_error_files \
+--compress \
+--genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
+--inputsamfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR12077404_SE.sam \
+--save_all_quality_scores \
+--save_exact_quality_scores \
+--output_directory /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR12077404_SE_compress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_0_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_1_save_exact_quality_scores_1 \
+1> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR12077404_SE_decompress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_0_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_1_save_exact_quality_scores_1.output \
+2> /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR12077404_SE_decompress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_0_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_1_save_exact_quality_scores_1.error &
+
+
+
+abridge \
+--keep_intermediate_error_files \
 --decompress \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
 --inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/developing_abridge/SRR12077404_SE_compress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_0_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_1_save_exact_quality_scores_1/SRR12077404_SE.abridge \
