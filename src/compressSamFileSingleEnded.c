@@ -360,7 +360,7 @@ void reModeliCIGARSSingleEnded (
 		{
 			printf ("\n%s %s" , compressed_ds_pool[i]->cigar , compressed_ds_pool_rearranged[i]->cigar);
 			printf ("\n%s %s" , compressed_ds_pool[i]->icigar , compressed_ds_pool_rearranged[i]->icigar);
-			printf ("\n%d %d" , compressed_ds_pool[i]->num_reads , compressed_ds_pool_rearranged[i]->num_reads);
+			printf ("\n%d %d %d" , compressed_ds_pool[i]->num_reads , compressed_ds_pool_rearranged[i]->num_reads , compressed_ds_pool_index);
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 				printf ("\n%s" , compressed_ds_pool[i]->pointers_to_qual_scores[j]);
 			printf ("\n----------------------------------------------------------------------------");
