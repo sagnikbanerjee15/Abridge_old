@@ -140,7 +140,7 @@ void writeToFile (
 						break;
 				}
 				fprintf (fhw_qual , "%s" , qual);
-				qual_score_length = strlen (qual);
+				qual_score_length = strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]);
 
 				splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
 				for ( m = 0 ; m < num_of_types ; m++ )
