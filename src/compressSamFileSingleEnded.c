@@ -148,6 +148,12 @@ void writeToFile (
 						cigar_length = cigar_items_instance[m].len;
 
 					if ( qual_score_length != cigar_length )
+					{
+						printf ("\nUNEQUAL LENGTHS");
+						printf ("\ncigar %s" , compressed_ds_pool[i]->cigar);
+						printf ("\nqual score $s" , qual);
+						printf ("\ncigar length %d qual score length %d" , cigar_length , qual_score_length);
+					}
 
 					fprintf (fhw_qual , "%s" , "\t");
 					if ( flag_ignore_soft_clippings == 1 )
