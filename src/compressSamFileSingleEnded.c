@@ -288,6 +288,9 @@ void reModeliCIGARSSingleEnded (
 		int compressed_ds_pool_index,
 		char **modified_icigars)
 {
+
+	compressed_ds_pool_rearranged = compressed_ds_pool;
+	return;
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
