@@ -153,7 +153,6 @@ void writeToFile (
 					printf ("\nqual score %s" , qual);
 					printf ("\ncigar length %d qual score length %d" , cigar_length , qual_score_length);
 				}
-				else printf ("\nLengths match!!");
 				if ( flag_save_exact_quality_scores == 0 )
 				{
 					fprintf (fhw_qual , "%s" , "\t");
