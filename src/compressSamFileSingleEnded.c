@@ -147,6 +147,8 @@ void writeToFile (
 					for ( m = 0 ; m < num_of_types ; m++ )
 						cigar_length = cigar_items_instance[m].len;
 
+					if ( qual_score_length != cigar_length )
+
 					fprintf (fhw_qual , "%s" , "\t");
 					if ( flag_ignore_soft_clippings == 1 )
 					{
