@@ -286,14 +286,16 @@ void reModeliCIGARSSingleEnded (
 		struct Compressed_DS **compressed_ds_pool_rearranged,
 		short *already_processed,
 		int compressed_ds_pool_index,
-		char **modified_icigars)
+		char **modified_icigars,
+		struct Cigar_Items *cigar_items_instance)
 {
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
-	int i, j, k;
+	int i, j, k, m;
 	int compressed_ds_pool_rearranged_index = 0;
 	int change_flag = 0;
+	int num_of_types;
 
 	//char icigar1[MAX_SEQ_LEN];
 	//char icigar2[MAX_SEQ_LEN];
@@ -357,6 +359,18 @@ void reModeliCIGARSSingleEnded (
 			}
 		}
 	}
+
+	for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+	{
+		int cigar_length = 0;
+		splitCigar (compressed_ds_pool_rearranged[i]->cigar , &num_of_types , cigar_items_instance);
+		for ( m = 0 ; m < num_of_types ; m++ )
+			cigar_length += cigar_items_instance[m].len;
+		for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
+		{
+		}
+	}
+
 	/*
 	 if ( change_flag == 1 )
 	 {
@@ -685,7 +699,7 @@ void readAlignmentsAndCompress (
 		{
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
-			reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars);
+			reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
 			writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 			//writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
@@ -748,7 +762,7 @@ void readAlignmentsAndCompress (
 			{
 				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
-				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars);
+				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
 				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 				//writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
@@ -776,7 +790,7 @@ void readAlignmentsAndCompress (
 	/*
 	 *Write final data to file
 	 */
-	reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars);
+	reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
 	writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 	//writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
