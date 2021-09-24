@@ -653,6 +653,7 @@ void readAlignmentsAndCompress (
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
 			//printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
+			quality_score_index = 0;
 			previous_position = current_position;
 			strcpy(prev_reference_name , curr_reference_name);
 			strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
