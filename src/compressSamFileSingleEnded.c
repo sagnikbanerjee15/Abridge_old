@@ -377,7 +377,7 @@ void reModeliCIGARSSingleEnded (
 				for ( k = 0 ;
 						compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
 						k++ )
-					printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k]);
+					printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
 			}
 		}
 	}
