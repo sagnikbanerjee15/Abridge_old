@@ -293,6 +293,7 @@ void reModeliCIGARSSingleEnded (
 	 ********************************************************************/
 	int i, j, k;
 	int compressed_ds_pool_rearranged_index = 0;
+	int change_flag = 0;
 
 	//char icigar1[MAX_SEQ_LEN];
 	//char icigar2[MAX_SEQ_LEN];
@@ -349,9 +350,12 @@ void reModeliCIGARSSingleEnded (
 				}
 				compressed_ds_pool_rearranged_index++;
 				already_processed[j] = 1;
+				change_flag = 1;
 			}
 		}
 	}
+	if ( compressed_ds_pool_rearranged_index != compressed_ds_pool_index )
+		printf ("Trouble");
 	/*
 	 printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
 	 if ( compressed_ds_pool_index > 25000 )
