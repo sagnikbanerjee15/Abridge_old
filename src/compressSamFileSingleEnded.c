@@ -348,6 +348,8 @@ void reModeliCIGARSSingleEnded (
 					printf ("\nEntering here");
 					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] = compressed_ds_pool[j]->pointers_to_qual_scores[k];
 					compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_read_names[k] = compressed_ds_pool[j]->pointers_to_read_names[k];
+
+					printf ("\n%u %u" , compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->pointers_to_qual_scores[k] , compressed_ds_pool[j]->pointers_to_qual_scores[k]);
 				}
 				compressed_ds_pool_rearranged_index++;
 				already_processed[j] = 1;
