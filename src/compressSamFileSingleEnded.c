@@ -373,11 +373,13 @@ void reModeliCIGARSSingleEnded (
 				printf ("\nUnequal Lengths inside reModeliCIGARSSingleEnded");
 				printf ("\ncigar %s" , compressed_ds_pool_rearranged[i]->cigar);
 				printf ("\nicigar %s" , compressed_ds_pool_rearranged[i]->icigar);
+				printf ("\nQual length %d" , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
 				printf ("\n");
 				for ( k = 0 ;
 						compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
 						k++ )
 					printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
+				printf ("\n================================================================================================================================");
 			}
 		}
 	}
