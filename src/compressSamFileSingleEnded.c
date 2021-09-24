@@ -371,6 +371,7 @@ void reModeliCIGARSSingleEnded (
 				printf ("\n");
 			}
 			printf ("\n----------------------------------------------------------------------------");
+			printf ("\n");
 			for ( j = 0 ; j < compressed_ds_pool_rearranged[i]->num_reads ;
 					j++ )
 			{
