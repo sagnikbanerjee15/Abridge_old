@@ -370,19 +370,61 @@ void reModeliCIGARSSingleEnded (
 		{
 			if ( strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]) != cigar_length )
 			{
-				printf ("\nUnequal Lengths inside reModeliCIGARSSingleEnded");
-				printf ("\ncigar %s" , compressed_ds_pool_rearranged[i]->cigar);
-				printf ("\nicigar %s" , compressed_ds_pool_rearranged[i]->icigar);
-				printf ("\nQual length %d" , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
+				change_flag = 1;
+				/*
+				 printf ("\nUnequal Lengths inside reModeliCIGARSSingleEnded");
+				 printf ("\ncigar %s" , compressed_ds_pool_rearranged[i]->cigar);
+				 printf ("\nicigar %s" , compressed_ds_pool_rearranged[i]->icigar);
+				 printf ("\nQual length %d" , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
+				 printf ("\n");
+				 for ( k = 0 ;
+				 compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
+				 k++ )
+				 printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
+				 printf ("\n========================================================================================================================================================================");
+				 printf ("\n========================================================================================================================================================================");
+				 */
+			}
+		}
+	}
+	if ( change_flag == 1 )
+	{
+		printf ("\nPrinting everything");
+		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+		{
+			printf ("\ni=%d" , i);
+			printf ("\ncigar = %s icigar = %s" , compressed_ds_pool[i]->cigar , compressed_ds_pool[i]->icigar);
+			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
+			{
+				printf ("\nQual length = %d" , strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]));
+				for ( k = 0 ;
+						compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
+						k++ )
+
+					printf ("%d %c" , j , compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90);
 				printf ("\n");
+			}
+		}
+		printf ("\n********************************************************************************************************************************************************************************************");
+		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+		{
+			printf ("\ni=%d" , i);
+			printf ("\ncigar = %s icigar = %s" , compressed_ds_pool_rearranged[i]->cigar , compressed_ds_pool_rearranged[i]->icigar);
+			for ( j = 0 ; j < compressed_ds_pool_rearranged[i]->num_reads ;
+					j++ )
+			{
+				printf ("\nQual length = %d" , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
 				for ( k = 0 ;
 						compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
 						k++ )
-					printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
-				printf ("\n========================================================================================================================================================================");
-				printf ("\n========================================================================================================================================================================");
+
+					printf ("%d %c" , j , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
+				printf ("\n");
 			}
 		}
+
+		printf ("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+		printf ("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 	}
 
 	/*
