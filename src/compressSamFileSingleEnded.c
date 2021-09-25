@@ -397,6 +397,7 @@ void reModeliCIGARSSingleEnded (
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 			{
 				printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]));
+				printf ("\n");
 				for ( k = 0 ;
 						compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
 						k++ )
@@ -414,6 +415,7 @@ void reModeliCIGARSSingleEnded (
 					j++ )
 			{
 				printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
+				printf ("\n");
 				for ( k = 0 ;
 						compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
 						k++ )
