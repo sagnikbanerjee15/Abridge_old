@@ -396,12 +396,12 @@ void reModeliCIGARSSingleEnded (
 			printf ("\ncigar = %s icigar = %s" , compressed_ds_pool[i]->cigar , compressed_ds_pool[i]->icigar);
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 			{
-				printf ("\nQual length = %d" , strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]));
+				printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]));
 				for ( k = 0 ;
 						compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
 						k++ )
 
-					printf ("%d %c" , j , compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90);
+					printf ("%c" , compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90);
 				printf ("\n");
 			}
 		}
@@ -413,12 +413,12 @@ void reModeliCIGARSSingleEnded (
 			for ( j = 0 ; j < compressed_ds_pool_rearranged[i]->num_reads ;
 					j++ )
 			{
-				printf ("\nQual length = %d" , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
+				printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
 				for ( k = 0 ;
 						compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
 						k++ )
 
-					printf ("%d %c" , j , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
+					printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
 				printf ("\n");
 			}
 		}
