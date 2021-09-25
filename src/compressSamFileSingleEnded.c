@@ -343,6 +343,7 @@ void reModeliCIGARSSingleEnded (
 				//strcpy( compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar , compressed_ds_pool[i]->icigar );
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[0] = findMatchCharacterIcigar (compressed_ds_pool[j]->icigar);
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->icigar[1] = '\0';
+				strcpy(compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->cigar , compressed_ds_pool[j]->cigar);
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->num_reads = compressed_ds_pool[j]->num_reads;
 				compressed_ds_pool_rearranged[compressed_ds_pool_rearranged_index]->position = compressed_ds_pool[j]->position;
 				for ( k = 0 ; k < compressed_ds_pool[j]->num_reads ; k++ )
