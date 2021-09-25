@@ -356,7 +356,6 @@ void reModeliCIGARSSingleEnded (
 				}
 				compressed_ds_pool_rearranged_index++;
 				already_processed[j] = 1;
-				if ( j != ( i + 1 ) ) change_flag = 1;
 			}
 		}
 	}
