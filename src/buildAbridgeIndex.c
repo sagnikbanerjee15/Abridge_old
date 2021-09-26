@@ -63,7 +63,14 @@ long long int findEndPointOfiCIGAR (char *icigar)
 	return end_point;
 }
 
-void findFarthestMapping (long long int *start, long long int *end, char **split_icigar_field, int number_of_fields, char **split_icigar_and_num_reads, int print, short int save_scores)
+void findFarthestMapping (
+		long long int *start,
+		long long int *end,
+		char **split_icigar_field,
+		int number_of_fields,
+		char **split_icigar_and_num_reads,
+		int print,
+		short int save_scores)
 {
 	int i;
 	*end = -1;
@@ -91,7 +98,13 @@ void findFarthestMapping (long long int *start, long long int *end, char **split
 	}
 }
 
-void findContinousClusters (char *input_pass1_filename, char *input_qual_filename, char *output_filename, long long int max_input_reads_in_a_single_nucl_loc, int paired, short int save_scores)
+void findContinousClusters (
+		char *input_pass1_filename,
+		char *input_qual_filename,
+		char *output_filename,
+		long long int max_input_reads_in_a_single_nucl_loc,
+		int paired,
+		short int save_scores)
 {
 	/*
 	 *
@@ -403,7 +416,7 @@ void findContinousClusters (char *input_pass1_filename, char *input_qual_filenam
 		}
 		line_len_previous = line_len;
 		//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nLine read from file:%s", line);
-		fflush (fhw);
+		//fflush (fhw);
 	}
 	//byte_number_end_cluster = ftell ( fhr_pass1 ) - line_len - line_len_previous;
 	byte_number_end_cluster = ftell (fhr_pass1);
