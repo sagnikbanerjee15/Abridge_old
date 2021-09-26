@@ -2454,7 +2454,7 @@ void readInEachChromosome (
 	fhr = fopen (genome_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File not found %s" , genome_filename);
 		exit (1);
 	}
 
