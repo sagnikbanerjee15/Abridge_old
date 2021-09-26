@@ -2521,7 +2521,7 @@ void readInTheEntireGenome (
 	fhr = fopen (genome_filename , "rb");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File not found %s" , genome_filename);
 		exit (1);
 	}
 
@@ -2620,7 +2620,7 @@ void readInGenomeSequenceSingleChromosome (
 	fhr = fopen (genome_filename , "rb");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File not found %s" , genome_filename);
 		exit (1);
 	}
 	/********************************************************************/
@@ -2736,7 +2736,7 @@ void readGenomeIndex (
 	fhr = fopen (genome_index_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File not found %s" , genome_index_filename);
 		exit (1);
 	}
 	/********************************************************************/
@@ -2786,7 +2786,7 @@ void readAbridgeIndex (
 	fhr = fopen (abridge_index_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File not found %s" , abridge_index_filename);
 		exit (1);
 	}
 	/********************************************************************/
@@ -2843,7 +2843,7 @@ void loadSequencesFromFile (char **sequences, char *filename)
 	fhr = fopen (filename , "rb");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File not found %s" , filename);
 		exit (1);
 	}
 	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
@@ -3724,7 +3724,7 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename, int print_to_file)
 	fhr = fopen (faidx_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("Error! File not found %s" , faidx_filename);
 		exit (1);
 	}
 
