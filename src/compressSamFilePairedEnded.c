@@ -469,43 +469,43 @@ void compressPairedEndedAlignments (
 	fhr = fopen (input_samfilename , "r");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File %s not found" , input_samfilename);
+		printf ("1. Error! File %s not found" , input_samfilename);
 		exit (1);
 	}
 	fhr_freq_samflags = fopen (frequency_of_flags_filename , "r");
 	if ( fhr_freq_samflags == NULL )
 	{
-		printf ("Error! File %s not found" , fhr_freq_samflags);
+		printf ("2. Error! File %s not found" , fhr_freq_samflags);
 		exit (1);
 	}
 	fhw_pass1 = fopen (output_abridgefilename , "w");
 	if ( fhw_pass1 == NULL )
 	{
-		printf ("%s File cannot be created" , output_abridgefilename);
+		printf ("3. %s File cannot be created" , output_abridgefilename);
 		exit (1);
 	}
 	fhw_unmapped = fopen (unmapped_filename , "w");
 	if ( fhw_unmapped == NULL )
 	{
-		printf ("%s File cannot be created" , unmapped_filename);
+		printf ("4. %s File cannot be created" , unmapped_filename);
 		exit (1);
 	}
 	fhw_name_of_file_with_max_commas = fopen (name_of_file_with_max_commas , "w");
 	if ( fhw_name_of_file_with_max_commas == NULL )
 	{
-		printf ("%s File cannot be created" , name_of_file_with_max_commas);
+		printf ("5. %s File cannot be created" , name_of_file_with_max_commas);
 		exit (1);
 	}
 	fhw_qual = fopen (name_of_file_with_quality_scores , "w");
 	if ( fhw_qual == NULL )
 	{
-		printf ("%s File cannot be created" , name_of_file_with_quality_scores);
+		printf ("6. %s File cannot be created" , name_of_file_with_quality_scores);
 		exit (1);
 	}
 	fhw_dictionary = fopen (dictionary_filename , "w");
 	if ( fhw_dictionary == NULL )
 	{
-		printf ("%s File cannot be created" , dictionary_filename);
+		printf ("7. %s File cannot be created" , dictionary_filename);
 		exit (1);
 	}
 
