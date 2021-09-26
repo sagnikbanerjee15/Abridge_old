@@ -107,25 +107,25 @@ void decompressFile (
 	fhr = fopen (pass1_filename , "r");
 	if ( fhr == NULL )
 	{
-		printf ("Error! File %s not found" , pass1_filename);
+		printf ("1. Error! File %s not found" , pass1_filename);
 		exit (1);
 	}
 	fhr_dictionary = fopen (dictionary_name , "r");
 	if ( fhr_dictionary == NULL )
 	{
-		printf ("Error! File %s not found" , dictionary_name);
+		printf ("2. Error! File %s not found" , dictionary_name);
 		exit (1);
 	}
 	fhr_qual = fopen (name_of_file_with_quality_scores , "r");
 	if ( fhr_qual == NULL )
 	{
-		printf ("Error! File not found");
+		printf ("3. Error! File not found %s" , name_of_file_with_quality_scores);
 		exit (1);
 	}
 	fhw = fopen (output_sam_filename , "w");
 	if ( fhw == NULL )
 	{
-		printf ("Error! File cannot be opened for writing");
+		printf ("4. Error! File %s cannot be opened for writing" , output_sam_filename);
 		exit (1);
 	}
 
