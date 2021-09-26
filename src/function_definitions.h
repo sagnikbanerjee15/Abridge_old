@@ -2334,7 +2334,7 @@ void generateIntegratedCigarPairedEnded (
 	 * Append the cigar with mapping quality score and the alignment score (if available)
 	 */
 
-	if ( flag_ignore_scores == 1 )
+	if ( flag_ignore_scores == 0 )
 	{
 		sprintf (str , "%d" , curr_alignment->mapping_quality_score);
 		strcat (curr_alignment->icigar , "-");

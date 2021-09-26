@@ -374,7 +374,7 @@ void compressPairedEndedAlignments (
 		long long int max_number_of_alignments,
 		int max_read_length,
 		char *dictionary_filename,
-		short int flag_save_scores)
+		short int flag_ignore_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -589,7 +589,7 @@ void compressPairedEndedAlignments (
 	sprintf(str , "%lld" , flag_save_exact_quality_scores);
 	strcat(temp , str);
 	strcat(temp , "\t");
-	sprintf(str , "%lld" , flag_save_scores);
+	sprintf(str , "%lld" , flag_ignore_scores);
 	strcat(temp , str);
 	strcat(temp , "\n");
 	fprintf (fhw_pass1 , "%s" , temp);
@@ -693,7 +693,7 @@ void compressPairedEndedAlignments (
 		 * Change this function
 		 */
 
-		generateIntegratedCigarPairedEnded (curr_alignment , flag_save_scores , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
+		generateIntegratedCigarPairedEnded (curr_alignment , flag_ignore_scores , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
 		//continue;
 		NH_tag_index = -1;
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
@@ -850,7 +850,7 @@ int main (int argc, char *argv[])
 	short int run_diagnostics;
 	short int save_all_quality_scores;
 	short int save_exact_quality_scores;
-	short int save_scores;
+	short int ignore_scores;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 	long long int max_number_of_alignments;
@@ -881,9 +881,9 @@ int main (int argc, char *argv[])
 	max_read_length = strtol (argv[16] , &temp , 10);
 	strcpy(frequency_of_flags_filename , argv[17]);
 	strcpy(dictionary_filename , argv[18]);
-	save_scores = strtol (argv[19] , &temp , 10);
+	ignore_scores = strtol (argv[19] , &temp , 10);
 	/********************************************************************/
 
-	compressPairedEndedAlignments (frequency_of_flags_filename , name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , max_number_of_alignments , max_read_length , dictionary_filename , save_scores);
+	compressPairedEndedAlignments (frequency_of_flags_filename , name_of_file_with_quality_scores , name_of_file_with_max_commas , input_samfilename , output_abridgefilename , unmapped_filename , genome_filename , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , run_diagnostics , max_input_reads_in_a_single_nucl_loc , save_all_quality_scores , save_exact_quality_scores , max_number_of_alignments , max_read_length , dictionary_filename , ignore_scores);
 	return 0;
 }
