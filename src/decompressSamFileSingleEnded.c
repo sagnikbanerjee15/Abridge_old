@@ -45,7 +45,7 @@ void decompressFile (
 	short int flag_ignore_quality_score;
 	short int flag_save_all_quality_scores;
 	short int flag_save_exact_quality_scores;
-	short int flag_save_scores;
+	short int flag_ignore_scores;
 	short int number_of_columns;
 	short int read_names_stored;
 
@@ -173,7 +173,7 @@ void decompressFile (
 	flag_ignore_quality_score = strtol (split_on_tab[3] , &convert_to_int_temp , 10);
 	flag_save_all_quality_scores = strtol (split_on_tab[4] , &convert_to_int_temp , 10);
 	flag_save_exact_quality_scores = strtol (split_on_tab[5] , &convert_to_int_temp , 10);
-	flag_save_scores = strtol (split_on_tab[6] , &convert_to_int_temp , 10);
+	flag_ignore_scores = strtol (split_on_tab[6] , &convert_to_int_temp , 10);
 
 	/*
 	 printf ("\nflag_ignore_mismatches %d" , flag_ignore_mismatches);
@@ -254,7 +254,7 @@ void decompressFile (
 				curr_position++;
 			else curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 		}
-		convertToAlignmentSingleEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , split_on_tilde , default_quality_value , flag_save_scores , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome , read_names , read_names_stored);
+		convertToAlignmentSingleEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , split_on_tilde , default_quality_value , flag_ignore_scores , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , read_prefix , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome , read_names , read_names_stored);
 	}
 
 	//printf ("\nTotal mapped reads: %d" , total_mapped_reads);

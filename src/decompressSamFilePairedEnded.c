@@ -48,7 +48,7 @@ void decompressFile (
 	short int flag_ignore_quality_score;
 	short int flag_save_all_quality_scores;
 	short int flag_save_exact_quality_scores;
-	short int flag_save_scores;
+	short int flag_ignore_scores;
 	short int number_of_columns;
 
 	unsigned long long int max_cluster_size;
@@ -189,7 +189,7 @@ void decompressFile (
 	flag_ignore_quality_score = strtol (split_on_tab[3] , &convert_to_int_temp , 10);
 	flag_save_all_quality_scores = strtol (split_on_tab[4] , &convert_to_int_temp , 10);
 	flag_save_exact_quality_scores = strtol (split_on_tab[5] , &convert_to_int_temp , 10);
-	flag_save_scores = strtol (split_on_tab[6] , &convert_to_int_temp , 10);
+	flag_ignore_scores = strtol (split_on_tab[6] , &convert_to_int_temp , 10);
 
 	line_num = 0;
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
@@ -246,7 +246,7 @@ void decompressFile (
 			curr_position++;
 		else if ( number_of_columns == 3 )
 			curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
-		convertToAlignmentPairedEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , split_on_tilde , read_names , default_quality_value , flag_save_scores , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
+		convertToAlignmentPairedEnded (sam_alignment_instance , whole_genome , split_on_tab , split_on_dash , split_on_comma , split_on_tilde , read_names , default_quality_value , flag_ignore_scores , flag_ignore_mismatches , flag_ignore_soft_clippings , flag_ignore_unmapped_sequences , flag_ignore_quality_score , flag_ignore_sequence_information , &read_number , &total_mapped_reads , fhw , fhr_qual , flag_save_all_quality_scores , number_of_columns , curr_position , current_chromosome , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
 	}
 
 	/*

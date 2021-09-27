@@ -2337,16 +2337,16 @@ void generateIntegratedCigarPairedEnded (
 	if ( flag_ignore_scores == 0 )
 	{
 		sprintf (str , "%d" , curr_alignment->mapping_quality_score);
-		strcat (curr_alignment->icigar , "-");
+		strcat (curr_alignment->icigar , "~");
 		strcat (curr_alignment->icigar , str);
 		if ( AS_tag_index != -1 )
 		{
-			strcat (curr_alignment->icigar , "-");
+			strcat (curr_alignment->icigar , "~");
 			strcat (curr_alignment->icigar , curr_alignment->tags[AS_tag_index].val);
 		}
 		else
 		{
-			strcat (curr_alignment->icigar , "-");
+			strcat (curr_alignment->icigar , "~");
 			strcat (curr_alignment->icigar , "X");
 		}
 	}
