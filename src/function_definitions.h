@@ -3413,7 +3413,7 @@ void writeAlignmentToFilePairedEnded (
 			strcat (line_to_be_written_to_file , sam_alignment->tags[2].val);
 			strcat (line_to_be_written_to_file , "\t");
 		}
-		if ( flag_ignore_scores == 1 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
+		if ( flag_ignore_scores == 0 && strcmp (sam_alignment->tags[3].val , "X") != 0 )
 		{
 			strcat (line_to_be_written_to_file , "AS:i:");
 			strcat (line_to_be_written_to_file , sam_alignment->tags[3].val);
