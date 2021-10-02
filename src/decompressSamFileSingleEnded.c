@@ -188,7 +188,7 @@ void decompressFile (
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		line_num++;
-		printf ("\nline_num = %d %s" , line_num , line);
+		printf ("\nline_num = %d %s" , line_num , buffer);
 		//if ( line_num == 10 ) break;
 		if ( strstr (buffer , "abridge_") )
 			read_names_stored = 1;
