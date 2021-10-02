@@ -478,6 +478,7 @@ cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_compress_level_3*
 
  
 cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_SE_decompress_level_1*/*.error|grep Exit|sort|uniq
+cat /90daydata/maizegdb/sagnik/ABRIDGE/developing_abridge/*_PE_decompress_level_1*/*.error|grep Exit|sort|uniq
 
 
 abridge \
