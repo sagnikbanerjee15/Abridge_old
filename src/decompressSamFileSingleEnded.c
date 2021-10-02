@@ -206,6 +206,8 @@ void decompressFile (
 			} while ( buffer[0] == '@' && line_len != -1 );
 			curr_position = 0;
 			fseek (fhr , -line_len , SEEK_CUR);
+			printf ("\nline_num = %d" , line_num);
+			fflush (stdout);
 			continue;
 		}
 		number_of_commas_in_each_line = 0;
