@@ -266,8 +266,8 @@ int findChromosomeIndex (
 	for ( i = 0 ; i < max_number_of_sequences ; i++ )
 		if ( strcmp (r[i]->reference_name , chromosome) == 0 )
 		{
-			p
-			//rintf ("\nMismatch %s %s" , r[i]->reference_name , chromosome);
+
+			//printf ("\nMismatch %s %s" , r[i]->reference_name , chromosome);
 			return i;
 		}
 		else
