@@ -3774,7 +3774,6 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename, int print_to_file)
 		strcat (line_to_be_written_to_file , "\t");
 		strcat (line_to_be_written_to_file , "LN:");
 		strcat (line_to_be_written_to_file , split_on_tab[1]);
-		strcat (line_to_be_written_to_file , "\t");
 		strcat (line_to_be_written_to_file , "\n");
 		if ( print_to_file == 1 )
 			fprintf (fhw , "%s" , line_to_be_written_to_file);
