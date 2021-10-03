@@ -256,6 +256,17 @@ struct All_Relevant_Info_PE_per_Alignment* allocateMemoryAll_Relevant_Info_PE_pe
 	return s;
 }
 
+int findChromosomeIndex (
+		struct Reference_Sequence_Info r,
+		char *chromosome,
+		int max_number_of_sequences)
+{
+	int i;
+	for ( i = 0 ; i < max_number_of_sequences ; i++ )
+		if ( strcmp (r[i]->line , chromosome) == 0 ) return i;
+	return -1;
+}
+
 long long int countNumberOfCharatersInString (char *line, char needle)
 {
 	/********************************************************************

@@ -750,6 +750,7 @@ void readAlignmentsAndCompress (
 			compressed_ds_pool_index++;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
+			reference_sequence_index = findChromosomeIndex (reference_info , prev_reference_name , number_of_reference_sequences);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
 			reference_sequence_index++;
 		}
@@ -777,6 +778,7 @@ void readAlignmentsAndCompress (
 			compressed_ds_pool_index++;
 			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
 			//fflush(stdout);
+			reference_sequence_index = findChromosomeIndex (reference_info , prev_reference_name , number_of_reference_sequences);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
 			reference_sequence_index++;
 		}
