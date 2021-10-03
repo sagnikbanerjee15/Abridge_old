@@ -698,6 +698,7 @@ void readAlignmentsAndCompress (
 				strcpy(reference_info[number_of_reference_sequences]->line , line);
 				splitByDelimiter (line , "\t" , split_line);
 				splitByDelimiter (split_line[1] , ":" , split_tags);
+				printf ("\nLoading chromosome %s" , split_tags[1]);
 				strcpy(reference_info[number_of_reference_sequences]->reference_name , split_tags[1]);
 				number_of_reference_sequences++;
 			}
