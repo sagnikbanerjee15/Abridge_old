@@ -257,7 +257,7 @@ struct All_Relevant_Info_PE_per_Alignment* allocateMemoryAll_Relevant_Info_PE_pe
 }
 
 int findChromosomeIndex (
-		struct Reference_Sequence_Info r,
+		struct Reference_Sequence_Info **r,
 		char *chromosome,
 		int max_number_of_sequences)
 {
