@@ -190,7 +190,7 @@ void decompressFile (
 		line_num++;
 		//printf ("\nline_num = %d %s" , line_num , buffer);
 		//if ( line_num == 10 ) break;
-		if ( strstr (buffer , "abridge_") )
+		if ( strstr (buffer , "brdg_") )
 			read_names_stored = 1;
 		else read_names_stored = 0;
 		//printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);

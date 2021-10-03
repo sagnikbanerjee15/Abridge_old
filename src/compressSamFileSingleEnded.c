@@ -97,7 +97,7 @@ void writeToFile (
 		{
 			if ( compressed_ds_pool[i]->pointers_to_read_names[j][0] != ' ' && compressed_ds_pool[i]->pointers_to_read_names[j][1] != '\0' )
 			{
-				strcat(list_of_read_names , "abridge_");
+				strcat(list_of_read_names , "brdg_");
 				strcat(list_of_read_names , compressed_ds_pool[i]->pointers_to_read_names[j]);
 				if ( i != compressed_ds_pool_total - 1 || j != compressed_ds_pool[i]->num_reads - 1 )
 				strcat(list_of_read_names , ",");
@@ -387,91 +387,49 @@ void reModeliCIGARSSingleEnded (
 			}
 		}
 	}
-	if ( change_flag == 1 )
-	{
-		printf ("\nPrinting everything");
-		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
-		{
-			printf ("\ni=%d" , i);
-			printf ("\ncigar = %s icigar = %s" , compressed_ds_pool[i]->cigar , compressed_ds_pool[i]->icigar);
-			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
-			{
-				printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]));
-				printf ("\n");
-				for ( k = 0 ;
-						compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
-						k++ )
-
-					printf ("%c" , compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90);
-				printf ("\n");
-			}
-		}
-		printf ("\n********************************************************************************************************************************************************************************************");
-		for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
-		{
-			printf ("\ni=%d" , i);
-			printf ("\ncigar = %s icigar = %s" , compressed_ds_pool_rearranged[i]->cigar , compressed_ds_pool_rearranged[i]->icigar);
-			for ( j = 0 ; j < compressed_ds_pool_rearranged[i]->num_reads ;
-					j++ )
-			{
-				printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
-				printf ("\n");
-				for ( k = 0 ;
-						compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
-						k++ )
-
-					printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
-				printf ("\n");
-			}
-		}
-
-		printf ("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-		printf ("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-	}
-
 	/*
 	 if ( change_flag == 1 )
 	 {
+	 printf ("\nPrinting everything");
 	 for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
 	 {
 	 printf ("\ni=%d" , i);
-	 printf ("\n%s %s" , compressed_ds_pool[i]->cigar , compressed_ds_pool_rearranged[i]->cigar);
-	 printf ("\n%s %s" , compressed_ds_pool[i]->icigar , compressed_ds_pool_rearranged[i]->icigar);
-	 printf ("\n%d %d %d" , compressed_ds_pool[i]->num_reads , compressed_ds_pool_rearranged[i]->num_reads , compressed_ds_pool_index);
-	 printf ("\n");
+	 printf ("\ncigar = %s icigar = %s" , compressed_ds_pool[i]->cigar , compressed_ds_pool[i]->icigar);
 	 for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 	 {
+	 printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]));
+	 printf ("\n");
 	 for ( k = 0 ;
 	 compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
 	 k++ )
+
 	 printf ("%c" , compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90);
 	 printf ("\n");
 	 }
-	 printf ("\n--------------------------------------------------------------------------------------------------------------------------------------------------------");
-	 printf ("\n");
+	 }
+	 printf ("\n********************************************************************************************************************************************************************************************");
+	 for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
+	 {
+	 printf ("\ni=%d" , i);
+	 printf ("\ncigar = %s icigar = %s" , compressed_ds_pool_rearranged[i]->cigar , compressed_ds_pool_rearranged[i]->icigar);
 	 for ( j = 0 ; j < compressed_ds_pool_rearranged[i]->num_reads ;
 	 j++ )
 	 {
+	 printf ("\n%d Qual length = %d" , j , strlen (compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j]));
+	 printf ("\n");
 	 for ( k = 0 ;
 	 compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] != '\0' ;
 	 k++ )
+
 	 printf ("%c" , compressed_ds_pool_rearranged[i]->pointers_to_qual_scores[j][k] - 90);
 	 printf ("\n");
 	 }
 	 }
-	 printf ("\n==========================================================================================================================================================");
-	 printf ("\n==========================================================================================================================================================");
-	 }*/
-	/*
-	 printf ( "\n %d %d" , compressed_ds_pool_rearranged_index , compressed_ds_pool_index );
-	 if ( compressed_ds_pool_index > 25000 )
-	 {
-	 for ( i = 0 ; i < compressed_ds_pool_index ; i++ )
-	 {
-	 printf ( "\n%s %d %s %d" , compressed_ds_pool[i]->icigar , compressed_ds_pool[i]->num_reads , compressed_ds_pool_rearranged[i]->icigar , compressed_ds_pool_rearranged[i]->num_reads );
+
+	 printf ("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+	 printf ("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 	 }
-	 printf ( "\n==============================================================================================================================================================================================" );
-	 }
+
 	 */
 }
 
@@ -856,7 +814,7 @@ void readAlignmentsAndCompress (
 	 */
 	reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
 	writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
-//writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
+	//writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
 	sprintf(temp , "%lld" , max_commas);
 	strcat(temp , "\n");
