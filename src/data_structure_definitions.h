@@ -40,6 +40,7 @@ char mismatch_characters[] =
 struct Reference_Sequence_Info
 {
 	char *line;
+	char *reference_name;
 };
 
 struct Sam_Tags

@@ -208,6 +208,7 @@ struct Reference_Sequence_Info* allocateMemoryReference_Sequence_Info ()
 	struct Reference_Sequence_Info *s;
 	s = ( struct Reference_Sequence_Info* ) malloc (sizeof(struct Reference_Sequence_Info));
 	s->line = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	s->reference_name = ( char* ) malloc (sizeof(char) * 1000);
 	return s;
 }
 
@@ -263,7 +264,7 @@ int findChromosomeIndex (
 {
 	int i;
 	for ( i = 0 ; i < max_number_of_sequences ; i++ )
-		if ( strcmp (r[i]->line , chromosome) == 0 ) return i;
+		if ( strcmp (r[i]->reference_name , chromosome) == 0 ) return i;
 	return -1;
 }
 
