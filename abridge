@@ -729,6 +729,10 @@ def compressSamFile(options):
         if options.quiet == False:
             logging.info("Starting compression with brotli")
         
+        fhw = open(f"{options.output_directory}/compression_method","w")
+        fhw.write("brotli")
+        fhw.close()
+        
         cmd  = f"(/usr/bin/time --verbose "
         cmd += f" 7za a -t7z -m0=brotli -mx=9 -mfb=64  -ms=on -mmt={options.cpu} "
         cmd += f" {options.outputfilename} " # Compressed Output filename
