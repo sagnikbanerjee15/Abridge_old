@@ -202,7 +202,6 @@ void findContinousClusters (
 	{
 		num_lines_read++;
 		printf ("\nLines read %d" , num_lines_read);
-		continue;
 		if ( num_lines_read == 1 )
 		{
 			fprintf (fhw , "%s" , line);
