@@ -410,11 +410,13 @@ void findContinousClusters (
 
 				byte_number_start_cluster = ftell (fhr_pass1) - line_len;
 				byte_number_start_cluster_qual = byte_number_end_cluster_qual;
+				printf ("\n1");
 
 			}
 			else if ( end_position_of_read > end_position_of_cluster )
 			{
 				end_position_of_cluster = end_position_of_read;
+				printf ("\n2");
 				//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nEnd_position_of_cluster: %d", end_position_of_cluster);
 			}
 			/*else
