@@ -416,7 +416,7 @@ void findContinousClusters (
 		}
 		line_len_previous = line_len;
 		//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nLine read from file:%s", line);
-		//fflush (fhw);
+		fflush (fhw);
 	}
 	//byte_number_end_cluster = ftell ( fhr_pass1 ) - line_len - line_len_previous;
 	byte_number_end_cluster = ftell (fhr_pass1);
