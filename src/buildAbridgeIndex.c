@@ -296,6 +296,7 @@ void findContinousClusters (
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 				 */
 				findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
+				printf ("\nReturned %d" , num_lines_read);
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
 				byte_number_start_cluster = file_position;
@@ -364,6 +365,7 @@ void findContinousClusters (
 			 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 			 */
 			findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
+			printf ("\nReturned %d" , num_lines_read);
 			// New cluster is found
 			if ( start_position_of_read > end_position_of_cluster + 1 )
 			{
