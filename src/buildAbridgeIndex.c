@@ -416,6 +416,10 @@ void findContinousClusters (
 				end_position_of_cluster = end_position_of_read;
 				//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nEnd_position_of_cluster: %d", end_position_of_cluster);
 			}
+			else
+			{
+				printf ("\nInside here");
+			}
 		}
 		line_len_previous = line_len;
 		//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nLine read from file:%s", line);
