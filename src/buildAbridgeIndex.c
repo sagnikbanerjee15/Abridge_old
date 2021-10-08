@@ -418,7 +418,7 @@ void findContinousClusters (
 			}
 			else
 			{
-				printf ("\nInside here");
+				printf ("\nInside here %d %d %d %d" , start_position_of_read , end_position_of_read , start_position_of_cluster , end_position_of_cluster);
 			}
 		}
 		line_len_previous = line_len;
