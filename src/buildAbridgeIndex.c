@@ -201,8 +201,8 @@ void findContinousClusters (
 	while ( ( line_len = getline ( &line , &len , fhr_pass1) ) != -1 )
 	{
 		num_lines_read++;
-		printf ("\nLines read %d" , num_lines_read);
-		fflush (stdout);
+		/*printf ("\nLines read %d" , num_lines_read);
+		 fflush (stdout);*/
 		if ( num_lines_read == 1 )
 		{
 			fprintf (fhw , "%s" , line);
@@ -261,10 +261,10 @@ void findContinousClusters (
 				 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 				 */
-				printf ("\nCalling findFarthestMapping %d" , num_lines_read);
+				//printf ("\nCalling findFarthestMapping %d" , num_lines_read);
 				findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
-				printf ("\nReturned %d" , num_lines_read);
-				fflush (stdout);
+				/*printf ("\nReturned %d" , num_lines_read);
+				 fflush (stdout);*/
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
 				byte_number_start_cluster = file_position;
@@ -298,10 +298,10 @@ void findContinousClusters (
 				 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 				 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 				 */
-				printf ("\nCalling findFarthestMapping %d" , num_lines_read);
+				//printf ("\nCalling findFarthestMapping %d" , num_lines_read);
 				findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
-				printf ("\nReturned %d" , num_lines_read);
-				fflush (stdout);
+				/*printf ("\nReturned %d" , num_lines_read);
+				 fflush (stdout);*/
 				start_position_of_cluster = start_position_of_read;
 				end_position_of_cluster = end_position_of_read;
 				byte_number_start_cluster = file_position;
@@ -369,11 +369,11 @@ void findContinousClusters (
 			 if (strcmp(current_reference_sequence, "MT") == 0) findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 1);
 			 else findFarthestMapping(&start_position_of_read, &end_position_of_read, split_icigar_field, number_of_fields, split_icigar_and_num_reads, 0);
 			 */
-			printf ("\nCalling findFarthestMapping %d" , num_lines_read);
+			//printf ("\nCalling findFarthestMapping %d" , num_lines_read);
 			findFarthestMapping ( &start_position_of_read , &end_position_of_read , split_icigar_field , number_of_fields , split_icigar_and_num_reads , 0 , save_scores);
-			printf ("\nReturned %d" , num_lines_read);
-			printf ("\n%d %d %d %d" , start_position_of_read , end_position_of_read , start_position_of_cluster , end_position_of_cluster);
-			fflush (stdout);
+			/*printf ("\nReturned %d" , num_lines_read);
+			 printf ("\n%d %d %d %d" , start_position_of_read , end_position_of_read , start_position_of_cluster , end_position_of_cluster);
+			 fflush (stdout);*/
 			// New cluster is found
 			if ( start_position_of_read > end_position_of_cluster + 1 )
 			{
@@ -434,9 +434,9 @@ void findContinousClusters (
 		line_len_previous = line_len;
 		//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nLine read from file:%s", line);
 		fflush (fhw);
-		printf ("\nIteration complete for %d" , num_lines_read);
-		printf ("\n");
-		fflush (stdout);
+		/*printf ("\nIteration complete for %d" , num_lines_read);
+		 printf ("\n");
+		 fflush (stdout);*/
 
 	}
 	//byte_number_end_cluster = ftell ( fhr_pass1 ) - line_len - line_len_previous;
