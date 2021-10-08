@@ -201,7 +201,7 @@ void findContinousClusters (
 	while ( ( line_len = getline ( &line , &len , fhr_pass1) ) != -1 )
 	{
 		num_lines_read++;
-		printf ("\nLines read %d %s" , num_lines_read);
+		printf ("\nLines read %d %s" , num_lines_read , line);
 		if ( num_lines_read == 1 )
 		{
 			fprintf (fhw , "%s" , line);
