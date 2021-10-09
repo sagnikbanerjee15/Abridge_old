@@ -433,7 +433,7 @@ void findContinousClusters (
 		}
 		line_len_previous = line_len;
 		//if (strcmp(current_reference_sequence, "MT") == 0) printf("\nLine read from file:%s", line);
-		fflush (fhw);
+		//fflush (fhw);
 		/*printf ("\nIteration complete for %d" , num_lines_read);
 		 printf ("\n");
 		 fflush (stdout);*/
