@@ -3574,7 +3574,7 @@ void convertToAlignmentPairedEnded (
 			( *read_number )++;
 			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		if ( stcmp (chromosome , "Pt") == 0 )
+		if ( strcmp (chromosome , "Pt") == 0 )
 			printf ("\nRead name: %s" , sam_alignment_instance->read_name);
 		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
