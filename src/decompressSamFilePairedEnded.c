@@ -74,6 +74,8 @@ void decompressFile (
 	int COLS_split_on_dash = MAX_SEQ_LEN * 3; //3,000
 	int ROWS_split_on_comma = ROWS * 10; //10,000
 	int COLS_split_on_comma = MAX_SEQ_LEN * 3; //3,000
+	int ROWS_split_on_tilde = 5;
+	int COLS_split_on_tilde = MAX_SEQ_LEN * 3; //3000
 	int number_of_unique_samformatflags;
 
 	//char **split_on_newline;
@@ -147,13 +149,13 @@ void decompressFile (
 	for ( i = 0 ; i < ROWS_split_on_dash ; i++ )
 		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_dash);
 
-	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
-	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+	split_on_comma = ( char** ) malloc (sizeof(char*) * max_reads_in_each_line);
+	for ( i = 0 ; i < max_reads_in_each_line ; i++ )
 		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 
-	split_on_tilde = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
-	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
-		split_on_tilde[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+	split_on_tilde = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tilde);
+	for ( i = 0 ; i < ROWS_split_on_tilde ; i++ )
+		split_on_tilde[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tilde);
 
 	output_prefix_without_path = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	sequence_portions_from_reference = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
