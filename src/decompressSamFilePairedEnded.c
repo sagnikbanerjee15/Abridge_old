@@ -149,8 +149,8 @@ void decompressFile (
 	for ( i = 0 ; i < ROWS_split_on_dash ; i++ )
 		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_dash);
 
-	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
-	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+	split_on_comma = ( char** ) malloc (sizeof(char*) * max_reads_in_each_line);
+	for ( i = 0 ; i < max_reads_in_each_line ; i++ )
 		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 
 	split_on_tilde = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tilde);
@@ -230,20 +230,21 @@ void decompressFile (
 			//fflush (stdout);
 
 		}
-		if ( max_number_of_commas > ROWS_split_on_comma )
-		{
-			//printf ("\nB--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
-			//fflush (stdout);
-			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
-				free (split_on_comma[i]);
-			free (split_on_comma);
-			ROWS_split_on_comma = line_len / max_number_of_commas + 10;
-			split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
-			for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
-				split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
-			//printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
-			//fflush (stdout);
-		}
+		/*
+		 if ( max_number_of_commas > ROWS_split_on_comma )
+		 {
+		 //printf ("\nB--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
+		 //fflush (stdout);
+		 for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		 free (split_on_comma[i]);
+		 free (split_on_comma);
+		 ROWS_split_on_comma = line_len / max_number_of_commas + 10;
+		 split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+		 for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		 split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
+		 //printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
+		 //fflush (stdout);
+		 }*/
 		number_of_columns = splitByDelimiter (buffer , '\t' , split_on_tab);
 		if ( number_of_columns == 2 )
 			curr_position++;
