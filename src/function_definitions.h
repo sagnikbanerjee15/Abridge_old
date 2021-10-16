@@ -3370,7 +3370,7 @@ void writeAlignmentToFilePairedEnded (
 		line_to_be_written_to_file[0] = '\0';
 		strcat (line_to_be_written_to_file , read_names[ *read_names_index]);
 		( *read_names_index )++;
-		if ( read_names_index > number_of_reads )
+		if ( *read_names_index > number_of_reads )
 		{
 			printf ("\nRead index exceeded");
 			exit (1);
