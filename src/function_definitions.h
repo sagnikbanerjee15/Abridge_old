@@ -3353,7 +3353,7 @@ void writeAlignmentToFilePairedEnded (
 		short int flag_save_all_quality_scores,
 		char **read_names,
 		int *read_names_index,
-		short int flag_ignore_scores
+		short int flag_ignore_scores,
 		int number_of_reads)
 {
 	int i;
@@ -3365,15 +3365,15 @@ void writeAlignmentToFilePairedEnded (
 	size_t len = 0;
 	ssize_t line_len;
 
-	for ( i = 0; i < number_of_repititions_of_the_same_reads; i++ )
+	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
 		strcat (line_to_be_written_to_file , read_names[ *read_names_index]);
 		( *read_names_index )++;
-		if (read_names_index>number_of_reads)
+		if ( read_names_index > number_of_reads )
 		{
-			printf("\nRead index exceeded");
-			exit(1);
+			printf ("\nRead index exceeded");
+			exit (1);
 		}
 		//sprintf (temp , "%d" , i + 1);
 		//strcat (line_to_be_written_to_file , "_");
@@ -3392,7 +3392,7 @@ void writeAlignmentToFilePairedEnded (
 
 		strcat (line_to_be_written_to_file , "\t");
 		if ( flag_ignore_scores == 1 )
-		strcat (line_to_be_written_to_file , "255");
+			strcat (line_to_be_written_to_file , "255");
 		else
 		{
 			sprintf (temp , "%d" , sam_alignment->mapping_quality_score);
@@ -3449,7 +3449,7 @@ void writeAlignmentToFilePairedEnded (
 		}
 
 		if ( line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] == '\t' )
-		line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] = '\0';
+			line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] = '\0';
 		strcat (line_to_be_written_to_file , "\n");
 		fprintf (fhw , "%s" , line_to_be_written_to_file);
 	}
