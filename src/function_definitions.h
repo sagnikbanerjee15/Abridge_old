@@ -3523,11 +3523,11 @@ void convertToAlignmentPairedEnded (
 		int max_number_of_commas = 0, number_of_commas = 0;
 		for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
 			if ( split_on_tab[1][i] == ',' ) number_of_commas++;
-		if ( strcmp (chromosome , "Pt") == 0 )
-		{
-			printf ("\nsplit_on_tab %s" , split_on_tab[1]);
-			fflush (stdout);
-		}
+		/*if ( strcmp (chromosome , "Pt") == 0 )
+		 {
+		 printf ("\nsplit_on_tab %s" , split_on_tab[1]);
+		 fflush (stdout);
+		 }*/
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 		number_of_reads = splitByDelimiter (split_on_tab[2] , ',' , read_names);
 	}
@@ -3599,7 +3599,7 @@ void convertToAlignmentPairedEnded (
 			 strcpy (sam_alignment_instance->read_name , temp);
 			 */
 		}
-		//writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores , number_of_reads);
+		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores , number_of_reads);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
