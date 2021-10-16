@@ -3525,6 +3525,7 @@ void convertToAlignmentPairedEnded (
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 		number_of_reads = splitByDelimiter (split_on_tab[2] , ',' , read_names);
 	}
+	return;
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
 		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
