@@ -3550,10 +3550,13 @@ void convertToAlignmentPairedEnded (
 
 		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 		{
-			// Use the same cigar
-			sprintf (temp , "%d" , *read_number);
-			( *read_number )++;
-			strcpy (sam_alignment_instance->read_name , temp);
+			// Use the same cigar - basically do nothing
+
+			/*
+			 sprintf (temp , "%d" , *read_number);
+			 ( *read_number )++;
+			 strcpy (sam_alignment_instance->read_name , temp);
+			 */
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nSame iCIGAR");
@@ -3582,9 +3585,12 @@ void convertToAlignmentPairedEnded (
 			 printf ("\n==============================================================================================================================");
 			 fflush (stdout);
 			 }*/
-			sprintf (temp , "%d" , *read_number);
-			( *read_number )++;
-			strcpy (sam_alignment_instance->read_name , temp);
+
+			/*
+			 sprintf (temp , "%d" , *read_number);
+			 ( *read_number )++;
+			 strcpy (sam_alignment_instance->read_name , temp);
+			 */
 		}
 		//writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores , number_of_reads);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
