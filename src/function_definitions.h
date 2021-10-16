@@ -3375,6 +3375,10 @@ void writeAlignmentToFilePairedEnded (
 			printf ("\nRead index exceeded");
 			exit (1);
 		}
+		else
+		{
+			printf ("\nIndex=%d Total=%d" , *read_names_index , number_of_reads);
+		}
 		//sprintf (temp , "%d" , i + 1);
 		//strcat (line_to_be_written_to_file , "_");
 		//strcat (line_to_be_written_to_file , temp);
@@ -3581,8 +3585,6 @@ void convertToAlignmentPairedEnded (
 			( *read_number )++;
 			strcpy (sam_alignment_instance->read_name , temp);
 		}
-		if ( strcmp (chromosome , "Pt") == 0 )
-			printf ("\nRead name: %s" , sam_alignment_instance->read_name);
 		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores , number_of_reads);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
