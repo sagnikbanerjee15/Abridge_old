@@ -3523,8 +3523,8 @@ void convertToAlignmentPairedEnded (
 		int max_number_of_commas = 0, number_of_commas = 0;
 		for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
 			if ( split_on_tab[1][i] == ',' ) number_of_commas++;
-		//number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
-		number_of_reads = splitByDelimiter (split_on_tab[2] , ',' , read_names);
+		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
+		//number_of_reads = splitByDelimiter (split_on_tab[2] , ',' , read_names);
 	}
 	return;
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
