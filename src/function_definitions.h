@@ -3353,7 +3353,8 @@ void writeAlignmentToFilePairedEnded (
 		short int flag_save_all_quality_scores,
 		char **read_names,
 		int *read_names_index,
-		short int flag_ignore_scores)
+		short int flag_ignore_scores
+		int number_of_reads)
 {
 	int i;
 
@@ -3364,11 +3365,16 @@ void writeAlignmentToFilePairedEnded (
 	size_t len = 0;
 	ssize_t line_len;
 
-	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
+	for ( i = 0; i < number_of_repititions_of_the_same_reads; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
 		strcat (line_to_be_written_to_file , read_names[ *read_names_index]);
 		( *read_names_index )++;
+		if (read_names_index>number_of_reads)
+		{
+			printf("\nRead index exceeded");
+			exit(1);
+		}
 		//sprintf (temp , "%d" , i + 1);
 		//strcat (line_to_be_written_to_file , "_");
 		//strcat (line_to_be_written_to_file , temp);
@@ -3386,7 +3392,7 @@ void writeAlignmentToFilePairedEnded (
 
 		strcat (line_to_be_written_to_file , "\t");
 		if ( flag_ignore_scores == 1 )
-			strcat (line_to_be_written_to_file , "255");
+		strcat (line_to_be_written_to_file , "255");
 		else
 		{
 			sprintf (temp , "%d" , sam_alignment->mapping_quality_score);
@@ -3443,7 +3449,7 @@ void writeAlignmentToFilePairedEnded (
 		}
 
 		if ( line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] == '\t' )
-			line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] = '\0';
+		line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] = '\0';
 		strcat (line_to_be_written_to_file , "\n");
 		fprintf (fhw , "%s" , line_to_be_written_to_file);
 	}
@@ -3483,6 +3489,7 @@ void convertToAlignmentPairedEnded (
 	int number_of_distinct_cigars_in_a_line;
 	int number_of_repititions_of_the_same_reads;
 	int samformatflag;
+	int number_of_reads;
 
 	int i, j;
 	int read_names_index = 0;
@@ -3504,7 +3511,7 @@ void convertToAlignmentPairedEnded (
 		for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
 			if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
-		splitByDelimiter (split_on_tab[1] , ',' , read_names);
+		number_of_reads = splitByDelimiter (split_on_tab[1] , ',' , read_names);
 	}
 	else if ( number_of_columns == 3 )
 	{
@@ -3512,7 +3519,7 @@ void convertToAlignmentPairedEnded (
 		for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
 			if ( split_on_tab[1][i] == ',' ) number_of_commas++;
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
-		splitByDelimiter (split_on_tab[2] , ',' , read_names);
+		number_of_reads = splitByDelimiter (split_on_tab[2] , ',' , read_names);
 	}
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
@@ -3576,7 +3583,7 @@ void convertToAlignmentPairedEnded (
 		}
 		if ( strcmp (chromosome , "Pt") == 0 )
 			printf ("\nRead name: %s" , sam_alignment_instance->read_name);
-		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores);
+		writeAlignmentToFilePairedEnded (sam_alignment_instance , flag_ignore_sequence_information , number_of_repititions_of_the_same_reads , fhw , fhr_qual , flag_save_all_quality_scores , read_names , &read_names_index , flag_ignore_scores , number_of_reads);
 		( *total_mapped_reads ) += number_of_repititions_of_the_same_reads;
 	}
 }
