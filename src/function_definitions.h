@@ -3509,6 +3509,7 @@ void convertToAlignmentPairedEnded (
 
 	/********************************************************************/
 
+	return;
 	if ( number_of_columns == 2 )
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
