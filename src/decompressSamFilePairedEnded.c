@@ -149,8 +149,8 @@ void decompressFile (
 	for ( i = 0 ; i < ROWS_split_on_dash ; i++ )
 		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_dash);
 
-	split_on_comma = ( char** ) malloc (sizeof(char*) * max_reads_in_each_line);
-	for ( i = 0 ; i < max_reads_in_each_line ; i++ )
+	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
 		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 
 	split_on_tilde = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tilde);
