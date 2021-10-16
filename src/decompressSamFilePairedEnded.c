@@ -200,6 +200,7 @@ void decompressFile (
 			splitByDelimiter (buffer , '\t' , split_on_tab);
 			splitByDelimiter (split_on_tab[1] , ':' , split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
 			strcpy(current_chromosome , split_on_dash[1]);
+			printf ("\nProcessing chromosome %s" , current_chromosome);
 			readInEachChromosome (genome_filename , whole_genome , current_chromosome);
 			do
 			{
