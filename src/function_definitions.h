@@ -3525,7 +3525,7 @@ void convertToAlignmentPairedEnded (
 			if ( split_on_tab[1][i] == ',' ) number_of_commas++;
 		if ( strcmp (chromosome , "Pt") == 0 )
 		{
-			printf ("\n%d" , split_on_tab[1]);
+			printf ("\n%split_on_tab s" , split_on_tab[1]);
 			fflush (stdout);
 		}
 		number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
