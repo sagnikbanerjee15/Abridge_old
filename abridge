@@ -825,7 +825,7 @@ def compressSamFile(options):
             cmd += f" {name_of_file_with_quality_scores_rle} "
         else:
             cmd += f" {name_of_file_with_quality_scores} "
-        cmd += f" -m2 -t{options.cpu} -f "
+        cmd += f" -m5 -t{options.cpu} -f "
         cmd += f" -noattributes "
         cmd += f") "
         cmd += f"1> /dev/null "
