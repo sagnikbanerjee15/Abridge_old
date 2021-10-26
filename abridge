@@ -1534,7 +1534,7 @@ def main():
             os.system(cmd)
         
         generateCoverage(_outputfilename,_index_outputfilename,options)
-        os.system(f"rm -rf {options.output_directory}")
+        #os.system(f"rm -rf {options.output_directory}")
     
     cleanUp(options)
     if options.quiet == False:
