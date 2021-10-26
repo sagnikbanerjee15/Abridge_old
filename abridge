@@ -1413,9 +1413,9 @@ def main():
         
     for line in pprint.pformat(options).split('\n'):
         logging.info(line)
-        
+    return    
     validateCommandLineArguments(options)
-    return
+    
     for line in pprint.pformat(options).split('\n'):
         logging.info(line)
 
