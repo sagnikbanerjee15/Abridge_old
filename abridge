@@ -1339,8 +1339,8 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     
     input_filename = options.inputabrfilenames
     name_of_input_file_without_location = input_filename.split("/")[-1][:-8]
-    _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam."
-    _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam..index"
+    _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_"
+    _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam__index"
     unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.unmapped"
     name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam.qual"
     compressed_abridged_filename = input_filename
