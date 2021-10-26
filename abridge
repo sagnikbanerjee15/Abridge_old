@@ -1464,7 +1464,7 @@ def main():
         name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam_qual"
         compressed_abridged_filename = input_filename
         output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
-        
+        return
         cmd  = f"7za e {input_filename} -y "
         cmd += f" -o{options.output_directory}"
         cmd += f" 1> /dev/null 2>/dev/null"
