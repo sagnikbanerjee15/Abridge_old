@@ -1418,7 +1418,7 @@ def main():
         logging.info(line)
         
     validateCommandLineArguments(options)
-    return
+    
     for line in pprint.pformat(options).split('\n'):
         logging.info(line)
 
