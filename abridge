@@ -1341,8 +1341,8 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     name_of_input_file_without_location = input_filename.split("/")[-1][:-8]
     _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_"
     _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam__index"
-    unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.unmapped"
-    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam.qual"
+    unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_unmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam_qual"
     compressed_abridged_filename = input_filename
     output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
     outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "_" + options.positions.replace(":","_") + ".sam"
@@ -1394,7 +1394,7 @@ def main():
     if len(commandLineArg)==1:
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
-    print(options)
+    #print(options)
     #return
     
     if options.inputsamfilenames is not None:
@@ -1460,8 +1460,8 @@ def main():
         name_of_input_file_without_location = input_filename.split("/")[-1][:-8]
         _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_"
         _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam__index"
-        unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam.unmapped"
-        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam.qual"
+        unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_unmapped"
+        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam_qual"
         compressed_abridged_filename = input_filename
         output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
         
