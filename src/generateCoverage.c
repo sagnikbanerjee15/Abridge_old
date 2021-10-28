@@ -170,11 +170,11 @@ void generateCoverageFromCompressedMappedFile (
 			coverage_array[j] = 0;
 		while ( number_of_bytes_read_from_compressed_file < max_bytes_for_current_index_entry )
 		{
-
+			line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1);
+			number_of_bytes_read_from_compressed_file += line_len;
 			printf ("\n%s number_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , abridge_index->chromosome[i] , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
 			fflush (stdout);
 			continue;
-			line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1);
 			if ( buffer_for_pass1[0] == '@' )
 			{
 				/***********************************************************************************
@@ -212,7 +212,7 @@ void generateCoverageFromCompressedMappedFile (
 				last_location_of_current_chromosome = strtol (split_on_comma[1] , &temp , 10);
 				continue;
 			}
-			number_of_bytes_read_from_compressed_file += line_len;
+
 			number_of_commas_in_each_line = 0;
 			for ( j = 0 ; buffer_for_pass1[j] != '\0' ; j++ )
 				if ( buffer_for_pass1[j] == ',' )
