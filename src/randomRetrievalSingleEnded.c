@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
 		split_on_newline_qual[i] = ( char* ) malloc (sizeof(char) * split_on_newline_qual_COLS);
 
 	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS * 100);
-	for ( i = 0 ; i < ROWS * 10 ; i++ )
+	for ( i = 0 ; i < ROWS * 100 ; i++ )
 		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS * 100);
 
 	split_on_tab = ( char** ) malloc (sizeof(char*) * 5);
@@ -135,11 +135,11 @@ int main (int argc, char *argv[])
 		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
 
 	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS * 100);
-	for ( i = 0 ; i < ROWS * 10 ; i++ )
+	for ( i = 0 ; i < ROWS * 100 ; i++ )
 		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS * 100);
 
 	split_on_delimiter = ( char** ) malloc (sizeof(char*) * ROWS * 100);
-	for ( i = 0 ; i < ROWS ; i++ )
+	for ( i = 0 ; i < ROWS * 100 ; i++ )
 		split_on_delimiter[i] = ( char* ) malloc (sizeof(char) * COLS * 100);
 
 	buffer_for_pass1 = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
