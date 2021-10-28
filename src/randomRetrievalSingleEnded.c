@@ -169,11 +169,11 @@ int main (int argc, char *argv[])
 	{
 		if ( loop_num == 2 ) break;
 		loop_num++;
-		/*
-		 printf ("\n%s %lld %lld %lld %lld %lld %lld" , abridge_index->chromosome[i] , abridge_index->start[i] , abridge_index->end[i] , abridge_index->start_byte[i] , abridge_index->end_byte[i] , abridge_index->start_byte_qual[i] , abridge_index->end_byte_qual[i]);
-		 fflush (stdout);
-		 //continue;
-		 */
+
+		printf ("\n%s %lld %lld %lld %lld %lld %lld" , abridge_index->chromosome[i] , abridge_index->start[i] , abridge_index->end[i] , abridge_index->start_byte[i] , abridge_index->end_byte[i] , abridge_index->start_byte_qual[i] , abridge_index->end_byte_qual[i]);
+		fflush (stdout);
+		continue;
+
 		fseek_ret_val = fseek (fhr_pass1 , abridge_index->start_byte[i] , SEEK_SET);
 		buffer_for_pass1[0] = '\0';
 		fread_ret_val = fread (buffer_for_pass1 , 1 , abridge_index->end_byte[i] - abridge_index->start_byte[i] , fhr_pass1);
