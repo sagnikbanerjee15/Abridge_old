@@ -67,6 +67,7 @@ int main (int argc, char *argv[])
 	unsigned long long int read_number = 1;
 	unsigned long long int from = -1;
 	unsigned long long int to = -1;
+	unsigned int loop_num = 0;
 
 	long long int start;
 	long long int end;
@@ -166,6 +167,8 @@ int main (int argc, char *argv[])
 	 */
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
+		loop_num = 0;
+		if ( loop_num == 2 ) break;
 		/*
 		 printf ("\n%s %lld %lld %lld %lld %lld %lld" , abridge_index->chromosome[i] , abridge_index->start[i] , abridge_index->end[i] , abridge_index->start_byte[i] , abridge_index->end_byte[i] , abridge_index->start_byte_qual[i] , abridge_index->end_byte_qual[i]);
 		 fflush (stdout);
