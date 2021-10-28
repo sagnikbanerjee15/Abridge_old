@@ -208,6 +208,7 @@ int main (int argc, char *argv[])
 			printf ("\n%s" , split_on_newline[j]);
 			fflush (stdout);
 		}
+		continue;
 
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
