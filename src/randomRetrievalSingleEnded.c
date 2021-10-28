@@ -161,19 +161,19 @@ int main (int argc, char *argv[])
 	buffer_for_qual = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
 	from = start;
 	to = end;
-
-	printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
-	fflush (stdout);
-
+	/*
+	 printf ("\n abridge_match_start_index %d abridge_match_end_index %d" , abridge_match_start_index , abridge_match_end_index);
+	 fflush (stdout);
+	 */
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
 		if ( loop_num == 2 ) break;
 		loop_num++;
-
-		printf ("\n%s %lld %lld %lld %lld %lld %lld" , abridge_index->chromosome[i] , abridge_index->start[i] , abridge_index->end[i] , abridge_index->start_byte[i] , abridge_index->end_byte[i] , abridge_index->start_byte_qual[i] , abridge_index->end_byte_qual[i]);
-		fflush (stdout);
-		//continue;
-
+		/*
+		 printf ("\n%s %lld %lld %lld %lld %lld %lld" , abridge_index->chromosome[i] , abridge_index->start[i] , abridge_index->end[i] , abridge_index->start_byte[i] , abridge_index->end_byte[i] , abridge_index->start_byte_qual[i] , abridge_index->end_byte_qual[i]);
+		 fflush (stdout);
+		 //continue;
+		 */
 		fseek_ret_val = fseek (fhr_pass1 , abridge_index->start_byte[i] , SEEK_SET);
 		buffer_for_pass1[0] = '\0';
 		fread_ret_val = fread (buffer_for_pass1 , 1 , abridge_index->end_byte[i] - abridge_index->start_byte[i] , fhr_pass1);
@@ -208,16 +208,16 @@ int main (int argc, char *argv[])
 		 printf ("\n%s" , split_on_newline_qual[j]);
 		 */
 		qual_pool_iterator = 0;
-
-		printf ("\nLoop_num %d" , loop_num);
-		printf ("\nfread_ret_val %d" , fread_ret_val);
-		printf ("\nNew Record:%d\n" , i);
-		printf ("%s" , buffer_for_pass1);
-		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		fflush (stdout);
-		//continue;
-
+		/*
+		 printf ("\nLoop_num %d" , loop_num);
+		 printf ("\nfread_ret_val %d" , fread_ret_val);
+		 printf ("\nNew Record:%d\n" , i);
+		 printf ("%s" , buffer_for_pass1);
+		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		 fflush (stdout);
+		 //continue;
+		 */
 		curr_position = abridge_index->start[i];
 		//if ( first_record == 1 ) curr_position = 0;
 		/*
@@ -267,7 +267,7 @@ int main (int argc, char *argv[])
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 			}
 
-			printf ("\ncurr_position %d number_of_distinct_cigars_in_a_line %d \n" , curr_position , number_of_distinct_cigars_in_a_line);
+			//printf ("\ncurr_position %d number_of_distinct_cigars_in_a_line %d \n" , curr_position , number_of_distinct_cigars_in_a_line);
 
 			strcpy(sam_alignment->reference_name , chromosome);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
