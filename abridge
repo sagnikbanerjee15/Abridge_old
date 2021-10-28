@@ -1365,7 +1365,7 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     os.system(cmd)
     files_to_be_removed.append(f"{name_of_file_with_quality_scores}")
 
-    dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
+    dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.sam.dictionary"
     print(dictionary_name)
     if os.path.exists(dictionary_name)==False:
         cmd  = f" {randomRetrievalSingleEnded} " #argv[0]
