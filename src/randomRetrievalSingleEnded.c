@@ -206,15 +206,15 @@ int main (int argc, char *argv[])
 		 printf ("\n%s" , split_on_newline_qual[j]);
 		 */
 		qual_pool_iterator = 0;
-		/*
-		 printf ("\nfread_ret_val %d" , fread_ret_val);
-		 printf ("\nNew Record:%d\n" , i);
-		 printf ("%s" , buffer_for_pass1);
-		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		 fflush (stdout);
-		 continue;
-		 */
+
+		printf ("\nfread_ret_val %d" , fread_ret_val);
+		printf ("\nNew Record:%d\n" , i);
+		printf ("%s" , buffer_for_pass1);
+		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		fflush (stdout);
+		//continue;
+
 		curr_position = abridge_index->start[i];
 		//if ( first_record == 1 ) curr_position = 0;
 		/*
@@ -264,9 +264,8 @@ int main (int argc, char *argv[])
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 			}
 
-			/*
-			 printf ("\ncurr_position %d\n" , curr_position);
-			 */
+			printf ("\ncurr_position %d\n" , curr_position);
+
 			strcpy(sam_alignment->reference_name , chromosome);
 			for ( k = 0 ; k < number_of_distinct_cigars_in_a_line ; k++ )
 			{
