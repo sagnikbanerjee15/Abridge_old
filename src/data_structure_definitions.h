@@ -5,8 +5,8 @@
  * Defining macros
  */
 # define FILENAME_LENGTH 10000
-# define ROWS 100000
-# define COLS 100000
+# define ROWS 10000
+# define COLS 10000
 # define MAX_SEQ_LEN 1000
 # define MAX_CIGAR_ITEMS 5000
 # define MAX_CIGAR_LENGTH 10000

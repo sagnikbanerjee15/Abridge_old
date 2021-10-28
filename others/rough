@@ -13,7 +13,7 @@
 --random \
 --keep_intermediate_error_files \
 --genome /project/maizegdb/sagnik/data/ARATH/genome/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
---inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/compress_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354_SE_0/SRR13711353-SRR13711354_SE.abridge \
---cpu 1 -p 5:1000-100000 --output_directory /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_random_access/random_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354_SE_0) \
-1> /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/outputs/random_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354_SE_0.output \
-2> /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/errors/random_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354_SE_0.error 
+--inputabrfilenames /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_compressed_files/compress_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354-SRR13711355-SRR13711356-SRR13711357_SE_0/SRR13711353-SRR13711354-SRR13711355-SRR13711356-SRR13711357_SE.abridge \
+--cpu 1 -p 5:1000-100000 --output_directory /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/abridge_random_access/random_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354-SRR13711355-SRR13711356-SRR13711357_SE_0) \
+1> /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/outputs/random_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354-SRR13711355-SRR13711356-SRR13711357_SE_0.output \
+2> /project/maizegdb/sagnik/ABRIDGE/data_analysis_for_MS/errors/random_save_all_quality_scores_save_exact_quality_scores_level_2_SRR13711353-SRR13711354-SRR13711355-SRR13711356-SRR13711357_SE_0.error 
