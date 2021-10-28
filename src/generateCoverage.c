@@ -52,14 +52,14 @@ void generateCoverageFromCompressedMappedFile (
 	int BUFFER_SIZE = 8 * 100 * 1024 * 1024; // 100 MB
 	//int ROWS_split_on_newline = ROWS * 10; //10,000
 	//int COLS_split_on_newline = COLS * 1000; //1,000,000
-	int ROWS_split_on_tab = 10; //10
-	int COLS_split_on_tab = COLS * 10 * 10; //100,0000
+	int ROWS_split_on_tab = 5; //10
+	int COLS_split_on_tab = COLS * 10; //100,000
 	int ROWS_split_on_dash = 5; //5
 	int COLS_split_on_dash = MAX_SEQ_LEN * 3; //3,000
-	int ROWS_split_on_comma = ROWS * 100; //10,0000
+	int ROWS_split_on_comma = ROWS * 100; //100,000
 	int COLS_split_on_comma = MAX_SEQ_LEN * 3; //3,000
-	int ROWS_split_on_newline = ROWS * 1000; // 1,000,0000
-	int COLS_split_on_newline = COLS * 1000; // 1,000,0000
+	int ROWS_split_on_newline = ROWS * 100; // 1,000,000
+	int COLS_split_on_newline = COLS * 100; // 1,000,000
 	int number_of_unique_samformatflags;
 	int length_of_continuous_segment;
 	int number_of_commas_in_each_line;
