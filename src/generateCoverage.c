@@ -165,7 +165,7 @@ void generateCoverageFromCompressedMappedFile (
 		max_bytes_for_current_index_entry = abridge_index->end_byte[i] - abridge_index->start_byte[i];
 		number_of_bytes_read_from_compressed_file = 0;
 		if ( coverage_array != NULL ) free (coverage_array);
-		coverage_array = ( long long int* ) malloc (sizeof(long long int*) * length_of_continuous_segment);
+		coverage_array = ( long long int* ) malloc (sizeof(long long int) * length_of_continuous_segment);
 		for ( j = 0 ; j < length_of_continuous_segment ; j++ )
 			coverage_array[j] = 0;
 		continue;
