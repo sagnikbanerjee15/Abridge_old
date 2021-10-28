@@ -167,8 +167,8 @@ int main (int argc, char *argv[])
 	 */
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
-		loop_num++;
 		if ( loop_num == 2 ) break;
+		loop_num++;
 		/*
 		 printf ("\n%s %lld %lld %lld %lld %lld %lld" , abridge_index->chromosome[i] , abridge_index->start[i] , abridge_index->end[i] , abridge_index->start_byte[i] , abridge_index->end_byte[i] , abridge_index->start_byte_qual[i] , abridge_index->end_byte_qual[i]);
 		 fflush (stdout);
@@ -210,6 +210,7 @@ int main (int argc, char *argv[])
 		 */
 		qual_pool_iterator = 0;
 
+		printf ("\nLoop_num %d" , loop_num);
 		printf ("\nfread_ret_val %d" , fread_ret_val);
 		printf ("\nNew Record:%d\n" , i);
 		printf ("%s" , buffer_for_pass1);
