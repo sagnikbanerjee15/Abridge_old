@@ -255,15 +255,15 @@ int main (int argc, char *argv[])
 			if ( ( number_of_columns == 1 && read_names_stored == 0 ) || ( number_of_columns == 2 && read_names_stored == 1 ) )
 			{
 				int max_number_of_commas = 0, number_of_commas = 0;
-				for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
-					if ( split_on_tab[0][i] == ',' ) number_of_commas++;
+				for ( k = 0 ; split_on_tab[0][k] != '\0' ; k++ )
+					if ( split_on_tab[0][k] == ',' ) number_of_commas++;
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] , ',' , split_on_comma);
 			}
 			else if ( ( number_of_columns == 2 && read_names_stored == 0 ) || ( number_of_columns == 3 && read_names_stored == 1 ) )
 			{
 				int max_number_of_commas = 0, number_of_commas = 0;
-				for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
-					if ( split_on_tab[1][i] == ',' ) number_of_commas++;
+				for ( k = 0 ; split_on_tab[1][k] != '\0' ; i++ )
+					if ( split_on_tab[1][k] == ',' ) number_of_commas++;
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 			}
 
