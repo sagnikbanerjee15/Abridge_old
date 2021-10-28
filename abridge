@@ -1387,8 +1387,8 @@ def retrieveAlignmentsRandomly(chromosome,start,end,options):
     cmd += f" {name_of_file_with_quality_scores}" #argv[12]
     if os.path.exists(dictionary_name)==True:
         cmd += f" {dictionary_name} " # argv[13]
-    #print(cmd)
-    #sys.stdout.flush()
+    print(cmd)
+    sys.stdout.flush()
     os.system(cmd)
     
     
@@ -1514,7 +1514,7 @@ def main():
         else:
             sortPositions(options.positions)
         """
-        os.system(f"rm -rf {options.output_directory}")
+        #os.system(f"rm -rf {options.output_directory}")
     
     if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage ==True:
         input_filename = options.inputabrfilenames
