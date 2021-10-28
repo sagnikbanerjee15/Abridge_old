@@ -262,7 +262,7 @@ int main (int argc, char *argv[])
 			else if ( ( number_of_columns == 2 && read_names_stored == 0 ) || ( number_of_columns == 3 && read_names_stored == 1 ) )
 			{
 				int max_number_of_commas = 0, number_of_commas = 0;
-				for ( k = 0 ; split_on_tab[1][k] != '\0' ; i++ )
+				for ( k = 0 ; split_on_tab[1][k] != '\0' ; k++ )
 					if ( split_on_tab[1][k] == ',' ) number_of_commas++;
 				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] , ',' , split_on_comma);
 			}
