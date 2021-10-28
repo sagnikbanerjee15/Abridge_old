@@ -58,8 +58,8 @@ int main (int argc, char *argv[])
 	int fread_ret_val;
 	int number_of_entries_in_cluster;
 	int sam_alignment_pool_index;
-	int split_on_newline_qual_ROWS = ROWS;
-	int split_on_newline_qual_COLS = COLS * 10;
+	int split_on_newline_qual_ROWS = ROWS * 10;
+	int split_on_newline_qual_COLS = COLS * 100;
 	int read_names_ROWS = -1;
 	int read_names_COLS = -1;
 	int number_of_newlines = 0;
@@ -136,9 +136,9 @@ int main (int argc, char *argv[])
 	for ( i = 0 ; i < split_on_newline_qual_ROWS ; i++ )
 		split_on_newline_qual[i] = ( char* ) malloc (sizeof(char) * split_on_newline_qual_COLS);
 
-	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS * 10);
-	for ( i = 0 ; i < ROWS * 10 ; i++ )
-		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
+	split_on_newline = ( char** ) malloc (sizeof(char*) * ROWS * 100);
+	for ( i = 0 ; i < ROWS * 100 ; i++ )
+		split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS * 100);
 
 	split_on_tab = ( char** ) malloc (sizeof(char*) * 5);
 	for ( i = 0 ; i < 5 ; i++ )
@@ -146,15 +146,15 @@ int main (int argc, char *argv[])
 
 	split_on_dash = ( char** ) malloc (sizeof(char*) * 5);
 	for ( i = 0 ; i < 5 ; i++ )
-		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS);
+		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
 
-	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS * 10);
+	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS * 100);
+	for ( i = 0 ; i < ROWS * 100 ; i++ )
+		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS * 100);
+
+	split_on_delimiter = ( char** ) malloc (sizeof(char*) * ROWS * 10);
 	for ( i = 0 ; i < ROWS * 10 ; i++ )
-		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
-
-	split_on_delimiter = ( char** ) malloc (sizeof(char*) * ROWS);
-	for ( i = 0 ; i < ROWS ; i++ )
-		split_on_delimiter[i] = ( char* ) malloc (sizeof(char) * COLS);
+		split_on_delimiter[i] = ( char* ) malloc (sizeof(char) * COLS * 10);
 
 	buffer_for_pass1 = ( char* ) malloc (sizeof(char) * MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE);
 	single_genome_sequence = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
