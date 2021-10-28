@@ -53,13 +53,13 @@ void generateCoverageFromCompressedMappedFile (
 	//int ROWS_split_on_newline = ROWS * 10; //10,000
 	//int COLS_split_on_newline = COLS * 1000; //1,000,000
 	int ROWS_split_on_tab = 10; //10
-	int COLS_split_on_tab = COLS * 10; //100,000
+	int COLS_split_on_tab = COLS * 10 * 10; //100,0000
 	int ROWS_split_on_dash = 5; //5
 	int COLS_split_on_dash = MAX_SEQ_LEN * 3; //3,000
-	int ROWS_split_on_comma = ROWS * 10; //10,000
+	int ROWS_split_on_comma = ROWS * 100; //10,0000
 	int COLS_split_on_comma = MAX_SEQ_LEN * 3; //3,000
-	int ROWS_split_on_newline = ROWS * 100; // 1,000,000
-	int COLS_split_on_newline = COLS * 100; // 1,000,000
+	int ROWS_split_on_newline = ROWS * 1000; // 1,000,0000
+	int COLS_split_on_newline = COLS * 1000; // 1,000,0000
 	int number_of_unique_samformatflags;
 	int length_of_continuous_segment;
 	int number_of_commas_in_each_line;
@@ -156,7 +156,7 @@ void generateCoverageFromCompressedMappedFile (
 	flag_save_scores = strtol (split_on_tab[6] , &convert_to_int_temp , 10);
 
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores , &flag_save_scores);
-	return;
+
 	line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
 	coverage_array = NULL;
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
