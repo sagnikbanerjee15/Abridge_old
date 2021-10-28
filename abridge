@@ -1520,8 +1520,8 @@ def main():
     if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage ==True:
         input_filename = options.inputabrfilenames
         name_of_input_file_without_location = input_filename.split("/")[-1][:-11]
-        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "."
-        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "..index"
+        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_"
+        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "sam__index"
         
         cmd  = f"7za e {input_filename} -y "
         cmd += f" -o{options.output_directory}"
