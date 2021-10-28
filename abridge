@@ -1534,6 +1534,7 @@ def main():
             cmd = f"brotli -d -k -f {_outputfilename}.br {_index_outputfilename}.br"
             os.system(cmd)
         
+        print(_outputfilename,_index_outputfilename)
         generateCoverage(_outputfilename,_index_outputfilename,options)
         #os.system(f"rm -rf {options.output_directory}")
     
