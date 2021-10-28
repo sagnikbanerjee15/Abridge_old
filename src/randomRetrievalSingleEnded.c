@@ -167,7 +167,7 @@ int main (int argc, char *argv[])
 	 */
 	for ( i = abridge_match_start_index ; i <= abridge_match_end_index ; i++ )
 	{
-		if ( loop_num == 3 ) break;
+		if ( loop_num == 2 ) break;
 		loop_num++;
 		/*
 		 printf ("\n%s %lld %lld %lld %lld %lld %lld" , abridge_index->chromosome[i] , abridge_index->start[i] , abridge_index->end[i] , abridge_index->start_byte[i] , abridge_index->end_byte[i] , abridge_index->start_byte_qual[i] , abridge_index->end_byte_qual[i]);
