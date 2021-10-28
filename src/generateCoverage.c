@@ -155,6 +155,7 @@ void generateCoverageFromCompressedMappedFile (
 	flag_save_exact_quality_scores = strtol (split_on_tab[5] , &convert_to_int_temp , 10);
 	flag_save_scores = strtol (split_on_tab[6] , &convert_to_int_temp , 10);
 
+	return;
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores , &flag_save_scores);
 	return;
 	//line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
