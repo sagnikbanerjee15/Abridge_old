@@ -206,14 +206,15 @@ int main (int argc, char *argv[])
 		 printf ("\n%s" , split_on_newline_qual[j]);
 		 */
 		qual_pool_iterator = 0;
-
-		printf ("\nfread_ret_val %d" , fread_ret_val);
-		printf ("\nNew Record:%d\n" , i);
-		printf ("%s" , buffer_for_pass1);
-		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		fflush (stdout);
-
+		/*
+		 printf ("\nfread_ret_val %d" , fread_ret_val);
+		 printf ("\nNew Record:%d\n" , i);
+		 printf ("%s" , buffer_for_pass1);
+		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		 printf ("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		 fflush (stdout);
+		 continue;
+		 */
 		curr_position = abridge_index->start[i];
 		//if ( first_record == 1 ) curr_position = 0;
 		/*
@@ -221,7 +222,7 @@ int main (int argc, char *argv[])
 		 */
 		for ( j = 0 ; j < number_of_entries_in_cluster ; j++ )
 		{
-			if ( strstr (split_on_newline[j] , "abridge_") )
+			if ( strstr (split_on_newline[j] , "brdg_") )
 				read_names_stored = 1;
 			else read_names_stored = 0;
 
@@ -241,7 +242,7 @@ int main (int argc, char *argv[])
 			{
 				if ( number_of_columns == 2 )
 					curr_position++;
-				else if ( number_of_columns == 2 )
+				else if ( number_of_columns == 3 )
 				{
 					if ( j != 0 )
 						curr_position += strtol (split_on_tab[0] , &temp , 10);
