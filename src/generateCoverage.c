@@ -251,6 +251,10 @@ void generateCoverageFromCompressedMappedFile (
 			}
 			number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
 
+			// SE and stores names of reads
+			if ( max_reads_in_each_line == -1 && strstr (buffer_for_pass1 , "brdg_") )
+				number_of_columns--;
+
 			// Increase the number_of_columns for SE
 			if ( max_reads_in_each_line == -1 ) number_of_columns++;
 
