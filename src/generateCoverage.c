@@ -145,8 +145,9 @@ void generateCoverageFromCompressedMappedFile (
 	/****************************************************************************************************************************************/
 
 	line_len = getline ( &buffer_for_index , &len , fhr_index);
-	splitByDelimiter (buffer_for_index , '\t' , split_on_tab);
 	return;
+	splitByDelimiter (buffer_for_index , '\t' , split_on_tab);
+
 	flag_ignore_mismatches = strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 	flag_ignore_soft_clippings = strtol (split_on_tab[1] , &convert_to_int_temp , 10);
 	flag_ignore_unmapped_sequences = strtol (split_on_tab[2] , &convert_to_int_temp , 10);
