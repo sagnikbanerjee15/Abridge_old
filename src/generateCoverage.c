@@ -250,9 +250,11 @@ void generateCoverageFromCompressedMappedFile (
 				//fflush (stdout);
 			}
 			number_of_columns = splitByDelimiter (buffer_for_pass1 , '\t' , split_on_tab);
+
+			// Increase the number_of_columns for SE
 			if ( max_reads_in_each_line == -1 ) number_of_columns++;
-			//printf ("\nmax_reads_in_each_line %d dictionary name %s" , max_reads_in_each_line , dictionary_name);
-			//fflush (stdout);
+			printf ("\nmax_reads_in_each_line %d dictionary name %s number_of_columns %d" , max_reads_in_each_line , dictionary_name , number_of_columns);
+			fflush (stdout);
 			if ( number_of_columns == 2 )
 			{
 				curr_position++;
