@@ -350,6 +350,7 @@ void generateCoverageFromCompressedMappedFile (
 				 */
 			}
 		}
+		continue;
 		/*
 		 printf ("\n%s number_of_bytes_read_from_compressed_file = %d max_bytes_for_current_index_entry = %d" , abridge_index->chromosome[i] , number_of_bytes_read_from_compressed_file , max_bytes_for_current_index_entry);
 		 printf ("\n=======================================================================================================================================");
@@ -358,6 +359,7 @@ void generateCoverageFromCompressedMappedFile (
 		/*
 		 * Print the coverage as requested by user
 		 */
+
 		if ( d == 1 && bg == 0 && bga == 0 )
 		{
 			if ( first_position == 1 )
