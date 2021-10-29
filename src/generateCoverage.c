@@ -271,7 +271,7 @@ void generateCoverageFromCompressedMappedFile (
 				curr_position += strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 				ptr_to_icigars = split_on_tab[1];
 			}
-			//printf ("\nChromosome=%s curr_position=%d" , abridge_index->chromosome[i] , curr_position);
+			printf ("\nChromosome=%s curr_position=%d" , abridge_index->chromosome[i] , curr_position);
 			/*
 			 if ( abridge_index->start[i] != 23162 || abridge_index->end[i] != 207509 )
 			 continue;
