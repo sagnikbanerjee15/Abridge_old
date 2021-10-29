@@ -1276,13 +1276,14 @@ def generateCoverage(_outputfilename,_index_outputfilename,options):
     else:
         options.generate_non_overlapping_coverage = 0
     
-    name_of_input_file_without_location = options.inputabrfilenames.split("/")[-1].split("sam")[0]+"sam"
-    if os.path.exists(f"{options.output_directory}/{name_of_input_file_without_location}.sam.dictionary") == True:
+    name_of_input_file_without_location = options.inputabrfilenames.split("/")[-1].split(".abridge")[0]
+    dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.sam.dictionary"
+    if os.path.exists(dictionary_name) == True:
         single = 0
     else:
         single = 1
     
-    dictionary_name = f"{options.output_directory}/{name_of_input_file_without_location}.sam.dictionary"
+    
     max_reads_in_each_line_filename = f"{options.output_directory}/{name_of_input_file_without_location}.max_read_in_each_line"
     
     cmd  = f"(/usr/bin/time --verbose "
