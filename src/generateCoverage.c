@@ -143,10 +143,10 @@ void generateCoverageFromCompressedMappedFile (
 	last_cigar[0] = '\0';
 	if ( strcmp (dictionary_name , "dummy") == 0 ) max_reads_in_each_line = -1;
 	/****************************************************************************************************************************************/
-	return;
+
 	line_len = getline ( &buffer_for_index , &len , fhr_index);
 	splitByDelimiter (buffer_for_index , '\t' , split_on_tab);
-
+	return;
 	flag_ignore_mismatches = strtol (split_on_tab[0] , &convert_to_int_temp , 10);
 	flag_ignore_soft_clippings = strtol (split_on_tab[1] , &convert_to_int_temp , 10);
 	flag_ignore_unmapped_sequences = strtol (split_on_tab[2] , &convert_to_int_temp , 10);
@@ -157,7 +157,7 @@ void generateCoverageFromCompressedMappedFile (
 
 	readAbridgeIndex (abridge_index , abridge_index_filename , split_on_newline , &flag_ignore_mismatches , &flag_ignore_soft_clippings , &flag_ignore_unmapped_sequences , &flag_ignore_quality_score , &flag_save_all_quality_scores , &flag_save_exact_quality_scores , &flag_save_scores);
 	return;
-	//line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
+	line_len = getline ( &buffer_for_pass1 , &len , fhr_pass1); // Reading the first line and getting rid of it.
 	coverage_array = NULL;
 	for ( i = 0 ; i < abridge_index->number_of_items ; i++ )
 	{
