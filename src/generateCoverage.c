@@ -145,7 +145,6 @@ void generateCoverageFromCompressedMappedFile (
 	/****************************************************************************************************************************************/
 
 	line_len = getline ( &buffer_for_index , &len , fhr_index);
-	return;
 	splitByDelimiter (buffer_for_index , '\t' , split_on_tab);
 
 	flag_ignore_mismatches = strtol (split_on_tab[0] , &convert_to_int_temp , 10);
