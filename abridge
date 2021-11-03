@@ -37,16 +37,12 @@ def parseCommandLineArguments():
     
     compress_decompress_group = parser.add_mutually_exclusive_group(required=True)
     compress_decompress_group.add_argument("-cmp","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
-    #compress_decompress_group.add_argument("-m","--merge",help="Set this option if you wish to compress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-dcmp","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
     compress_decompress_group.add_argument("-r","--random",help="Retrieve alignments from random locations",action="store_true")
     compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
-    #compress_decompress_group.add_argument("-l","--list",help="List the constituents of the compressed file and exit. This option will come in handy to find the samples that have been compressed.")
-    #compress_decompress_group.add_argument("-s","--split_files",help="Enter the name of the compressed merged file which you wish to split.")
     
     # Optional arguments
     optional_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
-    #optional_named.add_argument("-tmp","--temp_directory",help="Enter the name of the temporary directory. If nothing is specified then abridge will create a temporary directory for you and remove it after the execution is complete.")
     optional_named.add_argument("-l","--level",help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type=int, default = 2)
     
     optional_named.add_argument("-ss","--ignore_scores",help = "Request abrigde to store the quality scores and the alignment score",action="store_true")
@@ -61,9 +57,8 @@ def parseCommandLineArguments():
     #optional_named.add_argument("-dna","--dnaseq",help="Set this parameter if your data is DNA-Seq",action = "store_true")
     #optional_named.add_argument("-o","--outputfilenameprefix",help="Enter the prefix of the output file. If this parameter is not provided then abridge will attempt to write to the directory where the input file is present. Please make sure that the directory has write permissions enabled. This parameter is ignored while decompressing.")
     optional_named.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
-    optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option is limited by the number of samples submitted for compression or decompression.",default = 1)
-    optional_named.add_argument("-t","--produce_tags",help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags.",nargs="*")
-    optional_named.add_argument("-mem","--max_memory",help="Enter the maximum memory allowed (in GB)",default=10)
+    optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option will be used during compression or decompression.",default = 1)
+    
     optional_named.add_argument("-run_diagnostics","--run_diagnostics",help="abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies",action="store_true")
     optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
     optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
@@ -89,7 +84,8 @@ def parseCommandLineArguments():
     optional_named.add_argument("-bg","--bg",help=argparse.SUPPRESS, action = "store_true")
     optional_named.add_argument("-bga","--bga",help=argparse.SUPPRESS, action = "store_true")
     optional_named.add_argument("-split","--split",help=argparse.SUPPRESS, action = "store_true") # help = "Treat \"split\" BAM or BED12 entries as distinct BED intervals.",
-    
+    optional_named.add_argument("-mem","--max_memory",help=argparse.SUPPRESS, default=10) # help="Enter the maximum memory allowed (in GB)"
+    optional_named.add_argument("-t","--produce_tags",help=argparse.SUPPRESS,nargs="*") # help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags."
     return parser.parse_args()
 
 def configureLogger(options):
