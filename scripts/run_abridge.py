@@ -31,7 +31,6 @@ def parseCommandLineArguments():
     
     # Required arguments
     required_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory", required = True)
-    required_named.add_argument("--container_name","-cn", help = "Enter the name of the container. You can choose any string. Please ensure that parallel runs of the software should not have the same container name", required = True)
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("-isam","--inputsamfilenames",help="Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time.")
     input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time.")
@@ -61,7 +60,6 @@ def parseCommandLineArguments():
     optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
     optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
     optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
-    optional_named.add_argument("--test","-test", help = "Set this option to test run the software with example data", action = "store_true")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
