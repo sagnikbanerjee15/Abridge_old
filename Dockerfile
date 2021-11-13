@@ -6,10 +6,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ARG ABRIDGE_VERSION=1.0.0
 ARG ZPAQ_VERSION=715
+ARG SAMTOOLS_VERSION=1.14
 
 # Update base image and install software
 RUN apt-get -y update
-RUN apt-get install -y --no-install-recommends git python3 less vim wget time build-essential zlib1g-dev libncurses5-dev gcc g++ make unzip zip cmake ca-certificates
+RUN apt-get install -y --no-install-recommends git python3 less vim wget time build-essential zlib1g-dev libncurses5-dev gcc g++ make unzip zip cmake ca-certificates liblzma-dev libbz2-dev libcurl4-openssl-dev
 RUN apt-get clean
 
 # Create directories for installation
@@ -34,6 +35,13 @@ RUN cd /software &&\
 	make && \
 	make install
 
+RUN cd /software && \
+	mkdir samtools && \
+	cd samtools && \
+	wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 && \
+	tar jxf samtools-${SAMTOOLS_VERSION}.tar.bz2 && \
+	cd samtools-${SAMTOOLS_VERSION} && make && make install &&\
+	cd .. && rm samtools-${SAMTOOLS_VERSION}.tar.bz2
 
 # Downloading the current git repo - change this to a specific version later
 RUN cd /software && \
@@ -42,4 +50,4 @@ RUN cd /software && \
 	make && \
 	make install
 	
-ENV PATH /softwares/Abridge:${PATH}
+ENV PATH /software/Abridge:${PATH}
