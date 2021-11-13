@@ -143,6 +143,7 @@ def main():
                                "/software/Abridge/example/SRR13711353_PE_100000.sam",
                                "/software/Abridge/example/arath_1.fa"]
         
+        return
         # Setting up commands for testing
         for level in ["1","2","3"]: # 3 iterations
             for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam","/software/Abridge/example/SRR13711353_PE_100000.sam"]: # 2 iterations
