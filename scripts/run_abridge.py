@@ -20,9 +20,9 @@ import subprocess
 from pprint import pformat
 
 
-from .assessMemoryRequirement import *
-from .verifyPositions import *
-from .sortPositionsForRandomAccess import *
+from assessMemoryRequirement import *
+from verifyPositions import *
+from sortPositionsForRandomAccess import *
 
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser(prog="abridge",description="Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages",formatter_class=RawTextHelpFormatter)
