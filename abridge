@@ -28,7 +28,7 @@ def parseCommandLineArguments():
     # Required arguments
     required_named.add_argument("--container_name","-cn", help = "Enter the name of the container. You can choose any string. Please ensure that parallel runs of the software should not have the same container name")
     required_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
-    input_group = parser.add_mutually_exclusive_group(required=True)
+    input_group = parser.add_mutually_exclusive_group()
     input_group.add_argument("-isam","--inputsamfilenames",help="Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time.")
     input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time.")
     required_named.add_argument("-g","--genome",help="Enter a single fasta file for the reference")
