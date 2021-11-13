@@ -59,16 +59,112 @@ def main():
     output_filename = f"{options.error_directory}.output"
     error_filename = f"{options.error_directory}.error"
     
+    abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
+                                      image_version = "latest",
+                                      container_name=options.container_name,
+                                      temp_file_name=f"{options.error_directory}.output")
+    
+    
     if options.test ==  True:
-        pass
+        # Convert BAM files to SAM files
+        cmd = "samtools view /software/Abridge/example/SRR13711353_SE_100000.bam > /software/Abridge/example/SRR13711353_SE_100000.sam "
+        os.system(cmd)
+        cmd = "samtools view /software/Abridge/example/SRR13711353_PE_100000.bam > /software/Abridge/example/SRR13711353_PE_100000.sam "
+        os.system(cmd)
+        cmd = "gunzip -c /software/Abridge/example/arath_1.fa.gz > /software/Abridge/example/arath_1.fa"
+        os.system(cmd)
+        files_to_be_removed = ["/software/Abridge/example/SRR13711353_SE_100000.sam",
+                               "/software/Abridge/example/SRR13711353_PE_100000.sam",
+                               "/software/Abridge/example/arath_1.fa"]
+        
+        # Setting up commands for testing
+        for level in ["1","2","3"]: # 3 iterations
+            for paired_type in [inputsamfile_SE,inputsamfile_PE]: # 2 iterations
+                for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam","/software/Abridge/example/SRR13711353_PE_100000.sam"]: # 2 iterations
+                    for ignore_scores in [0,1]: # 2 iterations
+                        for ignore_quality_scores in [0,1]: # 2 iterations
+                            for ignore_soft_clippings in [0,1]: # 2 iterations
+                                for ignore_mismatches in [0,1]: # 2 iterations
+                                    for ignore_unmapped_reads in [0,1]: # 2 iterations
+                                        for save_all_quality_scores in [0,1]: # 2 iterations
+                                            for save_exact_quality_scores in [0,1]: # 2 iterations
+                                                
+                                                inputfilename_without_location = inputfilename.split("/")[-1][:-4]
+                                                output_directory_name = f"/software/Abridge/example/" 
+                                                output_directory_name += f"{inputfilename_without_location}_"
+                                                output_directory_name += f"compress_level_{level}_"
+                                                output_directory_name += f"ignore_scores_{ignore_scores}_"
+                                                output_directory_name += f"ignore_quality_scores_{ignore_quality_scores}_"
+                                                output_directory_name += f"ignore_soft_clippings_{ignore_soft_clippings}_"
+                                                output_directory_name += f"ignore_mismatches_{ignore_mismatches}_"
+                                                output_directory_name += f"ignore_unmapped_reads_{ignore_unmapped_reads}_"
+                                                output_directory_name += f"save_all_quality_scores_{save_all_quality_scores}_"
+                                                output_directory_name += f"save_exact_quality_scores_{save_exact_quality_scores}"
+                                                
+                                                cmd  = f"(/usr/bin/time --verbose "
+                                                cmd += f" run_abridge.py "
+                                                cmd += f" --keep_intermediate_error_files "
+                                                cmd += f" --compress "
+                                                cmd += f" --genome /software/Abridge/example/arath_1.fa "
+                                                cmd += f" --inputsamfilenames {inputfilename} "
+                                                cmd += f" --output_directory {output_directory_name} "
+                                                cmd += f" --level {level} "
+                                                if ignore_scores == 1:
+                                                    cmd += f" --ignore_scores "
+                                                if ignore_quality_scores == 1:
+                                                    cmd += f" --ignore_quality_scores "
+                                                if ignore_soft_clippings == 1:
+                                                    cmd += f" --ignore_soft_clippings "
+                                                if ignore_mismatches == 1:
+                                                    cmd += f" --ignore_mismatches "
+                                                if ignore_unmapped_reads == 1:
+                                                    cmd += f" --ignore_unmapped_reads "
+                                                if save_all_quality_scores == 1:
+                                                    cmd += f" --save_all_quality_scores "
+                                                if save_exact_quality_scores == 1:
+                                                    cmd += f" --save_exact_quality_scores "
+                                                cmd += f") "
+                                                cmd += f" 1>> {output_directory_name}.output "
+                                                cmd += f" 2> {output_directory_name}.error "
+                                                output_directory_name_without_location = output_directory_name.split("/")[-1]
+                                                os.system(cmd)
+                                                
+                                                for ignore_sequence in [0,1]: # 2 iterations
+                                                    output_directory_name = f"/software/Abridge/example/" 
+                                                    output_directory_name += f"{inputfilename_without_location}_"
+                                                    output_directory_name += f"decompress_level_{level}_"
+                                                    output_directory_name += f"ignore_scores_{ignore_scores}_"
+                                                    output_directory_name += f"ignore_quality_scores_{ignore_quality_scores}_"
+                                                    output_directory_name += f"ignore_soft_clippings_{ignore_soft_clippings}_"
+                                                    output_directory_name += f"ignore_mismatches_{ignore_mismatches}_"
+                                                    output_directory_name += f"ignore_unmapped_reads_{ignore_unmapped_reads}_"
+                                                    output_directory_name += f"save_all_quality_scores_{save_all_quality_scores}_"
+                                                    output_directory_name += f"save_exact_quality_scores_{save_exact_quality_scores}_"
+                                                    output_directory_name += f"ignore_sequence_{ignore_sequence}"
+                                                    
+                                                    cmd  = f"(/usr/bin/time --verbose "
+                                                    cmd += f" run_abridge.py "
+                                                    cmd += f" --keep_intermediate_error_files "
+                                                    cmd += f" --decompress "
+                                                    cmd += f" --genome /software/Abridge/example/arath_1.fa "
+                                                    cmd += f" --inputabrfilenames {output_directory_name.split('_ignore_sequence_')[0].replace('decompress','compress')}/{inputfilename_without_location}.abridge "
+                                                    cmd += f" --output_directory {output_directory_name} "
+                                                    if ignore_sequence == 1:
+                                                        cmd += " --ignore_sequence "
+                                                    cmd += f") "
+                                                    cmd += f" 1>> {output_directory_name}.output"
+                                                    cmd += f" 2> {output_directory_name}.error"
+                                                    os.system(cmd)
+        
     else:
-        cmd  = f" run_abridge "
+        cmd  = f" run_abridge.py "
         for key,value in options.__dict__.items():
             if value is not None:
                 cmd += f" --{key} {value}"
         cmd += f" > {output_filename}"
         cmd += f" > {error_filename}"
-        print(cmd)
+        
+        abridge_docker.runCommand(cmd)
         
 
 if __name__ == "__main__":
