@@ -31,7 +31,7 @@ RUN cd /software &&\
 	mkdir zpaq && \
 	cd zpaq &&\
 	wget http://mattmahoney.net/dc/zpaq${ZPAQ_VERSION}.zip && \
-	unzip zpaq715.zip && \
+	unzip zpaq${ZPAQ_VERSION}.zip && \
 	make && \
 	make install
 
@@ -50,4 +50,4 @@ RUN cd /software && \
 	make && \
 	make install
 	
-ENV PATH /software/Abridge:${PATH}
+ENV PATH /software/Abridge:/software/Abridge/scripts:${PATH}

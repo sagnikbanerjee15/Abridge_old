@@ -20,9 +20,9 @@ import subprocess
 from pprint import pformat
 
 
-from scripts.assessMemoryRequirement import *
-from scripts.verifyPositions import *
-from scripts.sortPositionsForRandomAccess import *
+from .assessMemoryRequirement import *
+from .verifyPositions import *
+from .sortPositionsForRandomAccess import *
 
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser(prog="abridge",description="Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages",formatter_class=RawTextHelpFormatter)
@@ -61,6 +61,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
     optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
     optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
+    optional_named.add_argument("--test","-test", help = "Set this option to test run the software with example data", action = "store_true")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile

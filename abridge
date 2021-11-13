@@ -56,12 +56,20 @@ def main():
         print("Please use the --help option to get usage information")
     options=parseCommandLineArguments()
     
-    error_filename = f"{'/'.join(options.error_directory.split('/')[:-1])}.error"
-    output_filename = f"{'/'.join(options.error_directory.split('/')[:-1])}.output"
+    output_filename = f"{options.error_directory}.output"
+    error_filename = f"{options.error_directory}.error"
     
-    
-    
-    print(output_filename, error_filename)
+    if options.test ==  True:
+        pass
+    else:
+        cmd  = f" run_abridge "
+        for key,value in options.__dict__.items():
+            if value is not None:
+                cmd += f" --{key} {value}"
+        cmd += f" > {output_filename}"
+        cmd += f" > {error_filename}"
+        print(cmd)
+        
 
 if __name__ == "__main__":
     main()
