@@ -30,7 +30,7 @@ def parseCommandLineArguments():
     optional_named = parser.add_argument_group('Optional arguments')
     
     # Required arguments
-    required_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory", required = True)
+    required_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("-isam","--inputsamfilenames",help="Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time.")
     input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time.")
@@ -43,7 +43,6 @@ def parseCommandLineArguments():
     compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
     
     # Optional arguments
-    optional_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
     optional_named.add_argument("-l","--level",help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type=int, default = 2)
     optional_named.add_argument("-ss","--ignore_scores",help = "Request abrigde to store the quality scores and the alignment score",action="store_true")
     optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
@@ -60,6 +59,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
     optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
     optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
+    optional_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory")
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
