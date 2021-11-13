@@ -31,7 +31,7 @@ def parseCommandLineArguments():
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("-isam","--inputsamfilenames",help="Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time.")
     input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time.")
-    required_named.add_argument("-g","--genome",help="Enter a single fasta file for the reference",required=True)
+    required_named.add_argument("-g","--genome",help="Enter a single fasta file for the reference")
     
     compress_decompress_group = parser.add_mutually_exclusive_group()
     compress_decompress_group.add_argument("-cmp","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
