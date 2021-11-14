@@ -61,17 +61,20 @@ void writeToFile (
 		int quality_score_index,
 		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance,
-		char *line_to_be_written_to_file)
+		char *line_to_be_written_to_file,
+		char *list_of_read_names,
+		char *list_of_qual_scores,
+		char *qual)
 {
 	printf ("\nInside writeToFile\n");
 	fflush (stdout);
 
 	int i, j, k, l, m;
 	char str[1000];
-	char qual[MAX_SEQ_LEN];
+	//char qual[MAX_SEQ_LEN];
 	//char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
-	char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
-	char list_of_qual_scores[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
+	//char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
+	//char list_of_qual_scores[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 	int num_of_types;
 	int qual_score_length, cigar_length;
 
@@ -92,7 +95,7 @@ void writeToFile (
 				printf ("\nstr=%s" , str);
 				fflush (stdout);
 				strcat(line_to_be_written_to_file , str);
-				//strcat(line_to_be_written_to_file , "\t");
+				strcat(line_to_be_written_to_file , "\t");
 			}
 			else str[0] = '\0'; // empty string
 		}
@@ -491,6 +494,9 @@ void readAlignmentsAndCompress (
 	char *encoded_string;
 	char **modified_icigars;
 	char *line_to_be_written_to_file;
+	char *list_of_read_names;
+	char *list_of_qual_scores;
+	char *qual_for_writeToFile;
 	char str[100];
 
 	size_t len = 0;
@@ -592,7 +598,11 @@ void readAlignmentsAndCompress (
 	write_to_file_col2 = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col3 = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	line_to_be_written_to_file = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	list_of_read_names = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	list_of_qual_scores = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	qual_for_writeToFile = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	encoded_string = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+
 	write_to_file_col1[0] = '\0';
 	write_to_file_col2[0] = '\0';
 	write_to_file_col3[0] = '\0';
@@ -814,7 +824,7 @@ void readAlignmentsAndCompress (
 				fflush (stdout);
 				printf ("%d %d %d %d %d" , flag_save_all_quality_scores , flag_save_exact_quality_scores , compressed_ds_pool_index , quality_score_index , flag_ignore_soft_clippings);
 				fflush (stdout);
-				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance , line_to_be_written_to_file);
+				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance , line_to_be_written_to_file , list_of_read_names , list_of_qual_scores , qual_for_writeToFile);
 				//printf ("\nReturned from writeToFile");
 				//fflush (stdout);
 
