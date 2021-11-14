@@ -10,8 +10,17 @@ ARG SAMTOOLS_VERSION=1.14
 
 # Update base image and install software
 RUN yum -y update
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN yum -y install git python3 less vim wget time zlib-devel ncurses-devel gcc gcc-c++ make unzip zip cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils p7zip p7zip-plugins 
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+RUN yum -y install git python3 less vim wget time zlib-devel ncurses-devel make unzip zip gcc-c++ cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils p7zip p7zip-plugins 
+RUN yum clean all
+
+
+RUN yum -y remove gcc libgomp
+RUN yum -y install libmpc
+RUN rpm -Uvh http://rpmfind.net/linux/centos/7.9.2009/os/x86_64/Packages/cpp-4.8.5-44.el7.x86_64.rpm
+RUN yum -y install glibc-devel
+RUN rpm -Uvh https://rpmfind.net/linux/centos/7.9.2009/os/x86_64/Packages/libgomp-4.8.5-44.el7.x86_64.rpm
+RUN rpm -Uvh https://rpmfind.net/linux/centos/7.9.2009/os/x86_64/Packages/gcc-4.8.5-44.el7.x86_64.rpm
 RUN yum clean all
 
 # Create directories for installation

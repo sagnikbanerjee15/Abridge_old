@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/bin/env python
 
 ########################################################################################################################################################
 # The software 'abridge' will compress aligned files to a bare minimum needed for generating assemblies and producing read counts
