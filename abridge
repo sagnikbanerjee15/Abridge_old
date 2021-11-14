@@ -223,6 +223,7 @@ def main():
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 print(cmd)
                                                 os.system(cmd)
+                                            return
         
     else:
         abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
