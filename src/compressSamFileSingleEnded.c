@@ -88,6 +88,8 @@ void writeToFile (
 			if ( compressed_ds_pool[i]->position != 1 )
 			{
 				sprintf(str , "%lld" , compressed_ds_pool[i]->position);
+				printf ("\nstr=%s" , str);
+				fflush (stdout);
 				strcat(line_to_be_written_to_file , str);
 				//strcat(line_to_be_written_to_file , "\t");
 			}
