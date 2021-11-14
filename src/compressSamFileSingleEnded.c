@@ -46,15 +46,20 @@ char findMatchCharacterIcigar (char *icigar)
 }
 
 void writeToFile (
+		short int flag_save_all_quality_scores,
+		short int flag_save_exact_quality_scores,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
+		int compressed_ds_pool_total,
 		char *write_to_file_col1,
 		char *write_to_file_col2,
 		char *write_to_file_col3,
 		char *encoded_string,
 		long long int *count,
 		char **qual_Scores,
+		int quality_score_index,
+		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance)
 {
 	printf ("\nInside writeToFile\n");
@@ -804,7 +809,7 @@ void readAlignmentsAndCompress (
 				//fflush (stdout);
 				//printf ("%d %d %d %d %d" , flag_save_all_quality_scores , flag_save_exact_quality_scores , compressed_ds_pool_index , quality_score_index , flag_ignore_soft_clippings);
 				fflush (stdout);
-				writeToFile (fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , cigar_items_instance);
+				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 				//printf ("\nReturned from writeToFile");
 				//fflush (stdout);
 
