@@ -194,7 +194,7 @@ def main():
                                             output_directory_name_without_location = output_directory_name.split("/")[-1]
                                             print(cmd)
                                             os.system(cmd)
-                                            
+                                            return
                                             
                                             for ignore_sequence in [0,1]: # 2 iterations
                                                 output_directory_name = f"/software/Abridge/example/" 
