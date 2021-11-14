@@ -63,7 +63,8 @@ void writeToFile (
 		struct Cigar_Items *cigar_items_instance)
 {
 	printf ("\nInside writeToFile\n");
-	//fflush (stdout);
+	fflush (stdout);
+	return;
 	int i, j, k, l, m;
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
