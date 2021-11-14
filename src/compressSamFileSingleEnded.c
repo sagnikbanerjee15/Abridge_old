@@ -80,7 +80,7 @@ void writeToFile (
 
 	printf ("\ncompressed_ds_pool_total %d" , compressed_ds_pool_total);
 	fflush (stdout);
-	return;
+
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
 		if ( i == 0 )
