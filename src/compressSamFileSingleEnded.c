@@ -666,13 +666,14 @@ void readAlignmentsAndCompress (
 	//return;
 	do
 	{
+		continue;
 		number_of_records_read += 1;
 		/*if (number_of_records_read % 1000000 == 0)
 		 {
 		 printf("\nNumber of records read: %lld Million %s", number_of_records_read / 1000000, output_abridgefilename);
 		 fflush(stdout);
 		 }*/
-		continue;
+
 		printf ("\n%s" , line);
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		continue;
