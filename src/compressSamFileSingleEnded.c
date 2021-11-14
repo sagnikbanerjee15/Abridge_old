@@ -609,7 +609,7 @@ void readAlignmentsAndCompress (
 	for ( i = 0 ; i < max_input_reads_in_a_single_nucl_loc ; i++ )
 		modified_icigars[i] = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	/********************************************************************/
-	return;
+
 	/*
 	 * Write the first line in output file
 	 */
@@ -663,6 +663,7 @@ void readAlignmentsAndCompress (
 		}
 		else break;
 	}
+	return;
 	do
 	{
 		number_of_records_read += 1;
