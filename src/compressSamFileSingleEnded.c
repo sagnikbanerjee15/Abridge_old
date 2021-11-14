@@ -62,6 +62,8 @@ void writeToFile (
 		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance)
 {
+	printf ("\nInside writeToFile");
+	fflush (stdout);
 	int i, j, k, l, m;
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
@@ -434,6 +436,8 @@ void reModeliCIGARSSingleEnded (
 	 }
 
 	 */
+	printf ("\nReturning from reModeliCIGARSSingleEnded");
+	fflush (stdout);
 }
 
 void readAlignmentsAndCompress (
@@ -794,7 +798,6 @@ void readAlignmentsAndCompress (
 				printf ("\n4. compressed_ds_pool_index %d" , compressed_ds_pool_index);
 				fflush (stdout);
 				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
-				continue;
 				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 				continue;
 				//writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
