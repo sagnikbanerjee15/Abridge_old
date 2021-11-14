@@ -441,6 +441,11 @@ void reModeliCIGARSSingleEnded (
 	fflush (stdout);
 }
 
+void dummy ()
+{
+	printf ("\nCall to a dummy function");
+}
+
 void readAlignmentsAndCompress (
 		char *name_of_file_with_quality_scores,
 		char *name_of_file_with_max_commas,
@@ -805,7 +810,8 @@ void readAlignmentsAndCompress (
 				fflush (stdout);
 				printf ("\nCalling writeToFile");
 				fflush (stdout);
-				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
+				dummy ();
+				//writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
 				printf ("\nReturned from writeToFile");
 				fflush (stdout);
 
