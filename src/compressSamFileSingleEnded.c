@@ -83,6 +83,7 @@ void writeToFile (
 	//return;
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
+		continue;
 		if ( i == 0 )
 		{
 			if ( compressed_ds_pool[i]->position != 1 )
@@ -93,7 +94,7 @@ void writeToFile (
 			}
 			else str[0] = '\0'; // empty string
 		}
-		continue;
+
 		strcat(line_to_be_written_to_file , compressed_ds_pool[i]->icigar);
 		strcat(line_to_be_written_to_file , "-");
 		sprintf(str , "%ld" , compressed_ds_pool[i]->num_reads);
@@ -238,6 +239,7 @@ void writeToFile (
 
 	//  Check if the last element of list_of_read_names is a comma
 
+	return;
 	if ( list_of_read_names[strlen (list_of_read_names) - 1] == ',' )
 		list_of_read_names[strlen (list_of_read_names) - 1] = '\0';
 	if ( list_of_read_names[0] != '\0' )
