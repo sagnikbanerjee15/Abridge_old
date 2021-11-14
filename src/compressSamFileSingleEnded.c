@@ -793,24 +793,24 @@ void readAlignmentsAndCompress (
 			else
 			{
 
-				printf ("\n4. compressed_ds_pool_index %d" , compressed_ds_pool_index);
-				fflush (stdout);
-				printf ("\nCalling reModeliCIGARSSingleEnded");
-				fflush (stdout);
+				//printf ("\n4. compressed_ds_pool_index %d" , compressed_ds_pool_index);
+				//fflush (stdout);
+				//printf ("\nCalling reModeliCIGARSSingleEnded");
+				//fflush (stdout);
 				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
-				printf ("\nReturned from reModeliCIGARSSingleEnded");
-				fflush (stdout);
-				printf ("\nCalling writeToFile");
-				fflush (stdout);
-				printf ("%d %d %d %d %d" , flag_save_all_quality_scores , flag_save_exact_quality_scores , compressed_ds_pool_index , quality_score_index , flag_ignore_soft_clippings);
+				//printf ("\nReturned from reModeliCIGARSSingleEnded");
+				//fflush (stdout);
+				//printf ("\nCalling writeToFile");
+				//fflush (stdout);
+				//printf ("%d %d %d %d %d" , flag_save_all_quality_scores , flag_save_exact_quality_scores , compressed_ds_pool_index , quality_score_index , flag_ignore_soft_clippings);
 				fflush (stdout);
 				writeToFile (fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , cigar_items_instance);
-				printf ("\nReturned from writeToFile");
-				fflush (stdout);
+				//printf ("\nReturned from writeToFile");
+				//fflush (stdout);
 
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
-				printf ("\n%lld %lld" , curr_commas , max_commas);
-				fflush (stdout);
+				//printf ("\n%lld %lld" , curr_commas , max_commas);
+				//fflush (stdout);
 				compressed_ds_pool_index = 0;
 				quality_score_index = 0;
 				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
@@ -822,8 +822,8 @@ void readAlignmentsAndCompress (
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position - previous_position;
 				quality_score_index++;
-				printf ("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
-				fflush (stdout);
+				//printf ("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
+				//fflush (stdout);
 				compressed_ds_pool_index++;
 			}
 			previous_position = current_position;
