@@ -11,7 +11,7 @@ all: $(PROGS)
 %: %.c
 
 install: $(PROGS)
-	mv $(PROGS) $(INSTALLDIR)
+	cp $(PROGS) $(INSTALLDIR)
 
 clean: 
 	rm -f $(PROGS) *.o
