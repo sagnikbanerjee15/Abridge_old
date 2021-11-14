@@ -2,7 +2,7 @@ SRCS = $(wildcard *.c)
 
 PROGS = $(patsubst %.c,%,$(SRCS))
 
-CFLAGS = -Ofast -g -Wall
+CFLAGS = -Ofast -g
 
 INSTALLDIR ?= /usr/local/bin
 

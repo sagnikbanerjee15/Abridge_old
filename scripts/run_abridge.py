@@ -122,9 +122,11 @@ def validateCommandLineArguments(options):
     
     options.files_for_removal = []
     options.softwares = {}
+    """
     abridge_location = subprocess.run(['which', 'abridge'], stdout=subprocess.PIPE).stdout.decode('utf-8').split()[-1]
     if options.header==True:
         options.quiet = True
+    """
     
     if options.random==True or options.generate_overlapping_coverage==True or options.generate_non_overlapping_coverage==True:
         options.output_directory = "/".join(options.inputabrfilenames.split("/")[:-1])+"/"+str(int(time.time()))
@@ -155,28 +157,26 @@ def validateCommandLineArguments(options):
         options.save_all_quality_scores = True
         options.ignore_quality_scores = True
         
-    options.softwares["determineEndedness"] = "/".join(abridge_location.split("/")[:-1])+"/src/determineEndedness"
-    options.softwares["compressSamFileSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEnded"
-    options.softwares["compressSamFileSingleEndedPass2"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFileSingleEndedPass2"
-    options.softwares["compressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEnded"
-    options.softwares["splitSamFileIntoEachReferenceSequence"] = "/".join(abridge_location.split("/")[:-1])+"/src/splitSamFileIntoEachReferenceSequence"
-    options.softwares["buildABRIDGEIndex"]= "/".join(abridge_location.split("/")[:-1])+"/src/buildAbridgeIndex"
-    options.softwares["decompressSamFileSingleEnded"]= "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFileSingleEnded"
-    options.softwares["extractSequencesFromReferences"] = "/".join(abridge_location.split("/")[:-1])+"/scripts/extractSequencesFromReferences.py"
-    options.softwares["randomRetrievalSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalSingleEnded"
-    options.softwares["randomRetrievalPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/randomRetrievalPairedEnded"
-    options.softwares["mergeCompressedFilesSingleEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/mergeCompressedFilesSingleEnded"
-    options.softwares["addTagToSamFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/addTagToSamFile"
-    options.softwares["maxReadsMappedToSingleNucleotide"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsMappedToSingleNucleotide"
-    options.softwares["compressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressQualityScoresFile"
-    options.softwares["deCompressQualityScoresFile"] = "/".join(abridge_location.split("/")[:-1])+"/src/deCompressQualityScoresFile"
-    #options.softwares["separateReadsMatePairTogetherAndMatePairAway"] = "/".join(abridge_location.split("/")[:-1])+"/src/separateReadsMatePairTogetherAndMatePairAway"
-    #options.softwares["modifyReadNamesPairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/modifyReadNamesPairedEnded"
-    options.softwares["compressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/compressSamFilePairedEnded"
-    options.softwares["decompressSamFilePairedEnded"] = "/".join(abridge_location.split("/")[:-1])+"/src/decompressSamFilePairedEnded"
-    options.softwares["generateCoverage"] = "/".join(abridge_location.split("/")[:-1])+"/src/generateCoverage"
-    options.softwares["findMaximumNumberOfReadsInEachLine"] = "/".join(abridge_location.split("/")[:-1])+"/src/findMaximumNumberOfReadsInEachLine"
-    options.softwares["maxReadsInEachLine"] = "/".join(abridge_location.split("/")[:-1])+"/src/maxReadsInEachLine"
+    options.softwares["determineEndedness"] = "determineEndedness"
+    options.softwares["compressSamFileSingleEnded"] = "compressSamFileSingleEnded"
+    options.softwares["compressSamFileSingleEndedPass2"] = "compressSamFileSingleEndedPass2"
+    options.softwares["compressSamFilePairedEnded"] = "compressSamFilePairedEnded"
+    options.softwares["splitSamFileIntoEachReferenceSequence"] = "splitSamFileIntoEachReferenceSequence"
+    options.softwares["buildABRIDGEIndex"]= "buildAbridgeIndex"
+    options.softwares["decompressSamFileSingleEnded"]= "/decompressSamFileSingleEnded"
+    options.softwares["extractSequencesFromReferences"] = "extractSequencesFromReferences.py"
+    options.softwares["randomRetrievalSingleEnded"] = "randomRetrievalSingleEnded"
+    options.softwares["randomRetrievalPairedEnded"] = "randomRetrievalPairedEnded"
+    options.softwares["mergeCompressedFilesSingleEnded"] = "mergeCompressedFilesSingleEnded"
+    options.softwares["addTagToSamFile"] = "addTagToSamFile"
+    options.softwares["maxReadsMappedToSingleNucleotide"] = "maxReadsMappedToSingleNucleotide"
+    options.softwares["compressQualityScoresFile"] = "compressQualityScoresFile"
+    options.softwares["deCompressQualityScoresFile"] = "deCompressQualityScoresFile"
+    options.softwares["compressSamFilePairedEnded"] = "compressSamFilePairedEnded"
+    options.softwares["decompressSamFilePairedEnded"] = "decompressSamFilePairedEnded"
+    options.softwares["generateCoverage"] = "generateCoverage"
+    options.softwares["findMaximumNumberOfReadsInEachLine"] = "findMaximumNumberOfReadsInEachLine"
+    options.softwares["maxReadsInEachLine"] = "maxReadsInEachLine"
     
     genome_filename_without_location = options.genome.split("/")[-1]
     cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.output_directory}/{genome_filename_without_location}"
@@ -185,10 +185,7 @@ def validateCommandLineArguments(options):
     os.system(cmd)
     os.system(f"samtools faidx {options.output_directory}/{genome_filename_without_location}")
     options.genome = f"{options.output_directory}/{genome_filename_without_location}"
-    """
-    cmd = f"mv {options.genome}.temp {options.genome}"
-    os.system(cmd)
-    """
+    
     
     if options.decompress==True:
         if options.inputabrfilenames[-8:]!=".abridge":
