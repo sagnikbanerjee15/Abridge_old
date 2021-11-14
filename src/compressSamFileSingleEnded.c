@@ -87,11 +87,11 @@ void writeToFile (
 		{
 			if ( compressed_ds_pool[i]->position != 1 )
 			{
-				sprintf(str , "%lld" , compressed_ds_pool[i]->position);
-				strcat(line_to_be_written_to_file , str);
-				strcat(line_to_be_written_to_file , "\t");
+				//sprintf(str , "%lld" , compressed_ds_pool[i]->position);
+				//strcat(line_to_be_written_to_file , str);
+				//strcat(line_to_be_written_to_file , "\t");
 			}
-			//else str[0] = '\0'; // empty string
+			else str[0] = '\0'; // empty string
 		}
 		continue;
 		strcat(line_to_be_written_to_file , compressed_ds_pool[i]->icigar);
