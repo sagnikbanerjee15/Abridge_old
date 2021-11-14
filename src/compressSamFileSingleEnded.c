@@ -92,8 +92,8 @@ void writeToFile (
 			if ( compressed_ds_pool[i]->position != 1 )
 			{
 				sprintf(str , "%lld" , compressed_ds_pool[i]->position);
-				printf ("\nstr=%s" , str);
-				fflush (stdout);
+				//printf ("\nstr=%s" , str);
+				//fflush (stdout);
 				strcat(line_to_be_written_to_file , str);
 				strcat(line_to_be_written_to_file , "\t");
 			}
@@ -697,7 +697,7 @@ void readAlignmentsAndCompress (
 		 fflush(stdout);
 		 }*/
 
-		printf ("\n%s" , line);
+		//printf ("\n%s" , line);
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
 		strcpy(curr_reference_name , curr_alignment->reference_name);
