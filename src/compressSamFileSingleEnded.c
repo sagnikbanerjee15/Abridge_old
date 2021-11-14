@@ -66,8 +66,8 @@ void writeToFile (
 		char *list_of_qual_scores,
 		char *qual)
 {
-	printf ("\nInside writeToFile\n");
-	fflush (stdout);
+	//printf ("\nInside writeToFile\n");
+	//fflush (stdout);
 
 	int i, j, k, l, m;
 	char str[1000];
@@ -82,8 +82,8 @@ void writeToFile (
 	list_of_read_names[0] = '\0';
 	list_of_qual_scores[0] = '\0';
 
-	printf ("\ncompressed_ds_pool_total %d" , compressed_ds_pool_total);
-	fflush (stdout);
+	//printf ("\ncompressed_ds_pool_total %d" , compressed_ds_pool_total);
+	//fflush (stdout);
 
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
