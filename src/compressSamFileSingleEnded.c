@@ -663,7 +663,7 @@ void readAlignmentsAndCompress (
 		}
 		else break;
 	}
-	return;
+	//return;
 	do
 	{
 		number_of_records_read += 1;
