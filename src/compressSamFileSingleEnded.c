@@ -46,20 +46,15 @@ char findMatchCharacterIcigar (char *icigar)
 }
 
 void writeToFile (
-		short int flag_save_all_quality_scores,
-		short int flag_save_exact_quality_scores,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
-		int compressed_ds_pool_total,
 		char *write_to_file_col1,
 		char *write_to_file_col2,
 		char *write_to_file_col3,
 		char *encoded_string,
 		long long int *count,
 		char **qual_Scores,
-		int quality_score_index,
-		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance)
 {
 	printf ("\nInside writeToFile\n");
@@ -77,174 +72,176 @@ void writeToFile (
 	line_to_be_written_to_file[0] = '\0';
 	list_of_read_names[0] = '\0';
 	list_of_qual_scores[0] = '\0';
-
-	printf ("\ncompressed_ds_pool_total %d" , compressed_ds_pool_total);
-	fflush (stdout);
-	return;
-	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
-	{
-		if ( i == 0 )
-		{
-			if ( compressed_ds_pool[i]->position != 1 )
-			{
-				sprintf(str , "%lld" , compressed_ds_pool[i]->position);
-				strcat(line_to_be_written_to_file , str);
-				strcat(line_to_be_written_to_file , "\t");
-			}
-			else str[0] = '\0'; // empty string
-		}
-		strcat(line_to_be_written_to_file , compressed_ds_pool[i]->icigar);
-		strcat(line_to_be_written_to_file , "-");
-		sprintf(str , "%ld" , compressed_ds_pool[i]->num_reads);
-		strcat(line_to_be_written_to_file , str);
-		if ( i != compressed_ds_pool_total - 1 )
-		strcat(line_to_be_written_to_file , ",");
-
-		for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
-		{
-			if ( compressed_ds_pool[i]->pointers_to_read_names[j][0] != ' ' && compressed_ds_pool[i]->pointers_to_read_names[j][1] != '\0' )
-			{
-				strcat(list_of_read_names , "brdg_");
-				strcat(list_of_read_names , compressed_ds_pool[i]->pointers_to_read_names[j]);
-				if ( i != compressed_ds_pool_total - 1 || j != compressed_ds_pool[i]->num_reads - 1 )
-				strcat(list_of_read_names , ",");
-			}
-		}
-
-		if ( flag_save_all_quality_scores == 1 )
-		{
-			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
-			{
-				qual_score_length = 0;
-				cigar_length = 0;
-				switch ( findMatchCharacterIcigar (compressed_ds_pool[i]->icigar) )
-				{
-					case 'B':
-					case 'F':
-					case 'J':
-					case 'L':
-					case 'P':
-					case 'R':
-						for ( k = 0 ;
-								compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
-								k++ )
-							qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
-						qual[k] = '\0';
-						break;
-					case 'E':
-					case 'H':
-					case 'K':
-					case 'O':
-					case 'Q':
-					case 'U':
-						for ( k = strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 ;
-								k >= 0 ; k-- )
-						{
-							qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
-							//printf ("\n Read name check %s" , compressed_ds_pool[i]->pointers_to_read_names[j]);
-						}
-						qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j])] = '\0';
-						break;
-				}
-				fprintf (fhw_qual , "%s" , qual);
-				qual_score_length = strlen (qual);
-
-				splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-				for ( m = 0 ; m < num_of_types ; m++ )
-					cigar_length += cigar_items_instance[m].len;
-
-				if ( qual_score_length != cigar_length )
-				{
-					printf ("\nUNEQUAL LENGTHS");
-					printf ("\ncigar %s" , compressed_ds_pool[i]->cigar);
-					printf ("\nqual score %s" , qual);
-					printf ("\ncigar length %d qual score length %d" , cigar_length , qual_score_length);
-				}
-				if ( flag_save_exact_quality_scores == 0 )
-				{
-					fprintf (fhw_qual , "%s" , "\t");
-					if ( flag_ignore_soft_clippings == 1 )
-					{
-						splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-						if ( cigar_items_instance[0].def == 'S' && compressed_ds_pool[i]->icigar[1] != '\0' ) // Left soft clip exists
-						{
-							sprintf(str , "%ld" , cigar_items_instance[0].len);
-							fprintf (fhw_qual , "%s" , str);
-							fprintf (fhw_qual , "%s" , "S");
-						}
-					}
-					if ( compressed_ds_pool[i]->icigar[1] != '\0' )
-					{
-						for ( k = 0 ;
-								compressed_ds_pool[i]->icigar[k + 1] != '~' && compressed_ds_pool[i]->icigar[k + 1] != '\0' ;
-								k++ )
-							fputc (compressed_ds_pool[i]->icigar[k] , fhw_qual);
-					}
-					else
-					{
-						/*
-						 * Find the icigar before the ith one which is not compressed
-						 */
-						l = i - 1;
-						while ( l >= 0 )
-						{
-							if ( compressed_ds_pool[l]->icigar[1] != '\0' )
-								break;
-							else l--;
-						}
-
-						for ( k = 0 ;
-								compressed_ds_pool[l]->icigar[k + 1] != '~' && compressed_ds_pool[l]->icigar[k + 1] != '\0' ;
-								k++ )
-							fputc (compressed_ds_pool[l]->icigar[k] , fhw_qual);
-					}
-					if ( flag_ignore_soft_clippings == 1 )
-					{
-						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-						if ( cigar_items_instance[num_of_types - 1].def == 'S' && compressed_ds_pool[i]->icigar[1] != '\0' ) // Right soft clip exists
-						{
-							sprintf(str , "%ld" , cigar_items_instance[num_of_types - 1].len);
-							fprintf (fhw_qual , "%s" , str);
-							fprintf (fhw_qual , "%s" , "S");
-						}
-					}
-					fprintf (fhw_qual , "%s" , "\t");
-					// Print whether the read was mapped in forward or the reverse direction
-					switch ( findMatchCharacterIcigar (compressed_ds_pool[i]->icigar) )
-					{
-						case 'B':
-						case 'F':
-						case 'J':
-						case 'L':
-						case 'P':
-						case 'R':
-							fprintf (fhw_qual , "%s" , "1");
-							break;
-						case 'E':
-						case 'H':
-						case 'K':
-						case 'O':
-						case 'Q':
-						case 'U':
-							fprintf (fhw_qual , "%s" , "2");
-							break;
-					}
-				}
-				fprintf (fhw_qual , "%s" , "\n");
-			}
-		}
-	}
 	/*
-	 * Check if the last element of list_of_read_names is a comma
+	 printf ("\ncompressed_ds_pool_total %d" , compressed_ds_pool_total);
+	 fflush (stdout);
+	 return;
+	 for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
+	 {
+	 if ( i == 0 )
+	 {
+	 if ( compressed_ds_pool[i]->position != 1 )
+	 {
+	 sprintf(str , "%lld" , compressed_ds_pool[i]->position);
+	 strcat(line_to_be_written_to_file , str);
+	 strcat(line_to_be_written_to_file , "\t");
+	 }
+	 else str[0] = '\0'; // empty string
+	 }
+	 strcat(line_to_be_written_to_file , compressed_ds_pool[i]->icigar);
+	 strcat(line_to_be_written_to_file , "-");
+	 sprintf(str , "%ld" , compressed_ds_pool[i]->num_reads);
+	 strcat(line_to_be_written_to_file , str);
+	 if ( i != compressed_ds_pool_total - 1 )
+	 strcat(line_to_be_written_to_file , ",");
+
+	 for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
+	 {
+	 if ( compressed_ds_pool[i]->pointers_to_read_names[j][0] != ' ' && compressed_ds_pool[i]->pointers_to_read_names[j][1] != '\0' )
+	 {
+	 strcat(list_of_read_names , "brdg_");
+	 strcat(list_of_read_names , compressed_ds_pool[i]->pointers_to_read_names[j]);
+	 if ( i != compressed_ds_pool_total - 1 || j != compressed_ds_pool[i]->num_reads - 1 )
+	 strcat(list_of_read_names , ",");
+	 }
+	 }
+
+	 if ( flag_save_all_quality_scores == 1 )
+	 {
+	 for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
+	 {
+	 qual_score_length = 0;
+	 cigar_length = 0;
+	 switch ( findMatchCharacterIcigar (compressed_ds_pool[i]->icigar) )
+	 {
+	 case 'B':
+	 case 'F':
+	 case 'J':
+	 case 'L':
+	 case 'P':
+	 case 'R':
+	 for ( k = 0 ;
+	 compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
+	 k++ )
+	 qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+	 qual[k] = '\0';
+	 break;
+	 case 'E':
+	 case 'H':
+	 case 'K':
+	 case 'O':
+	 case 'Q':
+	 case 'U':
+	 for ( k = strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 ;
+	 k >= 0 ; k-- )
+	 {
+	 qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+	 //printf ("\n Read name check %s" , compressed_ds_pool[i]->pointers_to_read_names[j]);
+	 }
+	 qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j])] = '\0';
+	 break;
+	 }
+	 fprintf (fhw_qual , "%s" , qual);
+	 qual_score_length = strlen (qual);
+
+	 splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+	 for ( m = 0 ; m < num_of_types ; m++ )
+	 cigar_length += cigar_items_instance[m].len;
+
+	 if ( qual_score_length != cigar_length )
+	 {
+	 printf ("\nUNEQUAL LENGTHS");
+	 printf ("\ncigar %s" , compressed_ds_pool[i]->cigar);
+	 printf ("\nqual score %s" , qual);
+	 printf ("\ncigar length %d qual score length %d" , cigar_length , qual_score_length);
+	 }
+	 if ( flag_save_exact_quality_scores == 0 )
+	 {
+	 fprintf (fhw_qual , "%s" , "\t");
+	 if ( flag_ignore_soft_clippings == 1 )
+	 {
+	 splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+	 if ( cigar_items_instance[0].def == 'S' && compressed_ds_pool[i]->icigar[1] != '\0' ) // Left soft clip exists
+	 {
+	 sprintf(str , "%ld" , cigar_items_instance[0].len);
+	 fprintf (fhw_qual , "%s" , str);
+	 fprintf (fhw_qual , "%s" , "S");
+	 }
+	 }
+	 if ( compressed_ds_pool[i]->icigar[1] != '\0' )
+	 {
+	 for ( k = 0 ;
+	 compressed_ds_pool[i]->icigar[k + 1] != '~' && compressed_ds_pool[i]->icigar[k + 1] != '\0' ;
+	 k++ )
+	 fputc (compressed_ds_pool[i]->icigar[k] , fhw_qual);
+	 }
+	 else
+	 {
+
+	 //Find the icigar before the ith one which is not compressed
+
+	 l = i - 1;
+	 while ( l >= 0 )
+	 {
+	 if ( compressed_ds_pool[l]->icigar[1] != '\0' )
+	 break;
+	 else l--;
+	 }
+
+	 for ( k = 0 ;
+	 compressed_ds_pool[l]->icigar[k + 1] != '~' && compressed_ds_pool[l]->icigar[k + 1] != '\0' ;
+	 k++ )
+	 fputc (compressed_ds_pool[l]->icigar[k] , fhw_qual);
+	 }
+	 if ( flag_ignore_soft_clippings == 1 )
+	 {
+	 //splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+	 if ( cigar_items_instance[num_of_types - 1].def == 'S' && compressed_ds_pool[i]->icigar[1] != '\0' ) // Right soft clip exists
+	 {
+	 sprintf(str , "%ld" , cigar_items_instance[num_of_types - 1].len);
+	 fprintf (fhw_qual , "%s" , str);
+	 fprintf (fhw_qual , "%s" , "S");
+	 }
+	 }
+	 fprintf (fhw_qual , "%s" , "\t");
+	 // Print whether the read was mapped in forward or the reverse direction
+	 switch ( findMatchCharacterIcigar (compressed_ds_pool[i]->icigar) )
+	 {
+	 case 'B':
+	 case 'F':
+	 case 'J':
+	 case 'L':
+	 case 'P':
+	 case 'R':
+	 fprintf (fhw_qual , "%s" , "1");
+	 break;
+	 case 'E':
+	 case 'H':
+	 case 'K':
+	 case 'O':
+	 case 'Q':
+	 case 'U':
+	 fprintf (fhw_qual , "%s" , "2");
+	 break;
+	 }
+	 }
+	 fprintf (fhw_qual , "%s" , "\n");
+	 }
+	 }
+	 }
+
+	 //  Check if the last element of list_of_read_names is a comma
+
+	 if ( list_of_read_names[strlen (list_of_read_names) - 1] == ',' )
+	 list_of_read_names[strlen (list_of_read_names) - 1] = '\0';
+	 if ( list_of_read_names[0] != '\0' )
+	 strcat(line_to_be_written_to_file , "\t");
+	 strcat(line_to_be_written_to_file , list_of_read_names);
+	 strcat(line_to_be_written_to_file , "\n");
+	 fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
+	 *count = compressed_ds_pool_total;
+
 	 */
-	if ( list_of_read_names[strlen (list_of_read_names) - 1] == ',' )
-		list_of_read_names[strlen (list_of_read_names) - 1] = '\0';
-	if ( list_of_read_names[0] != '\0' )
-	strcat(line_to_be_written_to_file , "\t");
-	strcat(line_to_be_written_to_file , list_of_read_names);
-	strcat(line_to_be_written_to_file , "\n");
-	fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
-	*count = compressed_ds_pool_total;
 
 //strcat(line_to_be_written_to_file , "\n");
 //fprintf (fhw_pass1 , "%s" , line_to_be_written_to_file);
@@ -808,7 +805,7 @@ void readAlignmentsAndCompress (
 				fflush (stdout);
 				printf ("%d %d %d %d %d" , flag_save_all_quality_scores , flag_save_exact_quality_scores , compressed_ds_pool_index , quality_score_index , flag_ignore_soft_clippings);
 				fflush (stdout);
-				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , flag_ignore_soft_clippings , cigar_items_instance);
+				writeToFile (fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , cigar_items_instance);
 				printf ("\nReturned from writeToFile");
 				fflush (stdout);
 
