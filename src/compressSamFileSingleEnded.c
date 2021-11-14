@@ -83,7 +83,6 @@ void writeToFile (
 	//return;
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
-		continue;
 		if ( i == 0 )
 		{
 			if ( compressed_ds_pool[i]->position != 1 )
