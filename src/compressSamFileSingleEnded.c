@@ -244,7 +244,7 @@ void writeToFile (
 
 	//  Check if the last element of list_of_read_names is a comma
 
-	return;
+//return;
 	if ( list_of_read_names[strlen (list_of_read_names) - 1] == ',' )
 		list_of_read_names[strlen (list_of_read_names) - 1] = '\0';
 	if ( list_of_read_names[0] != '\0' )
