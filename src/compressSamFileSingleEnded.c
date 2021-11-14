@@ -707,8 +707,8 @@ void readAlignmentsAndCompress (
 		//printf ("\n Position:%lld iCIGAR: %s" , curr_alignment->start_position , curr_alignment->icigar);
 		if ( strlen (prev_reference_name) == 0 ) // 1st chromosome - initialize stuffs
 		{
-			//printf("\n1. compressed_ds_pool_index %d", compressed_ds_pool_index);
-			//fflush(stdout);
+			printf ("\n1. compressed_ds_pool_index %d" , compressed_ds_pool_index);
+			fflush (stdout);
 			previous_position = current_position;
 			strcpy(prev_reference_name , curr_reference_name);
 			strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
@@ -719,11 +719,11 @@ void readAlignmentsAndCompress (
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 			compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 			compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position;
-			//printf("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
+			printf ("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
 			quality_score_index++;
 			compressed_ds_pool_index++;
-			//printf("\n Writing Reference to file %s %d", reference_info[reference_sequence_index]->line, reference_sequence_index);
-			//fflush(stdout);
+			printf ("\n Writing Reference to file %s %d" , reference_info[reference_sequence_index]->line , reference_sequence_index);
+			fflush (stdout);
 			reference_sequence_index = findChromosomeIndex (reference_info , prev_reference_name , number_of_reference_sequences);
 			fprintf (fhw_pass1 , "%s" , reference_info[reference_sequence_index]->line);
 			reference_sequence_index++;
@@ -800,7 +800,7 @@ void readAlignmentsAndCompress (
 				fflush (stdout);
 				printf ("\nCalling reModeliCIGARSSingleEnded");
 				fflush (stdout);
-				//reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
+				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
 				printf ("\nReturned from reModeliCIGARSSingleEnded");
 				fflush (stdout);
 				printf ("\nCalling writeToFile");
