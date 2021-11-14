@@ -64,6 +64,7 @@ void writeToFile (
 {
 	printf ("\nInside writeToFile");
 	fflush (stdout);
+	return;
 	int i, j, k, l, m;
 	char str[1000];
 	char qual[MAX_SEQ_LEN];
