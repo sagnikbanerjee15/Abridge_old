@@ -12,6 +12,8 @@ int findSamFormatFlagPairedEnded (
 		char[],
 		char*);
 
+int findSamFormatFlagSingleEnded (char*, int, char*);
+
 struct Sam_Alignment* allocateMemorySam_Alignment ()
 {
 	/********************************************************************
