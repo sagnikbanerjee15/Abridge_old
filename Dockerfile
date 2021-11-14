@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM centos
 MAINTAINER Sagnik Banerjee <sagnikbanerjee15@gmail.com>
 
 ENV TZ=America/New_York
@@ -9,9 +9,10 @@ ARG ZPAQ_VERSION=715
 ARG SAMTOOLS_VERSION=1.14
 
 # Update base image and install software
-RUN apt-get -y update
-RUN apt-get install -y --no-install-recommends git python3 less vim wget time build-essential zlib1g-dev libncurses5-dev gcc g++ make unzip zip cmake ca-certificates liblzma-dev libbz2-dev libcurl4-openssl-dev
-RUN apt-get clean
+RUN yum -y update
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN yum -y install git python3 less vim wget time zlib-devel ncurses-devel gcc gcc-c++ make unzip zip cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils 
+RUN yum clean all
 
 # Create directories for installation
 RUN mkdir /software 
