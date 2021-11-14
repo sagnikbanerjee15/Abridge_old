@@ -117,13 +117,17 @@ void writeToFile (
 		int number_of_unique_samformatflags,
 		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
 		short int flag_ignore_soft_clippings,
-		struct Cigar_Items *cigar_items_instance)
+		struct Cigar_Items *cigar_items_instance,
+		char *line_to_be_written_to_file,
+		char *list_of_read_names,
+		char *list_of_qual_scores,
+		char *qual)
 {
 	int i, j, k, l;
 	char str[1000];
-	char qual[MAX_SEQ_LEN];
-	char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
-	char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
+	//char qual[MAX_SEQ_LEN];
+	//char line_to_be_written_to_file[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
+	//char list_of_read_names[MAX_LINE_TO_BE_WRITTEN_TO_FILE];
 	int num_of_types;
 	char investigate_qual[1000] = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFF:FFFFFFFFFFFFFFFF,FFFFFFFFF:FFFFFFFF:FFFFFFFFFF";
 
@@ -406,6 +410,9 @@ void compressPairedEndedAlignments (
 	char *write_to_file_col3;
 	char *encoded_string;
 	char **modified_icigars;
+	char *list_of_read_names;
+	char *list_of_qual_scores;
+	char *qual_for_writeToFile;
 	char str[100];
 	char read_id_string[100];
 	char line_to_be_written_to_file[1000];
@@ -534,6 +541,9 @@ void compressPairedEndedAlignments (
 	write_to_file_col1 = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col2 = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col3 = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	list_of_read_names = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	list_of_qual_scores = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	qual_for_writeToFile = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	encoded_string = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col1[0] = '\0';
 	write_to_file_col2[0] = '\0';
@@ -734,7 +744,7 @@ void compressPairedEndedAlignments (
 			//printf ("\2. ncompressed_ds_pool_index %d" , compressed_ds_pool_index);
 			//fflush (stdout);
 			reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
-			writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance);
+			writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance , line_to_be_written_to_file , list_of_read_names , list_of_qual_scores , qual_for_writeToFile);
 			if ( max_commas < curr_commas ) max_commas = curr_commas;
 			//printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
@@ -796,7 +806,7 @@ void compressPairedEndedAlignments (
 				//printf ("\n4. compressed_ds_pool_index %d" , compressed_ds_pool_index);
 				//fflush(stdout);
 				reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
-				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance);
+				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance , line_to_be_written_to_file , list_of_read_names , list_of_qual_scores , qual_for_writeToFile);
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
@@ -821,7 +831,7 @@ void compressPairedEndedAlignments (
 	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
 
 	reModeliCIGARSPairedEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , samformatflag_replacer_characters);
-	writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance);
+	writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance , line_to_be_written_to_file , list_of_read_names , list_of_qual_scores , qual_for_writeToFile);
 	if ( max_commas < curr_commas ) max_commas = curr_commas;
 	sprintf(temp , "%lld" , max_commas);
 	strcat(temp , "\n");
