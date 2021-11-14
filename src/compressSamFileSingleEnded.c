@@ -62,7 +62,7 @@ void writeToFile (
 		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance)
 {
-	printf ("\nInside writeToFile");
+	printf ("\nInside writeToFile\n");
 	fflush (stdout);
 	int i, j, k, l, m;
 	char str[1000];
