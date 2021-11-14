@@ -13,7 +13,7 @@ ARG SAMTOOLS_VERSION=1.14
 # Update base image and install software
 RUN yum -y update
 RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-RUN yum -y install git python3 less vim wget time zlib-devel ncurses-devel make unzip zip glibc-devel gcc gcc-c++ cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils p7zip p7zip-plugins 
+RUN yum -y install git python3 less gdb valgrind centos-release-scl vim wget time zlib-devel ncurses-devel make unzip zip glibc-devel gcc gcc-c++ cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils p7zip p7zip-plugins 
 RUN yum clean all
 
 # Create directories for installation
