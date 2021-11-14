@@ -750,7 +750,7 @@ void readAlignmentsAndCompress (
 		}
 		else // Same chromosome
 		{
-			continue;
+
 			if ( previous_position == current_position )
 			{
 				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
@@ -787,6 +787,7 @@ void readAlignmentsAndCompress (
 			}
 			else
 			{
+				continue;
 				//printf("\n4. compressed_ds_pool_index %d", compressed_ds_pool_index);
 				//fflush(stdout);
 				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
