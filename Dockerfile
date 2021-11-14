@@ -3,6 +3,8 @@ MAINTAINER Sagnik Banerjee <sagnikbanerjee15@gmail.com>
 
 ENV TZ=America/New_York
 ENV DEBIAN_FRONTEND=noninteractive 
+ENV LC_CTYPE=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 ARG ABRIDGE_VERSION=1.0.0
 ARG ZPAQ_VERSION=715
