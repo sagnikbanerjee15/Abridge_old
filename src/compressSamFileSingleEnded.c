@@ -722,7 +722,6 @@ void readAlignmentsAndCompress (
 		}
 		else if ( strcmp (prev_reference_name , curr_reference_name) != 0 ) // New chromosome
 		{
-			continue;
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
 			reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
