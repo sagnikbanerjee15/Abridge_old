@@ -677,7 +677,7 @@ void readAlignmentsAndCompress (
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
 		strcpy(curr_reference_name , curr_alignment->reference_name);
-		continue;
+
 		if ( curr_alignment->samflag == 4 )
 		{
 			if ( flag_ignore_unmapped_sequences == 0 )
@@ -692,7 +692,7 @@ void readAlignmentsAndCompress (
 			}
 			continue;
 		}
-
+		continue;
 		current_position = curr_alignment->start_position;
 		//printSamAlignmentInstance(curr_alignment,0);
 		generateIntegratedCigarSingleEnded (curr_alignment , flag_ignore_scores , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics);
