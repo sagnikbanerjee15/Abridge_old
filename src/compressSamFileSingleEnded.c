@@ -91,7 +91,7 @@ void writeToFile (
 				strcat(line_to_be_written_to_file , str);
 				strcat(line_to_be_written_to_file , "\t");
 			}
-			else str[0] = '\0'; // empty string
+			//else str[0] = '\0'; // empty string
 		}
 		continue;
 		strcat(line_to_be_written_to_file , compressed_ds_pool[i]->icigar);
