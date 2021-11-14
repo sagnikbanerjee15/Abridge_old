@@ -673,10 +673,10 @@ void readAlignmentsAndCompress (
 		 fflush(stdout);
 		 }*/
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
+		continue;
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
 		strcpy(curr_reference_name , curr_alignment->reference_name);
 
-		continue;
 		if ( curr_alignment->samflag == 4 )
 		{
 			if ( flag_ignore_unmapped_sequences == 0 )
@@ -721,7 +721,6 @@ void readAlignmentsAndCompress (
 		}
 		else if ( strcmp (prev_reference_name , curr_reference_name) != 0 ) // New chromosome
 		{
-			continue;
 			//printf("\2. ncompressed_ds_pool_index %d", compressed_ds_pool_index);
 			//fflush(stdout);
 			reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
@@ -750,7 +749,6 @@ void readAlignmentsAndCompress (
 		}
 		else // Same chromosome
 		{
-			continue;
 			if ( previous_position == current_position )
 			{
 				//printf("\n3. compressed_ds_pool_index %d", compressed_ds_pool_index);
