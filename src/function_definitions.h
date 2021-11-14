@@ -3,6 +3,15 @@
 
 #include <stdbool.h>
 
+int findSamFormatFlagPairedEnded (
+		char*,
+		int,
+		char*,
+		struct Paired_Ended_Flag_to_Single_Character*,
+		int,
+		char[],
+		char*);
+
 struct Sam_Alignment* allocateMemorySam_Alignment ()
 {
 	/********************************************************************
