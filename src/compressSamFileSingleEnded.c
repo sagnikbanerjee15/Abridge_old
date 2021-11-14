@@ -74,6 +74,8 @@ void writeToFile (
 	line_to_be_written_to_file[0] = '\0';
 	list_of_read_names[0] = '\0';
 	list_of_qual_scores[0] = '\0';
+
+	printf ("\ncompressed_ds_pool_total %d" , compressed_ds_pool_total);
 	for ( i = 0 ; i < compressed_ds_pool_total ; i++ )
 	{
 		if ( i == 0 )
