@@ -783,16 +783,16 @@ void readAlignmentsAndCompress (
 			else
 			{
 
-				//printf ("\n4. compressed_ds_pool_index %d" , compressed_ds_pool_index);
-				//fflush (stdout);
-				//printf ("\nCalling reModeliCIGARSSingleEnded");
-				//fflush (stdout);
+				printf ("\n4. compressed_ds_pool_index %d" , compressed_ds_pool_index);
+				fflush (stdout);
+				printf ("\nCalling reModeliCIGARSSingleEnded");
+				fflush (stdout);
 				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
-				//printf ("\nReturned from reModeliCIGARSSingleEnded");
-				//fflush (stdout);
-				//printf ("\nCalling writeToFile");
-				//fflush (stdout);
-				//printf ("%d %d %d %d %d" , flag_save_all_quality_scores , flag_save_exact_quality_scores , compressed_ds_pool_index , quality_score_index , flag_ignore_soft_clippings);
+				printf ("\nReturned from reModeliCIGARSSingleEnded");
+				fflush (stdout);
+				printf ("\nCalling writeToFile");
+				fflush (stdout);
+				printf ("%d %d %d %d %d" , flag_save_all_quality_scores , flag_save_exact_quality_scores , compressed_ds_pool_index , quality_score_index , flag_ignore_soft_clippings);
 				fflush (stdout);
 				writeToFile (flag_save_all_quality_scores);
 				//printf ("\nReturned from writeToFile");
