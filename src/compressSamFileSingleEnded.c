@@ -62,7 +62,6 @@ void writeToFile (
 		short int flag_ignore_soft_clippings,
 		struct Cigar_Items *cigar_items_instance)
 {
-	return;
 	printf ("\nInside writeToFile");
 	fflush (stdout);
 	return;
@@ -801,7 +800,7 @@ void readAlignmentsAndCompress (
 				fflush (stdout);
 				printf ("\nCalling reModeliCIGARSSingleEnded");
 				fflush (stdout);
-				reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
+				//reModeliCIGARSSingleEnded (compressed_ds_pool , compressed_ds_pool_rearranged , already_processed , compressed_ds_pool_index , modified_icigars , cigar_items_instance);
 				printf ("\nReturned from reModeliCIGARSSingleEnded");
 				fflush (stdout);
 				printf ("\nCalling writeToFile");
