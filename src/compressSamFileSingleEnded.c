@@ -99,7 +99,7 @@ void writeToFile (
 			}
 			else str[0] = '\0'; // empty string
 		}
-		continue;
+
 		strcat(line_to_be_written_to_file , compressed_ds_pool[i]->icigar);
 		strcat(line_to_be_written_to_file , "-");
 		sprintf(str , "%ld" , compressed_ds_pool[i]->num_reads);
