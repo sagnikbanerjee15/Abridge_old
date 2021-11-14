@@ -672,6 +672,7 @@ void readAlignmentsAndCompress (
 		 printf("\nNumber of records read: %lld Million %s", number_of_records_read / 1000000, output_abridgefilename);
 		 fflush(stdout);
 		 }*/
+		printf ("\n%s" , line);
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		continue;
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
