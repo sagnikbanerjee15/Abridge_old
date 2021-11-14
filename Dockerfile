@@ -11,16 +11,7 @@ ARG SAMTOOLS_VERSION=1.14
 # Update base image and install software
 RUN yum -y update
 RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-RUN yum -y install git python3 less vim wget time zlib-devel ncurses-devel make unzip zip gcc-c++ cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils p7zip p7zip-plugins 
-RUN yum clean all
-
-
-RUN yum -y remove gcc libgomp
-RUN yum -y install libmpc
-RUN rpm -Uvh http://rpmfind.net/linux/centos/7.9.2009/os/x86_64/Packages/cpp-4.8.5-44.el7.x86_64.rpm
-RUN yum -y install glibc-devel
-RUN rpm -Uvh https://rpmfind.net/linux/centos/7.9.2009/os/x86_64/Packages/libgomp-4.8.5-44.el7.x86_64.rpm
-RUN rpm -Uvh https://rpmfind.net/linux/centos/7.9.2009/os/x86_64/Packages/gcc-4.8.5-44.el7.x86_64.rpm
+RUN yum -y install git python3 less vim wget time zlib-devel ncurses-devel make unzip zip glibc-devel gcc gcc-c++ cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils p7zip p7zip-plugins 
 RUN yum clean all
 
 # Create directories for installation
@@ -55,10 +46,7 @@ RUN cd /software && \
 
 # Downloading the current git repo - change this to a specific version later
 RUN cd /software && \
-	git clone https://github.com/sagnikbanerjee15/Abridge.git && \
-	cd Abridge/src && \
-	make && \
-	make install
+	git clone https://github.com/sagnikbanerjee15/Abridge.git
 	
 ENV PATH /software/Abridge:/software/Abridge/scripts:${PATH}
 
