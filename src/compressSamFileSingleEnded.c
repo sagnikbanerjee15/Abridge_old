@@ -666,7 +666,7 @@ void readAlignmentsAndCompress (
 	//return;
 	do
 	{
-		continue;
+		return;
 		number_of_records_read += 1;
 		/*if (number_of_records_read % 1000000 == 0)
 		 {
