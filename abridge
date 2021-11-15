@@ -130,6 +130,7 @@ def main():
     
     if options.test ==  True:
         # Convert BAM files to SAM files
+        """
         cmd = "samtools view -h /software/Abridge/example/SRR13711353_SE_100000.bam > /software/Abridge/example/SRR13711353_SE_100000.sam "
         print(cmd)
         os.system(cmd)
@@ -139,6 +140,8 @@ def main():
         cmd = "gunzip -c /software/Abridge/example/arath_1.fa.gz > /software/Abridge/example/arath_1.fa"
         print(cmd)
         os.system(cmd)
+        """
+        
         files_to_be_removed = ["/software/Abridge/example/SRR13711353_SE_100000.sam",
                                "/software/Abridge/example/SRR13711353_PE_100000.sam",
                                "/software/Abridge/example/arath_1.fa"]
