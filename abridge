@@ -112,6 +112,11 @@ class DockerOperations:
         docker_cmd += f" bash -c {cmd}"
         os.system(docker_cmd)
 
+def verifyCompressionDirectory(directory):
+    '''
+    '''
+    
+
 def main():
     commandLineArg=sys.argv
     if len(commandLineArg)==1:
@@ -194,11 +199,11 @@ def main():
                                             cmd += f") "
                                             cmd += f" 1> {output_directory_name}.output "
                                             cmd += f" 2> {output_directory_name}.error "
-                                            output_directory_name_without_location = output_directory_name.split("/")[-1]
+                                            
                                             print(cmd)
                                             os.system(cmd)
                                             
-                                            
+                                            output_directory_name_without_location = output_directory_name.split("/")[-1]
                                             for ignore_sequence in [0,1]: # 2 iterations
                                                 output_directory_name = f"/software/Abridge/example/" 
                                                 output_directory_name += f"{inputfilename_without_location}_"
@@ -226,7 +231,7 @@ def main():
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 print(cmd)
                                                 os.system(cmd)
-                                            return
+                                            #return
         
     else:
         abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
