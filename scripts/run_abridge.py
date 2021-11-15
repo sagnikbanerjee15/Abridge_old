@@ -163,7 +163,7 @@ def validateCommandLineArguments(options):
     options.softwares["compressSamFilePairedEnded"] = "compressSamFilePairedEnded"
     options.softwares["splitSamFileIntoEachReferenceSequence"] = "splitSamFileIntoEachReferenceSequence"
     options.softwares["buildABRIDGEIndex"]= "buildAbridgeIndex"
-    options.softwares["decompressSamFileSingleEnded"]= "/decompressSamFileSingleEnded"
+    options.softwares["decompressSamFileSingleEnded"]= "decompressSamFileSingleEnded"
     options.softwares["extractSequencesFromReferences"] = "extractSequencesFromReferences.py"
     options.softwares["randomRetrievalSingleEnded"] = "randomRetrievalSingleEnded"
     options.softwares["randomRetrievalPairedEnded"] = "randomRetrievalPairedEnded"

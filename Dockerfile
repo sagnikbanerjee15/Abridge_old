@@ -1,20 +1,17 @@
-FROM centos
+FROM ubuntu
 MAINTAINER Sagnik Banerjee <sagnikbanerjee15@gmail.com>
 
 ENV TZ=America/New_York
-ENV DEBIAN_FRONTEND=noninteractive 
-ENV LC_CTYPE=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
 ARG ABRIDGE_VERSION=1.0.0
 ARG ZPAQ_VERSION=715
 ARG SAMTOOLS_VERSION=1.14
 
 # Update base image and install software
-RUN yum -y update
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-RUN yum -y install git python3 less vim wget time zlib-devel ncurses-devel make unzip zip glibc-devel gcc gcc-c++ cmake ca-certificates bzip2-devel xz-devel libcurl-devel htop autoconf automake binutils bison flex gettext libtool make patch pkgconfig redhat-rpm-config rpm-build rpm-sign ctags elfutils patchutils p7zip p7zip-plugins 
-RUN yum clean all
+RUN apt-get -y update
+RUN apt-get -y install git python3 less vim wget time zlib1g zlib1g-dev lzma-dev libncurses5-dev libcurl4-nss-dev liblzma-dev libncursesw5-dev make unzip zip build-essential gcc g++ cmake ca-certificates libbz2-dev xz-utils htop autoconf automake binutils bison flex gettext libtool make patch pkg-config p7zip-full p7zip-rar 
+RUN apt-get clean all
 
 # Create directories for installation
 RUN mkdir /software 
@@ -51,7 +48,7 @@ RUN cd /software && \
 	git clone https://github.com/sagnikbanerjee15/Abridge.git &&\
 	cd Abridge/src &&\
 	make
-	
+
 ENV PATH /software/Abridge:/software/Abridge/src:/software/Abridge/scripts:${PATH}
 
 
