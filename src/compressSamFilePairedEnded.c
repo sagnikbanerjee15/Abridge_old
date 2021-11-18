@@ -901,7 +901,6 @@ void compressPairedEndedAlignments (
 						compressed_ds_pool_index ,
 						modified_icigars ,
 						samformatflag_replacer_characters);
-				printSamAlignmentInstance (curr_alignment , 1);
 				printf ("\nReturned from reModeliCIGARSPairedEnded");
 				fflush (stdout);
 				writeToFile (flag_save_all_quality_scores ,
@@ -930,9 +929,9 @@ void compressPairedEndedAlignments (
 				fflush (stdout);
 
 				printf ("\n%s" , line);
-				//printf ("Read name: %s" , curr_alignment->read_name);
+				printf ("Read name: %s" , curr_alignment->read_name);
 				fflush (stdout);
-				//printSamAlignmentInstance (curr_alignment , 1);
+				printSamAlignmentInstance (curr_alignment , 1);
 				fflush (stdout);
 				printf ("\nReturned from printSamAlignmentInstance");
 				fflush (stdout);
