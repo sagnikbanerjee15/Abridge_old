@@ -415,7 +415,7 @@ void compressPairedEndedAlignments (
 	char *qual_for_writeToFile;
 	char str[100];
 	char read_id_string[100];
-	char line_to_be_written_to_file[1000];
+	char *line_to_be_written_to_file;
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -543,6 +543,7 @@ void compressPairedEndedAlignments (
 	write_to_file_col3 = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	list_of_read_names = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	list_of_qual_scores = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
+	line_to_be_written_to_file = ( char* ) malloc (sizeof(char) * 1000);
 	qual_for_writeToFile = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
 	encoded_string = ( char* ) malloc (sizeof(char) * MAX_LINE_TO_BE_WRITTEN_TO_FILE);
 	write_to_file_col1[0] = '\0';
