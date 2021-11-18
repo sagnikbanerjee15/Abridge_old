@@ -816,10 +816,11 @@ void compressPairedEndedAlignments (
 				quality_score_index = 0;
 				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
 				strcpy(read_names[quality_score_index] , curr_alignment->read_name);
-				continue;
+
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
+				continue;
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = qual_scores[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position - previous_position;
