@@ -817,6 +817,8 @@ void compressPairedEndedAlignments (
 
 				printSamAlignmentInstance (curr_alignment);
 				fflush (stdout);
+				printf ("\nReturned from printSamAlignmentInstance");
+				fflush (stdout);
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
