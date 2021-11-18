@@ -503,7 +503,7 @@ void compressPairedEndedAlignments (
 	fhr_freq_samflags = fopen (frequency_of_flags_filename , "r");
 	if ( fhr_freq_samflags == NULL )
 	{
-		printf ("2. Error! File %s not found" , fhr_freq_samflags);
+		printf ("2. Error! File %s not found" , frequency_of_flags_filename);
 		exit (1);
 	}
 	fhw_pass1 = fopen (output_abridgefilename , "w");
