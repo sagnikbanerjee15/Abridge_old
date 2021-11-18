@@ -446,7 +446,7 @@ void printSamAlignmentInstance (
 		short int print_everything)
 {
 	printf ("\nInside printSamAlignmentInstance");
-	fflus (stdout);
+	fflush (stdout);
 	int i;
 	printf ("\n");
 	printf ("^^^^^^^^^^^^^^^^^SAM ALIGNMENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
