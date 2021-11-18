@@ -445,6 +445,7 @@ void printSamAlignmentInstance (
 		struct Sam_Alignment *s,
 		short int print_everything)
 {
+	printf ("\nInside printSamAlignmentInstance");
 	int i;
 	printf ("\n");
 	printf ("^^^^^^^^^^^^^^^^^SAM ALIGNMENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
