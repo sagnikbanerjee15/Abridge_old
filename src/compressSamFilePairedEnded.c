@@ -295,7 +295,7 @@ void reModeliCIGARSPairedEnded (
 		char **modified_icigars,
 		char samformatflag_replacer_characters[])
 {
-	printf ("\nInside reModeliCIGARSPairedEnded");
+	//printf ("\nInside reModeliCIGARSPairedEnded");
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
@@ -892,17 +892,17 @@ void compressPairedEndedAlignments (
 			else
 			{
 
-				printf ("\n4. compressed_ds_pool_index %d" ,
-						compressed_ds_pool_index);
-				fflush (stdout);
+				//printf ("\n4. compressed_ds_pool_index %d" ,
+				//		compressed_ds_pool_index);
+				//fflush (stdout);
 				reModeliCIGARSPairedEnded (compressed_ds_pool ,
 						compressed_ds_pool_rearranged ,
 						already_processed ,
 						compressed_ds_pool_index ,
 						modified_icigars ,
 						samformatflag_replacer_characters);
-				printf ("\nReturned from reModeliCIGARSPairedEnded");
-				fflush (stdout);
+				//printf ("\nReturned from reModeliCIGARSPairedEnded");
+				//fflush (stdout);
 				writeToFile (flag_save_all_quality_scores ,
 						flag_save_exact_quality_scores ,
 						fhw_qual ,
@@ -925,16 +925,16 @@ void compressPairedEndedAlignments (
 						list_of_read_names ,
 						list_of_qual_scores ,
 						qual_for_writeToFile);
-				printf ("\nReturned from writeToFile");
-				fflush (stdout);
+				//printf ("\nReturned from writeToFile");
+				//fflush (stdout);
 
-				printf ("\n%s" , line);
-				printf ("Read name: %s" , curr_alignment->read_name);
-				fflush (stdout);
-				printSamAlignmentInstance (curr_alignment , 1);
-				fflush (stdout);
-				printf ("\nReturned from printSamAlignmentInstance");
-				fflush (stdout);
+				//printf ("\n%s" , line);
+				//printf ("Read name: %s" , curr_alignment->read_name);
+				//fflush (stdout);
+				//printSamAlignmentInstance (curr_alignment , 1);
+				//fflush (stdout);
+				//printf ("\nReturned from printSamAlignmentInstance");
+				//fflush (stdout);
 				//continue;
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
@@ -952,11 +952,11 @@ void compressPairedEndedAlignments (
 				compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads - 1] = read_names[quality_score_index];
 				compressed_ds_pool[compressed_ds_pool_index]->position = curr_alignment->start_position - previous_position;
 				quality_score_index++;
-				printf ("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" ,
-						compressed_ds_pool[compressed_ds_pool_index]->num_reads ,
-						curr_alignment->reference_name ,
-						curr_alignment->start_position ,
-						compressed_ds_pool_index);
+				//printf ("\n5. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" ,
+				//		compressed_ds_pool[compressed_ds_pool_index]->num_reads ,
+				//		curr_alignment->reference_name ,
+				//		curr_alignment->start_position ,
+				//		compressed_ds_pool_index);
 				compressed_ds_pool_index++;
 			}
 			previous_position = current_position;
