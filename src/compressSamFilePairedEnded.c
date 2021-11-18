@@ -690,8 +690,6 @@ void compressPairedEndedAlignments (
 		//printf ("\n%s" , line);
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
-
-		printSamAlignmentInstance (curr_alignment , 1);
 		strcpy(curr_reference_name , curr_alignment->reference_name);
 		if ( curr_alignment->samflag == 77 || curr_alignment->samflag == 141 )
 		{
@@ -713,6 +711,7 @@ void compressPairedEndedAlignments (
 		 */
 
 		generateIntegratedCigarPairedEnded (curr_alignment , flag_ignore_scores , flag_ignore_soft_clippings , flag_ignore_mismatches , flag_ignore_unmapped_sequences , flag_ignore_quality_score , whole_genome , sam_alignment_instance_diagnostics , number_of_records_read , run_diagnostics , samflag_dictionary , number_of_unique_samformatflags , samformatflag_replacer_characters);
+		printSamAlignmentInstance (curr_alignment , 1);
 		//continue;
 		NH_tag_index = -1;
 		for ( i = 0 ; i < curr_alignment->number_of_tag_items ; i++ )
