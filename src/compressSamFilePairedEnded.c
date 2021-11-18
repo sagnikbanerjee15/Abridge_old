@@ -815,6 +815,7 @@ void compressPairedEndedAlignments (
 				printf ("\nReturned from writeToFile");
 				fflush (stdout);
 
+				printf ("\n%s" , line);
 				printSamAlignmentInstance (curr_alignment , 1);
 				fflush (stdout);
 				printf ("\nReturned from printSamAlignmentInstance");
