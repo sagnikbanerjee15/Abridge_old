@@ -814,9 +814,9 @@ void compressPairedEndedAlignments (
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
 				quality_score_index = 0;
-				continue;
 				strcpy(qual_scores[quality_score_index] , curr_alignment->qual);
 				strcpy(read_names[quality_score_index] , curr_alignment->read_name);
+				continue;
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->icigar , curr_alignment->icigar);
 				strcpy(compressed_ds_pool[compressed_ds_pool_index]->cigar , curr_alignment->cigar);
 				compressed_ds_pool[compressed_ds_pool_index]->num_reads = 1;
