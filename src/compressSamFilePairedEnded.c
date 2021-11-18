@@ -816,6 +816,8 @@ void compressPairedEndedAlignments (
 				fflush (stdout);
 
 				printf ("\n%s" , line);
+				printf ("Read name: %s" , curr_alignment->read_name);
+				fflush (stdout);
 				printSamAlignmentInstance (curr_alignment , 1);
 				fflush (stdout);
 				printf ("\nReturned from printSamAlignmentInstance");
