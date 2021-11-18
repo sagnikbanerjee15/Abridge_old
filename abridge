@@ -154,6 +154,7 @@ def main():
         # Setting up commands for testing
         for level in ["1","2","3"]: # 3 iterations
             for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam","/software/Abridge/example/SRR13711353_PE_100000.sam"]: # 2 iterations
+                if "PE" not in inputfilename:continue
                 for ignore_scores in [0,1]: # 2 iterations
                     for ignore_quality_scores in [0,1]: # 2 iterations
                         for ignore_soft_clippings in [0,1]: # 2 iterations
@@ -231,7 +232,7 @@ def main():
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 print(cmd)
                                                 os.system(cmd)
-                                            #return
+                                            return
         
     else:
         abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
