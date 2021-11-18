@@ -814,6 +814,9 @@ void compressPairedEndedAlignments (
 				writeToFile (flag_save_all_quality_scores , flag_save_exact_quality_scores , fhw_qual , fhw_pass1 , compressed_ds_pool_rearranged , compressed_ds_pool_index , write_to_file_col1 , write_to_file_col2 , write_to_file_col3 , encoded_string , &curr_commas , qual_scores , quality_score_index , samformatflag_replacer_characters , number_of_unique_samformatflags , samflag_dictionary , flag_ignore_soft_clippings , cigar_items_instance , line_to_be_written_to_file , list_of_read_names , list_of_qual_scores , qual_for_writeToFile);
 				printf ("\nReturned from writeToFile");
 				fflush (stdout);
+
+				printSamAlignmentInstance (curr_alignment);
+				fflush (stdout);
 				if ( max_commas < curr_commas ) max_commas = curr_commas;
 				//printf ( "\n%lld %lld" , curr_commas , max_commas );
 				compressed_ds_pool_index = 0;
