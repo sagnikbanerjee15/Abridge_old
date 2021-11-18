@@ -690,6 +690,8 @@ void compressPairedEndedAlignments (
 		//printf ("\n%s" , line);
 		number_of_fields = splitByDelimiter (line , '\t' , split_line);
 		populateSamAlignmentInstance (curr_alignment , split_line , number_of_fields , split_tags);
+
+		printSamAlignmentInstance (curr_alignment , 1);
 		strcpy(curr_reference_name , curr_alignment->reference_name);
 		if ( curr_alignment->samflag == 77 || curr_alignment->samflag == 141 )
 		{
