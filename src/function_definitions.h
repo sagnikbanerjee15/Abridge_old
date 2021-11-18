@@ -452,55 +452,75 @@ void printSamAlignmentInstance (
 	printf ("^^^^^^^^^^^^^^^^^SAM ALIGNMENT^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 	printf ("\n");
 	printf ("Read name: %s" , s->read_name);
+	fflush (stdout);
 	printf ("\n");
 	printf ("SamFlag: %d" , s->samflag);
+	fflush (stdout);
 	printf ("\n");
 	printf ("Reference name: %s" , s->reference_name);
+	fflush (stdout);
 	printf ("\n");
 	printf ("Start position: %lld" , s->start_position);
+	fflush (stdout);
 	printf ("\n");
 	printf ("Mapping quality score: %d" , s->mapping_quality_score);
+	fflush (stdout);
 	printf ("\n");
 	printf ("CIGAR: %s" , s->cigar);
+	fflush (stdout);
 	printf ("\n");
 	printf ("iCIGAR: %s" , s->icigar);
+	fflush (stdout);
 	printf ("\n");
 	printf ("Reference name next mate: %s" , s->reference_name_next_mate);
+	fflush (stdout);
 	printf ("\n");
 	printf ("Start position next: %lld" , s->start_position_next);
+	fflush (stdout);
 	printf ("\n");
 	printf ("Template length: %d" , s->template_length);
+	fflush (stdout);
 	printf ("\n");
 	printf ("Seq:  %s %d " , s->seq , strlen (s->seq));
+	fflush (stdout);
 	printf ("\n");
 	printf ("Qual: %s");
 	for ( i = 0 ; s->qual[i] != '\0' ; i++ )
 		printf ("%c" , s->qual[i] - 90);
 	printf ("\n");
+	fflush (stdout);
 	for ( i = 0 ; i < s->number_of_tag_items ; i++ )
 	{
 		printf ("Tag item %s Tag value %s" , s->tags[i].name , s->tags[i].val);
 		printf ("\n");
 	}
-
+	fflush (stdout);
 	if ( print_everything == 1 )
 	{
 		printf ("Left Soft clipped portion");
 		printf ("\n");
+		fflush (stdout);
 		printf ("%s" , s->soft_clippings.left);
 		printf ("\n");
+		fflush (stdout);
 		printf ("Right Soft clipped portion");
 		printf ("\n");
+		fflush (stdout);
 		printf ("%s" , s->soft_clippings.right);
 		printf ("\n");
+		fflush (stdout);
 		printf ("MD_extended: ");
 		printf ("\n");
+		fflush (stdout);
 		printf ("CIGAR_extended: ");
 		printf ("\n");
+		fflush (stdout);
 		printf ("soft clip removed sequence: ");
 		printf ("\n");
+		fflush (stdout);
 		printf ("\n%s\n%s\n%s" , s->md_extended , s->cigar_extended , s->soft_clips_removed_seq);
 		printf ("\n");
+		fflush (stdout);
 	}
 	printf ("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
