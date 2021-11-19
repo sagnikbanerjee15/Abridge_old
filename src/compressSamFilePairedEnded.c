@@ -927,7 +927,7 @@ void compressPairedEndedAlignments (
 						list_of_read_names ,
 						list_of_qual_scores ,
 						qual_for_writeToFile);
-				printf ("\nRead name: %s" , curr_alignment->read_name);
+				//printf ("\nRead name: %s" , curr_alignment->read_name);
 				//printf ("\nReturned from writeToFile");
 				//fflush (stdout);
 
