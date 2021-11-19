@@ -892,7 +892,6 @@ void compressPairedEndedAlignments (
 			else
 			{
 
-				printf ("Read name: %s" , curr_alignment->read_name);
 				//printf ("\n4. compressed_ds_pool_index %d" ,
 				//		compressed_ds_pool_index);
 				//fflush (stdout);
@@ -902,6 +901,7 @@ void compressPairedEndedAlignments (
 						compressed_ds_pool_index ,
 						modified_icigars ,
 						samformatflag_replacer_characters);
+				printf ("\nRead name: %s" , curr_alignment->read_name);
 				//printf ("\nReturned from reModeliCIGARSPairedEnded");
 				//fflush (stdout);
 				writeToFile (flag_save_all_quality_scores ,
