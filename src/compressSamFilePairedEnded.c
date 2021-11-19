@@ -892,6 +892,7 @@ void compressPairedEndedAlignments (
 			else
 			{
 
+				printf ("Read name: %s" , curr_alignment->read_name);
 				//printf ("\n4. compressed_ds_pool_index %d" ,
 				//		compressed_ds_pool_index);
 				//fflush (stdout);
@@ -929,7 +930,7 @@ void compressPairedEndedAlignments (
 				//fflush (stdout);
 
 				//printf ("\n%s" , line);
-				printf ("Read name: %s" , curr_alignment->read_name);
+
 				//fflush (stdout);
 				//printSamAlignmentInstance (curr_alignment , 1);
 				//fflush (stdout);
