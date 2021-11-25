@@ -2,28 +2,15 @@
 
 `abridge` is a software program to compress short-read alignments. 
 
-
-
 # Installation
 
-You can install `abridge` by executing a simple conda command. It will install all the dependencies within the conda environment
+`abridge` is released as a docker image and can be obtained from DockerHub.
 
 ```bash
-conda install -c bioconda abridge
+docker pull abridge:1.0.0
 ```
 
-Please note that the conda version might not be the latest. It will host a stable version though. If you wish to work with the most recent version please execute the following commands
-
-```bash
-git clone https://github.com/sagnikbanerjee15/abridge.git
-cd abridge
-./install.py
-echo "export PATH=\$PATH:$(pwd)" >> ~/.bashrc # Add this path permanently to the bashrc file
-export PATH=$PATH:$(pwd)
-echo "export PATH=\$PATH:$(pwd)/utils" >> ~/.bashrc # Add this path permanently to the bashrc file
-export PATH=$PATH:$(pwd)/utils
-```
-
+On High performance clusters please use singularity 
 
 
 # Generating alignments
