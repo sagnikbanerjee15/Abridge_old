@@ -17,6 +17,17 @@ Advancement in technology has enabled sequencing machines to produce vast amount
 `abridge` is released through GitHub. Download the latest release from GutHub
 
 ```bash
+wget https://github.com/sagnikbanerjee15/Abridge/archive/refs/tags/ABRIDGE_v1.0.0.tar.gz
+tar -xvzf ABRIDGE_v1.0.0.tar.gz
+cd ABRIDGE_v1.0.0
+echo "export PATH=\$PATH:$(pwd)" >> ~/.bashrc
+source ~/.bashrc
+```
+
+
+
+
+```bash
 https://github.com/sagnikbanerjee15/Abridge.git
 ```
 
