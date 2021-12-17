@@ -32,9 +32,15 @@ Alignments can be generated using a number of different software.
 
 ## Compress a single RNA-Seq file
 
-## Nitty gritties of compression
+### Lossless compression
 
-Explain the process and refer to paper and supplemental information
+
+
+### Lossy compression
+
+
+
+
 
 ## Generic compression tools
 
@@ -82,4 +88,4 @@ License information can be accessed from
 
 Please list all issues at https://github.com/sagnikbanerjee15/Abridge/issues
 
-For all other queries please email sagnik@iastate.edu
+For all other queries please email sagnikbanerjee15@gmail.com 
