@@ -43,11 +43,13 @@ RUN cd /software && \
 	cd samtools-${SAMTOOLS_VERSION} && make && make install &&\
 	cd .. && rm samtools-${SAMTOOLS_VERSION}.tar.bz2
 
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 # Downloading the current git repo - change this to a specific version later
 RUN cd /software && \
 	git clone https://github.com/sagnikbanerjee15/Abridge.git &&\
 	cd Abridge/src &&\
-	make
+	make &&\
+	chmod -R 777 /software/Abridge
 
 ENV PATH /software/Abridge:/software/Abridge/src:/software/Abridge/scripts:${PATH}
 

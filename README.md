@@ -14,7 +14,7 @@ Advancement in technology has enabled sequencing machines to produce vast amount
 
 # Installation
 
-`abridge` is released through GitHub. Download the latest release from GutHub
+`abridge` is released through GitHub. Download the latest release from GitHub
 
 ```bash
 wget https://github.com/sagnikbanerjee15/Abridge/archive/refs/tags/ABRIDGE_v1.0.0.tar.gz
@@ -24,26 +24,28 @@ echo "export PATH=\$PATH:$(pwd)" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-
+Download `abridge` directly from GitHub using `git clone`. Please note that this version is developmental and might contain bugs
 
 
 ```bash
 https://github.com/sagnikbanerjee15/Abridge.git
 ```
 
-On High performance clusters please use singularity.
+`abridge` will execute either `docker` or `singularity` depending on which software is available. 
 
 # Generating alignments
 
-Alignments can be generated using a number of different software. 
+Alignments can be generated using a number of different software. For more details on how to generate alignments please refer to https://github.com/alexdobin/STAR or https://github.com/DaehwanKimLab/hisat2
 
-## STAR
+## Inputs to `abridge`
 
 
 
 # Compress
 
 ## Compress a single RNA-Seq file
+
+`abridge`
 
 ### Lossless compression
 
