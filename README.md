@@ -39,6 +39,70 @@ Alignments can be generated using a number of different software. For more detai
 
 ## Inputs to `abridge`
 
+```bash
+run_abridge --help
+
+usage: run_abridge [-h] [-o OUTPUT_DIRECTORY]
+               (-isam INPUTSAMFILENAMES | -iabr INPUTABRFILENAMES) -g GENOME
+               [-cmp] [-dcmp] [-r] [-H] [-l LEVEL] [-ss] [-igqual]
+               [-qual QUALITY] [-gsc] [-gm] [-gs] [-gu] [-sq] [-aq] [-q]
+               [-n CPU] [-run_diagnostics] [-p POSITIONS] [-rp READ_PREFIX]
+               [--keep_intermediate_error_files]
+               [--error_directory ERROR_DIRECTORY]
+
+Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -isam INPUTSAMFILENAMES, --inputsamfilenames INPUTSAMFILENAMES
+                        Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time.
+  -iabr INPUTABRFILENAMES, --inputabrfilenames INPUTABRFILENAMES
+                        Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time.
+  -cmp, --compress      Set this option if you wish to compress the alignment file
+  -dcmp, --decompress   Set this option if you wish to decompress the alignment file
+  -r, --random          Retrieve alignments from random locations
+  -H, --header          Print only the header of reference sequences during decompression
+
+Required arguments:
+  -o OUTPUT_DIRECTORY, --output_directory OUTPUT_DIRECTORY
+                        Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile
+  -g GENOME, --genome GENOME
+                        Enter a single fasta file for the reference
+
+Optional arguments:
+  -l LEVEL, --level LEVEL
+                        This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete
+  -ss, --ignore_scores  Request abrigde to store the quality scores and the alignment score
+  -igqual, --ignore_quality_scores
+                        Ignore all quality scores
+  -qual QUALITY, --quality QUALITY
+                        Enter dummy quality scores while decompressing
+  -gsc, --ignore_soft_clippings
+                        No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference
+  -gm, --ignore_mismatches
+                        All mismatches will be ignored
+  -gs, --ignore_sequence
+                        No nucleotide sequence will be produced during decompression
+  -gu, --ignore_unmapped_reads
+                        Request abridge to discard all reads that are unmapped
+  -sq, --save_all_quality_scores
+                        Request abridge to save all quality scores
+  -aq, --save_exact_quality_scores
+                        Adjust quality scores for matched bases to achieve better encoding. For more details please check ...
+  -q, --quiet           Prevent abridge from printing any log information. By default logging is enables
+  -n CPU, --cpu CPU     Enter the number of CPU cores to be used. This option will be used during compression or decompression.
+  -run_diagnostics, --run_diagnostics
+                        abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies
+  -p POSITIONS, --positions POSITIONS
+                        Enter the position as chromosome:start-end from which reads will be retrieved
+  -rp READ_PREFIX, --read_prefix READ_PREFIX
+                        Enter a read prefix for decompression - valid only for random access
+  --keep_intermediate_error_files, -kief
+                        Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those
+  --error_directory ERROR_DIRECTORY, -edir ERROR_DIRECTORY
+                        Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory
+```
+
 
 
 # Compress
