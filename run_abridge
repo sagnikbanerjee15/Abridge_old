@@ -188,6 +188,7 @@ def main():
         else:
             framework_of_choice = "docker"
     
+    os.system(f"rm -rf {options.output_directory}")
     
     if options.test ==  True:
         # Convert BAM files to SAM files
