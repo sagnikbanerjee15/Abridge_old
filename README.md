@@ -1,6 +1,14 @@
-# abridge
+To do:
 
-`abridge` is a software program to compress short-read alignments. 
+1. Docker and singularity support
+2. Test it out with singularity on AWS
+3. 
+
+
+
+# ABRIDGE
+
+`abridge` is a software program to compress short-read alignments.  
 
 # Installation
 
@@ -10,14 +18,15 @@
 docker pull abridge:1.0.0
 ```
 
-On High performance clusters please use singularity 
-
+On High performance clusters please use singularity.
 
 # Generating alignments
 
-
+Alignments can be generated using a number of different software. 
 
 ## STAR
+
+
 
 # Compress
 
