@@ -19,16 +19,9 @@ On High performance clusters please use singularity
 
 ## STAR
 
-
 # Compress
 
 ## Compress a single RNA-Seq file
-
-
-
-## Compress multiple RNA-Seq aligned files
-
-
 
 ## Nitty gritties of compression
 
@@ -74,10 +67,10 @@ Here is a list of future upgrades to `abridge`
 
 # License
 
-License information can be accessed here.
+License information can be accessed from 
 
 # Contact
 
-Please list all issues at ....
+Please list all issues at https://github.com/sagnikbanerjee15/Abridge/issues
 
 For all other queries please email sagnik@iastate.edu
