@@ -58,6 +58,7 @@ def parseCommandLineArguments():
     optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
     optional_named.add_argument("--test","-test", help = "Set this option to test run the software with example data", action = "store_true")
     optional_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory")
+    optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
     
     # Suppressed arguments
     parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
@@ -116,7 +117,39 @@ class DockerOperations:
 def verifyCompressionDirectory(directory):
     '''
     '''
-    
+
+def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a docker container
+    """
+
+    # Runs the main command
+    docker_cmd = f" docker run "
+    # docker_cmd += f" -ti "
+    docker_cmd += f" --rm "
+    docker_cmd += f" --cpus={cpus}"
+    docker_cmd += f" --memory='{memory}'"
+    docker_cmd += f" --name {container_name}"
+    for mapping in volumes:
+        docker_cmd += f" -v {mapping}"
+    docker_cmd += f" {image_location}:{version} "
+    docker_cmd += f" bash -c {command}"
+    os.system( docker_cmd )
+
+
+def runSingularityCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a Singularity container
+    """
+
+    # Runs the main command
+    singularity_cmd = f" singularity exec --disable-cache  "
+    for mapping in volumes:
+        singularity_cmd += f" -B {mapping}"
+    singularity_cmd += f" docker://{image_location}:{version} "
+    singularity_cmd += f" bash -c {command}"
+    os.system( singularity_cmd )
+
 
 def main():
     commandLineArg=sys.argv
@@ -131,7 +164,29 @@ def main():
     output_filename = f"{options.error_directory}.output"
     error_filename = f"{options.error_directory}.error"
     
-    
+    os.system( f"mkdir -p {options.output_directory}" )
+    os.system( f"which docker > {options.output_directory}/find_docker" )
+    os.system( f"which singularity > {options.output_directory}/find_singularity" )
+
+    docker_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
+    singularity_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_singularity", "r" ).read() else 0
+
+    if docker_installed == 0 and singularity_installed == 0:
+        print( "You need to have either docker or singularity installed" )
+        sys.exit()
+
+    framework_of_choice = ""
+    if options.framework == "docker":
+        if docker_installed == 1:
+            framework_of_choice = "docker"
+        else:
+            framework_of_choice = "singularity"
+
+    if options.framework == "singularity":
+        if singularity_installed == "singularity":
+            framework_of_choice = "singularity"
+        else:
+            framework_of_choice = "docker"
     
     
     if options.test ==  True:
@@ -176,8 +231,10 @@ def main():
                                             output_directory_name += f"save_all_quality_scores_{save_all_quality_scores}_"
                                             output_directory_name += f"save_exact_quality_scores_{save_exact_quality_scores}"
                                             
-                                            cmd  = f"(/usr/bin/time --verbose "
-                                            cmd += f" run_abridge.py "
+                                            volumes_list = ""
+                                            
+                                            cmd = f" \" "
+                                            cmd += f" abridge "
                                             cmd += f" --keep_intermediate_error_files "
                                             cmd += f" --compress "
                                             cmd += f" --genome /software/Abridge/example/arath_1.fa "
@@ -198,12 +255,37 @@ def main():
                                                 cmd += f" --save_all_quality_scores "
                                             if save_exact_quality_scores == 1:
                                                 cmd += f" --save_exact_quality_scores "
-                                            cmd += f") "
+                                            
                                             cmd += f" 1> {output_directory_name}.output "
                                             cmd += f" 2> {output_directory_name}.error "
+                                            cmd += f" \" "
+                                            #print(cmd)
+                                            #os.system(cmd)
                                             
-                                            print(cmd)
-                                            os.system(cmd)
+                                            volumes_list = list( set( volumes_list ) )
+                                            if framework_of_choice == "docker":
+                                                os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
+                                                runDockerCommand( name = "finder",
+                                                                    version = "1.1.0",
+                                                                    image_location = "sagnikbanerjee15/finder",
+                                                                    container_name = f"ABRIDGE_test",
+                                                                    volumes = volumes_list,
+                                                                    command = cmd,
+                                                                    cpus = options.cpu,
+                                                                    memory = '100g'
+                                                    )
+                                        
+                                            elif framework_of_choice == "singularity":
+                                                os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
+                                                runSingularityCommand( name = "finder",
+                                                                    version = "1.1.0",
+                                                                    image_location = "sagnikbanerjee15/finder",
+                                                                    container_name = f"{options.output_directory.split('/')[-1]}",
+                                                                    volumes = volumes_list,
+                                                                    command = cmd,
+                                                                    cpus = options.cpu,
+                                                                    memory = '100g'
+                                                    )
                                             
                                             output_directory_name_without_location = output_directory_name.split("/")[-1]
                                             for ignore_sequence in [0,1]: # 2 iterations
@@ -219,8 +301,8 @@ def main():
                                                 output_directory_name += f"save_exact_quality_scores_{save_exact_quality_scores}_"
                                                 output_directory_name += f"ignore_sequence_{ignore_sequence}"
                                                 
-                                                cmd  = f"(/usr/bin/time --verbose "
-                                                cmd += f" run_abridge.py "
+                                                cmd = f" \" "
+                                                cmd += f" abridge "
                                                 cmd += f" --keep_intermediate_error_files "
                                                 cmd += f" --decompress "
                                                 cmd += f" --genome /software/Abridge/example/arath_1.fa "
@@ -228,14 +310,38 @@ def main():
                                                 cmd += f" --output_directory {output_directory_name} "
                                                 if ignore_sequence == 1:
                                                     cmd += " --ignore_sequence "
-                                                cmd += f") "
+                                                
                                                 cmd += f" 1> {output_directory_name}.output"
                                                 cmd += f" 2> {output_directory_name}.error"
-                                                print(cmd)
-                                                os.system(cmd)
+                                                cmd += f" \" "
+                                                #print(cmd)
+                                                #os.system(cmd)
+                                                if framework_of_choice == "docker":
+                                                    os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
+                                                    runDockerCommand( name = "finder",
+                                                                        version = "1.0.0",
+                                                                        image_location = "sagnikbanerjee15/abridge",
+                                                                        container_name = f"ABRIDGE_test",
+                                                                        volumes = volumes_list,
+                                                                        command = cmd,
+                                                                        cpus = options.cpu,
+                                                                        memory = '100g'
+                                                        )
+                                            
+                                                elif framework_of_choice == "singularity":
+                                                    os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
+                                                    runSingularityCommand( name = "finder",
+                                                                        version = "1.0.0",
+                                                                        image_location = "sagnikbanerjee15/abridge",
+                                                                        container_name = f"{options.output_directory.split('/')[-1]}",
+                                                                        volumes = volumes_list,
+                                                                        command = cmd,
+                                                                        cpus = options.cpu,
+                                                                        memory = '100g'
+                                                        )
         
     else:
-        abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
+        """abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
                                       image_version = "latest",
                                       container_name=options.container_name,
                                       temp_file_name=f"{options.error_directory}.output",
@@ -244,15 +350,48 @@ def main():
                                                  f"{options.output_directory}:{options.output_directory}",
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
-                                      )
-        cmd  = f" run_abridge.py "
+                                      )"""
+        
+        volumes_list = [f"{options.genome}:{'/'.join(options.genome.split('/')[:-1])}",
+                                                 f"{options.inputsamfilenames}:{'/'.join(options.inputsamfilenames.split('/')[:-1])}",
+                                                 f"{options.output_directory}:{options.output_directory}",
+                                                 f"{options.error_directory}:{options.error_directory}",
+                                                 ]
+        cmd = f" \" "
+        cmd += f" abridge.py "
         for key,value in options.__dict__.items():
             if value is not None:
                 cmd += f" --{key} {value}"
-        cmd += f" > {output_filename}"
-        cmd += f" > {error_filename}"
         
-        abridge_docker.runCommand(cmd)
+        cmd += f" 1> {output_filename}"
+        cmd += f" 2> {error_filename}"
+        cmd += f" \" "
+        
+        if framework_of_choice == "docker":
+            os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
+            runDockerCommand( name = "finder",
+                                version = "1.0.0",
+                                image_location = "sagnikbanerjee15/abridge",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
+                )
+        
+        elif framework_of_choice == "singularity":
+            os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
+            runSingularityCommand( name = "finder",
+                                version = "1.0.0",
+                                image_location = "sagnikbanerjee15/abridge",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
+                )
+        
+        #abridge_docker.runCommand(cmd)
         
 
 if __name__ == "__main__":
