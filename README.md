@@ -107,7 +107,7 @@ CPU=96
 run_abridge --test --output_directory $PWD/abridge_tests --cpu $CPU
 ```
 
-This command will execute abridge with all possible parameters and with two different input files. There are more than 2000 commands that will execute. So please give it plenty of time and as many cores you can spare.
+This command will execute abridge with all possible parameters and with two different input files. There are more than 2000 commands that will execute. So please give it plenty of time and as many cores you can spare. To check if everything has been executed properly issue the command `ls -lh $PWD/abridge_tests/*error`. All the error files should be empty if the runs were successful.
 
 # Compress
 

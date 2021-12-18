@@ -112,7 +112,7 @@ def runSingularityCommand( name, version, image_location, container_name, volume
     # singularity_cmd += f" --hostname {container_name}"
     for mapping in volumes:
         singularity_cmd += f" -B {mapping}"
-    singularity_cmd += f" docker://{image_location}:{version} "
+    singularity_cmd += f" abridge_{version}.sif "
     singularity_cmd += f" bash -c {command}"
     os.system( singularity_cmd )
     print( singularity_cmd )
