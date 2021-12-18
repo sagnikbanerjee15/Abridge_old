@@ -324,12 +324,12 @@ def main():
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 cmd += f" \" "
                                                 command_set.append( cmd )
-                                                print( cmd )
 
                                             command_set.append( output_directory_name.replace( "/", "_" )[1:] )
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
-                                            allinputs.append( command_set )
+                                            if len( allinputs ) < 10:
+                                                allinputs.append( command_set )
                                             # if len( allinputs ) >= 10: break
         pool.map( runDockerOrSingularityInParallel, allinputs )
 
