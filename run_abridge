@@ -147,11 +147,81 @@ def runSingularityCommand( name, version, image_location, container_name, volume
 
     # Runs the main command
     singularity_cmd = f" singularity exec --disable-cache  "
+    singularity_cmd += f" --hostname {container_name}"
     for mapping in volumes:
         singularity_cmd += f" -B {mapping}"
     singularity_cmd += f" docker://{image_location}:{version} "
     singularity_cmd += f" bash -c {command}"
     os.system( singularity_cmd )
+
+
+def runDockerOrSingularityInParallel( eachinput ):
+
+    compress_cmd, decompress1_cmd, decompress2_cmd, container_name, volumes_list, framework_of_choice = eachinput
+
+    if framework_of_choice == "docker":
+        os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
+        runDockerCommand( name = "abridge",
+                            version = "1.0.0",
+                            image_location = "sagnikbanerjee15/abridge",
+                            container_name = f"{container_name}_compress",
+                            volumes = volumes_list,
+                            command = compress_cmd,
+                            cpus = "1",
+                            memory = '3g'
+            )
+
+        runDockerCommand( name = "abridge",
+                            version = "1.0.0",
+                            image_location = "sagnikbanerjee15/abridge",
+                            container_name = f"{container_name}_compress",
+                            volumes = volumes_list,
+                            command = decompress1_cmd,
+                            cpus = "1",
+                            memory = '3g'
+            )
+
+        runDockerCommand( name = "abridge",
+                            version = "1.0.0",
+                            image_location = "sagnikbanerjee15/abridge",
+                            container_name = f"{container_name}_compress",
+                            volumes = volumes_list,
+                            command = decompress2_cmd,
+                            cpus = "1",
+                            memory = '3g'
+            )
+
+    elif framework_of_choice == "singularity":
+        os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
+        runSingularityCommand( name = "abridge",
+                            version = "1.0.0",
+                            image_location = "sagnikbanerjee15/abridge",
+                            container_name = f"{container_name}_compress",
+                            volumes = volumes_list,
+                            command = compress_cmd,
+                            cpus = "1",
+                            memory = '3g'
+            )
+
+        runSingularityCommand( name = "abridge",
+                            version = "1.0.0",
+                            image_location = "sagnikbanerjee15/abridge",
+                            container_name = f"{container_name}_decompress1",
+                            volumes = volumes_list,
+                            command = decompress1_cmd,
+                            cpus = "1",
+                            memory = '3g'
+            )
+
+        runSingularityCommand( name = "abridge",
+                            version = "1.0.0",
+                            image_location = "sagnikbanerjee15/abridge",
+                            container_name = f"{container_name}_decompress2",
+                            volumes = volumes_list,
+                            command = decompress2_cmd,
+                            cpus = "1",
+                            memory = '3g'
+            )
 
 
 def main():
@@ -198,23 +268,9 @@ def main():
     os.system( f"rm -rf {options.output_directory}" )
 
     if options.test == True:
-        # Convert BAM files to SAM files
-        """
-        cmd = "samtools view -h /software/Abridge/example/SRR13711353_SE_100000.bam > /software/Abridge/example/SRR13711353_SE_100000.sam "
-        print(cmd)
-        os.system(cmd)
-        cmd = "samtools view -h /software/Abridge/example/SRR13711353_PE_100000.bam > /software/Abridge/example/SRR13711353_PE_100000.sam "
-        print(cmd)
-        os.system(cmd)
-        cmd = "gunzip -c /software/Abridge/example/arath_1.fa.gz > /software/Abridge/example/arath_1.fa"
-        print(cmd)
-        os.system(cmd)
-        """
 
-        files_to_be_removed = ["/software/Abridge/example/SRR13711353_SE_100000.sam",
-                               "/software/Abridge/example/SRR13711353_PE_100000.sam",
-                               "/software/Abridge/example/arath_1.fa"]
-
+        pool = multiprocessing.Pool( processes = int( options.cpu ) )
+        allinputs = []
         # Setting up commands for testing
         for level in ["1", "2", "3"]:  # 3 iterations
             for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam", "/software/Abridge/example/SRR13711353_PE_100000.sam"]:  # 2 iterations
@@ -227,6 +283,7 @@ def main():
                                     for save_all_quality_scores in [0, 1]:  # 2 iterations
                                         for save_exact_quality_scores in [0, 1]:  # 2 iterations
 
+                                            command_set = []
                                             inputfilename_without_location = inputfilename.split( "/" )[-1][:-4]
                                             output_directory_name = f"{options.output_directory}/"
                                             output_directory_name += f"{inputfilename_without_location}_"
@@ -266,34 +323,12 @@ def main():
 
                                             cmd += f" 1> {output_directory_name}.output "
                                             cmd += f" 2> {output_directory_name}.error "
+                                            command_set.append( cmd )
                                             cmd += f" \" "
                                             # print(cmd)
                                             # os.system(cmd)
 
                                             volumes_list = list( set( volumes_list ) )
-                                            if framework_of_choice == "docker":
-                                                os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
-                                                runDockerCommand( name = "abridge",
-                                                                    version = "1.0.0",
-                                                                    image_location = "sagnikbanerjee15/abridge",
-                                                                    container_name = f"ABRIDGE_test",
-                                                                    volumes = volumes_list,
-                                                                    command = cmd,
-                                                                    cpus = options.cpu,
-                                                                    memory = '100g'
-                                                    )
-
-                                            elif framework_of_choice == "singularity":
-                                                os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
-                                                runSingularityCommand( name = "abridge",
-                                                                    version = "1.0.0",
-                                                                    image_location = "sagnikbanerjee15/abridge",
-                                                                    container_name = f"{options.output_directory.split('/')[-1]}",
-                                                                    volumes = volumes_list,
-                                                                    command = cmd,
-                                                                    cpus = options.cpu,
-                                                                    memory = '100g'
-                                                    )
 
                                             output_directory_name_without_location = output_directory_name.split( "/" )[-1]
                                             for ignore_sequence in [0, 1]:  # 2 iterations
@@ -322,31 +357,11 @@ def main():
                                                 cmd += f" 1> {output_directory_name}.output"
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 cmd += f" \" "
-                                                # print(cmd)
-                                                # os.system(cmd)
-                                                if framework_of_choice == "docker":
-                                                    os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
-                                                    runDockerCommand( name = "finder",
-                                                                        version = "1.0.0",
-                                                                        image_location = "sagnikbanerjee15/abridge",
-                                                                        container_name = f"ABRIDGE_test",
-                                                                        volumes = volumes_list,
-                                                                        command = cmd,
-                                                                        cpus = options.cpu,
-                                                                        memory = '100g'
-                                                        )
+                                                command_set.append( cmd )
 
-                                                elif framework_of_choice == "singularity":
-                                                    os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
-                                                    runSingularityCommand( name = "finder",
-                                                                        version = "1.0.0",
-                                                                        image_location = "sagnikbanerjee15/abridge",
-                                                                        container_name = f"{options.output_directory.split('/')[-1]}",
-                                                                        volumes = volumes_list,
-                                                                        command = cmd,
-                                                                        cpus = options.cpu,
-                                                                        memory = '100g'
-                                                        )
+                                            command_set.append( f"{options.output_directory.split('/')[-1]}" )
+                                            command_set.append( volumes_list )
+                                            command_set.append( framework_of_choice )
 
     else:
         """abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
