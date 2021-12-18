@@ -83,44 +83,6 @@ def parseCommandLineArguments():
     return parser.parse_args()
 
 
-class DockerOperations:
-
-    def __init__( self, image_name, image_version, container_name, volumes, temp_file_name ):
-        self.image_name = image_name
-        self.image_version = image_version
-        self.container_name = container_name
-        self.volumes = volumes
-        self.temp_file_name = temp_file_name
-
-    def runCommand( self, cmd ):
-
-        # Check to make sure the container does not exist
-        cmd = f" docker "
-        cmd += f" inspect --format '{{json .State.Stopped}}' "
-        cmd += f" {self.container_name} "
-        cmd += f" > {self.temp_file_name}"
-        os.system( cmd )
-
-        status = open( f"{self.temp_file_name}" ).read().strip( "\n" )
-        if status == "running" or status == "exited":
-            return
-
-        docker_cmd = f" docker run "
-        docker_cmd += f" -ti "
-        docker_cmd += f" --rm "
-        docker_cmd += f" --name {self.container_name} "
-        for mapping in self.volumes:
-            docker_cmd += f" -v {mapping} "
-        docker_cmd += f" {self.image_name}:{self_image_version} "
-        docker_cmd += f" bash -c {cmd}"
-        os.system( docker_cmd )
-
-
-def verifyCompressionDirectory( directory ):
-    '''
-    '''
-
-
 def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
     Runs the command in a docker container
@@ -326,8 +288,8 @@ def main():
 
                                             cmd += f" 1> {output_directory_name}.output "
                                             cmd += f" 2> {output_directory_name}.error "
-                                            command_set.append( cmd )
                                             cmd += f" \" "
+                                            command_set.append( cmd )
                                             # print(cmd)
                                             # os.system(cmd)
 
@@ -366,6 +328,7 @@ def main():
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
                                             allinputs.append( command_set )
+                                            # if len( allinputs ) >= 10: break
         pool.map( runDockerOrSingularityInParallel, allinputs )
 
     else:
