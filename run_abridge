@@ -108,7 +108,7 @@ def runSingularityCommand( name, version, image_location, container_name, volume
     """
 
     # Runs the main command
-    singularity_cmd = f" singularity exec --disable-cache  "
+    singularity_cmd = f" singularity exec  "
     singularity_cmd += f" --hostname {container_name}"
     for mapping in volumes:
         singularity_cmd += f" -B {mapping}"

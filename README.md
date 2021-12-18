@@ -107,15 +107,13 @@ CPU=96
 run_abridge --test --output_directory $PWD/abridge_tests --cpu $CPU
 ```
 
-This command will execute abridge with all possible parameters and with two different input files. 
-
-
+This command will execute abridge with all possible parameters and with two different input files. There are more than 2000 commands that will execute. So please give it plenty of time and as many cores you can spare.
 
 # Compress
 
 ## Compress a single RNA-Seq file
 
-`abridge`
+`abridge` is developed 
 
 ### Lossless compression
 
