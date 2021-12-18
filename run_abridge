@@ -160,7 +160,6 @@ def runDockerOrSingularityInParallel( eachinput ):
     compress_cmd, decompress1_cmd, decompress2_cmd, container_name, volumes_list, framework_of_choice = eachinput
 
     if framework_of_choice == "docker":
-        os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
         runDockerCommand( name = "abridge",
                             version = "1.0.0",
                             image_location = "sagnikbanerjee15/abridge",
@@ -192,7 +191,7 @@ def runDockerOrSingularityInParallel( eachinput ):
             )
 
     elif framework_of_choice == "singularity":
-        os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
+
         runSingularityCommand( name = "abridge",
                             version = "1.0.0",
                             image_location = "sagnikbanerjee15/abridge",
@@ -256,14 +255,18 @@ def main():
     if options.framework == "docker":
         if docker_installed == 1:
             framework_of_choice = "docker"
+            os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
         else:
             framework_of_choice = "singularity"
+            os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
 
     if options.framework == "singularity":
         if singularity_installed == 1:
             framework_of_choice = "singularity"
+            os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
         else:
             framework_of_choice = "docker"
+            os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
 
     os.system( f"rm -rf {options.output_directory}" )
 
@@ -359,7 +362,7 @@ def main():
                                                 cmd += f" \" "
                                                 command_set.append( cmd )
 
-                                            command_set.append( output_directory_name.replace( "/", "_" ) )
+                                            command_set.append( output_directory_name.replace( "/", "_" )[1:] )
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
                                             allinputs.append( command_set )
@@ -393,7 +396,6 @@ def main():
         cmd += f" \" "
 
         if framework_of_choice == "docker":
-            os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
             runDockerCommand( name = "abridge",
                                 version = "1.0.0",
                                 image_location = "sagnikbanerjee15/abridge",
@@ -405,7 +407,6 @@ def main():
                 )
 
         elif framework_of_choice == "singularity":
-            os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
             runSingularityCommand( name = "abridge",
                                 version = "1.0.0",
                                 image_location = "sagnikbanerjee15/abridge",
