@@ -332,7 +332,7 @@ def main():
 
                                             output_directory_name_without_location = output_directory_name.split( "/" )[-1]
                                             for ignore_sequence in [0, 1]:  # 2 iterations
-                                                output_directory_name = f"/software/Abridge/example/"
+                                                output_directory_name = f"{options.output_directory}/"
                                                 output_directory_name += f"{inputfilename_without_location}_"
                                                 output_directory_name += f"decompress_level_{level}_"
                                                 output_directory_name += f"ignore_scores_{ignore_scores}_"
@@ -359,7 +359,7 @@ def main():
                                                 cmd += f" \" "
                                                 command_set.append( cmd )
 
-                                            command_set.append( f"{options.output_directory.split('/')[-1]}" )
+                                            command_set.append( output_directory_name.replace( "/", "_" ) )
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
                                             allinputs.append( command_set )
