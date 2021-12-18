@@ -362,6 +362,7 @@ def main():
                                             command_set.append( f"{options.output_directory.split('/')[-1]}" )
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
+                                            allinputs.append( command_set )
         pool.map( runDockerOrSingularityInParallel, allinputs )
 
     else:
