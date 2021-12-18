@@ -94,8 +94,7 @@ def runDockerCommand( name, version, image_location, container_name, volumes, co
     docker_cmd += f" --rm "
     docker_cmd += f" --cpus={cpus}"
     docker_cmd += f" --memory='{memory}'"
-    if container_name is not None:
-        docker_cmd += f" --name {container_name}"
+    docker_cmd += f" --name {container_name}"
     for mapping in volumes:
         docker_cmd += f" -v {mapping}"
     docker_cmd += f" {image_location}:{version} "
@@ -110,8 +109,7 @@ def runSingularityCommand( name, version, image_location, container_name, volume
 
     # Runs the main command
     singularity_cmd = f" singularity exec  "
-    if container_name is not None:
-        singularity_cmd += f" --hostname {container_name}"
+    # singularity_cmd += f" --hostname {container_name}"
     for mapping in volumes:
         singularity_cmd += f" -B {mapping}"
     singularity_cmd += f" docker://{image_location}:{version} "
@@ -332,7 +330,7 @@ def main():
                                                 # print( cmd )
                                                 command_set.append( cmd )
 
-                                            command_set.append( None )
+                                            command_set.append( output_directory_name.replace( "/", "-" )[1:] )
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
                                             if len( allinputs ) < 1:
