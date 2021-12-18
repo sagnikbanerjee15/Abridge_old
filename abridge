@@ -19,9 +19,9 @@ import time
 import subprocess
 from pprint import pformat
 
-from assessMemoryRequirement import *
-from verifyPositions import *
-from sortPositionsForRandomAccess import *
+from /software/Abridge/scripts/assessMemoryRequirement import *
+from /software/Abridge/scripts/verifyPositions import *
+from /software/Abridge/scripts/sortPositionsForRandomAccess import *
 
 
 def parseCommandLineArguments():
