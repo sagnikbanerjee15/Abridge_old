@@ -103,10 +103,11 @@ Optional arguments:
 Run the following command if you wish to test abridge with the provided examples
 
 ```bash
-run_abridge --test
+CPU=96
+run_abridge --test --output_directory $PWD/abridge_tests --cpu $CPU
 ```
 
-
+This command will execute abridge with all possible parameters and with two different input files. 
 
 
 

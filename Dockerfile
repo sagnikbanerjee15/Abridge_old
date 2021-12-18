@@ -51,7 +51,4 @@ RUN cd /software && \
 	make &&\
 	chmod -R 777 /software/Abridge
 
-ENV PATH /software/Abridge:/software/Abridge/src:/software/Abridge/scripts:${PATH}
-
-
-#./scripts/run_abridge.py  --keep_intermediate_error_files  --compress  --genome example/arath_1.fa  --inputsamfilenames example/SRR13711353_SE_100000.sam  --output_directory example/SRR13711353_SE_100000_compress_level_1_ignore_scores_0_ignore_quality_scores_0_ignore_soft_clippings_0_ignore_mismatches_0_ignore_unmapped_reads_0_save_all_quality_scores_0_save_exact_quality_scores_0  --level 1 
+ENV PATH /software/Abridge:/software/Abridge/src:/software/Abridge/scripts:${PATH} 

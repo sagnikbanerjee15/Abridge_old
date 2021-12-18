@@ -4,7 +4,7 @@
 # Script for running abridge within docker container
 ########################################################################################################################################################
 
-import argparse 
+import argparse
 import logging
 import os
 import pprint
@@ -21,90 +21,91 @@ from argparse import RawTextHelpFormatter
 
 
 def parseCommandLineArguments():
-    parser = argparse.ArgumentParser(prog="abridge",description="Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages",formatter_class=RawTextHelpFormatter)
-    required_named = parser.add_argument_group('Required arguments')
-    optional_named = parser.add_argument_group('Optional arguments')
-    
+    parser = argparse.ArgumentParser( prog = "abridge", description = "Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages", formatter_class = RawTextHelpFormatter )
+    required_named = parser.add_argument_group( 'Required arguments' )
+    optional_named = parser.add_argument_group( 'Optional arguments' )
+
     # Required arguments
-    required_named.add_argument("--container_name","-cn", help = "Enter the name of the container. You can choose any string. Please ensure that parallel runs of the software should not have the same container name")
-    required_named.add_argument("-o","--output_directory",help="Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile")
+    required_named.add_argument( "--container_name", "-cn", help = "Enter the name of the container. You can choose any string. Please ensure that parallel runs of the software should not have the same container name" )
+    required_named.add_argument( "-o", "--output_directory", help = "Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile" )
     input_group = parser.add_mutually_exclusive_group()
-    input_group.add_argument("-isam","--inputsamfilenames",help="Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time.")
-    input_group.add_argument("-iabr","--inputabrfilenames",help="Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time.")
-    required_named.add_argument("-g","--genome",help="Enter a single fasta file for the reference")
-    
+    input_group.add_argument( "-isam", "--inputsamfilenames", help = "Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time." )
+    input_group.add_argument( "-iabr", "--inputabrfilenames", help = "Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time." )
+    required_named.add_argument( "-g", "--genome", help = "Enter a single fasta file for the reference" )
+
     compress_decompress_group = parser.add_mutually_exclusive_group()
-    compress_decompress_group.add_argument("-cmp","--compress",help="Set this option if you wish to compress the alignment file",action="store_true")
-    compress_decompress_group.add_argument("-dcmp","--decompress",help="Set this option if you wish to decompress the alignment file",action="store_true")
-    compress_decompress_group.add_argument("-r","--random",help="Retrieve alignments from random locations",action="store_true")
-    compress_decompress_group.add_argument("-H","--header",help="Print only the header of reference sequences during decompression",action="store_true")
-    
+    compress_decompress_group.add_argument( "-cmp", "--compress", help = "Set this option if you wish to compress the alignment file", action = "store_true" )
+    compress_decompress_group.add_argument( "-dcmp", "--decompress", help = "Set this option if you wish to decompress the alignment file", action = "store_true" )
+    compress_decompress_group.add_argument( "-r", "--random", help = "Retrieve alignments from random locations", action = "store_true" )
+    compress_decompress_group.add_argument( "-H", "--header", help = "Print only the header of reference sequences during decompression", action = "store_true" )
+
     # Optional arguments
-    optional_named.add_argument("-l","--level",help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type=int, default = 2)
-    optional_named.add_argument("-ss","--ignore_scores",help = "Request abrigde to store the quality scores and the alignment score",action="store_true")
-    optional_named.add_argument("-igqual","--ignore_quality_scores",help="Ignore all quality scores",action="store_true")
-    optional_named.add_argument("-qual","--quality",help="Enter dummy quality scores while decompressing",default='I')
-    optional_named.add_argument("-gsc","--ignore_soft_clippings",help="No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference",action="store_true")
-    optional_named.add_argument("-gm","--ignore_mismatches",help="All mismatches will be ignored",action="store_true")
-    optional_named.add_argument("-gs","--ignore_sequence",help="No nucleotide sequence will be produced during decompression",action="store_true")
-    optional_named.add_argument("-gu","--ignore_unmapped_reads",help="Request abridge to discard all reads that are unmapped",action="store_true")
-    optional_named.add_argument("-sq","--save_all_quality_scores",help="Request abridge to save all quality scores",action='store_true')
-    optional_named.add_argument("-aq","--save_exact_quality_scores",help="Adjust quality scores for matched bases to achieve better encoding. For more details please check ...",action="store_true")
-    optional_named.add_argument("-q","--quiet",help="Prevent abridge from printing any log information. By default logging is enables",action = "store_true")
-    optional_named.add_argument("-n","--cpu",help="Enter the number of CPU cores to be used. This option will be used during compression or decompression.",default = 1)
-    optional_named.add_argument("-run_diagnostics","--run_diagnostics",help="abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies",action="store_true")
-    optional_named.add_argument("-p","--positions",help="Enter the position as chromosome:start-end from which reads will be retrieved")
-    optional_named.add_argument("-rp","--read_prefix",help="Enter a read prefix for decompression - valid only for random access")
-    optional_named.add_argument("--keep_intermediate_error_files","-kief",help="Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those",action="store_true")
-    optional_named.add_argument("--test","-test", help = "Set this option to test run the software with example data", action = "store_true")
-    optional_named.add_argument("--error_directory","-edir",help="Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory")
+    optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
+    optional_named.add_argument( "-ss", "--ignore_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
+    optional_named.add_argument( "-igqual", "--ignore_quality_scores", help = "Ignore all quality scores", action = "store_true" )
+    optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
+    optional_named.add_argument( "-gsc", "--ignore_soft_clippings", help = "No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference", action = "store_true" )
+    optional_named.add_argument( "-gm", "--ignore_mismatches", help = "All mismatches will be ignored", action = "store_true" )
+    optional_named.add_argument( "-gs", "--ignore_sequence", help = "No nucleotide sequence will be produced during decompression", action = "store_true" )
+    optional_named.add_argument( "-gu", "--ignore_unmapped_reads", help = "Request abridge to discard all reads that are unmapped", action = "store_true" )
+    optional_named.add_argument( "-sq", "--save_all_quality_scores", help = "Request abridge to save all quality scores", action = 'store_true' )
+    optional_named.add_argument( "-aq", "--save_exact_quality_scores", help = "Adjust quality scores for matched bases to achieve better encoding. For more details please check ...", action = "store_true" )
+    optional_named.add_argument( "-q", "--quiet", help = "Prevent abridge from printing any log information. By default logging is enables", action = "store_true" )
+    optional_named.add_argument( "-n", "--cpu", help = "Enter the number of CPU cores to be used. This option will be used during compression or decompression.", default = 1 )
+    optional_named.add_argument( "-run_diagnostics", "--run_diagnostics", help = "abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies", action = "store_true" )
+    optional_named.add_argument( "-p", "--positions", help = "Enter the position as chromosome:start-end from which reads will be retrieved" )
+    optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
+    optional_named.add_argument( "--keep_intermediate_error_files", "-kief", help = "Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those", action = "store_true" )
+    optional_named.add_argument( "--test", "-test", help = "Set this option to test run the software with example data", action = "store_true" )
+    optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
-    
+
     # Suppressed arguments
-    parser.add_argument("--logfilename","-logfilename",help=argparse.SUPPRESS)# Name of the logfile
-    parser.add_argument("--files_for_removal","-files_for_removal",help=argparse.SUPPRESS)# Files will be removed later
-    parser.add_argument("--softwares","-softwares",help=argparse.SUPPRESS) # Software paths
-    parser.add_argument("--single_ended","-single_ended",help=argparse.SUPPRESS)
-    parser.add_argument("--reference_to_length","-num_of_reference_sequences",help=argparse.SUPPRESS)
-    parser.add_argument("--outputfilename","-outputfilena",help=argparse.SUPPRESS) 
-    parser.add_argument("--compile_programs","-compile_programs",action = "store_true", help=argparse.SUPPRESS) # Force abridge to compile the C programs 
-    
+    parser.add_argument( "--logfilename", "-logfilename", help = argparse.SUPPRESS )  # Name of the logfile
+    parser.add_argument( "--files_for_removal", "-files_for_removal", help = argparse.SUPPRESS )  # Files will be removed later
+    parser.add_argument( "--softwares", "-softwares", help = argparse.SUPPRESS )  # Software paths
+    parser.add_argument( "--single_ended", "-single_ended", help = argparse.SUPPRESS )
+    parser.add_argument( "--reference_to_length", "-num_of_reference_sequences", help = argparse.SUPPRESS )
+    parser.add_argument( "--outputfilename", "-outputfilena", help = argparse.SUPPRESS )
+    parser.add_argument( "--compile_programs", "-compile_programs", action = "store_true", help = argparse.SUPPRESS )  # Force abridge to compile the C programs
+
     # Future enhancements
-    compress_decompress_group.add_argument("-ov","--generate_overlapping_coverage",help=argparse.SUPPRESS, action = "store_true") # Future - This option can be used in conjuction with --positions to construct coverage from a specific location # help="Enter the name of the compressed file from which you wish to generate an overlapping coverage of reads ",  
-    compress_decompress_group.add_argument("-nov","--generate_non_overlapping_coverage",help=argparse.SUPPRESS, action = "store_true") # help="Enter the name of the compressed file from which you wish to generate a non-overlapping coverage of reads "
-    
+    compress_decompress_group.add_argument( "-ov", "--generate_overlapping_coverage", help = argparse.SUPPRESS, action = "store_true" )  # Future - This option can be used in conjuction with --positions to construct coverage from a specific location # help="Enter the name of the compressed file from which you wish to generate an overlapping coverage of reads ",
+    compress_decompress_group.add_argument( "-nov", "--generate_non_overlapping_coverage", help = argparse.SUPPRESS, action = "store_true" )  # help="Enter the name of the compressed file from which you wish to generate a non-overlapping coverage of reads "
+
     # Options for generating coverage
-    optional_named.add_argument("-d","--d",help=argparse.SUPPRESS, action = "store_true") # help = "Report the depth at each position in each A feature. Positions reported are one based.  Each position and depth follow the complete A feature.",
-    optional_named.add_argument("-bg","--bg",help=argparse.SUPPRESS, action = "store_true")
-    optional_named.add_argument("-bga","--bga",help=argparse.SUPPRESS, action = "store_true")
-    optional_named.add_argument("-split","--split",help=argparse.SUPPRESS, action = "store_true") # help = "Treat \"split\" BAM or BED12 entries as distinct BED intervals.",
-    optional_named.add_argument("-mem","--max_memory",help=argparse.SUPPRESS, default=10) # help="Enter the maximum memory allowed (in GB)"
-    optional_named.add_argument("-t","--produce_tags",help=argparse.SUPPRESS,nargs="*") # help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags."
+    optional_named.add_argument( "-d", "--d", help = argparse.SUPPRESS, action = "store_true" )  # help = "Report the depth at each position in each A feature. Positions reported are one based.  Each position and depth follow the complete A feature.",
+    optional_named.add_argument( "-bg", "--bg", help = argparse.SUPPRESS, action = "store_true" )
+    optional_named.add_argument( "-bga", "--bga", help = argparse.SUPPRESS, action = "store_true" )
+    optional_named.add_argument( "-split", "--split", help = argparse.SUPPRESS, action = "store_true" )  # help = "Treat \"split\" BAM or BED12 entries as distinct BED intervals.",
+    optional_named.add_argument( "-mem", "--max_memory", help = argparse.SUPPRESS, default = 10 )  # help="Enter the maximum memory allowed (in GB)"
+    optional_named.add_argument( "-t", "--produce_tags", help = argparse.SUPPRESS, nargs = "*" )  # help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags."
     return parser.parse_args()
 
+
 class DockerOperations:
-    
-    def __init__(self, image_name, image_version, container_name, volumes, temp_file_name):
+
+    def __init__( self, image_name, image_version, container_name, volumes, temp_file_name ):
         self.image_name = image_name
         self.image_version = image_version
         self.container_name = container_name
         self.volumes = volumes
         self.temp_file_name = temp_file_name
-        
-    def runCommand(self, cmd):
-        
+
+    def runCommand( self, cmd ):
+
         # Check to make sure the container does not exist
-        cmd  = f" docker "
+        cmd = f" docker "
         cmd += f" inspect --format '{{json .State.Stopped}}' "
         cmd += f" {self.container_name} "
         cmd += f" > {self.temp_file_name}"
-        os.system(cmd)
-        
-        status = open(f"{self.temp_file_name}").read().strip("\n")
+        os.system( cmd )
+
+        status = open( f"{self.temp_file_name}" ).read().strip( "\n" )
         if status == "running" or status == "exited":
             return
-            
-        docker_cmd  = f" docker run "
+
+        docker_cmd = f" docker run "
         docker_cmd += f" -ti "
         docker_cmd += f" --rm "
         docker_cmd += f" --name {self.container_name} "
@@ -112,11 +113,13 @@ class DockerOperations:
             docker_cmd += f" -v {mapping} "
         docker_cmd += f" {self.image_name}:{self_image_version} "
         docker_cmd += f" bash -c {cmd}"
-        os.system(docker_cmd)
+        os.system( docker_cmd )
 
-def verifyCompressionDirectory(directory):
+
+def verifyCompressionDirectory( directory ):
     '''
     '''
+
 
 def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
@@ -152,18 +155,22 @@ def runSingularityCommand( name, version, image_location, container_name, volume
 
 
 def main():
-    commandLineArg=sys.argv
-    if len(commandLineArg)==1:
-        print("Please use the --help option to get usage information")
-    options=parseCommandLineArguments()
-    
-    if options.test == False and (options.genome is None or options.container_name is None or options.output_directory is None or (options.inputsamfilenames is None and options.compress is True) or (options.inputabrfilenames is None and options.decompress is True)):
-        print("You must enter the genome, error directory, the samefile to compress and containder name")
+    commandLineArg = sys.argv
+    if len( commandLineArg ) == 1:
+        print( "Please use the --help option to get usage information" )
+    options = parseCommandLineArguments()
+
+    if options.test == False and ( options.genome is None or options.container_name is None or options.output_directory is None or ( options.inputsamfilenames is None and options.compress is True ) or ( options.inputabrfilenames is None and options.decompress is True ) ):
+        print( "You must enter the genome, error directory, the samefile to compress and containder name" )
         return
-    
+    else:
+        if options.output_directory is None:
+            print( "Please enter a valid output directory" )
+            return
+
     output_filename = f"{options.error_directory}.output"
     error_filename = f"{options.error_directory}.error"
-    
+
     os.system( f"mkdir -p {options.output_directory}" )
     os.system( f"which docker > {options.output_directory}/find_docker" )
     os.system( f"which singularity > {options.output_directory}/find_singularity" )
@@ -183,14 +190,14 @@ def main():
             framework_of_choice = "singularity"
 
     if options.framework == "singularity":
-        if singularity_installed == "singularity":
+        if singularity_installed == 1:
             framework_of_choice = "singularity"
         else:
             framework_of_choice = "docker"
-    
-    os.system(f"rm -rf {options.output_directory}")
-    
-    if options.test ==  True:
+
+    os.system( f"rm -rf {options.output_directory}" )
+
+    if options.test == True:
         # Convert BAM files to SAM files
         """
         cmd = "samtools view -h /software/Abridge/example/SRR13711353_SE_100000.bam > /software/Abridge/example/SRR13711353_SE_100000.sam "
@@ -203,25 +210,25 @@ def main():
         print(cmd)
         os.system(cmd)
         """
-        
+
         files_to_be_removed = ["/software/Abridge/example/SRR13711353_SE_100000.sam",
                                "/software/Abridge/example/SRR13711353_PE_100000.sam",
                                "/software/Abridge/example/arath_1.fa"]
-        
+
         # Setting up commands for testing
-        for level in ["1","2","3"]: # 3 iterations
-            for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam","/software/Abridge/example/SRR13711353_PE_100000.sam"]: # 2 iterations
-                #if "PE" not in inputfilename:continue
-                for ignore_scores in [0,1]: # 2 iterations
-                    for ignore_quality_scores in [0,1]: # 2 iterations
-                        for ignore_soft_clippings in [0,1]: # 2 iterations
-                            for ignore_mismatches in [0,1]: # 2 iterations
-                                for ignore_unmapped_reads in [0,1]: # 2 iterations
-                                    for save_all_quality_scores in [0,1]: # 2 iterations
-                                        for save_exact_quality_scores in [0,1]: # 2 iterations
-                                            
-                                            inputfilename_without_location = inputfilename.split("/")[-1][:-4]
-                                            output_directory_name = f"/software/Abridge/example/" 
+        for level in ["1", "2", "3"]:  # 3 iterations
+            for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam", "/software/Abridge/example/SRR13711353_PE_100000.sam"]:  # 2 iterations
+                # if "PE" not in inputfilename:continue
+                for ignore_scores in [0, 1]:  # 2 iterations
+                    for ignore_quality_scores in [0, 1]:  # 2 iterations
+                        for ignore_soft_clippings in [0, 1]:  # 2 iterations
+                            for ignore_mismatches in [0, 1]:  # 2 iterations
+                                for ignore_unmapped_reads in [0, 1]:  # 2 iterations
+                                    for save_all_quality_scores in [0, 1]:  # 2 iterations
+                                        for save_exact_quality_scores in [0, 1]:  # 2 iterations
+
+                                            inputfilename_without_location = inputfilename.split( "/" )[-1][:-4]
+                                            output_directory_name = f"{options.output_directory}/"
                                             output_directory_name += f"{inputfilename_without_location}_"
                                             output_directory_name += f"compress_level_{level}_"
                                             output_directory_name += f"ignore_scores_{ignore_scores}_"
@@ -231,9 +238,9 @@ def main():
                                             output_directory_name += f"ignore_unmapped_reads_{ignore_unmapped_reads}_"
                                             output_directory_name += f"save_all_quality_scores_{save_all_quality_scores}_"
                                             output_directory_name += f"save_exact_quality_scores_{save_exact_quality_scores}"
-                                            
-                                            volumes_list = ""
-                                            
+
+                                            volumes_list = [f"{options.output_directory}:{options.output_directory}"]
+
                                             cmd = f" \" "
                                             cmd += f" abridge "
                                             cmd += f" --keep_intermediate_error_files "
@@ -256,13 +263,13 @@ def main():
                                                 cmd += f" --save_all_quality_scores "
                                             if save_exact_quality_scores == 1:
                                                 cmd += f" --save_exact_quality_scores "
-                                            
+
                                             cmd += f" 1> {output_directory_name}.output "
                                             cmd += f" 2> {output_directory_name}.error "
                                             cmd += f" \" "
-                                            #print(cmd)
-                                            #os.system(cmd)
-                                            
+                                            # print(cmd)
+                                            # os.system(cmd)
+
                                             volumes_list = list( set( volumes_list ) )
                                             if framework_of_choice == "docker":
                                                 os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
@@ -275,7 +282,7 @@ def main():
                                                                     cpus = options.cpu,
                                                                     memory = '100g'
                                                     )
-                                        
+
                                             elif framework_of_choice == "singularity":
                                                 os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
                                                 runSingularityCommand( name = "finder",
@@ -287,10 +294,10 @@ def main():
                                                                     cpus = options.cpu,
                                                                     memory = '100g'
                                                     )
-                                            
-                                            output_directory_name_without_location = output_directory_name.split("/")[-1]
-                                            for ignore_sequence in [0,1]: # 2 iterations
-                                                output_directory_name = f"/software/Abridge/example/" 
+
+                                            output_directory_name_without_location = output_directory_name.split( "/" )[-1]
+                                            for ignore_sequence in [0, 1]:  # 2 iterations
+                                                output_directory_name = f"/software/Abridge/example/"
                                                 output_directory_name += f"{inputfilename_without_location}_"
                                                 output_directory_name += f"decompress_level_{level}_"
                                                 output_directory_name += f"ignore_scores_{ignore_scores}_"
@@ -301,7 +308,7 @@ def main():
                                                 output_directory_name += f"save_all_quality_scores_{save_all_quality_scores}_"
                                                 output_directory_name += f"save_exact_quality_scores_{save_exact_quality_scores}_"
                                                 output_directory_name += f"ignore_sequence_{ignore_sequence}"
-                                                
+
                                                 cmd = f" \" "
                                                 cmd += f" abridge "
                                                 cmd += f" --keep_intermediate_error_files "
@@ -311,12 +318,12 @@ def main():
                                                 cmd += f" --output_directory {output_directory_name} "
                                                 if ignore_sequence == 1:
                                                     cmd += " --ignore_sequence "
-                                                
+
                                                 cmd += f" 1> {output_directory_name}.output"
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 cmd += f" \" "
-                                                #print(cmd)
-                                                #os.system(cmd)
+                                                # print(cmd)
+                                                # os.system(cmd)
                                                 if framework_of_choice == "docker":
                                                     os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
                                                     runDockerCommand( name = "finder",
@@ -328,7 +335,7 @@ def main():
                                                                         cpus = options.cpu,
                                                                         memory = '100g'
                                                         )
-                                            
+
                                                 elif framework_of_choice == "singularity":
                                                     os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
                                                     runSingularityCommand( name = "finder",
@@ -340,7 +347,7 @@ def main():
                                                                         cpus = options.cpu,
                                                                         memory = '100g'
                                                         )
-        
+
     else:
         """abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
                                       image_version = "latest",
@@ -352,22 +359,22 @@ def main():
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
                                       )"""
-        
+
         volumes_list = [f"{options.genome}:{'/'.join(options.genome.split('/')[:-1])}",
                                                  f"{options.inputsamfilenames}:{'/'.join(options.inputsamfilenames.split('/')[:-1])}",
                                                  f"{options.output_directory}:{options.output_directory}",
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
         cmd = f" \" "
-        cmd += f" abridge.py "
-        for key,value in options.__dict__.items():
+        cmd += f" abridge "
+        for key, value in options.__dict__.items():
             if value is not None:
                 cmd += f" --{key} {value}"
-        
+
         cmd += f" 1> {output_filename}"
         cmd += f" 2> {error_filename}"
         cmd += f" \" "
-        
+
         if framework_of_choice == "docker":
             os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
             runDockerCommand( name = "finder",
@@ -379,7 +386,7 @@ def main():
                                 cpus = options.cpu,
                                 memory = '100g'
                 )
-        
+
         elif framework_of_choice == "singularity":
             os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
             runSingularityCommand( name = "finder",
@@ -391,9 +398,9 @@ def main():
                                 cpus = options.cpu,
                                 memory = '100g'
                 )
-        
-        #abridge_docker.runCommand(cmd)
-        
+
+        # abridge_docker.runCommand(cmd)
+
 
 if __name__ == "__main__":
     main()
