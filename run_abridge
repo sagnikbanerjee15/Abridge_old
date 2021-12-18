@@ -313,8 +313,8 @@ def main():
                                                 output_directory_name += f"ignore_unmapped_reads_{ignore_unmapped_reads}_"
                                                 output_directory_name += f"save_all_quality_scores_{save_all_quality_scores}_"
                                                 output_directory_name += f"save_exact_quality_scores_{save_exact_quality_scores}_"
-                                                output_directory_name += f"ignore_sequence_{ignore_sequence}_"
                                                 output_directory_name += f"{framework_of_choice}"
+                                                output_directory_name += f"ignore_sequence_{ignore_sequence}_"
 
                                                 cmd = f" \" "
                                                 cmd += f" abridge "
