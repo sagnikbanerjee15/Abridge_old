@@ -238,6 +238,7 @@ def main():
         allinputs = []
         # Setting up commands for testing
         for level in ["1", "2", "3"]:  # 3 iterations
+            if level != "3": continue
             for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam", "/software/Abridge/example/SRR13711353_PE_100000.sam"]:  # 2 iterations
                 # if "PE" not in inputfilename:continue
                 for ignore_scores in [0, 1]:  # 2 iterations
@@ -290,7 +291,7 @@ def main():
                                             cmd += f" 2> {output_directory_name}.error "
                                             cmd += f" \" "
                                             command_set.append( cmd )
-                                            # print(cmd)
+                                            print( cmd )
                                             # os.system(cmd)
 
                                             volumes_list = list( set( volumes_list ) )
@@ -323,6 +324,7 @@ def main():
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 cmd += f" \" "
                                                 command_set.append( cmd )
+                                                print( cmd )
 
                                             command_set.append( output_directory_name.replace( "/", "_" )[1:] )
                                             command_set.append( volumes_list )
