@@ -163,6 +163,7 @@ def runDockerOrSingularityInParallel( eachinput ):
                             cpus = "1",
                             memory = '3g'
             )
+        print( compress_cmd )
 
         runSingularityCommand( name = "abridge",
                             version = "1.0.0",
@@ -173,6 +174,7 @@ def runDockerOrSingularityInParallel( eachinput ):
                             cpus = "1",
                             memory = '3g'
             )
+        print( decompress1_cmd )
 
         runSingularityCommand( name = "abridge",
                             version = "1.0.0",
@@ -183,6 +185,7 @@ def runDockerOrSingularityInParallel( eachinput ):
                             cpus = "1",
                             memory = '3g'
             )
+        print( decompress2_cmd )
 
 
 def main():
@@ -291,7 +294,7 @@ def main():
                                             cmd += f" 2> {output_directory_name}.error "
                                             cmd += f" \" "
                                             command_set.append( cmd )
-                                            print( cmd )
+                                            # print( cmd )
                                             # os.system(cmd)
 
                                             volumes_list = list( set( volumes_list ) )
@@ -323,7 +326,7 @@ def main():
                                                 cmd += f" 1> {output_directory_name}.output"
                                                 cmd += f" 2> {output_directory_name}.error"
                                                 cmd += f" \" "
-                                                print( cmd )
+                                                # print( cmd )
                                                 command_set.append( cmd )
 
                                             command_set.append( output_directory_name.replace( "/", "_" )[1:] )
