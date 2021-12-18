@@ -329,8 +329,8 @@ def main():
                                             command_set.append( output_directory_name.replace( "/", "_" )[1:] )
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
-                                            # if len( allinputs ) < 1:
-                                            allinputs.append( command_set )
+                                            if len( allinputs ) < 1:
+                                                allinputs.append( command_set )
                                             # if len( allinputs ) >= 10: break
         pool.map( runDockerOrSingularityInParallel, allinputs )
 
