@@ -1092,7 +1092,7 @@ def decompressSamFile( options ):
     elif compressor == "zpaq":
         filename = options.inputabrfilenames.split( "/" )[-1]
         zpaq = " zpaq "
-        cmd = f"{zpaq} l {options.output_directory}/{filename}.zpaq > {options.output_directory}/file_list"
+        cmd = f"{zpaq} l {options.output_directory}/{filename}.zpaq > {options.output_directory}/file_list  2> /dev/null"
         if options.quiet == False:
             logging.info( f"Running command - {cmd}" )
         os.system( cmd )
