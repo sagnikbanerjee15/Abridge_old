@@ -291,7 +291,7 @@ def main():
                                             cmd += f" 2> {output_directory_name}.error "
                                             cmd += f" \" "
                                             command_set.append( cmd )
-                                            print( cmd )
+                                            # print( cmd )
                                             # os.system(cmd)
 
                                             volumes_list = list( set( volumes_list ) )
