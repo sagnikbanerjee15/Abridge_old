@@ -330,7 +330,7 @@ def main():
                                                 # print( cmd )
                                                 command_set.append( cmd )
 
-                                            command_set.append( output_directory_name.replace( "/", "-" )[1:] )
+                                            command_set.append( f"{inputfilename_without_location}_{level}_{ignore_scores}_{ignore_quality_scores}_{ignore_soft_clippings}_{ignore_mismatches}_{ignore_unmapped_reads}_{save_all_quality_scores}" )
                                             command_set.append( volumes_list )
                                             command_set.append( framework_of_choice )
                                             if len( allinputs ) < 1:
