@@ -1101,21 +1101,23 @@ def decompressSamFile( options ):
         for line in fhr:
             line_num += 1
             if line_num == 4:
-                compression_directory = line.strip().split()[-1]
+                compression_directory = "/".join( line.strip().split()[-1].split( "/" )[:-1] )
                 break
 
         # compression_directory = compression_directory.split("/")[-2]
         fhr.close()
-        cmd = f"{zpaq} x {options.output_directory}/{filename}.zpaq {'/'.join(compression_directory.split('/')[:-1])} -to {options.output_directory} -t{options.cpu} "
+        cmd = f"{zpaq} x {options.output_directory}/{filename}.zpaq {'/'.join(compression_directory.split('/')[:-1])} -to {options.output_directory} -t{options.cpu} 2> /dev/null"
         os.system( cmd )
         if options.quiet == False:
             logging.info( f"Running command - {cmd}" )
+        """
         # Move files
         cmd = f"mv {compression_directory}/* {options.output_directory}"
         os.system( cmd )
         if options.quiet == False:
             logging.info( f"Running command - {cmd}" )
-        files_to_be_removed.extend( f"{options.output_directory}/{compression_directory}" )
+        files_to_be_removed.append( f"{options.output_directory}/{compression_directory}" )
+        """
 
     files_to_be_removed.extend( [_outputfilename,
                                 _index_outputfilename,
