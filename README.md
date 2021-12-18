@@ -126,34 +126,42 @@ run_abridge --test
 
 
 
-## Generic compression tools
-
-
-
-## Diagnostic mode
-
-
-
 # Decompress
 
 
 
 
 
-# Compare compressed and decompressed files
-
 
 
 # Frequently asked questions (FAQ)
 
 1. I have several RNA-Seq samples aligned to a reference which is no longer available. What should I do?
+
+   You must have the reference file available. Without the reference file `abdridge` will not be able to compress or decompress files. Please make sure you privoded the same reference both for compression and also for decompression.
+
 2. I aligned my RNA-Seq samples to a reference without the MD tag. How do I generate MD tag for `abrigde` compression?
+
+   `MD` flags can be generated using the following command:
+
+   ```
+   samtools calmd
+   ```
+
+   
+
 3. How do I know that the compression is lossless?
+
 4. I need to view only the references and not alignments. What command should I execute?
+
 5. What is the correct command for viewing alignments without reference headers?
+
 6. How do I retreive alignments to a particular chromosome?
+
 7. I have only bamfiles but `abridge` needs samfiles to compress. What should I do?
+
 8. How do I retrieve multiple locations using random access?
+
 9. Can I generate overlapping read coverage for random locations?
 
 
