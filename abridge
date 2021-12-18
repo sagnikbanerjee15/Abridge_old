@@ -1224,7 +1224,7 @@ def decompressSamFile( options ):
     for file in files_to_be_removed:
         if options.quiet == False:
             logging.info( f"Deleting - {file}" )
-        os.system( "rm -f " + file )
+        os.system( "rm -rf " + file )
 
 
 def generateCoverage( _outputfilename, _index_outputfilename, options ):
