@@ -115,6 +115,7 @@ def runSingularityCommand( name, version, image_location, container_name, volume
     singularity_cmd += f" docker://{image_location}:{version} "
     singularity_cmd += f" bash -c {command}"
     os.system( singularity_cmd )
+    print( singularity_cmd )
 
 
 def runDockerOrSingularityInParallel( eachinput ):
@@ -163,7 +164,6 @@ def runDockerOrSingularityInParallel( eachinput ):
                             cpus = "1",
                             memory = '3g'
             )
-        print( compress_cmd )
 
         runSingularityCommand( name = "abridge",
                             version = "1.0.0",
@@ -174,7 +174,6 @@ def runDockerOrSingularityInParallel( eachinput ):
                             cpus = "1",
                             memory = '3g'
             )
-        print( decompress1_cmd )
 
         runSingularityCommand( name = "abridge",
                             version = "1.0.0",
@@ -185,7 +184,6 @@ def runDockerOrSingularityInParallel( eachinput ):
                             cpus = "1",
                             memory = '3g'
             )
-        print( decompress2_cmd )
 
 
 def main():
