@@ -381,6 +381,7 @@ def main():
                                 cpus = options.cpu,
                                 memory = '100g'
                 )
+            print( cmd )
 
         elif framework_of_choice == "singularity":
             runSingularityCommand( name = "abridge",
