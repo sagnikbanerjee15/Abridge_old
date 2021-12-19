@@ -126,6 +126,7 @@ abridge \
 --level 2 \
 --save_all_quality_scores \
 --save_exact_quality_scores \
+--container_name compress \
 1> $PWD/abridge_compressed.output \
 2> $PWD/abridge_compressed.error 
 ```
@@ -149,6 +150,7 @@ In the lossless mode, `abridge` will store the entire information.
    --ignore_mismatches \
    --ignore_scores \
    --ignore_quality_scores \
+   --container_name compress \
    1> $PWD/abridge_compressed.output \
    2> $PWD/abridge_compressed.error 
    ```
@@ -164,6 +166,7 @@ In the lossless mode, `abridge` will store the entire information.
    --inputsamfilenames <Name of input SAM file> \
    --genome <Name of the genome file> \
    --level 2 \
+   --container_name compress \
    1> $PWD/abridge_compressed.output \
    2> $PWD/abridge_compressed.error 
    ```
@@ -180,6 +183,7 @@ run_abridge \
 --output_directory $PWD/abridge_decompressed \
 --inputabrfilenames <Name of the abridge compressed file> \
 --genome <Name of the genome file> \
+--container_name decompress \
 1> $PWD/abridge_decompressed.output \
 2> $PWD/abridge_decompressed.error 
 ```

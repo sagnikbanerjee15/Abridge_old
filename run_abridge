@@ -193,7 +193,7 @@ def main():
     options = parseCommandLineArguments()
 
     if options.test == False and ( options.genome is None or options.container_name is None or options.output_directory is None or ( options.inputsamfilenames is None and options.compress is True ) or ( options.inputabrfilenames is None and options.decompress is True ) ):
-        print( "You must enter the genome, error directory, the samefile to compress and containder name" )
+        print( "You must enter the genome, the samfile to compress and container name" )
         return
     else:
         if options.output_directory is None:
@@ -357,6 +357,7 @@ def main():
                                                  f"{options.output_directory}:{options.output_directory}",
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
+        volumes_list = list( set( volumes_list ) )
         cmd = f" \" "
         cmd += f" abridge "
         for key, value in options.__dict__.items():
