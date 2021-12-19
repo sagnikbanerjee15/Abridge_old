@@ -376,7 +376,7 @@ def main():
             cmd += f" --compress "
             cmd += f" --inputsamfilenames {options.inputsamfilenames} "
             volumes_list.append( f"{'/'.join(options.inputsamfilenames.split('/')[:-1])}:{'/'.join(options.inputsamfilenames.split('/')[:-1])}", )
-        elif options.decomrpess == True:
+        elif options.decompress == True:
             cmd += f" --decompress "
             cmd += f" --inputabrfilenames {options.inputabrfilenames} "
             volumes_list.append( f"{'/'.join(options.inputabrfilenames.split('/')[:-1])}:{'/'.join(options.inputabrfilenames.split('/')[:-1])}", )
