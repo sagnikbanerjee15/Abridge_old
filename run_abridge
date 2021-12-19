@@ -370,6 +370,33 @@ def main():
             if value is not None:
                 cmd += f" --{key} {value}"
 
+        cmd = f" \" "
+        cmd += f" abridge "
+        cmd += f" --keep_intermediate_error_files "
+        if options.compress == True:
+            cmd += f" --compress "
+            cmd += f" --inputsamfilenames {options.inputsamfilenames} "
+        elif options.decomrpess == True:
+            cmd += f" --decompress "
+            cmd += f" --inputabrfilenames {options.inputabrfilenames} "
+        cmd += f" --genome {options.genome} "
+
+        cmd += f" --output_directory {options.output_directory} "
+        cmd += f" --level {options.level} "
+        if options.ignore_scores == True:
+            cmd += f" --ignore_scores "
+        if options.ignore_quality_scores == True:
+            cmd += f" --ignore_quality_scores "
+        if options.ignore_soft_clippings == True:
+            cmd += f" --ignore_soft_clippings "
+        if options.ignore_mismatches == True:
+            cmd += f" --ignore_mismatches "
+        if options.ignore_unmapped_reads == True:
+            cmd += f" --ignore_unmapped_reads "
+        if options.save_all_quality_scores == True:
+            cmd += f" --save_all_quality_scores "
+        if options.save_exact_quality_scores == True:
+            cmd += f" --save_exact_quality_scores "
         cmd += f" 1> {output_filename}"
         cmd += f" 2> {error_filename}"
         cmd += f" \" "
