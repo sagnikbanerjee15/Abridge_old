@@ -113,23 +113,76 @@ This command will execute abridge with all possible parameters and with two diff
 
 ## Compress a single RNA-Seq file
 
-`abridge` is developed 
+`abridge` is developed to run on a single CPU. You can run multiple samples together by providing a single CPU core to each. Please note that `abridge` can handle a single genome file. If you have the sequences of the chromosomes on separate files, please merge them into one. During compression `abridge` stores the parameters. These parameters are reused during decompression.
 
 ### Lossless compression
 
+```bash
+abridge \
+--compress \
+--output_directory $PWD/abridge_compressed \
+--inputsamfilenames <Name of input SAM file> \
+--genome <Name of the genome file> \
+--level 2 \
+--save_all_quality_scores \
+--save_exact_quality_scores \
+1> $PWD/abridge_compressed.output \
+2> $PWD/abridge_compressed.error 
+```
 
+In the lossless mode, `abridge` will store the entire information.
 
 ### Lossy compression
 
+`abridge` offers a range of choices for lossy compression. We have presented a few use cases below.
 
+1. Compressing a SAM file that will be later used for genome guided transcriptome assembly. There is no need to store soft-clips, mismatches, mapping score and quality scores.
 
+   ```bash
+   run_abridge \
+   --compress \
+   --output_directory $PWD/abridge_compressed \
+   --inputsamfilenames <Name of input SAM file> \
+   --genome <Name of the genome file> \
+   --level 2 \
+   --ignore_soft_clippings \
+   --ignore_mismatches \
+   --ignore_scores \
+   --ignore_quality_scores \
+   1> $PWD/abridge_compressed.output \
+   2> $PWD/abridge_compressed.error 
+   ```
 
+   
+
+2. Compressing a SAM file which will be used for calling SNPs. For this case, most quality scores can be ignored except for those nucleotides that were a mismatch to the reference. 
+
+   ```bash
+   run_abridge \
+   --compress \
+   --output_directory $PWD/abridge_compressed \
+   --inputsamfilenames <Name of input SAM file> \
+   --genome <Name of the genome file> \
+   --level 2 \
+   1> $PWD/abridge_compressed.output \
+   2> $PWD/abridge_compressed.error 
+   ```
+
+   
 
 # Decompress
 
+Decompression is performed by providing the compressed file and the genome file as input. There is no need to explicitly state the parameters with which the compression was performed since `abridge` stores that information during compression.
 
-
-
+```bash
+run_abridge \
+--decompress \
+--output_directory $PWD/abridge_decompressed \
+--inputabrfilenames <Name of the abridge compressed file> \
+--genome <Name of the genome file> \
+1> $PWD/abridge_decompressed.output \
+2> $PWD/abridge_decompressed.error 
+```
 
 
 
@@ -143,25 +196,54 @@ This command will execute abridge with all possible parameters and with two diff
 
    `MD` flags can be generated using the following command:
 
-   ```
-   samtools calmd
+   ```bash
+   samtools calmd -bAr aln.bam > aln_baq.bam
    ```
 
-   
+   This command will add the **NM** and **MD** tags at the same time. For more information please check http://www.htslib.org/doc/samtools-calmd.html
 
 3. How do I know that the compression is lossless?
 
+   You can decompress the file to verify that the compression was indeed lossless. It should produce all the alignments along with the quality scores.
+
 4. I need to view only the references and not alignments. What command should I execute?
 
-5. What is the correct command for viewing alignments without reference headers?
+   You need to execute `abridge` with the `header` argument
 
-6. How do I retreive alignments to a particular chromosome?
+   ```bash
+   run_abridge \
+   --header \
+   --inputabrfilenames <Name of the abridge compressed file> 
+   ```
 
-7. I have only bamfiles but `abridge` needs samfiles to compress. What should I do?
+5. How do I retreive alignments to a particular chromosome?
 
-8. How do I retrieve multiple locations using random access?
+   You can derive alignments to a particular chromosome by using the `random` command
 
-9. Can I generate overlapping read coverage for random locations?
+   ```bash
+   run_abridge \
+   --random \
+   --positions chr1:1-100000000 \
+   --output_directory $PWD/abridge_decompressed \
+   --inputabrfilenames <Name of the abridge compressed file> \
+   --genome <Name of the genome file> \
+   1> $PWD/abridge_decompressed.output \
+   2> $PWD/abridge_decompressed.error 
+   ```
+
+   To extract all alignments to a particular chromosome, provide an arbitrarily large number - higher that the size of the chromosome.
+
+6. I have only bamfiles but `abridge` needs samfiles to compress. What should I do?
+
+   Convert the bamfile to samfiles using the following command
+
+   ```bash
+   samtools view -@ <number of CPU> <bamfilename> > <samfilename>
+   ```
+
+7. How do I retrieve multiple locations using random access?
+
+   Option to retrieve alignments from multiple locations will be provided in the future
 
 
 
@@ -173,7 +255,7 @@ Here is a list of future upgrades to `abridge`
 
 # License
 
-License information can be accessed from 
+License information can be accessed from https://github.com/sagnikbanerjee15/Abridge/blob/main/LICENSE
 
 # Contact
 
