@@ -352,6 +352,8 @@ def main():
                                                  ]
                                       )"""
 
+        if options.error_directory is None:
+            options.error_directory = options.output_directory
         volumes_list = [f"{options.genome}:{'/'.join(options.genome.split('/')[:-1])}",
                                                  f"{options.inputsamfilenames}:{'/'.join(options.inputsamfilenames.split('/')[:-1])}",
                                                  f"{options.output_directory}:{options.output_directory}",
