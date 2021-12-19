@@ -362,6 +362,7 @@ def main():
                                                  f"{options.output_directory}:{options.output_directory}",
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
+        print( options )
         volumes_list = list( set( volumes_list ) )
         cmd = f" \" "
         cmd += f" abridge "
