@@ -352,6 +352,7 @@ def main():
                                                  ]
                                       )"""
 
+        os.system( f"mkdir -p {options.output_directory}" )
         if options.error_directory is None:
             options.error_directory = options.output_directory
         volumes_list = [f"{options.genome}:{'/'.join(options.genome.split('/')[:-1])}",
