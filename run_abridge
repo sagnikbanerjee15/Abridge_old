@@ -361,7 +361,6 @@ def main():
                                                  f"{options.output_directory}:{options.output_directory}",
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
-        print( options )
 
         cmd = f" \" "
         cmd += f" abridge "
