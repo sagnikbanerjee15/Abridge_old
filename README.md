@@ -103,7 +103,7 @@ Optional arguments:
 Run the following command if you wish to test abridge with the provided examples
 
 ```bash
-CPU=96
+CPU=96 # Enter the number of CPUs
 run_abridge --test --output_directory $PWD/abridge_tests --cpu $CPU
 ```
 
