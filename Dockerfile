@@ -46,7 +46,7 @@ RUN cd /software && \
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 # Downloading the current git repo - change this to a specific version later
 
-ARG ABRIDGE_VERSION=1.0.1
+ARG ABRIDGE_VERSION=1.0.0
 RUN cd /software && \
 	wget https://github.com/sagnikbanerjee15/Abridge/archive/refs/tags/ABRIDGE_v${ABRIDGE_VERSION}.tar.gz &&\
 	tar -xvzf ABRIDGE_v${ABRIDGE_VERSION}.tar.gz && \
@@ -54,4 +54,4 @@ RUN cd /software && \
 	make &&\
 	chmod -R 777 /software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}
 
-ENV PATH /software/Abridgee-ABRIDGE_v${ABRIDGE_VERSION}:/software/Abridgee-ABRIDGE_v${ABRIDGE_VERSION}/src:/software/Abridgee-ABRIDGE_v${ABRIDGE_VERSION}/scripts:${PATH} 
+ENV PATH /software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}/src:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}/scripts:${PATH} 
