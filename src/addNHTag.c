@@ -72,6 +72,9 @@ void findMultiMappedReadsFromSamFile (
 	} while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 );
 
 	number_of_lines_in_samfile = read_ids_i;
+	printf ("\nTotal number of reads %llu, Number of multi-mapped reads %llu" ,
+			number_of_lines_in_samfile ,
+			multi_mapped_read_ids_i);
 	/*
 	 * Find duplicated reads
 	 */
@@ -87,6 +90,7 @@ void findMultiMappedReadsFromSamFile (
 				strcpy(multi_mapped_read_ids[multi_mapped_read_ids_i++ ] ,
 						read_ids[i]);
 				strcpy(read_ids[j] , "");
+				break;
 			}
 		}
 	}
