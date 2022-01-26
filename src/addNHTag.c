@@ -87,12 +87,15 @@ void findMultiMappedReadsFromSamFile (
 		printf ("\n%llu" , i);
 		for ( j = i + 1 ; j < number_of_lines_in_samfile ; j++ )
 		{
-			if ( !strcmp (read_ids[i] , read_ids[j]) )
+			if ( read_ids[i][0] == read_ids[j][0] )
 			{
-				strcpy(multi_mapped_read_ids[multi_mapped_read_ids_i++ ] ,
-						read_ids[i]);
-				strcpy(read_ids[j] , "");
-				break;
+				if ( !strcmp (read_ids[i] , read_ids[j]) )
+				{
+					strcpy(multi_mapped_read_ids[multi_mapped_read_ids_i++ ] ,
+							read_ids[i]);
+					strcpy(read_ids[j] , "");
+					break;
+				}
 			}
 		}
 	}
