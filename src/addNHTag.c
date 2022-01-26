@@ -52,7 +52,7 @@ void findMultiMappedReadsFromSamFile (
 
 	read_ids = ( char** ) malloc (sizeof(char*) * number_of_lines_in_samfile);
 	for ( k = 0 ; k < number_of_lines_in_samfile ; k++ )
-		read_ids[k] = ( char* ) malloc (sizeof(char) * 25);
+		read_ids[k] = ( char* ) malloc (sizeof(char) * 50);
 
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
