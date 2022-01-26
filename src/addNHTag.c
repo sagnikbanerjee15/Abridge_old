@@ -84,7 +84,7 @@ void findMultiMappedReadsFromSamFile (
 	for ( i = 0 ; i < number_of_lines_in_samfile ; i++ )
 	{
 		//if ( i % 10000 == 0 )
-		printf ("\n%i=llu" , i);
+		printf ("\ni=%llu" , i);
 		for ( j = i + 1 ; j < number_of_lines_in_samfile ; j++ )
 		{
 			if ( !strcmp (read_ids[i] , read_ids[j]) )
@@ -95,7 +95,7 @@ void findMultiMappedReadsFromSamFile (
 				break;
 			}
 		}
-		printf ("% j=llu" , j);
+		printf (" j=%llu" , j);
 	}
 	printf ("\nTotal number of reads %llu, Number of multi-mapped reads %llu" ,
 			number_of_lines_in_samfile ,
