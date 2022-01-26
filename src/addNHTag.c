@@ -76,7 +76,7 @@ void findMultiMappedReadsFromSamFile (
 	 * Find duplicated reads
 	 */
 
-	multi_mapped_read_ids_i = 0
+	multi_mapped_read_ids_i = 0;
 	for ( i = 0 ; i < number_of_lines_in_samfile ; j++ )
 	{
 		for ( j = i + 1 ; j < number_of_lines_in_samfile ; j++ )
