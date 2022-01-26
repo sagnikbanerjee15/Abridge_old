@@ -27,14 +27,13 @@ void findMultiMappedReadsFromSamFile (
 	char **split_on_tab;
 	char line_to_be_written_to_file[10000];
 	char **read_ids;
+	char **multi_mapped_read_ids;
 	unsigned long long int number_of_lines_in_samfile = 0;
-	unsigned long long int k;
-	unsigned long long int read_ids_i;
+	unsigned long long int read_ids_i, multi_mapped_read_ids_i;
+	unsigned long long int i, j, k;
 
 	size_t len = 0;
 	ssize_t line_len;
-
-	int i;
 
 	fhr = fopen (input_samfilename , "r");
 	if ( fhr == NULL )
@@ -54,6 +53,10 @@ void findMultiMappedReadsFromSamFile (
 	for ( k = 0 ; k < number_of_lines_in_samfile ; k++ )
 		read_ids[k] = ( char* ) malloc (sizeof(char) * 50);
 
+	multi_mapped_read_ids = ( char** ) malloc (sizeof(char*) * number_of_lines_in_samfile);
+	for ( k = 0 ; k < number_of_lines_in_samfile ; k++ )
+		multi_mapped_read_ids[k] = ( char* ) malloc (sizeof(char) * 50);
+
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		if ( buffer[0] == '@' )
@@ -67,6 +70,28 @@ void findMultiMappedReadsFromSamFile (
 		splitByDelimiter (buffer , '\t' , split_on_tab);
 		strcpy(read_ids[read_ids_i++ ] , split_on_tab[0]);
 	} while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 );
+
+	number_of_lines_in_samfile = read_ids_i;
+	/*
+	 * Find duplicated reads
+	 */
+
+	multi_mapped_read_ids_i = 0
+	for ( i = 0 ; i < number_of_lines_in_samfile ; j++ )
+	{
+		for ( j = i + 1 ; j < number_of_lines_in_samfile ; j++ )
+		{
+			if ( !strcmp (read_ids[i] , read_ids[j]) )
+			{
+				strcpy(multi_mapped_read_ids[multi_mapped_read_ids_i++ ] ,
+						read_ids[i]);
+				strcpy(read_ids[j] , "");
+			}
+		}
+	}
+	printf ("\nTotal number of reads %llu, Number of multi-mapped reads $llu" ,
+			number_of_lines_in_samfile ,
+			multi_mapped_read_ids_i);
 }
 
 int main (int argc, char *argv[])
@@ -96,7 +121,7 @@ int main (int argc, char *argv[])
 	/*
 	 * Count the number of lines in read_multi_mapping_filename
 	 */
-	//number_of_lines_in_read_multi_mapping_filename = countNumberOfLines (read_multi_mapping_filename);
+//number_of_lines_in_read_multi_mapping_filename = countNumberOfLines (read_multi_mapping_filename);
 	/*
 	 * Create array of structures
 	 */
