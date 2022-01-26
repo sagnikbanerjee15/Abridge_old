@@ -98,6 +98,7 @@ void findMultiMappedReadsFromSamFile (
 				}
 			}
 		}
+		printf ("% llu" , j);
 	}
 	printf ("\nTotal number of reads %llu, Number of multi-mapped reads %llu" ,
 			number_of_lines_in_samfile ,
