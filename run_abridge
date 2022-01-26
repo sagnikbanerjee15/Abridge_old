@@ -224,12 +224,12 @@ def main():
             os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
         else:
             framework_of_choice = "singularity"
-            os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
+            os.system( f"singularity pull -F docker://sagnikbanerjee15/abridge:1.0.0" )
 
     if options.framework == "singularity":
         if singularity_installed == 1:
             framework_of_choice = "singularity"
-            os.system( f"singularity pull docker://sagnikbanerjee15/abridge:1.0.0" )
+            os.system( f"singularity pull -F docker://sagnikbanerjee15/abridge:1.0.0" )
         else:
             framework_of_choice = "docker"
             os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )

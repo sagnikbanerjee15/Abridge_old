@@ -14,6 +14,19 @@ int findSamFormatFlagPairedEnded (
 
 int findSamFormatFlagSingleEnded (char*, int, char*);
 
+struct Read_Ids_to_NH* allocateMemoryRead_Ids_to_NH ()
+{
+	/********************************************************************
+	 * Variable declarations
+	 ********************************************************************/
+	struct Read_Ids_to_NH *s;
+	/********************************************************************/
+
+	s->read_id = ( char* ) malloc (sizeof(char) * MAX_READ_ID_LENGTH);
+
+	return s;
+}
+
 struct Sam_Alignment* allocateMemorySam_Alignment ()
 {
 	/********************************************************************
@@ -4147,6 +4160,68 @@ void writeSequenceHeaders (FILE *fhw, char *genome_filename, int print_to_file)
 	}
 
 	fclose (fhr);
+}
+
+unsigned int countNumberOfLines (char *read_multi_mapping_filename)
+{
+	FILE *fhr;
+	unsigned int count = 0;
+	char temp[100];
+	char faidx_filename[1000];
+	char *buffer = NULL;
+	size_t len = 0;
+	ssize_t line_len;
+
+	fhr = open (read_multi_mapping_filename , "r");
+	if ( fhr == NULL )
+	{
+		printf ("Error! File not found %s" , read_multi_mapping_filename);
+		exit (1);
+	}
+
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
+		count++;
+
+	fclose (fhr);
+
+	return count;
+}
+
+void readMultiMappingInformationInDS (
+		struct Read_Ids_to_NH *read_ids_to_nh,
+		int number_of_lines_in_read_multi_mapping_filename,
+		char *read_multi_mapping_filename)
+{
+	FILE *fhr;
+	char **split_on_space;
+	int i;
+	char *buffer = NULL;
+	size_t len = 0;
+	ssize_t line_len;
+
+	split_on_space = ( char** ) malloc (sizeof(char*) * 5);
+	for ( i = 0 ; i < 5 ; i++ )
+		split_on_space[i] = ( char* ) malloc (sizeof(char) * COLS);
+
+	fhr = open (read_multi_mapping_filename , "r");
+	if ( fhr == NULL )
+	{
+		printf ("Error! File not found %s" , read_multi_mapping_filename);
+		exit (1);
+	}
+
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
+	{
+		if ( buffer[0] == '@' )
+			continue;
+		else break;
+	}
+
+	do
+	{
+		splitByDelimiter (buffer , ' ' , split_on_space);
+
+	} while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 );
 }
 
 #endif /* ABRIDGE_SRC_FUNCTIONS_DEFINITIONS_H_ */

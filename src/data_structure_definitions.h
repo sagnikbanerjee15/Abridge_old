@@ -27,6 +27,7 @@
 # define MAX_BUFFER_SIZE_FOR_READING_PASS2_FILE 1073741824
 # define MAX_REFERENCE_SEQ_LEN 1000000000
 # define MAX_FILES_FOR_MERGING 1000
+# define MAX_READ_ID_LENGTH 1000
 
 char *sam_tags[] =
 { "NH" , "HI" , "AS" , "nM" , "NM" , "MD" , "jM" , "jI" , "XS" , "RG" , "XT" , "XM" , "AM" , "X0" , "X1" , "XO" , "XG" };
@@ -251,6 +252,12 @@ struct Paired_Ended_Flag_to_Single_Character
 	char *direction;
 	int *samflags;
 
+};
+
+struct Read_Ids_to_NH
+{
+	char *read_id;
+	unsigned int NH;
 };
 
 int isCharacterInString (char*, char);
