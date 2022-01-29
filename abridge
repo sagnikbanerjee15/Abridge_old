@@ -1444,6 +1444,7 @@ def main():
         cmd = f"cat {inputsamfilename}|grep -v ^@|awk -F=\"\\t\" -vOFS=\"\\t\" "
         cmd += " {print $1,NR} "
         cmd += f" > {options.output_directory}/read_names_with_line_numbers"
+        print(cmd)
         #if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers") == False:
         os.system(cmd)
         
