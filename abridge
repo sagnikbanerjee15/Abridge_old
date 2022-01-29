@@ -1446,13 +1446,28 @@ def main():
         os.system(cmd)
         
         cmd = f" cat {options.output_directory}/read_names_with_line_numbers "
-        cmd += f" | sort > {options.output_directory}/read_names_with_line_numbers.sorted "
+        cmd += f" | sort > {options.output_directory}/read_names_with_line_numbers_sorted "
         #if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers.sorted") == False:
         os.system(cmd)
         
+        cmd = options.softwares["associateShortNamesToReads"]
+        cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted "
+        cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
+        os.system(cmd)
+
+        cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
+        cmd += f"|cut -f1|uniq -c "
+        cmd += f" > {options.output_directory}/read_names_with_short_names_NH "
+        os.system(cmd)
         
+        cmd = f" join {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
+        cmd += f" {options.output_directory}/read_names_with_short_names_NH "
+        cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH"
+        os.system(cmd)
         
-        
+        cmd = f" sort -nk2 {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH "
+        cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final"
+        os.system(cmd)
         
         if options.quiet == False:
             logging.info( f"Read names have been shortened to save space" )
