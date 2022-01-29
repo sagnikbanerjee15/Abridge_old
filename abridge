@@ -1461,7 +1461,7 @@ def main():
         os.system(cmd)
 
         cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-        cmd += f"|cut -f1|uniq -c| awk  -vOFS=\"\\t\" '{print $2,$1}' "
+        cmd += "|cut -f1|uniq -c| awk  -vOFS=\"\\t\" '{print $2,$1}' "
         cmd += f" > {options.output_directory}/read_names_with_short_names_NH "
         print(cmd)
         os.system(cmd)
