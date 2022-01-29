@@ -4172,7 +4172,7 @@ unsigned int countNumberOfLines (char *read_multi_mapping_filename)
 	size_t len = 0;
 	ssize_t line_len;
 
-	fhr = open (read_multi_mapping_filename , "r");
+	fhr = fopen (read_multi_mapping_filename , "r");
 	if ( fhr == NULL )
 	{
 		printf ("Error! File not found %s" , read_multi_mapping_filename);
@@ -4203,7 +4203,7 @@ void readMultiMappingInformationInDS (
 	for ( i = 0 ; i < 5 ; i++ )
 		split_on_space[i] = ( char* ) malloc (sizeof(char) * COLS);
 
-	fhr = open (read_multi_mapping_filename , "r");
+	fhr = fopen (read_multi_mapping_filename , "r");
 	if ( fhr == NULL )
 	{
 		printf ("Error! File not found %s" , read_multi_mapping_filename);
