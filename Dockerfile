@@ -66,6 +66,17 @@ RUN mkdir /software/bowtie2 && cd /software/bowtie2 && \
 ENV PATH="${PATH}:/software/bowtie2/bowtie2-${BOWTIE2_VERSION}-linux-x86_64"
 
 ###################################################################################################################################################################################################
+# Bwa
+###################################################################################################################################################################################################
+
+RUN mkdir -p /software/bwa && cd /software/bwa && \
+	git clone https://github.com/lh3/bwa.git && \
+	cd bwa && \
+	make
+	
+ENV PATH="${PATH}:/software/bwa/bwa"
+
+###################################################################################################################################################################################################
 # Brotli
 ###################################################################################################################################################################################################
 RUN mkdir -p /software/brotli cd /software/brotli &&\
@@ -106,24 +117,15 @@ RUN mkdir -p /software/samtools && cd /software/samtools && \
 # ABRIDGE
 ###################################################################################################################################################################################################
 
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 ARG ABRIDGE_VERSION=1.0.0
 RUN mkdir -p /software/abridge && cd /software/abridge && \
-	wget https://github.com/sagnikbanerjee15/Abridge/archive/refs/tags/ABRIDGE_v${ABRIDGE_VERSION}.tar.gz &&\
-	tar -xvzf ABRIDGE_v${ABRIDGE_VERSION}.tar.gz && \
-	cd Abridge-ABRIDGE_v${ABRIDGE_VERSION}/src &&\
+	git clone https://github.com/sagnikbanerjee15/Abridge.git &&\
+	cd Abridge/src &&\
 	make &&\
-	chmod -R 777 /software/abridge/Abridge-ABRIDGE_v${ABRIDGE_VERSION}
-ENV PATH="${PATH}:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}/src:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}/scripts"
-
-###################################################################################################################################################################################################
-# LCQS	
-###################################################################################################################################################################################################
-
-RUN mkdir /software/LCQS && cd /software/LCQS && \
-	git clone https://github.com/SCUT-CCNL/LCQS.git && \
-	cd LCQS && \
-	make
-ENV PATH="${PATH}:/software/LCQS/LCQS"
+	chmod -R 777 /software/abridge/Abridge	
+	
+ENV PATH="${PATH}:/software/Abridge-ABRIDGE:/software/Abridge/src:/software/Abridge/scripts"
 
 ###################################################################################################################################################################################################
 # FCLQC	
@@ -132,6 +134,8 @@ ENV PATH="${PATH}:/software/LCQS/LCQS"
 RUN mkdir -p /software/FCLQC && cd /software/FCLQC
 RUN cd /software/FCLQC && git clone https://github.com/Minhyeok01/FCLQC.git
 RUN cd /software/FCLQC/FCLQC && cargo build --release
+
+
 
 
 
