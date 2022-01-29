@@ -1450,26 +1450,31 @@ def main():
         
         cmd = f" cat {options.output_directory}/read_names_with_line_numbers "
         cmd += f" | sort > {options.output_directory}/read_names_with_line_numbers_sorted "
+        print(cmd)
         #if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers.sorted") == False:
         os.system(cmd)
         
         cmd = options.softwares["associateShortNamesToReads"]
         cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted "
         cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
+        print(cmd)
         os.system(cmd)
 
         cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
         cmd += f"|cut -f1|uniq -c "
         cmd += f" > {options.output_directory}/read_names_with_short_names_NH "
+        print(cmd)
         os.system(cmd)
         
         cmd = f" join {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
         cmd += f" {options.output_directory}/read_names_with_short_names_NH "
         cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH"
+        print(cmd)
         os.system(cmd)
         
         cmd = f" sort -nk2 {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH "
         cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final"
+        print(cmd)
         os.system(cmd)
         
         if options.quiet == False:
