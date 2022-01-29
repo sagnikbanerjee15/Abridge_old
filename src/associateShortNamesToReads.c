@@ -14,11 +14,19 @@ void generateNextShortReadId (char *short_read_id)
 		short_read_id[0] = '0';
 		short_read_id[1] = '\0';
 	}
+	else if ( strlen (short_read_id) == 1 && short_read_id[0] == 122 )
+	{
+		short_read_id[0] = 48;
+		short_read_id[1] = 48;
+		short_read_id[2] = '\0';
+	}
 	else
 	{
+
 		int i = strlen (short_read_id) - 1;
 		short_read_id[i]++;
 		i--;
+
 		for ( ; i >= 0 && short_read_id[i + 1] == 123 ; i-- )
 			short_read_id[i]++;
 
