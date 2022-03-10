@@ -50,7 +50,7 @@ def parseCommandLineArguments():
 
     # Optional arguments
     #optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
-    optional_named.add_argument( "-s", "--shorten_read_names", help="Request abridge to reduce the size of read names. This options takes a bit longer but leads to much higher compression without adding to decompression time", action = "store_true")
+    #optional_named.add_argument( "-s", "--shorten_read_names", help="Request abridge to reduce the size of read names. This options takes a bit longer but leads to much higher compression without adding to decompression time", action = "store_true")
     optional_named.add_argument( "-ss", "--ignore_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
     optional_named.add_argument( "-igqual", "--ignore_quality_scores", help = "Ignore all quality scores", action = "store_true" )
     optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
@@ -74,7 +74,7 @@ def parseCommandLineArguments():
     parser.add_argument( "--softwares", "-softwares", help = argparse.SUPPRESS )  # Software paths
     parser.add_argument( "--single_ended", "-single_ended", help = argparse.SUPPRESS )
     parser.add_argument( "--reference_to_length", "-num_of_reference_sequences", help = argparse.SUPPRESS )
-    parser.add_argument( "--outputfilename", "-outputfilena", help = argparse.SUPPRESS )
+    parser.add_argument( "--outputfilename", "-outputfilename", help = argparse.SUPPRESS )
     parser.add_argument( "--compile_programs", "-compile_programs", action = "store_true", help = argparse.SUPPRESS )  # Force abridge to compile the C programs
 
     # Future enhancements
@@ -274,6 +274,10 @@ def checkSAMAlignments( options, logging ):
         if line[:3] == '@SQ' or line[:3] == "@HD":
             header += line
         else:
+            if "NH:i" in line or "XM:i" in line:
+                NH_present=1
+            else:
+                NH_present=0
             break
     headers.append( header )
     if len( set( headers ) ) != 1:
@@ -281,6 +285,7 @@ def checkSAMAlignments( options, logging ):
         if options.quiet == False:
             logging.info( "All the headers must be same. Please check your bamfile. Exiting..." )
             sys.exit()
+    return NH_present
 
 
 def cleanUp( options ):
@@ -310,7 +315,7 @@ def constructFileNames( input_filename, options ):
     frequency_of_flags_filename = f"{options.output_directory}/{name_of_input_file_without_location}_frequency_of_flags"
 
     _outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_"
-    _index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}__index"
+    _index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_index"
     unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_unmapped"
     name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}_qual"
     name_of_file_with_quality_scores_rle = f"{options.output_directory}/{name_of_input_file_without_location}_qual_rle"
@@ -1340,10 +1345,10 @@ def retrieveAlignmentsRandomly( chromosome, start, end, options ):
 
     input_filename = options.inputabrfilename
     name_of_input_file_without_location = input_filename.split( "/" )[-1][:-8]
-    _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_"
-    _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam__index"
-    unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_unmapped"
-    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam_qual"
+    _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_concise"
+    _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_concise_index"
+    unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_conciseunmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam_concisequal"
     compressed_abridged_filename = input_filename
     output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
     outputfilename = options.output_directory + "/" + name_of_input_file_without_location + "_" + options.positions.replace( ":", "_" ) + ".sam"
@@ -1428,7 +1433,7 @@ def main():
         logging.info( "validateCommandLineArguments() execution is complete" )
 
     if options.compress == True:
-        checkSAMAlignments( options, logging )
+        NH_present = checkSAMAlignments( options, logging )
         if options.quiet == False:
             logging.info( f"convertInputToSAM() execution is complete" )
 
@@ -1447,35 +1452,47 @@ def main():
         print(cmd)
         #if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers") == False:
         os.system(cmd)
+        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers")
         
         cmd = f" cat {options.output_directory}/read_names_with_line_numbers "
         cmd += f" | sort > {options.output_directory}/read_names_with_line_numbers_sorted "
         print(cmd)
         #if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers.sorted") == False:
         os.system(cmd)
+        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted")
         
         cmd = options.softwares["associateShortNamesToReads"]
         cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted "
         cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
         print(cmd)
         os.system(cmd)
+        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names")
 
-        cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-        cmd += "|cut -f1|uniq -c| awk  -vOFS=\"\\t\" '{print $2,$1}' "
-        cmd += f" > {options.output_directory}/read_names_with_short_names_NH "
-        print(cmd)
-        os.system(cmd)
-        
-        cmd = f" join {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-        cmd += f" {options.output_directory}/read_names_with_short_names_NH "
-        cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH"
-        print(cmd)
-        os.system(cmd)
+        if NH_present==0:
+            cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
+            cmd += "|cut -f1|uniq -c| awk  -vOFS=\"\\t\" '{print $2,$1}' "
+            cmd += f" > {options.output_directory}/read_names_with_short_names_NH "
+            print(cmd)
+            os.system(cmd)
+            remove_these_files.append(f"{options.output_directory}/read_names_with_short_names_NH")
+            
+            cmd = f" join {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
+            cmd += f" {options.output_directory}/read_names_with_short_names_NH "
+            cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH"
+            print(cmd)
+            os.system(cmd)
+            remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH")
+        else:
+            cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
+            cmd += f"|awk '$4=-1' "
+            os.system(cmd)
+            remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH")
         
         cmd = f" sort -nk2 {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH "
         cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final"
         print(cmd)
         os.system(cmd)
+        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final")
         
         if options.quiet == False:
             logging.info( f"Read names have been shortened to save space" )
@@ -1505,10 +1522,10 @@ def main():
     if options.random == True:
         input_filename = options.inputabrfilename
         name_of_input_file_without_location = input_filename.split( "/" )[-1][:-8]
-        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_"
-        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam__index"
-        unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_unmapped"
-        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam_qual"
+        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_concise"
+        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_concise_index"
+        unmapped_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_concise_unmapped"
+        name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}.sam_concise_qual"
         compressed_abridged_filename = input_filename
         output_sam_filename = options.output_directory + "/" + name_of_input_file_without_location + ".decompressed.sam"
 
@@ -1560,8 +1577,8 @@ def main():
     if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage == True:
         input_filename = options.inputabrfilename
         name_of_input_file_without_location = input_filename.split( "/" )[-1][:-8]
-        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_"
-        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam__index"
+        _outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_concise"
+        _index_outputfilename = options.output_directory + "/" + name_of_input_file_without_location + ".sam_concise_index"
 
         cmd = f"7za e {input_filename} -y "
         cmd += f" -o{options.output_directory}"

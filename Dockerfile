@@ -1,3 +1,7 @@
+###################################################################################################################################################################################################
+# ABRIDGE
+###################################################################################################################################################################################################
+
 FROM rust
 MAINTAINER Sagnik Banerjee <sagnikbanerjee15@gmail.com>
 
@@ -9,11 +13,33 @@ RUN apt-get -y update
 RUN apt-get -y install git python3 less vim wget time zlib1g zlib1g-dev lzma-dev \
 	libncurses5-dev libcurl4-nss-dev liblzma-dev libncursesw5-dev make unzip zip build-essential \
 	gcc g++ cmake ca-certificates libbz2-dev xz-utils htop autoconf automake binutils bison flex \
-	gettext libtool make patch pkg-config p7zip-full p7zip python
+	gettext libtool make patch pkg-config p7zip-full p7zip python r-base
 RUN apt-get clean all
 
+###################################################################################################################################################################################################
+# Rsamtools
+###################################################################################################################################################################################################
+
+RUN R -e 'if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager"); BiocManager::install("Rsamtools")'
+
+###################################################################################################################################################################################################
 # Create directories for installation
+###################################################################################################################################################################################################
+
 RUN mkdir /software 
+
+###################################################################################################################################################################################################
+# CONDA
+###################################################################################################################################################################################################
+
+RUN rm -rf /var/lib/apt/lists/*
+ENV CONDA_DIR /opt/conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+     /bin/bash ~/miniconda.sh -b -p /opt/conda
+
+# Put conda in path so we can use conda activate
+
+ENV PATH=$PATH:$CONDA_DIR/bin
 
 ###################################################################################################################################################################################################
 # STAR
@@ -125,7 +151,7 @@ RUN cd /software/FCLQC/FCLQC && cargo build --release
 # ABRIDGE
 ###################################################################################################################################################################################################
 
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+#ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 ARG ABRIDGE_VERSION=1.0.0
 RUN mkdir -p /software/abridge && cd /software/abridge && \
 	git clone https://github.com/sagnikbanerjee15/Abridge.git &&\
@@ -133,8 +159,10 @@ RUN mkdir -p /software/abridge && cd /software/abridge && \
 	make &&\
 	chmod -R 777 /software/abridge/Abridge	
 	
-#ENV PATH="${PATH}:/software/abridge/Abridge:/software/abridge/Abridge/src:/software/abridge/Abridge/scripts"
 ENV PATH="${PATH}:/project/maizegdb/sagnik/ABRIDGE/Abridge:/project/maizegdb/sagnik/ABRIDGE/Abridge/src:/project/maizegdb/sagnik/ABRIDGE/Abridge/scripts"
+
+
+
 
 
 
