@@ -1,8 +1,0 @@
-RUN mkdir -p /software/abridge && cd /software/abridge && \
-	wget https://github.com/sagnikbanerjee15/Abridge/archive/refs/tags/ABRIDGE_v${ABRIDGE_VERSION}.tar.gz &&\
-	tar -xvzf ABRIDGE_v${ABRIDGE_VERSION}.tar.gz && \
-	cd Abridge-ABRIDGE_v${ABRIDGE_VERSION}/src &&\
-	make &&\
-	chmod -R 777 /software/abridge/Abridge-ABRIDGE_v${ABRIDGE_VERSION}
-	
-	ENV PATH="${PATH}:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}/src:/software/Abridge-ABRIDGE_v${ABRIDGE_VERSION}/scripts"
