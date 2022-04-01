@@ -14,7 +14,7 @@ RUN apt-get -y update
 RUN apt-get -y install git python3 less vim wget time zlib1g zlib1g-dev lzma-dev \
 	libncurses5-dev libcurl4-nss-dev liblzma-dev libncursesw5-dev make unzip zip build-essential \
 	gcc g++ cmake ca-certificates libbz2-dev xz-utils htop autoconf automake binutils bison flex \
-	gettext libtool make patch pkg-config p7zip-full p7zip python r-base
+	gettext libtool make patch pkg-config p7zip-full p7zip python r-base pip
 RUN apt-get clean all
 
 ###################################################################################################################################################################################################
