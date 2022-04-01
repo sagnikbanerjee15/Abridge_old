@@ -101,7 +101,7 @@ def runDockerCommand( name, version, image_location, container_name, volumes, co
     docker_cmd += f" {image_location}:{version} "
     docker_cmd += f" bash -c {command}"
     os.system( docker_cmd )
-    print( docker_cmd )
+    # print( docker_cmd )
 
 
 def runSingularityCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
@@ -117,7 +117,7 @@ def runSingularityCommand( name, version, image_location, container_name, volume
     singularity_cmd += f" abridge_{version}.sif "
     singularity_cmd += f" bash -c {command}"
     os.system( singularity_cmd )
-    print( singularity_cmd )
+    # print( singularity_cmd )
 
 
 def runDockerOrSingularityInParallel( eachinput ):

@@ -21,8 +21,10 @@ RUN apt-get clean all
 # ABRIDGE
 ###################################################################################################################################################################################################
 
-#ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-ARG ABRIDGE_VERSION=1.0.0
+
+RUN pip install ruffus
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+ARG ABRIDGE_VERSION=1.1.0
 RUN mkdir -p /software/abridge && cd /software/abridge && \
 	git clone https://github.com/sagnikbanerjee15/Abridge.git &&\
 	cd Abridge/src &&\

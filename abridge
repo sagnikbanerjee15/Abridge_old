@@ -97,6 +97,42 @@ def configureLogger( options ):
     logging.basicConfig( format = '%(asctime)s - %(message)s', datefmt = '%d-%b-%y %H:%M:%S', level = logging.DEBUG, filename = options.logfilename )
 
 
+def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a docker container
+    """
+
+    # Runs the main command
+    docker_cmd = f" docker run "
+    # docker_cmd += f" -ti "
+    docker_cmd += f" --rm "
+    docker_cmd += f" --cpus={cpus}"
+    docker_cmd += f" --memory='{memory}'"
+    # docker_cmd += f" --name {container_name}"
+    for mapping in volumes:
+        docker_cmd += f" -v {mapping}"
+    docker_cmd += f" {image_location}:{version} "
+    docker_cmd += f" bash -c {command}"
+    os.system( docker_cmd )
+    # print( docker_cmd )
+
+
+def runSingularityCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a Singularity container
+    """
+
+    # Runs the main command
+    singularity_cmd = f" singularity exec  "
+    # singularity_cmd += f" --hostname {container_name}"
+    for mapping in volumes:
+        singularity_cmd += f" -B {mapping}"
+    singularity_cmd += f" abridge_{version}.sif "
+    singularity_cmd += f" bash -c {command}"
+    os.system( singularity_cmd )
+    # print( singularity_cmd )
+
+
 def validateCommandLineArguments( options ):
     """
     """
