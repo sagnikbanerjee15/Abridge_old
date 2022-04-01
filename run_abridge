@@ -95,7 +95,7 @@ def runDockerCommand( name, version, image_location, container_name, volumes, co
     docker_cmd += f" --rm "
     docker_cmd += f" --cpus={cpus}"
     docker_cmd += f" --memory='{memory}'"
-    docker_cmd += f" --name {container_name}"
+    # docker_cmd += f" --name {container_name}"
     for mapping in volumes:
         docker_cmd += f" -v {mapping}"
     docker_cmd += f" {image_location}:{version} "
@@ -241,7 +241,8 @@ def main():
 
     list_of_softwares_with_versions = {"samtools":"1.14",
                                        "zpaq":"715",
-                                       "fclqc":"latest"}
+                                       "fclqc":"latest",
+                                       "abridge":"1.1.0"}
 
     if framework_of_choice == "docker":
         for software in list_of_softwares_with_versions:
@@ -249,7 +250,6 @@ def main():
     else:
         os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{list_of_softwares_with_versions['software']} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{list_of_softwares_with_versions['software']}" )
 
-    sys.exit()
     if options.test == True:
         pool = multiprocessing.Pool( processes = int( options.cpu ) )
         allinputs = []
@@ -357,19 +357,6 @@ def main():
         pool.map( runDockerOrSingularityInParallel, allinputs )
 
     else:
-        """abridge_docker = DockerOperations(image_name = "sagnikbanerjee15/abridge",
-                                      image_version = "latest",
-                                      container_name=options.container_name,
-                                      temp_file_name=f"{options.error_directory}.output",
-                                      volumes = [f"{options.genome}:{'/'.join(options.genome.split('/')[:-1])}",
-                                                 f"{options.inputsamfilenames}:{'/'.join(options.inputsamfilenames.split('/')[:-1])}",
-                                                 f"{options.output_directory}:{options.output_directory}",
-                                                 f"{options.error_directory}:{options.error_directory}",
-                                                 ]
-                                      )"""
-
-        os.system( f"mkdir -p {options.output_directory}" )
-
         volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
                                                  f"{options.output_directory}:{options.output_directory}",
                                                  f"{options.error_directory}:{options.error_directory}",
@@ -377,13 +364,8 @@ def main():
 
         cmd = f" \" "
         cmd += f" abridge "
-        for key, value in options.__dict__.items():
-            if value is not None:
-                cmd += f" --{key} {value}"
-
-        cmd = f" \" "
-        cmd += f" abridge "
-        cmd += f" --keep_intermediate_error_files "
+        if options.keep_intermediate_error_files == True:
+            cmd += f" --keep_intermediate_error_files "
         if options.compress == True:
             cmd += f" --compress "
             cmd += f" --inputsamfilenames {options.inputsamfilenames} "
@@ -393,9 +375,7 @@ def main():
             cmd += f" --inputabrfilenames {options.inputabrfilenames} "
             volumes_list.append( f"{'/'.join(options.inputabrfilenames.split('/')[:-1])}:{'/'.join(options.inputabrfilenames.split('/')[:-1])}", )
         cmd += f" --genome {options.genome} "
-
         cmd += f" --output_directory {options.output_directory} "
-        cmd += f" --level {options.level} "
         if options.ignore_scores == True:
             cmd += f" --ignore_scores "
         if options.ignore_quality_scores == True:
@@ -437,8 +417,6 @@ def main():
                                 cpus = options.cpu,
                                 memory = '100g'
                 )
-
-        # abridge_docker.runCommand(cmd)
 
 
 if __name__ == "__main__":

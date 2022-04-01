@@ -6,7 +6,7 @@
 # Changelist
 
 # Only a single type of compression zpaq
-# Altering of read names  
+# Altering of read names
 ########################################################################################################################################################
 
 from argparse import RawTextHelpFormatter
@@ -35,12 +35,12 @@ def parseCommandLineArguments():
     optional_named = parser.add_argument_group( 'Optional arguments' )
 
     # Required arguments
-    required_named.add_argument( "--container_name", "-cn", help = "Enter the name of the container. You can choose any string. Please ensure that parallel runs of the software should not have the same container name" )
     required_named.add_argument( "-o", "--output_directory", help = "Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile" )
+    required_named.add_argument( "-g", "--genome", help = "Enter a single fasta file for the reference", required = True )
+
     input_group = parser.add_mutually_exclusive_group( required = True )
     input_group.add_argument( "-isam", "--inputsamfilename", help = "Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time." )
     input_group.add_argument( "-iabr", "--inputabrfilename", help = "Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time." )
-    required_named.add_argument( "-g", "--genome", help = "Enter a single fasta file for the reference", required = True )
 
     compress_decompress_group = parser.add_mutually_exclusive_group( required = True )
     compress_decompress_group.add_argument( "-cmp", "--compress", help = "Set this option if you wish to compress the alignment file", action = "store_true" )
@@ -49,8 +49,8 @@ def parseCommandLineArguments():
     compress_decompress_group.add_argument( "-H", "--header", help = "Print only the header of reference sequences during decompression", action = "store_true" )
 
     # Optional arguments
-    #optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
-    optional_named.add_argument( "-skip_shortening_read_names", "--skip_shortening_read_names", help="Request abridge to skip the step to reduce the size of read names. This options takes a bit longer but leads to much higher compression without adding to decompression time", action = "store_true")
+    # optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
+    optional_named.add_argument( "-skip_shortening_read_names", "--skip_shortening_read_names", help = "Request abridge to skip the step to reduce the size of read names. This options takes a bit longer but leads to much higher compression without adding to decompression time", action = "store_true" )
     optional_named.add_argument( "-ss", "--ignore_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
     optional_named.add_argument( "-igqual", "--ignore_quality_scores", help = "Ignore all quality scores", action = "store_true" )
     optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
@@ -275,9 +275,9 @@ def checkSAMAlignments( options, logging ):
             header += line
         else:
             if "NH:i" in line or "XM:i" in line:
-                NH_present=1
+                NH_present = 1
             else:
-                NH_present=0
+                NH_present = 0
             break
     headers.append( header )
     if len( set( headers ) ) != 1:
@@ -1400,7 +1400,7 @@ def main():
     if len( commandLineArg ) == 1:
         print( "Please use the --help option to get usage information" )
     options = parseCommandLineArguments()
-    
+
     remove_these_files = []
     # print(options)
     # return
@@ -1441,62 +1441,62 @@ def main():
         findEndedness( options, logging )
         if options.quiet == False:
             logging.info( f"findEndedness() execution is complete" )
-            
+
     if options.compress == True and options.shorten_read_names == True:
         inputsamfilename = options.inputsamfilename
         outputsamfilename = f"{options.output_directory}/read_modified.sam"
-        
+
         cmd = f"cat {inputsamfilename}|grep -v ^@|awk -F\"\\t\" -vOFS=\"\\t\" "
         cmd += " '{print $1,NR}' "
         cmd += f" > {options.output_directory}/read_names_with_line_numbers"
-        print(cmd)
-        #if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers") == False:
-        os.system(cmd)
-        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers")
-        
+        print( cmd )
+        # if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers") == False:
+        os.system( cmd )
+        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers" )
+
         cmd = f" cat {options.output_directory}/read_names_with_line_numbers "
         cmd += f" | sort > {options.output_directory}/read_names_with_line_numbers_sorted "
-        print(cmd)
-        #if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers.sorted") == False:
-        os.system(cmd)
-        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted")
-        
+        print( cmd )
+        # if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers.sorted") == False:
+        os.system( cmd )
+        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted" )
+
         cmd = options.softwares["associateShortNamesToReads"]
         cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted "
         cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-        print(cmd)
-        os.system(cmd)
-        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names")
+        print( cmd )
+        os.system( cmd )
+        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names" )
 
-        if NH_present==0:
+        if NH_present == 0:
             cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
             cmd += "|cut -f1|uniq -c| awk  -vOFS=\"\\t\" '{print $2,$1}' "
             cmd += f" > {options.output_directory}/read_names_with_short_names_NH "
-            print(cmd)
-            os.system(cmd)
-            remove_these_files.append(f"{options.output_directory}/read_names_with_short_names_NH")
-            
+            print( cmd )
+            os.system( cmd )
+            remove_these_files.append( f"{options.output_directory}/read_names_with_short_names_NH" )
+
             cmd = f" join {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
             cmd += f" {options.output_directory}/read_names_with_short_names_NH "
             cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH"
-            print(cmd)
-            os.system(cmd)
-            remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH")
+            print( cmd )
+            os.system( cmd )
+            remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH" )
         else:
             cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
             cmd += f"|awk '$4=-1' "
-            os.system(cmd)
-            remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH")
-        
+            os.system( cmd )
+            remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH" )
+
         cmd = f" sort -nk2 {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH "
         cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final"
-        print(cmd)
-        os.system(cmd)
-        remove_these_files.append(f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final")
-        
+        print( cmd )
+        os.system( cmd )
+        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final" )
+
         if options.quiet == False:
             logging.info( f"Read names have been shortened to save space" )
-    return    
+    return
     if options.compress == True:
         compressSamFile( options )
         if options.quiet == False:
