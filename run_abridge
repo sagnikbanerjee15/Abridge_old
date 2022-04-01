@@ -26,7 +26,7 @@ def parseCommandLineArguments():
     optional_named = parser.add_argument_group( 'Optional arguments' )
 
     # Required arguments
-    required_named.add_argument( "--container_name", "-cn", help = "Enter the name of the container. You can choose any string. Please ensure that parallel runs of the software should not have the same container name" )
+
     required_named.add_argument( "-o", "--output_directory", help = "Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile" )
     input_group = parser.add_mutually_exclusive_group()
     input_group.add_argument( "-isam", "--inputsamfilenames", help = "Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time." )
@@ -40,7 +40,7 @@ def parseCommandLineArguments():
     compress_decompress_group.add_argument( "-H", "--header", help = "Print only the header of reference sequences during decompression", action = "store_true" )
 
     # Optional arguments
-    #optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
+    # optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
     optional_named.add_argument( "-ss", "--ignore_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
     optional_named.add_argument( "-igqual", "--ignore_quality_scores", help = "Ignore all quality scores", action = "store_true" )
     optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
@@ -59,6 +59,7 @@ def parseCommandLineArguments():
     optional_named.add_argument( "--test", "-test", help = "Set this option to test run the software with example data", action = "store_true" )
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
+    optional_named.add_argument( "--force", "-force", help = "Setting this argument will remove the output directory and start the computation from scratch", action = "store_true" )
 
     # Suppressed arguments
     parser.add_argument( "--logfilename", "-logfilename", help = argparse.SUPPRESS )  # Name of the logfile
@@ -221,23 +222,35 @@ def main():
     if options.framework == "docker":
         if docker_installed == 1:
             framework_of_choice = "docker"
-            os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
         else:
             framework_of_choice = "singularity"
-            os.system( f"singularity pull -F docker://sagnikbanerjee15/abridge:1.0.0" )
 
     if options.framework == "singularity":
         if singularity_installed == 1:
             framework_of_choice = "singularity"
-            os.system( f"singularity pull -F docker://sagnikbanerjee15/abridge:1.0.0" )
         else:
             framework_of_choice = "docker"
-            os.system( "docker pull sagnikbanerjee15/abridge:1.0.0" )
 
-    os.system( f"rm -rf {options.output_directory}" )
+    if options.force == True:
+        os.system( f"rm -rf {options.output_directory}" )
+    os.system( f"mkdir -p {options.output_directory}/singularity_images" )
 
+    ########################################################################################################################
+    # Pull down docker or singularity images
+    ########################################################################################################################
+
+    list_of_softwares_with_versions = {"samtools":"1.14",
+                                       "zpaq":"715",
+                                       "fclqc":"latest"}
+
+    if framework_of_choice == "docker":
+        for software in list_of_softwares_with_versions:
+            os.system( f"docker pull ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{list_of_softwares_with_versions['software']}" )
+    else:
+        os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{list_of_softwares_with_versions['software']} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{list_of_softwares_with_versions['software']}" )
+
+    sys.exit()
     if options.test == True:
-
         pool = multiprocessing.Pool( processes = int( options.cpu ) )
         allinputs = []
         # Setting up commands for testing
