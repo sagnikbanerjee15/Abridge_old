@@ -92,6 +92,7 @@ def runDockerCommand( name, version, image_location, container_name, volumes, co
     # Runs the main command
     docker_cmd = f" docker run "
     # docker_cmd += f" -ti "
+    docker_cmd += f" -v /var/run/docker.sock:/var/run/docker.sock"
     docker_cmd += f" --rm "
     docker_cmd += f" --cpus={cpus}"
     docker_cmd += f" --memory='{memory}'"
@@ -396,11 +397,11 @@ def main():
 
         volumes_list = list( set( volumes_list ) )
 
-        os.system( cmd )
+        # os.system( cmd )
 
-        """if framework_of_choice == "docker":
+        if framework_of_choice == "docker":
             runDockerCommand( name = "abridge",
-                                version = list_of_softwares_with_versions['abridge']},
+                                version = list_of_softwares_with_versions['abridge'],
                                 image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
@@ -418,7 +419,7 @@ def main():
                                 command = cmd,
                                 cpus = options.cpu,
                                 memory = '100g'
-                )"""
+                )
 
 
 if __name__ == "__main__":
