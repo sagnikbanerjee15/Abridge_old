@@ -67,6 +67,7 @@ def parseCommandLineArguments():
     optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
     optional_named.add_argument( "--keep_intermediate_error_files", "-keep_intermediate_error_files", help = "Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those", action = "store_true" )
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
+    optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
 
     # Suppressed arguments
     parser.add_argument( "--logfilename", "-logfilename", help = argparse.SUPPRESS )  # Name of the logfile
@@ -1431,15 +1432,67 @@ def retrieveAlignmentsRandomly( chromosome, start, end, options ):
     os.system( cmd )
 
 
+def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, framework ):
+    """
+    Performs the following operations:
+    - Checks if the input file is a bamfile or samfile
+    - Prepares a samfile coordinate sorted
+    """
+    file_extension = options.inputfilename[:-3]
+    if file_extension == "bam":
+        pass
+    elif file_extension == "sam":
+        first_line = open( options.inputfilename, "r" ).readline().strip()
+        if "SO:coordinate" in first_line:
+            pass
+        else:
+            # Need to sort by coordinate
+            cmd = f"samtools view -bS -@ {options.cpu} {options.inputfilename}|samtools sort -@ {options.cpu}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
+            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
+            remove_these_files.append( options.inputfilename )
+
+            if framework == "docker":
+                runDockerCommand( name = "abridge",
+                                    version = f"{list_of_softwares_with_versions['abridge']}",
+                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                    container_name = f"{options.output_directory.split('/')[-1]}",
+                                    volumes = volumes_list,
+                                    command = cmd,
+                                    cpus = options.cpu,
+                                    memory = '100g'
+                    )
+
+            elif framework == "singularity":
+                runSingularityCommand( name = "abridge",
+                                    version = f"{list_of_softwares_with_versions['abridge']}",
+                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                    container_name = f"{options.output_directory.split('/')[-1]}",
+                                    volumes = volumes_list,
+                                    command = cmd,
+                                    cpus = options.cpu,
+                                    memory = '100g' )
+
+
 def main():
     commandLineArg = sys.argv
     if len( commandLineArg ) == 1:
         print( "Please use the --help option to get usage information" )
     options = parseCommandLineArguments()
 
+    list_of_softwares_with_versions = {"samtools":"1.14",
+                                       "zpaq":"715",
+                                       "fclqc":"latest",
+                                       "abridge":"1.1.0"}
     remove_these_files = []
+    volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
+                                                 f"{options.output_directory}:{options.output_directory}",
+                                                 f"{options.error_directory}:{options.error_directory}",
+                                                 ]
+
+    if options.compress == True:
+        prepareInputFilesForCompressing( options, list_of_softwares_with_versions, volumes_list , options.framework )
     # print(options)
-    # return
+    return
 
     if options.inputfilename is not None:
         input_filename_without_location = options.inputfilename.split( "/" )[-1][:-4]

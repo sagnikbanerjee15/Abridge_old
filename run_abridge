@@ -390,16 +390,19 @@ def main():
             cmd += f" --save_all_quality_scores "
         if options.save_exact_quality_scores == True:
             cmd += f" --save_exact_quality_scores "
+        cmd += f" --framework {framework_of_choice}"
         cmd += f" 1> {output_filename}"
         cmd += f" 2> {error_filename}"
         cmd += f" \" "
 
         volumes_list = list( set( volumes_list ) )
 
-        if framework_of_choice == "docker":
+        os.system( cmd )
+
+        """if framework_of_choice == "docker":
             runDockerCommand( name = "abridge",
-                                version = "1.0.0",
-                                image_location = "sagnikbanerjee15/abridge",
+                                version = f"{list_of_softwares_with_versions['abridge']}",
+                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -409,14 +412,14 @@ def main():
 
         elif framework_of_choice == "singularity":
             runSingularityCommand( name = "abridge",
-                                version = "1.0.0",
-                                image_location = "sagnikbanerjee15/abridge",
+                                version = f"{list_of_softwares_with_versions['abridge']}",
+                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
                                 cpus = options.cpu,
                                 memory = '100g'
-                )
+                )"""
 
 
 if __name__ == "__main__":
