@@ -29,7 +29,7 @@ def parseCommandLineArguments():
 
     required_named.add_argument( "-o", "--output_directory", help = "Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile" )
     input_group = parser.add_mutually_exclusive_group()
-    input_group.add_argument( "-isam", "--inputsamfilenames", help = "Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time." )
+    input_group.add_argument( "-isam", "--inputfilename", help = "Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time." )
     input_group.add_argument( "-iabr", "--inputabrfilenames", help = "Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time." )
     required_named.add_argument( "-g", "--genome", help = "Enter a single fasta file for the reference" )
 
@@ -41,21 +41,21 @@ def parseCommandLineArguments():
 
     # Optional arguments
     # optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
-    optional_named.add_argument( "-ss", "--ignore_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
+    optional_named.add_argument( "-ss", "--ignore_alignment_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
     optional_named.add_argument( "-igqual", "--ignore_quality_scores", help = "Ignore all quality scores", action = "store_true" )
     optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
     optional_named.add_argument( "-gsc", "--ignore_soft_clippings", help = "No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference", action = "store_true" )
     optional_named.add_argument( "-gm", "--ignore_mismatches", help = "All mismatches will be ignored", action = "store_true" )
     optional_named.add_argument( "-gs", "--ignore_sequence", help = "No nucleotide sequence will be produced during decompression", action = "store_true" )
     optional_named.add_argument( "-gu", "--ignore_unmapped_reads", help = "Request abridge to discard all reads that are unmapped", action = "store_true" )
-    optional_named.add_argument( "-sq", "--save_all_quality_scores", help = "Request abridge to save all quality scores", action = 'store_true' )
-    optional_named.add_argument( "-aq", "--save_exact_quality_scores", help = "Adjust quality scores for matched bases to achieve better encoding. For more details please check ...", action = "store_true" )
+    # optional_named.add_argument( "-sq", "--save_all_quality_scores", help = "Request abridge to save all quality scores", action = 'store_true' )
+    # optional_named.add_argument( "-aq", "--save_exact_quality_scores", help = "Adjust quality scores for matched bases to achieve better encoding. For more details please check ...", action = "store_true" )
     optional_named.add_argument( "-q", "--quiet", help = "Prevent abridge from printing any log information. By default logging is enables", action = "store_true" )
     optional_named.add_argument( "-n", "--cpu", help = "Enter the number of CPU cores to be used. This option will be used during compression or decompression.", default = 1 )
     optional_named.add_argument( "-run_diagnostics", "--run_diagnostics", help = "abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies", action = "store_true" )
     optional_named.add_argument( "-p", "--positions", help = "Enter the position as chromosome:start-end from which reads will be retrieved" )
     optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
-    optional_named.add_argument( "--keep_intermediate_error_files", "-kief", help = "Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those", action = "store_true" )
+    optional_named.add_argument( "--keep_intermediate_error_files", "-keep_intermediate_error_files", help = "Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those", action = "store_true" )
     optional_named.add_argument( "--test", "-test", help = "Set this option to test run the software with example data", action = "store_true" )
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
@@ -194,7 +194,7 @@ def main():
         print( "Please use the --help option to get usage information" )
     options = parseCommandLineArguments()
 
-    if options.test == False and ( options.genome is None or options.container_name is None or options.output_directory is None or ( options.inputsamfilenames is None and options.compress is True ) or ( options.inputabrfilenames is None and options.decompress is True ) ):
+    if options.test == False and ( options.genome is None or options.container_name is None or options.output_directory is None or ( options.inputfilename is None and options.compress is True ) or ( options.inputabrfilenames is None and options.decompress is True ) ):
         print( "You must enter the genome, the samfile to compress and container name" )
         return
     else:
@@ -258,7 +258,7 @@ def main():
             # if level != "3": continue
             for inputfilename in ["/software/Abridge/example/SRR13711353_SE_100000.sam", "/software/Abridge/example/SRR13711353_PE_100000.sam"]:  # 2 iterations
                 # if "PE" not in inputfilename:continue
-                for ignore_scores in [0, 1]:  # 2 iterations
+                for ignore_alignment_scores in [0, 1]:  # 2 iterations
                     for ignore_quality_scores in [0, 1]:  # 2 iterations
                         for ignore_soft_clippings in [0, 1]:  # 2 iterations
                             for ignore_mismatches in [0, 1]:  # 2 iterations
@@ -271,7 +271,7 @@ def main():
                                             output_directory_name = f"{options.output_directory}/"
                                             output_directory_name += f"{inputfilename_without_location}_"
                                             output_directory_name += f"compress_level_{level}_"
-                                            output_directory_name += f"ignore_scores_{ignore_scores}_"
+                                            output_directory_name += f"ignore_alignment_scores_{ignore_alignment_scores}_"
                                             output_directory_name += f"ignore_quality_scores_{ignore_quality_scores}_"
                                             output_directory_name += f"ignore_soft_clippings_{ignore_soft_clippings}_"
                                             output_directory_name += f"ignore_mismatches_{ignore_mismatches}_"
@@ -290,11 +290,11 @@ def main():
                                             cmd += f" --keep_intermediate_error_files "
                                             cmd += f" --compress "
                                             cmd += f" --genome /software/Abridge/example/arath_1.fa "
-                                            cmd += f" --inputsamfilenames {inputfilename} "
+                                            cmd += f" --inputfilename {inputfilename} "
                                             cmd += f" --output_directory {output_directory_name} "
                                             cmd += f" --level {level} "
-                                            if ignore_scores == 1:
-                                                cmd += f" --ignore_scores "
+                                            if ignore_alignment_scores == 1:
+                                                cmd += f" --ignore_alignment_scores "
                                             if ignore_quality_scores == 1:
                                                 cmd += f" --ignore_quality_scores "
                                             if ignore_soft_clippings == 1:
@@ -322,7 +322,7 @@ def main():
                                                 output_directory_name = f"{options.output_directory}/"
                                                 output_directory_name += f"{inputfilename_without_location}_"
                                                 output_directory_name += f"decompress_level_{level}_"
-                                                output_directory_name += f"ignore_scores_{ignore_scores}_"
+                                                output_directory_name += f"ignore_alignment_scores_{ignore_alignment_scores}_"
                                                 output_directory_name += f"ignore_quality_scores_{ignore_quality_scores}_"
                                                 output_directory_name += f"ignore_soft_clippings_{ignore_soft_clippings}_"
                                                 output_directory_name += f"ignore_mismatches_{ignore_mismatches}_"
@@ -368,16 +368,16 @@ def main():
             cmd += f" --keep_intermediate_error_files "
         if options.compress == True:
             cmd += f" --compress "
-            cmd += f" --inputsamfilenames {options.inputsamfilenames} "
-            volumes_list.append( f"{'/'.join(options.inputsamfilenames.split('/')[:-1])}:{'/'.join(options.inputsamfilenames.split('/')[:-1])}", )
+            cmd += f" --inputfilename {options.inputfilename} "
+            volumes_list.append( f"{'/'.join(options.inputfilename.split('/')[:-1])}:{'/'.join(options.inputfilename.split('/')[:-1])}", )
         elif options.decompress == True:
             cmd += f" --decompress "
             cmd += f" --inputabrfilenames {options.inputabrfilenames} "
             volumes_list.append( f"{'/'.join(options.inputabrfilenames.split('/')[:-1])}:{'/'.join(options.inputabrfilenames.split('/')[:-1])}", )
         cmd += f" --genome {options.genome} "
         cmd += f" --output_directory {options.output_directory} "
-        if options.ignore_scores == True:
-            cmd += f" --ignore_scores "
+        if options.ignore_alignment_scores == True:
+            cmd += f" --ignore_alignment_scores "
         if options.ignore_quality_scores == True:
             cmd += f" --ignore_quality_scores "
         if options.ignore_soft_clippings == True:
