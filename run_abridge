@@ -389,10 +389,6 @@ def main():
             cmd += f" --ignore_mismatches "
         if options.ignore_unmapped_reads == True:
             cmd += f" --ignore_unmapped_reads "
-        if options.save_all_quality_scores == True:
-            cmd += f" --save_all_quality_scores "
-        if options.save_exact_quality_scores == True:
-            cmd += f" --save_exact_quality_scores "
         cmd += f" --framework {framework_of_choice}"
         cmd += f" 1> {output_filename}"
         cmd += f" 2> {error_filename}"
