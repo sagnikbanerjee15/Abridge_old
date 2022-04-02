@@ -93,6 +93,7 @@ def runDockerCommand( name, version, image_location, container_name, volumes, co
     docker_cmd = f" docker run "
     # docker_cmd += f" -ti "
     docker_cmd += f" -v /var/run/docker.sock:/var/run/docker.sock"
+    docker_cmd += f" -v /usr/bin/docker:/usr/bin/docker --privileged=true "
     docker_cmd += f" --rm "
     docker_cmd += f" --cpus={cpus}"
     docker_cmd += f" --memory='{memory}'"
