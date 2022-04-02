@@ -1,10 +1,10 @@
-run_abridge \
---inputfilename \
---output_directory \
+docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c 'run_abridge \
+--inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_Aligned.sortedByCoord.out.bam \
+--output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge \
 --compress \
---genome \
+--genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
 --keep_intermediate_error_files \
 --framework docker \
 --force \
-1> \
-2> 
+1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge.output \
+2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge.error'
