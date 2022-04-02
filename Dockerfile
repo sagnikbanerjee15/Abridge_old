@@ -31,7 +31,7 @@ RUN mkdir -p /software/abridge && cd /software/abridge && \
 	make &&\
 	chmod -R 777 /software/abridge/Abridge	
 	
-ENV PATH="${PATH}:/software/abridge/Abridge:/software/abridge/Abridge/src:/software/abridge/Abridge/scripts
+ENV PATH=${PATH}:/software/abridge/Abridge:/software/abridge/Abridge/src:/software/abridge/Abridge/scripts
 
 
 
