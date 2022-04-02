@@ -194,7 +194,7 @@ def main():
         print( "Please use the --help option to get usage information" )
     options = parseCommandLineArguments()
 
-    if options.test == False and ( options.genome is None or options.container_name is None or options.output_directory is None or ( options.inputfilename is None and options.compress is True ) or ( options.inputabrfilenames is None and options.decompress is True ) ):
+    if options.test == False and ( options.genome is None or options.output_directory is None or ( options.inputfilename is None and options.compress is True ) or ( options.inputabrfilenames is None and options.decompress is True ) ):
         print( "You must enter the genome, the samfile to compress and container name" )
         return
     else:
