@@ -249,7 +249,9 @@ def main():
             version = list_of_softwares_with_versions[software]
             os.system( f"docker pull ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
     else:
-        os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{list_of_softwares_with_versions['software']} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{list_of_softwares_with_versions['software']}" )
+        for software in list_of_softwares_with_versions:
+            version = list_of_softwares_with_versions[software]
+            os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
 
     if options.test == True:
         pool = multiprocessing.Pool( processes = int( options.cpu ) )
