@@ -1453,7 +1453,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
 
             if framework == "docker":
                 runDockerCommand( name = "abridge",
-                                    version = f"{list_of_softwares_with_versions['abridge']}",
+                                    version = list_of_softwares_with_versions['abridge'],
                                     image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
                                     container_name = f"{options.output_directory.split('/')[-1]}",
                                     volumes = volumes_list,
@@ -1464,7 +1464,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
 
             elif framework == "singularity":
                 runSingularityCommand( name = "abridge",
-                                    version = f"{list_of_softwares_with_versions['abridge']}",
+                                    version = list_of_softwares_with_versions['abridge'],
                                     image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
                                     container_name = f"{options.output_directory.split('/')[-1]}",
                                     volumes = volumes_list,

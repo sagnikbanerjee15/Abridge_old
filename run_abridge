@@ -246,7 +246,8 @@ def main():
 
     if framework_of_choice == "docker":
         for software in list_of_softwares_with_versions:
-            os.system( f"docker pull ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{list_of_softwares_with_versions['software']}" )
+            version = list_of_softwares_with_versions['software']
+            os.system( f"docker pull ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
     else:
         os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{list_of_softwares_with_versions['software']} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{list_of_softwares_with_versions['software']}" )
 
@@ -401,7 +402,7 @@ def main():
 
         """if framework_of_choice == "docker":
             runDockerCommand( name = "abridge",
-                                version = f"{list_of_softwares_with_versions['abridge']}",
+                                version = list_of_softwares_with_versions['abridge']},
                                 image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
@@ -412,7 +413,7 @@ def main():
 
         elif framework_of_choice == "singularity":
             runSingularityCommand( name = "abridge",
-                                version = f"{list_of_softwares_with_versions['abridge']}",
+                                version = list_of_softwares_with_versions['abridge'],
                                 image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
