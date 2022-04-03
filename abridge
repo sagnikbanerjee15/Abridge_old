@@ -1442,7 +1442,6 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
     """
 
     file_extension = options.inputfilename[-3:]
-    print( f"Inside prepareInputFilesForCompressing file_extension {file_extension}" )
     if file_extension == "bam":
         cmd = f"samtools view -h -@ {options.cpu} {options.inputfilename}|head > {options.output_directory}/header"
         remove_these_files.append( f"{options.output_directory}/header" )
@@ -1572,6 +1571,7 @@ def main():
     if len( commandLineArg ) == 1:
         print( "Please use the --help option to get usage information" )
     options = parseCommandLineArguments()
+    validateCommandLineArguments( options )
 
     remove_these_files = []
 
@@ -1634,6 +1634,7 @@ def main():
 
     if options.compress == True:
         prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
+        logging.info( f"Input files have been prepared" )
 
     return
 
@@ -1647,8 +1648,6 @@ def main():
 
     for line in pprint.pformat( options ).split( '\n' ):
         logging.info( line )
-
-    validateCommandLineArguments( options )
 
     for line in pprint.pformat( options ).split( '\n' ):
         logging.info( line )
