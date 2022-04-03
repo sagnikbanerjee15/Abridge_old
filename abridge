@@ -1569,6 +1569,9 @@ def main():
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
 
+    if options.error_directory is None:
+        options.error_directory = options.output_directory
+
     if options.force == True:
         os.system( f"rm -rf {options.output_directory}" )
     os.system( f"mkdir -p {options.output_directory}/singularity_images" )
