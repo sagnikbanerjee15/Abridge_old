@@ -1570,6 +1570,10 @@ def main():
     os.system( f"mkdir -p {options.output_directory}/singularity_images" )
     os.system( f"which docker > {options.output_directory}/find_docker" )
     os.system( f"which singularity > {options.output_directory}/find_singularity" )
+    options.logfilename = f"{options.output_directory}/progress.log"
+
+    if options.quiet == False:
+        configureLogger( options )
 
     docker_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
     singularity_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_singularity", "r" ).read() else 0
@@ -1621,12 +1625,6 @@ def main():
 
     if options.output_directory is None:
         options.output_directory = "/".join( options.inputfilename.split( "/" )[:-1] )
-
-    options.logfilename = f"{options.output_directory}/{input_filename_without_location}_progress.log"
-    os.system( f"mkdir -p {options.output_directory}" )
-
-    if options.quiet == False:
-        configureLogger( options )
 
     for line in pprint.pformat( options ).split( '\n' ):
         logging.info( line )
