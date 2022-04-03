@@ -69,6 +69,7 @@ def parseCommandLineArguments():
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
     optional_named.add_argument( "--force", "-force", help = "Setting this argument will remove the output directory and start the computation from scratch", action = "store_true" )
+    optional_named.add_argument( "--skip_modifying_read_names", "-skip_modifying_read_names", help = "Avoid renaming the reads to save space. Please note that enabling this option will lead to larger file sizes", action = "store_true" )
 
     # Suppressed arguments
     parser.add_argument( "--logfilename", "-logfilename", help = argparse.SUPPRESS )  # Name of the logfile
@@ -1560,6 +1561,15 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                     )
 
 
+def alterReadNamesAndAddNHTag( options, logging ):
+    """
+    """
+    cmd = f"cat {options.inputfilename}|grep -v ^@|cut -f1|awk -vOFS=\"\\t\" " + "'{print $0,NR}'|sort "
+    cmd += f"> {options.output_directory}/sorted_read_names"
+    if os.path.exists( f"{options.output_directory}/sorted_read_names" ) == False:
+        os.system( cmd )
+
+
 def main():
     commandLineArg = sys.argv
     if len( commandLineArg ) == 1:
@@ -1654,6 +1664,10 @@ def main():
     for line in pprint.pformat( options ).split( '\n' ):
         logging.info( line )
 
+    if options.compress == True:
+        alterReadNamesAndAddNHTag( options, logging )
+        if options.quiet == False:
+            logging.info( f"Read names have been altered and NH tags have been added" )
     return
     if options.compress == True:
         NH_present = checkSAMAlignments( options, logging )
