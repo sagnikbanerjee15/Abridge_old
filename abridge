@@ -162,8 +162,8 @@ def validateCommandLineArguments( options ):
 
     # Check if the input format is sam
     if options.inputfilename is not None:
-        if options.inputfilename[-3:] != "sam" and options.compress == True:
-            print( f"The input file {options.inputfilename} needs to be in sam format. Exiting..." )
+        if ( options.inputfilename[-3:] != "sam" or options.inputfilename[-3:] != "bam" ) and options.compress == True:
+            print( f"The input file {options.inputfilename} needs to be in either sam or bam format. Exiting..." )
             if options.quiet == False:
                 logging.info( f"The input file {options.inputfilename} needs to be in sam format. Exiting..." )
             sys.exit()
