@@ -1454,8 +1454,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
 
             if framework == "docker":
                 runDockerCommand( name = "abridge",
-                                    version = list_of_softwares_with_versions['abridge'],
-                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                    version = list_of_softwares_with_versions['samtools'],
+                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
                                     container_name = f"{options.output_directory.split('/')[-1]}",
                                     volumes = volumes_list,
                                     command = cmd,
@@ -1465,8 +1465,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
 
             elif framework == "singularity":
                 runSingularityCommand( name = "abridge",
-                                    version = list_of_softwares_with_versions['abridge'],
-                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                    version = list_of_softwares_with_versions['samtools'],
+                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
                                     container_name = f"{options.output_directory.split('/')[-1]}",
                                     volumes = volumes_list,
                                     command = cmd,
@@ -1480,10 +1480,6 @@ def main():
         print( "Please use the --help option to get usage information" )
     options = parseCommandLineArguments()
 
-    list_of_softwares_with_versions = {"samtools":"1.14",
-                                       "zpaq":"715",
-                                       "fclqc":"latest",
-                                       "abridge":"1.1.0"}
     remove_these_files = []
     volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
                                                  f"{options.output_directory}:{options.output_directory}",
