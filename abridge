@@ -1574,6 +1574,8 @@ def main():
         print( "Please use the --help option to get usage information" )
     options = parseCommandLineArguments()
     validateCommandLineArguments( options )
+    if options.quiet == False:
+        logging.info( "validateCommandLineArguments() execution is complete" )
 
     remove_these_files = []
 
@@ -1595,6 +1597,8 @@ def main():
 
     if options.quiet == False:
         configureLogger( options )
+    if options.quiet == False:
+        logging.info( "Logger has been configured" )
 
     docker_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
     singularity_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_singularity", "r" ).read() else 0
@@ -1616,9 +1620,9 @@ def main():
         else:
             framework_of_choice = "docker"
 
-    ########################################################################################################################
+    ################################################################################################################################################################################################################################################
     # Pull down docker or singularity images
-    ########################################################################################################################
+    ################################################################################################################################################################################################################################################
 
     list_of_softwares_with_versions = {"samtools":"1.14",
                                        "zpaq":"715",
@@ -1633,12 +1637,11 @@ def main():
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
             os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
+    ################################################################################################################################################################################################################################################
 
     if options.compress == True:
         prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
         logging.info( f"Input files have been prepared" )
-
-    return
 
     if options.inputfilename is not None:
         input_filename_without_location = options.inputfilename.split( "/" )[-1][:-4]
@@ -1651,14 +1654,7 @@ def main():
     for line in pprint.pformat( options ).split( '\n' ):
         logging.info( line )
 
-    for line in pprint.pformat( options ).split( '\n' ):
-        logging.info( line )
-
-    if options.quiet == False:
-        logging.info( "Logger has been configured" )
-    if options.quiet == False:
-        logging.info( "validateCommandLineArguments() execution is complete" )
-
+    return
     if options.compress == True:
         NH_present = checkSAMAlignments( options, logging )
         if options.quiet == False:
