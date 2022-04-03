@@ -1488,8 +1488,7 @@ def main():
 
     if options.force == True:
         os.system( f"rm -rf {options.output_directory}" )
-
-    os.system( f"mkdir -p {options.output_directory}" )
+    os.system( f"mkdir -p {options.output_directory}/singularity_images" )
     os.system( f"which docker > {options.output_directory}/find_docker" )
     os.system( f"which singularity > {options.output_directory}/find_singularity" )
 
@@ -1512,10 +1511,6 @@ def main():
             framework_of_choice = "singularity"
         else:
             framework_of_choice = "docker"
-
-    if options.force == True:
-        os.system( f"rm -rf {options.output_directory}" )
-    os.system( f"mkdir -p {options.output_directory}/singularity_images" )
 
     ########################################################################################################################
     # Pull down docker or singularity images
