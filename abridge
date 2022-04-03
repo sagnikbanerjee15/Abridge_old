@@ -1443,13 +1443,90 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
     print( "Inside prepareInputFilesForCompressing" )
     file_extension = options.inputfilename[:-3]
     if file_extension == "bam":
-        pass
+        cmd = f"samtools view -h -@ {options.cpu} {options.inputfilename}|head > {options.output_directory}/header"
+        remove_these_files.append( f"{options.output_directory}/header" )
+
+        if options.framework == "docker":
+            runDockerCommand( name = "abridge",
+                                version = list_of_softwares_with_versions['samtools'],
+                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '1g'
+                )
+        elif options.framework == "singularity":
+            runSingularityCommand( name = "abridge",
+                                version = list_of_softwares_with_versions['samtools'],
+                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '1g' )
+
+        first_line = open( f"{options.output_directory}/header" , "r" ).readline().strip()
+        if "SO:coordinate" in first_line:
+            # Convert to Sam file
+            cmd = f"samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
+            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
+            remove_these_files.append( options.inputfilename )
+
+            if options.framework == "docker":
+                runDockerCommand( name = "abridge",
+                                    version = list_of_softwares_with_versions['samtools'],
+                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                    container_name = f"{options.output_directory.split('/')[-1]}",
+                                    volumes = volumes_list,
+                                    command = cmd,
+                                    cpus = options.cpu,
+                                    memory = '100g'
+                    )
+
+            elif options.framework == "singularity":
+                runSingularityCommand( name = "abridge",
+                                    version = list_of_softwares_with_versions['samtools'],
+                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                    container_name = f"{options.output_directory.split('/')[-1]}",
+                                    volumes = volumes_list,
+                                    command = cmd,
+                                    cpus = options.cpu,
+                                    memory = '100g' )
+        else:
+            # Need to sort by coordinate
+            cmd = f"samtools sort -@ {options.cpu} {options.inputfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
+            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
+            remove_these_files.append( options.inputfilename )
+
+            if options.framework == "docker":
+                runDockerCommand( name = "abridge",
+                                    version = list_of_softwares_with_versions['samtools'],
+                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                    container_name = f"{options.output_directory.split('/')[-1]}",
+                                    volumes = volumes_list,
+                                    command = cmd,
+                                    cpus = options.cpu,
+                                    memory = '100g'
+                    )
+
+            elif options.framework == "singularity":
+                runSingularityCommand( name = "abridge",
+                                    version = list_of_softwares_with_versions['samtools'],
+                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                    container_name = f"{options.output_directory.split('/')[-1]}",
+                                    volumes = volumes_list,
+                                    command = cmd,
+                                    cpus = options.cpu,
+                                    memory = '100g' )
+
     elif file_extension == "sam":
         first_line = open( options.inputfilename, "r" ).readline().strip()
         if "SO:coordinate" in first_line:
+            # Nothing to change
             pass
         else:
-            # Need to sort by coordinate
+            # Sort Samfile by coordinate
             cmd = f"samtools view -bS -@ {options.cpu} {options.inputfilename}|samtools sort -@ {options.cpu}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
