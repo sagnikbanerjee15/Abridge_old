@@ -1569,6 +1569,16 @@ def alterReadNamesAndAddNHTag( options, logging ):
     if os.path.exists( f"{options.output_directory}/sorted_read_names" ) == False:
         os.system( cmd )
 
+    cmd = f"cat {options.output_directory}/sorted_read_names" + "|cut -f1|uniq -c|awk -vOFS=\"\\t\" '{print $2,$1}'"
+    cmd += f"> {options.output_directory}/NH_vals"
+    if os.path.exists( f"{options.output_directory}/NH_vals" ):
+        os.system( cmd )
+
+    cmd = f"join {options.output_directory}/sorted_read_names {options.output_directory}/NH_vals" + " |awk -vOFS=\"\\t\" '{print $1,$2,$3}' "
+    cmd += f" > {options.output_directory}/sorted_read_names_with_NH"
+    if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH" ):
+        os.system( cmd )
+
 
 def main():
     commandLineArg = sys.argv
