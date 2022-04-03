@@ -114,7 +114,7 @@ def runDockerCommand( logging, name, version, image_location, container_name, vo
     for mapping in volumes:
         docker_cmd += f" -v {mapping}"
     docker_cmd += f" {image_location}:{version} "
-    docker_cmd += f" bash -c {command}"
+    docker_cmd += f" bash -c '{command}'"
     os.system( docker_cmd )
     logging.info( f"Running command - {docker_cmd}" )
 
