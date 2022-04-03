@@ -1471,6 +1471,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
+            if os.path.exists( f"{options.output_directory}/inputfilename.sam" ) == True:return
             if options.framework == "docker":
                 runDockerCommand( logging,
                                   name = "samtools",
@@ -1500,6 +1501,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
+            if os.path.exists( f"{options.output_directory}/inputfilename.sam" ) == True:return
             if options.framework == "docker":
                 runDockerCommand( logging,
                                     name = "samtools",
@@ -1535,6 +1537,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
+            if os.path.exists( f"{options.output_directory}/inputfilename.sam" ) == True:return
             if options.framework == "docker":
                 runDockerCommand( logging,
                                   name = "samtools",
