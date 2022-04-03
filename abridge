@@ -68,6 +68,7 @@ def parseCommandLineArguments():
     optional_named.add_argument( "--keep_intermediate_error_files", "-keep_intermediate_error_files", help = "Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those", action = "store_true" )
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
+    optional_named.add_argument( "--force", "-force", help = "Setting this argument will remove the output directory and start the computation from scratch", action = "store_true" )
 
     # Suppressed arguments
     parser.add_argument( "--logfilename", "-logfilename", help = argparse.SUPPRESS )  # Name of the logfile
@@ -1489,9 +1490,58 @@ def main():
                                                  f"{options.error_directory}:{options.error_directory}",
                                                  ]
 
+    if options.force == True:
+        os.system( f"rm -rf {options.output_directory}" )
+
+    os.system( f"mkdir -p {options.output_directory}" )
+    os.system( f"which docker > {options.output_directory}/find_docker" )
+    os.system( f"which singularity > {options.output_directory}/find_singularity" )
+
+    docker_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
+    singularity_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_singularity", "r" ).read() else 0
+
+    if docker_installed == 0 and singularity_installed == 0:
+        print( "You need to have either docker or singularity installed" )
+        sys.exit()
+
+    framework_of_choice = ""
+    if options.framework == "docker":
+        if docker_installed == 1:
+            framework_of_choice = "docker"
+        else:
+            framework_of_choice = "singularity"
+
+    if options.framework == "singularity":
+        if singularity_installed == 1:
+            framework_of_choice = "singularity"
+        else:
+            framework_of_choice = "docker"
+
+    if options.force == True:
+        os.system( f"rm -rf {options.output_directory}" )
+    os.system( f"mkdir -p {options.output_directory}/singularity_images" )
+
+    ########################################################################################################################
+    # Pull down docker or singularity images
+    ########################################################################################################################
+
+    list_of_softwares_with_versions = {"samtools":"1.14",
+                                       "zpaq":"715",
+                                       "fclqc":"latest",
+                                       "abridge":"1.1.0"}
+
+    if framework_of_choice == "docker":
+        for software in list_of_softwares_with_versions:
+            version = list_of_softwares_with_versions[software]
+            os.system( f"docker pull ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
+    else:
+        for software in list_of_softwares_with_versions:
+            version = list_of_softwares_with_versions[software]
+            os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
+
     if options.compress == True:
         prepareInputFilesForCompressing( options, list_of_softwares_with_versions, volumes_list , options.framework )
-    # print(options)
+
     return
 
     if options.inputfilename is not None:

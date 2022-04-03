@@ -1,4 +1,4 @@
-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker --privileged=true -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c 'run_abridge \
+docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c 'abridge \
 --inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_Aligned.sortedByCoord.out.bam \
 --output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge \
 --compress \
