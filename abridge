@@ -1444,6 +1444,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
     file_extension = options.inputfilename[:-3]
     if file_extension == "bam":
         cmd = f"samtools view -h -@ {options.cpu} {options.inputfilename}|head > {options.output_directory}/header"
+        logging.info( f"Running command - {cmd}" )
         remove_these_files.append( f"{options.output_directory}/header" )
 
         if options.framework == "docker":
@@ -1470,6 +1471,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
         if "SO:coordinate" in first_line:
             # Convert to Sam file
             cmd = f"samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
+            logging.info( f"Running command - {cmd}" )
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
@@ -1496,6 +1498,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
         else:
             # Need to sort by coordinate
             cmd = f"samtools sort -@ {options.cpu} {options.inputfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
+            logging.info( f"Running command - {cmd}" )
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
@@ -1528,6 +1531,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
         else:
             # Sort Samfile by coordinate
             cmd = f"samtools view -bS -@ {options.cpu} {options.inputfilename}|samtools sort -@ {options.cpu}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
+            logging.info( f"Running command - {cmd}" )
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
@@ -1551,7 +1555,6 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     command = cmd,
                                     cpus = options.cpu,
                                     memory = '100g' )
-    logging.info( f"Running command - {cmd}" )
 
 
 def main():
