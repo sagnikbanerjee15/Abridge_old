@@ -1564,10 +1564,6 @@ def main():
     options = parseCommandLineArguments()
 
     remove_these_files = []
-    volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
-                                                 f"{options.output_directory}:{options.output_directory}",
-                                                 f"{options.error_directory}:{options.error_directory}",
-                                                 ]
 
     if options.error_directory is None:
         options.error_directory = options.output_directory
@@ -1578,6 +1574,11 @@ def main():
     os.system( f"which docker > {options.output_directory}/find_docker" )
     os.system( f"which singularity > {options.output_directory}/find_singularity" )
     options.logfilename = f"{options.output_directory}/progress.log"
+
+    volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
+                                                 f"{options.output_directory}:{options.output_directory}",
+                                                 f"{options.error_directory}:{options.error_directory}",
+                                                 ]
 
     if options.quiet == False:
         configureLogger( options )
