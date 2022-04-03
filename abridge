@@ -1433,7 +1433,7 @@ def retrieveAlignmentsRandomly( chromosome, start, end, options ):
     os.system( cmd )
 
 
-def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list ):
+def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging ):
     """
     Performs the following operations:
     - Checks if the input file is a bamfile or samfile
@@ -1551,6 +1551,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     command = cmd,
                                     cpus = options.cpu,
                                     memory = '100g' )
+    logging.info( f"Running command - {cmd}" )
 
 
 def main():
@@ -1614,7 +1615,7 @@ def main():
             os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
 
     if options.compress == True:
-        prepareInputFilesForCompressing( options, remove_these_files, list_of_softwares_with_versions, volumes_list )
+        prepareInputFilesForCompressing( options, remove_these_files, list_of_softwares_with_versions, volumes_list , logging )
 
     return
 
