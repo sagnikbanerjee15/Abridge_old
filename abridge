@@ -481,19 +481,13 @@ def compressSamFile( options ):
             cmd += f" 0"  # argv[9] - run diagnostics
         cmd += f" {max_input_reads_in_a_single_nucl_loc} "  # argv[10] - max_input_reads_in_a_single_nucl_loc
         cmd += f" {name_of_file_with_max_commas} "  # argv[11] - name_of_file_with_max_commas
-        if options.save_all_quality_scores == True and options.save_exact_quality_scores == True:
-            cmd += f" 1 1 "  # argv[12] and argv[13]
-        elif options.save_all_quality_scores == True and options.save_exact_quality_scores == False:
-            cmd += f" 1 0 "  # argv[12] and argv[13]
-        elif options.save_all_quality_scores == False and options.save_exact_quality_scores == True:
-            cmd += f" 0 1 "  # argv[12] and argv[13]
-        elif options.save_all_quality_scores == False and options.save_exact_quality_scores == False:
-            cmd += f" 0 0 "  # argv[12] and argv[13]
+        cmd += f" 1 1 "  # argv[12] and argv[13]
         cmd += f" {name_of_file_with_quality_scores} "  # argv[14]
         if options.ignore_alignment_scores == True:
             cmd += f" 1 "  # argv[15] - save_scores = False
         else:
             cmd += f" 0 "  # argv[15] - save_scores = True
+        cmd += f" {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "  # argv[16]
         cmd += f") "
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -1756,62 +1750,9 @@ def main():
         if options.quiet == False:
             logging.info( f"findEndedness() execution is complete" )
 
+    ###################################################################################################################  EXAMINED TILL HERE
     return
-    if options.compress == True and options.shorten_read_names == True:
-        inputfilename = options.inputfilename
-        outputsamfilename = f"{options.output_directory}/read_modified.sam"
 
-        cmd = f"cat {inputfilename}|grep -v ^@|awk -F\"\\t\" -vOFS=\"\\t\" "
-        cmd += " '{print $1,NR}' "
-        cmd += f" > {options.output_directory}/read_names_with_line_numbers"
-        print( cmd )
-        # if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers") == False:
-        os.system( cmd )
-        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers" )
-
-        cmd = f" cat {options.output_directory}/read_names_with_line_numbers "
-        cmd += f" | sort > {options.output_directory}/read_names_with_line_numbers_sorted "
-        print( cmd )
-        # if os.path.exists(f"{options.output_directory}/read_names_with_line_numbers.sorted") == False:
-        os.system( cmd )
-        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted" )
-
-        cmd = options.softwares["associateShortNamesToReads"]
-        cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted "
-        cmd += f" {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-        print( cmd )
-        os.system( cmd )
-        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names" )
-
-        if NH_present == 0:
-            cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-            cmd += "|cut -f1|uniq -c| awk  -vOFS=\"\\t\" '{print $2,$1}' "
-            cmd += f" > {options.output_directory}/read_names_with_short_names_NH "
-            print( cmd )
-            os.system( cmd )
-            remove_these_files.append( f"{options.output_directory}/read_names_with_short_names_NH" )
-
-            cmd = f" join {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-            cmd += f" {options.output_directory}/read_names_with_short_names_NH "
-            cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH"
-            print( cmd )
-            os.system( cmd )
-            remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH" )
-        else:
-            cmd = f"cat {options.output_directory}/read_names_with_line_numbers_sorted_short_names "
-            cmd += f"|awk '$4=-1' "
-            os.system( cmd )
-            remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH" )
-
-        cmd = f" sort -nk2 {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH "
-        cmd += f" > {options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final"
-        print( cmd )
-        os.system( cmd )
-        remove_these_files.append( f"{options.output_directory}/read_names_with_line_numbers_sorted_short_names_NH_sorted_final" )
-
-        if options.quiet == False:
-            logging.info( f"Read names have been shortened to save space" )
-    return
     if options.compress == True:
         compressSamFile( options )
         if options.quiet == False:
