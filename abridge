@@ -1618,7 +1618,7 @@ def main():
             os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
 
     if options.compress == True:
-        prepareInputFilesForCompressing( options, remove_these_files, list_of_softwares_with_versions, volumes_list , logging )
+        prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
 
     return
 
