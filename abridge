@@ -1433,7 +1433,7 @@ def retrieveAlignmentsRandomly( chromosome, start, end, options ):
     os.system( cmd )
 
 
-def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, framework ):
+def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list ):
     """
     Performs the following operations:
     - Checks if the input file is a bamfile or samfile
@@ -1452,7 +1452,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
-            if framework == "docker":
+            if options.framework == "docker":
                 runDockerCommand( name = "abridge",
                                     version = list_of_softwares_with_versions['samtools'],
                                     image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
@@ -1463,7 +1463,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     memory = '100g'
                     )
 
-            elif framework == "singularity":
+            elif options.framework == "singularity":
                 runSingularityCommand( name = "abridge",
                                     version = list_of_softwares_with_versions['samtools'],
                                     image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
@@ -1536,7 +1536,7 @@ def main():
             os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
 
     if options.compress == True:
-        prepareInputFilesForCompressing( options, list_of_softwares_with_versions, volumes_list , options.framework )
+        prepareInputFilesForCompressing( options, list_of_softwares_with_versions, volumes_list )
 
     return
 
