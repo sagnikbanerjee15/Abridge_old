@@ -1445,7 +1445,6 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
     print( f"Inside prepareInputFilesForCompressing file_extension {file_extension}" )
     if file_extension == "bam":
         cmd = f"samtools view -h -@ {options.cpu} {options.inputfilename}|head > {options.output_directory}/header"
-        logging.info( f"Running command - {cmd}" )
         remove_these_files.append( f"{options.output_directory}/header" )
 
         if options.framework == "docker":
@@ -1475,7 +1474,6 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
         if "SO:coordinate" in first_line:
             # Convert to Sam file
             cmd = f"samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
-            logging.info( f"Running command - {cmd}" )
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
@@ -1505,7 +1503,6 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
         else:
             # Need to sort by coordinate
             cmd = f"samtools sort -@ {options.cpu} {options.inputfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
-            logging.info( f"Running command - {cmd}" )
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
@@ -1541,7 +1538,6 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
         else:
             # Sort Samfile by coordinate
             cmd = f"samtools view -bS -@ {options.cpu} {options.inputfilename}|samtools sort -@ {options.cpu}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
-            logging.info( f"Running command - {cmd}" )
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
@@ -1590,9 +1586,10 @@ def main():
     options.logfilename = f"{options.output_directory}/progress.log"
 
     volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
-                                                 f"{options.output_directory}:{options.output_directory}",
-                                                 f"{options.error_directory}:{options.error_directory}",
-                                                 ]
+                    f"{options.output_directory}:{options.output_directory}",
+                    f"{options.error_directory}:{options.error_directory}",
+                    f"{'/'.join(options.inputfilename.split('/')[:-1])}:{'/'.join(options.inputfilename.split('/')[:-1])}",
+                    ]
 
     if options.quiet == False:
         configureLogger( options )
