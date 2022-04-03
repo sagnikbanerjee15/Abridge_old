@@ -1473,7 +1473,7 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
         first_line = open( f"{options.output_directory}/header" , "r" ).readline().strip()
         if "SO:coordinate" in first_line:
             # Convert to Sam file
-            cmd = f"samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
+            cmd = f"samtools view -h -@ {options.cpu} {options.inputfilename} > {options.output_directory}/inputfilename.sam "
             options.inputfilename = f"{options.output_directory}/inputfilename.sam"
             remove_these_files.append( options.inputfilename )
 
