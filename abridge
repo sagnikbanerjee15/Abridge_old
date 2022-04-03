@@ -99,7 +99,7 @@ def configureLogger( options ):
     logging.basicConfig( format = '%(asctime)s - %(message)s', datefmt = '%d-%b-%y %H:%M:%S', level = logging.DEBUG, filename = options.logfilename )
 
 
-def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' , logging ):
     """
     Runs the command in a docker container
     """
@@ -116,10 +116,10 @@ def runDockerCommand( name, version, image_location, container_name, volumes, co
     docker_cmd += f" {image_location}:{version} "
     docker_cmd += f" bash -c {command}"
     os.system( docker_cmd )
-    print( docker_cmd )
+    logging.info( f"Running command - {docker_cmd}" )
 
 
-def runSingularityCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+def runSingularityCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g', logging ):
     """
     Runs the command in a Singularity container
     """
@@ -133,6 +133,7 @@ def runSingularityCommand( name, version, image_location, container_name, volume
     singularity_cmd += f" bash -c {command}"
     os.system( singularity_cmd )
     # print( singularity_cmd )
+    logging.info( f"Running command - {singularity_cmd}" )
 
 
 def validateCommandLineArguments( options ):
@@ -1455,7 +1456,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                 volumes = volumes_list,
                                 command = cmd,
                                 cpus = options.cpu,
-                                memory = '1g'
+                                memory = '1g',
+                                logging
                 )
         elif options.framework == "singularity":
             runSingularityCommand( name = "abridge",
@@ -1465,7 +1467,9 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                 volumes = volumes_list,
                                 command = cmd,
                                 cpus = options.cpu,
-                                memory = '1g' )
+                                memory = '1g',
+                                logging
+                                )
 
         first_line = open( f"{options.output_directory}/header" , "r" ).readline().strip()
         if "SO:coordinate" in first_line:
@@ -1483,7 +1487,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     volumes = volumes_list,
                                     command = cmd,
                                     cpus = options.cpu,
-                                    memory = '100g'
+                                    memory = '100g',
+                                    logging
                     )
 
             elif options.framework == "singularity":
@@ -1494,7 +1499,9 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     volumes = volumes_list,
                                     command = cmd,
                                     cpus = options.cpu,
-                                    memory = '100g' )
+                                    memory = '100g',
+                                    logging
+                                    )
         else:
             # Need to sort by coordinate
             cmd = f"samtools sort -@ {options.cpu} {options.inputfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
@@ -1510,7 +1517,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     volumes = volumes_list,
                                     command = cmd,
                                     cpus = options.cpu,
-                                    memory = '100g'
+                                    memory = '100g',
+                                    logging
                     )
 
             elif options.framework == "singularity":
@@ -1521,7 +1529,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     volumes = volumes_list,
                                     command = cmd,
                                     cpus = options.cpu,
-                                    memory = '100g' )
+                                    memory = '100g', logging
+                    )
 
     elif file_extension == "sam":
         first_line = open( options.inputfilename, "r" ).readline().strip()
@@ -1543,7 +1552,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     volumes = volumes_list,
                                     command = cmd,
                                     cpus = options.cpu,
-                                    memory = '100g'
+                                    memory = '100g',
+                                    logging
                     )
 
             elif options.framework == "singularity":
@@ -1554,7 +1564,9 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
                                     volumes = volumes_list,
                                     command = cmd,
                                     cpus = options.cpu,
-                                    memory = '100g' )
+                                    memory = '100g',
+                                    logging
+                    )
 
 
 def main():
