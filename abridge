@@ -1439,6 +1439,8 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
     - Checks if the input file is a bamfile or samfile
     - Prepares a samfile coordinate sorted
     """
+
+    print( "Inside prepareInputFilesForCompressing" )
     file_extension = options.inputfilename[:-3]
     if file_extension == "bam":
         pass
