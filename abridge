@@ -1609,6 +1609,11 @@ def alterReadNamesAndAddNHTag( options, logging, list_of_softwares_with_versions
 
                 )
 
+    cmd = f"sort -nk2,2 {options.output_directory}/sorted_read_names_with_NH_and_short_read_names "
+    cmd += f" > {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos"
+    if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" ) == False:
+        os.system( cmd )
+
 
 def main():
     commandLineArg = sys.argv
