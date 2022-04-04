@@ -473,7 +473,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f" 0"  # argv[9] - run diagnostics
         cmd += f" {max_input_reads_in_a_single_nucl_loc} "  # argv[10] - max_input_reads_in_a_single_nucl_loc
         cmd += f" {name_of_file_with_max_commas} "  # argv[11] - name_of_file_with_max_commas
-        cmd += f" 1 0 "  # argv[12] and argv[13]
+        cmd += f" 1 1 "  # argv[12] and argv[13]
         cmd += f" {name_of_file_with_quality_scores} "  # argv[14]
         if options.ignore_alignment_scores == True:
             cmd += f" 1 "  # argv[15] - save_scores = False
