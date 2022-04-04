@@ -748,8 +748,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     zpaq = f" zpaq "
     cmd = f"(/usr/bin/time --verbose "
     cmd += f" {zpaq} a "
-    cmd += f" {options.outputfilename}.zpaq "
-    cmd += f" {outputfilename} {unmapped_outputfilename} {index_outputfilename} {genome_sha512_filename} "
+    cmd += f" {options.outputfilename} "
+    cmd += f" {outputfilename} {unmapped_outputfilename} {genome_sha512_filename} "
     if options.single_ended == False:
         cmd += f" {name_of_file_dictionary} "
     if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
@@ -815,10 +815,9 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
     files_to_be_removed.extend( delete_these_files )
     files_to_be_removed.extend( other_files )
-    """
+
     for file in files_to_be_removed:
         os.system( "rm -f " + file )
-    """
 
 
 def findEndedness( options, logging ):
