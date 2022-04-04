@@ -1777,13 +1777,13 @@ def main():
         if options.quiet == False:
             logging.info( f"findEndedness() execution is complete" )
 
-    ###################################################################################################################  EXAMINED TILL HERE
-    return
-
     if options.compress == True:
         compressSamFile( options, list_of_softwares_with_versions, volumes_list )
         if options.quiet == False:
             logging.info( f"compressSamFile() execution is complete" )
+
+    ###################################################################################################################  EXAMINED TILL HERE
+    return
 
     if options.decompress == True:
         decompressSamFile( options )
