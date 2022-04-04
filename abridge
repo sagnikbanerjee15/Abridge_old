@@ -764,9 +764,6 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         cmd += f"2> {error_file_zpaq_compression}"
     else:
         cmd += f"2> /dev/null"
-    os.system( cmd )
-    if options.quiet == False:
-        logging.info( f"Running command - {cmd}" )
 
     if options.framework == "docker":
         runDockerCommand( logging,
@@ -792,31 +789,16 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
                             memory = '100g'
 
             )
-    files_to_be_removed.append( f"{options.output_directory}/compression_method" )
-    files_to_be_removed.append( f"{options.outputfilename}.zpaq" )
 
-    files_to_be_removed.append( f"{outputfilename}.br" )
-    files_to_be_removed.append( f"{unmapped_outputfilename}.br" )
-    files_to_be_removed.append( f"{index_outputfilename}.br" )
-    files_to_be_removed.append( f"{genome_sha512_filename}.br" )
-    files_to_be_removed.append( f"{name_of_file_dictionary}.br" )
-    files_to_be_removed.append( f"{name_of_file_with_quality_scores}.br" )
-    files_to_be_removed.append( f"{name_of_file_with_quality_scores}.rle.br" )
-    files_to_be_removed.append( f"{options.output_directory}/compression_method" )
-    files_to_be_removed.append( f"{name_of_file_with_quality_scores_rle}.br" )
+    all_files = glob.glob( options.output_directory )
+    keep_these_files = []
+    remove_these_files = []
+    for file in all_files:
+        if file[-6:] == ".error" or file[-8:] == ".abridge":
+            keep_these_files.append( file )
+    remove_these_files = list( set( all_files ) - set( keep_these_files ) )
 
-    files_to_be_removed.append( f"{outputfilename}" )
-    files_to_be_removed.append( f"{unmapped_outputfilename}" )
-    files_to_be_removed.append( f"{index_outputfilename}" )
-    files_to_be_removed.append( f"{genome_sha512_filename}" )
-    files_to_be_removed.append( f"{name_of_file_dictionary}" )
-    files_to_be_removed.append( f"{name_of_file_with_quality_scores}" )
-    files_to_be_removed.append( f"{name_of_file_with_quality_scores_rle}" )
-
-    files_to_be_removed.extend( delete_these_files )
-    files_to_be_removed.extend( other_files )
-
-    for file in files_to_be_removed:
+    for file in remove_these_files:
         os.system( "rm -f " + file )
 
 
