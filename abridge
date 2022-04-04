@@ -1673,10 +1673,11 @@ def main():
         options.error_directory = options.output_directory
 
     genome_filename_without_location = options.genome.split( "/" )[-1]
-    cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.output_directory}/{genome_filename_without_location}"
-    if options.quiet == False:
-        logging.info( f"Running command - {cmd}" )
-    os.system( cmd )
+    if os.path.exists( f"{options.output_directory}/{genome_filename_without_location}" ) == False:
+        cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.output_directory}/{genome_filename_without_location}"
+        if options.quiet == False:
+            logging.info( f"Running command - {cmd}" )
+        os.system( cmd )
     options.genome = f"{options.output_directory}/{genome_filename_without_location}"
 
     volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
