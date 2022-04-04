@@ -45,9 +45,8 @@ char findMatchCharacterIcigar(char *icigar)
 	return ' ';
 }
 
-void writeToFile(
-		short int flag_save_all_quality_scores,
-		short int flag_save_exact_quality_scores,
+void writeToFile(short int flag_ignore_all_quality_scores,
+//short int flag_save_exact_quality_scores,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
@@ -124,7 +123,7 @@ void writeToFile(
 			}
 		}
 
-		if (flag_save_all_quality_scores == 1)
+		if (flag_ignore_all_quality_scores == 1)
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
 			{
@@ -189,88 +188,90 @@ void writeToFile(
 							cigar_length,
 							qual_score_length);
 				}
-				if (flag_save_exact_quality_scores == 0)
-				{
-					fprintf(fhw_qual, "%s", "\t");
-					if (flag_ignore_soft_clippings == 1)
-					{
-						splitCigar(
-								compressed_ds_pool[i]->cigar,
-								&num_of_types,
-								cigar_items_instance);
-						if (cigar_items_instance[0].def == 'S'
-								&& compressed_ds_pool[i]->icigar[1] != '\0') // Left soft clip exists
-						{
-							sprintf(str, "%ld", cigar_items_instance[0].len);
-							fprintf(fhw_qual, "%s", str);
-							fprintf(fhw_qual, "%s", "S");
-						}
-					}
-					if (compressed_ds_pool[i]->icigar[1] != '\0')
-					{
-						for (k = 0;
-								compressed_ds_pool[i]->icigar[k + 1] != '~'
-										&& compressed_ds_pool[i]->icigar[k + 1]
-												!= '\0'; k++)
-							fputc(compressed_ds_pool[i]->icigar[k], fhw_qual);
-					}
-					else
-					{
+				/*
+				 if (flag_save_exact_quality_scores == 0)
+				 {
+				 fprintf(fhw_qual, "%s", "\t");
+				 if (flag_ignore_soft_clippings == 1)
+				 {
+				 splitCigar(
+				 compressed_ds_pool[i]->cigar,
+				 &num_of_types,
+				 cigar_items_instance);
+				 if (cigar_items_instance[0].def == 'S'
+				 && compressed_ds_pool[i]->icigar[1] != '\0') // Left soft clip exists
+				 {
+				 sprintf(str, "%ld", cigar_items_instance[0].len);
+				 fprintf(fhw_qual, "%s", str);
+				 fprintf(fhw_qual, "%s", "S");
+				 }
+				 }
+				 if (compressed_ds_pool[i]->icigar[1] != '\0')
+				 {
+				 for (k = 0;
+				 compressed_ds_pool[i]->icigar[k + 1] != '~'
+				 && compressed_ds_pool[i]->icigar[k + 1]
+				 != '\0'; k++)
+				 fputc(compressed_ds_pool[i]->icigar[k], fhw_qual);
+				 }
+				 else
+				 {
 
-						//Find the icigar before the ith one which is not compressed
+				 //Find the icigar before the ith one which is not compressed
 
-						l = i - 1;
-						while (l >= 0)
-						{
-							if (compressed_ds_pool[l]->icigar[1] != '\0')
-								break;
-							else
-								l--;
-						}
+				 l = i - 1;
+				 while (l >= 0)
+				 {
+				 if (compressed_ds_pool[l]->icigar[1] != '\0')
+				 break;
+				 else
+				 l--;
+				 }
 
-						for (k = 0;
-								compressed_ds_pool[l]->icigar[k + 1] != '~'
-										&& compressed_ds_pool[l]->icigar[k + 1]
-												!= '\0'; k++)
-							fputc(compressed_ds_pool[l]->icigar[k], fhw_qual);
-					}
-					if (flag_ignore_soft_clippings == 1)
-					{
-						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-						if (cigar_items_instance[num_of_types - 1].def == 'S'
-								&& compressed_ds_pool[i]->icigar[1] != '\0') // Right soft clip exists
-						{
-							sprintf(
-									str,
-									"%ld",
-									cigar_items_instance[num_of_types - 1].len);
-							fprintf(fhw_qual, "%s", str);
-							fprintf(fhw_qual, "%s", "S");
-						}
-					}
-					fprintf(fhw_qual, "%s", "\t");
-					// Print whether the read was mapped in forward or the reverse direction
-					switch (findMatchCharacterIcigar(
-							compressed_ds_pool[i]->icigar))
-					{
-						case 'B':
-						case 'F':
-						case 'J':
-						case 'L':
-						case 'P':
-						case 'R':
-							fprintf(fhw_qual, "%s", "1");
-							break;
-						case 'E':
-						case 'H':
-						case 'K':
-						case 'O':
-						case 'Q':
-						case 'U':
-							fprintf(fhw_qual, "%s", "2");
-							break;
-					}
-				}
+				 for (k = 0;
+				 compressed_ds_pool[l]->icigar[k + 1] != '~'
+				 && compressed_ds_pool[l]->icigar[k + 1]
+				 != '\0'; k++)
+				 fputc(compressed_ds_pool[l]->icigar[k], fhw_qual);
+				 }
+				 if (flag_ignore_soft_clippings == 1)
+				 {
+				 //splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+				 if (cigar_items_instance[num_of_types - 1].def == 'S'
+				 && compressed_ds_pool[i]->icigar[1] != '\0') // Right soft clip exists
+				 {
+				 sprintf(
+				 str,
+				 "%ld",
+				 cigar_items_instance[num_of_types - 1].len);
+				 fprintf(fhw_qual, "%s", str);
+				 fprintf(fhw_qual, "%s", "S");
+				 }
+				 }
+				 fprintf(fhw_qual, "%s", "\t");
+				 // Print whether the read was mapped in forward or the reverse direction
+				 switch (findMatchCharacterIcigar(
+				 compressed_ds_pool[i]->icigar))
+				 {
+				 case 'B':
+				 case 'F':
+				 case 'J':
+				 case 'L':
+				 case 'P':
+				 case 'R':
+				 fprintf(fhw_qual, "%s", "1");
+				 break;
+				 case 'E':
+				 case 'H':
+				 case 'K':
+				 case 'O':
+				 case 'Q':
+				 case 'U':
+				 fprintf(fhw_qual, "%s", "2");
+				 break;
+				 }
+				 }
+				 */
 				fprintf(fhw_qual, "%s", "\n");
 			}
 		}
@@ -521,9 +522,9 @@ void readAlignmentsAndCompress(
 		short int flag_ignore_quality_score,
 		short int run_diagnostics,
 		long long int max_input_reads_in_a_single_nucl_loc,
-		short int flag_save_all_quality_scores,
-		short int flag_save_exact_quality_scores,
-		short int flag_ignore_scores)
+		short int flag_ignore_all_quality_scores,
+		//short int flag_save_exact_quality_scores,
+		short int flag_ignore_alignment_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -746,16 +747,12 @@ void readAlignmentsAndCompress(
 	strcat(temp, "flag_ignore_quality_score:");
 	strcat(temp, str);
 	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_save_all_quality_scores);
-	strcat(temp, "flag_save_all_quality_scores:");
+	sprintf(str, "%lld", flag_ignore_all_quality_scores);
+	strcat(temp, "flag_ignore_all_quality_scores:");
 	strcat(temp, str);
 	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_save_exact_quality_scores);
-	strcat(temp, "flag_save_exact_quality_scores:");
-	strcat(temp, str);
-	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_ignore_scores);
-	strcat(temp, "flag_ignore_scores:");
+	sprintf(str, "%lld", flag_ignore_alignment_scores);
+	strcat(temp, "flag_ignore_alignment_scores:");
 	strcat(temp, str);
 	strcat(temp, "\n");
 	fprintf(fhw_pass1, "%s", temp);
@@ -865,7 +862,7 @@ void readAlignmentsAndCompress(
 		//printSamAlignmentInstance(curr_alignment,0);
 		generateIntegratedCigarSingleEnded(
 				curr_alignment,
-				flag_ignore_scores,
+				flag_ignore_alignment_scores,
 				flag_ignore_soft_clippings,
 				flag_ignore_mismatches,
 				flag_ignore_unmapped_sequences,
@@ -923,8 +920,7 @@ void readAlignmentsAndCompress(
 					modified_icigars,
 					cigar_items_instance);
 			writeToFile(
-					flag_save_all_quality_scores,
-					flag_save_exact_quality_scores,
+					flag_ignore_all_quality_scores,
 					fhw_qual,
 					fhw_pass1,
 					compressed_ds_pool_rearranged,
@@ -1044,8 +1040,7 @@ void readAlignmentsAndCompress(
 						modified_icigars,
 						cigar_items_instance);
 				writeToFile(
-						flag_save_all_quality_scores,
-						flag_save_exact_quality_scores,
+						flag_ignore_all_quality_scores,
 						fhw_qual,
 						fhw_pass1,
 						compressed_ds_pool_rearranged,
@@ -1110,8 +1105,7 @@ void readAlignmentsAndCompress(
 			modified_icigars,
 			cigar_items_instance);
 	writeToFile(
-			flag_save_all_quality_scores,
-			flag_save_exact_quality_scores,
+			flag_ignore_all_quality_scores,
 			fhw_qual,
 			fhw_pass1,
 			compressed_ds_pool_rearranged,
@@ -1161,8 +1155,8 @@ int main(int argc, char *argv[])
 	short int flag_ignore_quality_score;
 	short int flag_ignore_unmapped_sequences;
 	short int run_diagnostics;
-	short int save_all_quality_scores;
-	short int save_exact_quality_scores;
+	short int ignore_all_quality_scores;
+	short int ignore_exact_quality_scores;
 	short int ignore_scores;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
@@ -1182,11 +1176,11 @@ int main(int argc, char *argv[])
 	run_diagnostics = strtol(argv[9], &temp, 10);
 	max_input_reads_in_a_single_nucl_loc = strtol(argv[10], &temp, 10);
 	strcpy(name_of_file_with_max_commas, argv[11]);
-	save_all_quality_scores = strtol(argv[12], &temp, 10);
-	save_exact_quality_scores = strtol(argv[13], &temp, 10);
-	strcpy(name_of_file_with_quality_scores, argv[14]);
-	ignore_scores = strtol(argv[15], &temp, 10);
-	strcpy(name_of_file_with_read_names_to_short_read_names_and_NH, argv[16]);
+	ignore_all_quality_scores = strtol(argv[12], &temp, 10);
+	//ignore_exact_quality_scores = strtol(argv[13], &temp, 10);
+	strcpy(name_of_file_with_quality_scores, argv[13]);
+	ignore_scores = strtol(argv[14], &temp, 10);
+	strcpy(name_of_file_with_read_names_to_short_read_names_and_NH, argv[15]);
 	/********************************************************************/
 
 	/*
@@ -1206,8 +1200,7 @@ int main(int argc, char *argv[])
 			flag_ignore_quality_score,
 			run_diagnostics,
 			max_input_reads_in_a_single_nucl_loc,
-			save_all_quality_scores,
-			save_exact_quality_scores,
+			ignore_all_quality_scores
 			ignore_scores);
 	return 0;
 }
