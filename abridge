@@ -692,10 +692,12 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     fhw.write( "}\n" )
     fhw.close()
 
-    cmd = f" main "
+    cmd = f"(/usr/bin/time --verbose "
+    cmd += f" main "
     cmd += f" -c {name_of_file_with_quality_scores} "
     cmd += f" {fclqc_output_filename}"
     cmd += f" {options.output_directory}/parameter.json"
+    cmd += f") "
     cmd += f" 1> /dev/null "
     cmd += f" 2> {error_fclqc}"
 
