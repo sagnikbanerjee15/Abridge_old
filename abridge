@@ -693,7 +693,37 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     fhw.write( "}" )
     fhw.close()
 
-    cmd = ""
+    cmd = f" main "
+    cmd += f" -c {name_of_file_with_quality_scores} "
+    cmd += f" {fclqc_output_filename}"
+    cmd += f" {options.output_directory}/parameter.json"
+    cmd += f" 1> /dev/null "
+    cmd += f" 2> {error_fclqc}"
+
+    if options.framework == "docker":
+        runDockerCommand( logging,
+                          name = "fclqc",
+                            version = list_of_softwares_with_versions['fclqc'],
+                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '100g'
+            )
+
+    elif options.framework == "singularity":
+        runSingularityCommand( logging,
+                            name = "fclqc",
+                            version = list_of_softwares_with_versions['fclqc'],
+                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '100g'
+
+            )
 
     return
     ######################################################################################
