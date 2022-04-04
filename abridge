@@ -690,7 +690,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     fhw.write( f"\t\"thread_num\": {options.cpu},\n" )
     fhw.write( f"\t\"first_line\": 1,\n" )
     fhw.write( f"\t\"last_line\": {number_of_quality_scores*4},\n" )
-    fhw.write( "}" )
+    fhw.write( "}\n" )
     fhw.close()
 
     cmd = f" main "
