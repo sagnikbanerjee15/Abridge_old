@@ -477,7 +477,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
                                 memory = '100g'
 
                 )
-
+        return
         # pool.map(runCommand,all_commands)
 
         ######################################################################################
