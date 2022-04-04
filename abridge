@@ -674,14 +674,11 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         """
 
     ######################################################################################
-    # Compress Qualtiy scores file is one is produced
+    # Compress Qualtiy scores file
     ######################################################################################
-    name_of_file_with_quality_scores
-    fclqc_output_filename
-    error_fclqc
     number_of_quality_scores = int( open( f"{name_of_total_number_of_alignments_file}" , "r" ).read().strip() )
-    # Create the parameter file for fclqc
 
+    # Create the parameter file for fclqc
     fhw = open( f"{options.output_directory}/parameter.json", "w" )
     fhw.write( "{\n" )
     fhw.write( f"\t\"precision\": 52,\n" )
@@ -726,7 +723,6 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
             )
 
-    return
     ######################################################################################
     # Generate SHA512 for genome file
     ######################################################################################
@@ -735,6 +731,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     os.system( cmd )
     open( genome_sha512_filename, "w" ).write( open( f"{genome_sha512_filename}.temp", "r" ).read().strip().split()[0] )
     os.system( f"rm {genome_sha512_filename}.temp" )
+    return
 
     ######################################################################################
     # Compress files
