@@ -46,7 +46,7 @@ char findMatchCharacterIcigar(char *icigar)
 }
 
 void writeToFile(
-		short int flag_ignore_all_quality_scores,
+		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
@@ -123,7 +123,8 @@ void writeToFile(
 			}
 		}
 
-		if (flag_ignore_all_quality_scores == 0) //Write out the entire quality score
+		if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases
+				== 0) //Write out the entire quality score
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
 			{
@@ -524,11 +525,10 @@ void readAlignmentsAndCompress(
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_score,
+		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 		short int run_diagnostics,
 		long long int max_input_reads_in_a_single_nucl_loc,
-		short int flag_ignore_all_quality_scores,
-		//short int flag_save_exact_quality_scores,
+		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases,
 		short int flag_ignore_alignment_scores)
 {
 	/********************************************************************
@@ -748,12 +748,22 @@ void readAlignmentsAndCompress(
 	strcat(temp, "flag_ignore_unmapped_sequences:");
 	strcat(temp, str);
 	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_ignore_quality_score);
-	strcat(temp, "flag_ignore_quality_score:");
+	sprintf(
+			str,
+			"%lld",
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	strcat(
+			temp,
+			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips:");
 	strcat(temp, str);
 	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_ignore_all_quality_scores);
-	strcat(temp, "flag_ignore_all_quality_scores:");
+	sprintf(
+			str,
+			"%lld",
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases);
+	strcat(
+			temp,
+			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases:");
 	strcat(temp, str);
 	strcat(temp, "\t");
 	sprintf(str, "%lld", flag_ignore_alignment_scores);
@@ -871,7 +881,7 @@ void readAlignmentsAndCompress(
 				flag_ignore_soft_clippings,
 				flag_ignore_mismatches,
 				flag_ignore_unmapped_sequences,
-				flag_ignore_quality_score,
+				flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 				whole_genome,
 				sam_alignment_instance_diagnostics,
 				number_of_records_read,
@@ -925,7 +935,7 @@ void readAlignmentsAndCompress(
 					modified_icigars,
 					cigar_items_instance);
 			writeToFile(
-					flag_ignore_all_quality_scores,
+					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases,
 					fhw_qual,
 					fhw_pass1,
 					compressed_ds_pool_rearranged,
@@ -1045,7 +1055,7 @@ void readAlignmentsAndCompress(
 						modified_icigars,
 						cigar_items_instance);
 				writeToFile(
-						flag_ignore_all_quality_scores,
+						flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases,
 						fhw_qual,
 						fhw_pass1,
 						compressed_ds_pool_rearranged,
@@ -1110,7 +1120,7 @@ void readAlignmentsAndCompress(
 			modified_icigars,
 			cigar_items_instance);
 	writeToFile(
-			flag_ignore_all_quality_scores,
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clipss_for_matched_bases,
 			fhw_qual,
 			fhw_pass1,
 			compressed_ds_pool_rearranged,
@@ -1157,12 +1167,11 @@ int main(int argc, char *argv[])
 
 	short int flag_ignore_soft_clippings;
 	short int flag_ignore_mismatches;
-	short int flag_ignore_quality_score;
+	short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
 	short int flag_ignore_unmapped_sequences;
 	short int run_diagnostics;
-	short int ignore_all_quality_scores;
-	short int ignore_exact_quality_scores;
-	short int ignore_alignment_scores;
+	short int flag_ignore_quality_scores_for_matched_bases;
+	short int flag_ignore_alignment_scores;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 	/********************************************************************/
@@ -1173,7 +1182,10 @@ int main(int argc, char *argv[])
 	strcpy(genome_filename, argv[1]);
 	flag_ignore_soft_clippings = strtol(argv[2], &temp, 10);
 	flag_ignore_mismatches = strtol(argv[3], &temp, 10);
-	flag_ignore_quality_score = strtol(argv[4], &temp, 10);
+	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = strtol(
+			argv[4],
+			&temp,
+			10);
 	flag_ignore_unmapped_sequences = strtol(argv[5], &temp, 10);
 	strcpy(input_samfilename, argv[6]);
 	strcpy(output_abridgefilename, argv[7]);
@@ -1181,10 +1193,10 @@ int main(int argc, char *argv[])
 	run_diagnostics = strtol(argv[9], &temp, 10);
 	max_input_reads_in_a_single_nucl_loc = strtol(argv[10], &temp, 10);
 	strcpy(name_of_file_with_max_commas, argv[11]);
-	ignore_all_quality_scores = strtol(argv[12], &temp, 10);
+	flag_ignore_quality_scores_for_matched_bases = strtol(argv[12], &temp, 10);
 	//ignore_exact_quality_scores = strtol(argv[13], &temp, 10);
 	strcpy(name_of_file_with_quality_scores, argv[13]);
-	ignore_alignment_scores = strtol(argv[14], &temp, 10);
+	flag_ignore_alignment_scores = strtol(argv[14], &temp, 10);
 	strcpy(name_of_file_with_read_names_to_short_read_names_and_NH, argv[15]);
 	/********************************************************************/
 
@@ -1202,10 +1214,10 @@ int main(int argc, char *argv[])
 			flag_ignore_soft_clippings,
 			flag_ignore_mismatches,
 			flag_ignore_unmapped_sequences,
-			flag_ignore_quality_score,
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 			run_diagnostics,
 			max_input_reads_in_a_single_nucl_loc,
-			ignore_all_quality_scores,
-			ignore_alignment_scores);
+			flag_ignore_quality_scores_for_matched_bases,
+			flag_ignore_alignment_scores);
 	return 0;
 }
