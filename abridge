@@ -790,9 +790,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
             )
 
-    all_files = glob.glob( options.output_directory )
+    all_files = glob.glob( f"{options.output_directory}/*" )
     keep_these_files = []
-    remove_these_files = []
     for file in all_files:
         if file[-6:] == ".error" or file[-8:] == ".abridge":
             keep_these_files.append( file )
