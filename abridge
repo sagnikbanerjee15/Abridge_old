@@ -340,7 +340,7 @@ def runCommand( eachpinput ):
 
 
 def constructFileNames( input_filename, options ):
-    name_of_input_file_without_location = input_filename.split( "/" )[-1]
+    name_of_input_file_without_location = input_filename.split( "/" )[-1][:-4]
 
     name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}_max_input_reads"
     name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}_max_commas"
@@ -473,7 +473,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f" 0"  # argv[9] - run diagnostics
         cmd += f" {max_input_reads_in_a_single_nucl_loc} "  # argv[10] - max_input_reads_in_a_single_nucl_loc
         cmd += f" {name_of_file_with_max_commas} "  # argv[11] - name_of_file_with_max_commas
-        cmd += f" 1 1 "  # argv[12] and argv[13]
+        cmd += f" 1 0 "  # argv[12] and argv[13]
         cmd += f" {name_of_file_with_quality_scores} "  # argv[14]
         if options.ignore_alignment_scores == True:
             cmd += f" 1 "  # argv[15] - save_scores = False
