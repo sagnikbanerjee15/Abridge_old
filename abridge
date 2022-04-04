@@ -731,138 +731,58 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     os.system( cmd )
     open( genome_sha512_filename, "w" ).write( open( f"{genome_sha512_filename}.temp", "r" ).read().strip().split()[0] )
     os.system( f"rm {genome_sha512_filename}.temp" )
-    return
 
     ######################################################################################
     # Compress files
     ######################################################################################
 
     ######################################################################################
-    # Lowest compression (--1) using brotli
-    ######################################################################################
-    if options.level == 1:
-        if options.quiet == False:
-            logging.info( "Starting compression with brotli" )
-
-        cmd = f"(/usr/bin/time --verbose "
-        cmd += f" brotli -9 -f -k -n "
-        cmd += f" {outputfilename} {unmapped_outputfilename} {index_outputfilename} {genome_sha512_filename} "
-        if options.single_ended == False:
-            cmd += f" {name_of_file_dictionary} "
-        if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores_rle} "
-        else:
-            cmd += f" {name_of_file_with_quality_scores} "
-        cmd += f") "
-        cmd += f"1> /dev/null "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_brotli_compression}"
-        else:
-            cmd += f"2> /dev/null"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
-
-        fhw = open( f"{options.output_directory}/compression_method", "w" )
-        fhw.write( "brotli" )
-        fhw.close()
-
-        cmd = f"(/usr/bin/time --verbose "
-        cmd += f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt={options.cpu}  "
-        cmd += f" {options.outputfilename} "  # Compressed Output filename
-        cmd += f" {outputfilename}.br {unmapped_outputfilename}.br {index_outputfilename}.br {genome_sha512_filename}.br {options.output_directory}/compression_method "
-        if options.single_ended == False:
-            cmd += f" {name_of_file_dictionary}.br "
-        if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores_rle}.br "
-        else:
-            cmd += f" {name_of_file_with_quality_scores}.br "
-        cmd += f") "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_7z_compression}"
-        else:
-            cmd += f"2> /dev/null"
-        os.system( cmd )
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-
-    ######################################################################################
-    # Medium compression (--2) using 7z
-    ######################################################################################
-    if options.level == 2:
-        if options.quiet == False:
-            logging.info( "Starting compression with 7z" )
-        fhw = open( f"{options.output_directory}/compression_method", "w" )
-        fhw.write( "7z" )
-        fhw.close()
-
-        cmd = f"(/usr/bin/time --verbose "
-        cmd += f" 7za a -t7z -m0=lzma2 -mx=9 -mfb=64  -ms=on -mmt={options.cpu}  "
-        cmd += f" {options.outputfilename} "  # Compressed Output filename
-        cmd += f" {outputfilename} {unmapped_outputfilename} {index_outputfilename} {genome_sha512_filename} {options.output_directory}/compression_method "
-        if options.single_ended == False:
-            cmd += f" {name_of_file_dictionary} "
-        if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores_rle} "
-        else:
-            cmd += f" {name_of_file_with_quality_scores} "
-        cmd += f") "
-        cmd += f"1> /dev/null "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_7z_compression}"
-        else:
-            cmd += f"2> /dev/null"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
-
-    ######################################################################################
     # Best compression (--3) using zpaq
     ######################################################################################
 
     # Compress the quality scores with zpaq if save_exact_quality_scores is requested
-    if options.level == 3:
-        if options.quiet == False:
-            logging.info( "Starting compression with zpaq" )
-        fhw = open( f"{options.output_directory}/compression_method", "w" )
-        fhw.write( "zpaq" )
-        fhw.close()
 
-        zpaq = f" zpaq "
-        cmd = f"(/usr/bin/time --verbose "
-        cmd += f" {zpaq} a "
-        cmd += f" {options.outputfilename}.zpaq "
-        cmd += f" {outputfilename} {unmapped_outputfilename} {index_outputfilename} {genome_sha512_filename} "
-        if options.single_ended == False:
-            cmd += f" {name_of_file_dictionary} "
-        if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
-            cmd += f" {name_of_file_with_quality_scores_rle} "
-        else:
-            cmd += f" {name_of_file_with_quality_scores} "
-        cmd += f" -m3 -t{options.cpu} -f "
-        cmd += f" -noattributes "
-        cmd += f") "
-        cmd += f"1> /dev/null "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_zpaq_compression}"
-        else:
-            cmd += f"2> /dev/null"
-        os.system( cmd )
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
+    if options.quiet == False:
+        logging.info( "Starting compression with zpaq" )
+    fhw = open( f"{options.output_directory}/compression_method", "w" )
+    fhw.write( "zpaq" )
+    fhw.close()
 
-        cmd = f"(/usr/bin/time --verbose "
-        cmd += f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt=1  "
-        cmd += f" {options.outputfilename} "  # Compressed Output filename
-        cmd += f" {options.outputfilename}.zpaq {options.output_directory}/compression_method "
-        cmd += f") "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_7z_compression}"
-        else:
-            cmd += f"2> /dev/null"
-        os.system( cmd )
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
+    zpaq = f" zpaq "
+    cmd = f"(/usr/bin/time --verbose "
+    cmd += f" {zpaq} a "
+    cmd += f" {options.outputfilename}.zpaq "
+    cmd += f" {outputfilename} {unmapped_outputfilename} {index_outputfilename} {genome_sha512_filename} "
+    if options.single_ended == False:
+        cmd += f" {name_of_file_dictionary} "
+    if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
+        cmd += f" {name_of_file_with_quality_scores_rle} "
+    else:
+        cmd += f" {name_of_file_with_quality_scores} "
+    cmd += f" -m3 -t{options.cpu} -f "
+    cmd += f" -noattributes "
+    cmd += f") "
+    cmd += f"1> /dev/null "
+    if options.keep_intermediate_error_files == True:
+        cmd += f"2> {error_file_zpaq_compression}"
+    else:
+        cmd += f"2> /dev/null"
+    os.system( cmd )
+    if options.quiet == False:
+        logging.info( f"Running command - {cmd}" )
+
+    cmd = f"(/usr/bin/time --verbose "
+    cmd += f" 7za a -t7z -m0=lzma2 -mx=1 -mfb=64  -ms=on -mmt=1  "
+    cmd += f" {options.outputfilename} "  # Compressed Output filename
+    cmd += f" {options.outputfilename}.zpaq {options.output_directory}/compression_method "
+    cmd += f") "
+    if options.keep_intermediate_error_files == True:
+        cmd += f"2> {error_file_7z_compression}"
+    else:
+        cmd += f"2> /dev/null"
+    os.system( cmd )
+    if options.quiet == False:
+        logging.info( f"Running command - {cmd}" )
 
     files_to_be_removed.append( f"{options.output_directory}/compression_method" )
     files_to_be_removed.append( f"{options.outputfilename}.zpaq" )
