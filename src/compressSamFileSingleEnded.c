@@ -45,8 +45,8 @@ char findMatchCharacterIcigar(char *icigar)
 	return ' ';
 }
 
-void writeToFile(short int flag_ignore_all_quality_scores,
-//short int flag_save_exact_quality_scores,
+void writeToFile(
+		short int flag_ignore_all_quality_scores,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
@@ -123,7 +123,7 @@ void writeToFile(short int flag_ignore_all_quality_scores,
 			}
 		}
 
-		if (flag_ignore_all_quality_scores == 1)
+		if (flag_ignore_all_quality_scores == 0) //Write out the entire quality score
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
 			{
@@ -168,7 +168,13 @@ void writeToFile(short int flag_ignore_all_quality_scores,
 								'\0';
 						break;
 				}
+				// Writing dummy lines for fclqc
+				fprintf(fhw_qual, "%s", "\n");
+				fprintf(fhw_qual, "%s", "\n");
+				fprintf(fhw_qual, "%s", "\n");
+
 				fprintf(fhw_qual, "%s", qual);
+				fprintf(fhw_qual, "%s", "\n");
 				qual_score_length = strlen(qual);
 
 				splitCigar(
@@ -272,7 +278,6 @@ void writeToFile(short int flag_ignore_all_quality_scores,
 				 }
 				 }
 				 */
-				fprintf(fhw_qual, "%s", "\n");
 			}
 		}
 	}
@@ -1157,7 +1162,7 @@ int main(int argc, char *argv[])
 	short int run_diagnostics;
 	short int ignore_all_quality_scores;
 	short int ignore_exact_quality_scores;
-	short int ignore_scores;
+	short int ignore_alignment_scores;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 	/********************************************************************/
@@ -1179,7 +1184,7 @@ int main(int argc, char *argv[])
 	ignore_all_quality_scores = strtol(argv[12], &temp, 10);
 	//ignore_exact_quality_scores = strtol(argv[13], &temp, 10);
 	strcpy(name_of_file_with_quality_scores, argv[13]);
-	ignore_scores = strtol(argv[14], &temp, 10);
+	ignore_alignment_scores = strtol(argv[14], &temp, 10);
 	strcpy(name_of_file_with_read_names_to_short_read_names_and_NH, argv[15]);
 	/********************************************************************/
 
@@ -1200,7 +1205,7 @@ int main(int argc, char *argv[])
 			flag_ignore_quality_score,
 			run_diagnostics,
 			max_input_reads_in_a_single_nucl_loc,
-			ignore_all_quality_scores
-			ignore_scores);
+			ignore_all_quality_scores,
+			ignore_alignment_scores);
 	return 0;
 }
