@@ -829,7 +829,10 @@ void compressPairedEndedAlignments(
 				&len,
 				fhr_name_of_file_with_read_names_to_short_read_names_and_NH);
 
-		splitByDelimiter(line, '\t', split_line);
+		splitByDelimiter(
+				line_name_of_file_with_read_names_to_short_read_names_and_NH,
+				'\t',
+				split_line);
 		strcpy(curr_alignment->read_name, split_line[3]);
 		for (i = 11; i < number_of_fields; i++)
 		{
