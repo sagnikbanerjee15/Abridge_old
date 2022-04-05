@@ -834,7 +834,7 @@ void compressPairedEndedAlignments(
 				'\t',
 				split_line);
 		strcpy(curr_alignment->read_name, split_line[3]);
-		printf("\nRead name: %s", split_line[3]);
+		//printf("\nRead name: %s", split_line[3]);
 		for (i = 11; i < number_of_fields; i++)
 		{
 			if (strcmp(curr_alignment->tags[i - 11].name, "NH") == 0)
