@@ -63,8 +63,8 @@ def parseCommandLineArguments():
     optional_named.add_argument( "-q", "--quiet", help = "Prevent abridge from printing any log information. By default logging is enables", action = "store_true" )
     optional_named.add_argument( "-n", "--cpu", help = "Enter the number of CPU cores to be used. This option will be used during compression or decompression.", default = 1 )
     optional_named.add_argument( "-run_diagnostics", "--run_diagnostics", help = "abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies", action = "store_true" )
-    optional_named.add_argument( "-p", "--positions", help = "Enter the position as chromosome:start-end from which reads will be retrieved" )
-    optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
+    # optional_named.add_argument( "-p", "--positions", help = "Enter the position as chromosome:start-end from which reads will be retrieved" )
+    # optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
     optional_named.add_argument( "--keep_intermediate_error_files", "-keep_intermediate_error_files", help = "Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those", action = "store_true" )
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
@@ -970,7 +970,7 @@ def mergeAbridgeData( options ):
         os.system( "rm " + file )
 
 
-def decompressSamFile( options ):
+def decompressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     """
     """
     pool = multiprocessing.Pool( processes = int( options.cpu ) )
@@ -983,39 +983,32 @@ def decompressSamFile( options ):
     error_file_max_input_reads, error_file_compress_, error_file_qual_rle, error_file_prep_abridge_index, error_file_7z_compression, error_file_zpaq_compression, error_file_brotli_compression, error_file_7z_decompression, error_file_zpaq_decompression, error_file_brotli_decompression = error_files
 
     cmd = f"samtools faidx {options.genome}"
+
     if os.path.exists( f"{options.genome}.fai" ) == False:
-        if options.quiet == False:
-            logging.info( f"Running cmd - {cmd}" )
-        os.system( cmd )
+        if options.framework == "docker":
+            runDockerCommand( logging,
+                              name = "samtools",
+                                version = list_of_softwares_with_versions['samtools'],
+                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
+                )
 
-    decompressSamFileSingleEnded = options.softwares["decompressSamFileSingleEnded"]
-    decompressSamFilePairedEnded = options.softwares["decompressSamFilePairedEnded"]
-    deCompressQualityScoresFile = options.softwares["deCompressQualityScoresFile"]
-    maxReadsInEachLine = options.softwares["maxReadsInEachLine"]
-    ######################################################################################
-    # Compiling programs - will be removed during final version
-    ######################################################################################
-    if options.compile_programs == True:
-        cmd = f"gcc {decompressSamFileSingleEnded}.c -o {decompressSamFileSingleEnded} -Ofast"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
+        elif options.framework == "singularity":
+            runSingularityCommand( logging,
+                                name = "samtools",
+                                version = list_of_softwares_with_versions['samtools'],
+                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
 
-        cmd = f"gcc {decompressSamFilePairedEnded}.c -o {decompressSamFilePairedEnded} -Ofast"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
-
-        cmd = f"gcc {deCompressQualityScoresFile}.c -o {deCompressQualityScoresFile} -Ofast"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
-
-        cmd = f"gcc {maxReadsInEachLine}.c -o {maxReadsInEachLine} -Ofast"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
-    ######################################################################################
+                )
 
     # Check the amount memory needed
     if options.ignore_sequence == 0:
@@ -1023,63 +1016,35 @@ def decompressSamFile( options ):
 
     files_to_be_removed = []
 
-    # Use 7za to unpack the single compressed file
-    cmd = f"7za e {options.inputabrfilename} -y -mmt={options.cpu} "
-    cmd += f" -o{options.output_directory}"
-    cmd += f" 1> /dev/null 2>/dev/null"
+    filename = options.inputabrfilename.split( "/" )[-1]
+    zpaq = " zpaq "
+    cmd = f"{zpaq} l {options.output_directory}/{filename}.zpaq > {options.output_directory}/file_list  2> /dev/null"
     if options.quiet == False:
         logging.info( f"Running command - {cmd}" )
     os.system( cmd )
-    time.sleep( 1 )
+    fhr = open( f"{options.output_directory}/file_list", "r" )
+    line_num = 0
+    for line in fhr:
+        line_num += 1
+        if line_num == 4:
+            compression_directory = "/".join( line.strip().split()[-1].split( "/" )[:-1] )
+            break
 
-    compressor = open( f"{options.output_directory}/compression_method", "r" ).read()
-    if compressor == "brotli":
-        cmd = f"brotli -d -k -f "
-        cmd += f"{_outputfilename}.br "
-        cmd += f"{_index_outputfilename}.br "
-        cmd += f"{unmapped_outputfilename}.br "
-        if os.path.exists( f"{name_of_file_with_quality_scores_rle}.br" ) == True:
-            cmd += f"{name_of_file_with_quality_scores_rle}.br "
-        if os.path.exists( f"{name_of_file_with_quality_scores}.br" ) == True:
-            cmd += f"{name_of_file_with_quality_scores}.br "
-        if os.path.exists( f"{name_of_file_dictionary}.br" ) == True:
-            cmd += f"{name_of_file_dictionary}.br "
-        files_to_be_removed.extend( f"{_outputfilename}.br {_index_outputfilename}.br {unmapped_outputfilename}.br {name_of_file_with_quality_scores}.rle.br".split() )
-        os.system( cmd )
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-    elif compressor == "7z":
-        # No need to decompress further
-        pass
-    elif compressor == "zpaq":
-        filename = options.inputabrfilename.split( "/" )[-1]
-        zpaq = " zpaq "
-        cmd = f"{zpaq} l {options.output_directory}/{filename}.zpaq > {options.output_directory}/file_list  2> /dev/null"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
-        fhr = open( f"{options.output_directory}/file_list", "r" )
-        line_num = 0
-        for line in fhr:
-            line_num += 1
-            if line_num == 4:
-                compression_directory = "/".join( line.strip().split()[-1].split( "/" )[:-1] )
-                break
+    # compression_directory = compression_directory.split("/")[-2]
+    fhr.close()
+    cmd = f"{zpaq} x {options.output_directory}/{filename}.zpaq {'/'.join(compression_directory.split('/')[:-1])} -to {options.output_directory} -t{options.cpu} 2> /dev/null"
+    os.system( cmd )
+    if options.quiet == False:
+        logging.info( f"Running command - {cmd}" )
 
-        # compression_directory = compression_directory.split("/")[-2]
-        fhr.close()
-        cmd = f"{zpaq} x {options.output_directory}/{filename}.zpaq {'/'.join(compression_directory.split('/')[:-1])} -to {options.output_directory} -t{options.cpu} 2> /dev/null"
-        os.system( cmd )
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
+    # Move files
+    cmd = f"mv {options.output_directory}/{compression_directory.split('/')[-1]}/* {options.output_directory}"
+    os.system( cmd )
+    if options.quiet == False:
+        logging.info( f"Running command - {cmd}" )
+    files_to_be_removed.append( f"{options.output_directory}/{compression_directory.split('/')[-1]}" )
 
-        # Move files
-        cmd = f"mv {options.output_directory}/{compression_directory.split('/')[-1]}/* {options.output_directory}"
-        os.system( cmd )
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        files_to_be_removed.append( f"{options.output_directory}/{compression_directory.split('/')[-1]}" )
-
+    return
     files_to_be_removed.extend( [_outputfilename,
                                 _index_outputfilename,
                                 unmapped_outputfilename,
@@ -1122,7 +1087,7 @@ def decompressSamFile( options ):
     ######################################################################################
     if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
         cmd = f"(/usr/bin/time --verbose "
-        cmd += f" {deCompressQualityScoresFile} "
+        cmd += f" deCompressQualityScoresFile "
         cmd += f" {name_of_file_with_quality_scores_rle} "
         cmd += f" {name_of_file_with_quality_scores} "
         cmd += f") "
@@ -1149,9 +1114,9 @@ def decompressSamFile( options ):
 
     cmd = f"(/usr/bin/time --verbose "
     if os.path.exists( name_of_file_dictionary ) == False:
-        cmd += f" {decompressSamFileSingleEnded} "  # argv[0] - Name of the program
+        cmd += f" decompressSamFileSingleEnded "  # argv[0] - Name of the program
     else:
-        cmd += f" {decompressSamFilePairedEnded} "  # argv[0] - Name of the program
+        cmd += f" decompressSamFilePairedEnded "  # argv[0] - Name of the program
     cmd += f" {_index_outputfilename} "  # argv[1] - Abridge index, _index_outputfilename
     cmd += f" {options.genome} "  # argv[2] - genome file
     cmd += f" {output_sam_filename} "  # argv[3] - decompressed SAM filename
@@ -1164,7 +1129,7 @@ def decompressSamFile( options ):
     if os.path.exists( name_of_file_dictionary ) == True:
         cmd += f" {name_of_file_dictionary} "  # argv[10]
 
-        cmd_1 = f" {maxReadsInEachLine} "
+        cmd_1 = f" maxReadsInEachLine "
         cmd_1 += f" {_outputfilename} "
         cmd_1 += f" {max_reads_in_each_line_filename} "
         if options.quiet == False:
@@ -1677,13 +1642,13 @@ def main():
         if options.quiet == False:
             logging.info( f"compressSamFile() execution is complete" )
 
-    ###################################################################################################################  EXAMINED TILL HERE
-    return
-
     if options.decompress == True:
-        decompressSamFile( options )
+        decompressSamFile( options, list_of_softwares_with_versions, volumes_list )
         if options.quiet == False:
             logging.info( f"decompressSamFile() execution is complete" )
+
+    ###################################################################################################################  EXAMINED TILL HERE
+    return
 
     if options.header == True:
         """
