@@ -113,7 +113,7 @@ void writeToFile(
 					&& compressed_ds_pool[i]->pointers_to_read_names[j][1]
 							!= '\0')
 			{
-				strcat(list_of_read_names, "brdg_");
+				//strcat(list_of_read_names, "brdg_");
 				strcat(
 						list_of_read_names,
 						compressed_ds_pool[i]->pointers_to_read_names[j]);
@@ -122,7 +122,9 @@ void writeToFile(
 					strcat(list_of_read_names, ",");
 			}
 		}
-
+		printf(
+				"\n flag_ignore_quality_scores_for_matched_bases %d",
+				flag_ignore_quality_scores_for_matched_bases);
 		if (flag_ignore_quality_scores_for_matched_bases == 0) //Write out the entire quality score
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
