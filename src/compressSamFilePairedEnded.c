@@ -1277,3 +1277,4 @@ int main(int argc, char *argv[])
 			ignore_alignment_scores);
 	return 0;
 }
+
