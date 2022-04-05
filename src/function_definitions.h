@@ -518,10 +518,10 @@ void printSamAlignmentInstance(
 	printf("Template length: %d", s->template_length);
 	fflush(stdout);
 	printf("\n");
-	printf("Seq:  %s %d ", s->seq, strlen(s->seq));
+	printf("Seq:  %s %ld ", s->seq, strlen(s->seq));
 	fflush(stdout);
 	printf("\n");
-	printf("Qual: %s");
+	printf("Qual: ");
 	for (i = 0; s->qual[i] != '\0'; i++)
 		printf("%c", s->qual[i] - 90);
 	printf("\n");
