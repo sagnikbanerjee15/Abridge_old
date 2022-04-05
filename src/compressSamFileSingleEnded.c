@@ -932,7 +932,7 @@ void readAlignmentsAndCompress(
 					modified_icigars,
 					cigar_items_instance);
 			writeToFile(
-					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+					flag_ignore_quality_scores_for_matched_bases,
 					fhw_qual,
 					fhw_pass1,
 					compressed_ds_pool_rearranged,
@@ -1052,7 +1052,7 @@ void readAlignmentsAndCompress(
 						modified_icigars,
 						cigar_items_instance);
 				writeToFile(
-						flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+						flag_ignore_quality_scores_for_matched_bases,
 						fhw_qual,
 						fhw_pass1,
 						compressed_ds_pool_rearranged,
@@ -1117,7 +1117,7 @@ void readAlignmentsAndCompress(
 			modified_icigars,
 			cigar_items_instance);
 	writeToFile(
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+			flag_ignore_quality_scores_for_matched_bases,
 			fhw_qual,
 			fhw_pass1,
 			compressed_ds_pool_rearranged,
