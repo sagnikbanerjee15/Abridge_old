@@ -172,10 +172,11 @@ def validateCommandLineArguments( options ):
     options.files_for_removal = []
     options.softwares = {}
 
-    if options.random == True or options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage == True:
+    if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage == True:
         options.output_directory = "/".join( options.inputabrfilename.split( "/" )[:-1] ) + "/" + str( int( time.time() ) )
         os.system( f"mkdir -p {options.output_directory}" )
 
+    """
     if options.random == True and options.positions == None:
         print( "You need to enter at least one location from where reads will be retrieved" )
         sys.exit()
@@ -187,7 +188,7 @@ def validateCommandLineArguments( options ):
     if options.random == True and options.inputfilename is not None:
         print( f"You need to provide one compressed file for random access" )
         sys.exit()
-
+    """
     if options.error_directory == None:
         options.error_directory = options.output_directory
     else:
@@ -1694,7 +1695,7 @@ def main():
         os.system( cmd )
         # print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
         os.system( f"rm -f {options.inputfilename[0][:-3]}.headers" )
-
+    """
     if options.random == True:
         input_filename = options.inputabrfilename
         name_of_input_file_without_location = input_filename.split( "/" )[-1][:-8]
@@ -1740,7 +1741,7 @@ def main():
             sys.exit()
         retrieveAlignmentsRandomly( chromosome, start, end, options )
         os.system( f"rm -rf {options.output_directory}" )
-
+    """
     if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage == True:
         input_filename = options.inputabrfilename
         name_of_input_file_without_location = input_filename.split( "/" )[-1][:-8]
