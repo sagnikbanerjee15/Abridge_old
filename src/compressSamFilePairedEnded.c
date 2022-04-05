@@ -470,6 +470,7 @@ void compressPairedEndedAlignments(
 			"BEFHIJKLMOPQRSUVWXYZbdefhijklmopqrsuvwxyz";
 	char *temp; //Useless
 	char *line = NULL; // for reading each line
+	char *line_name_of_file_with_read_names_to_short_read_names_and_NH = NULL;
 	char *entry_in_output_file; //entry in output file
 	char *prev_reference_name;
 	char *curr_reference_name;
