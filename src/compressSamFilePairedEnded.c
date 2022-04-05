@@ -1263,7 +1263,7 @@ int main(int argc, char *argv[])
 			output_abridgefilename,
 			unmapped_filename,
 			genome_filename,
-			name_of_file_with_read_names_to_short_read_names_and_NH
+			name_of_file_with_read_names_to_short_read_names_and_NH,
 			flag_ignore_soft_clippings,
 			flag_ignore_mismatches,
 			flag_ignore_unmapped_sequences,
