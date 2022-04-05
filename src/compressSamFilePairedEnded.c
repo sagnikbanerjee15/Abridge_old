@@ -163,7 +163,7 @@ void writeToFile(
 				strcat(list_of_read_names, ",");
 		}
 
-		if (flag_ignore_quality_scores_for_matched_bases == 1)
+		if (flag_ignore_quality_scores_for_matched_bases == 0)
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
 			{
@@ -348,7 +348,7 @@ void reModeliCIGARSPairedEnded(
 		if (already_processed[i] == 1)
 			continue;
 		already_processed[i] = 1;
-//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar,samformatflag_replacer_characters );
+		//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar,samformatflag_replacer_characters );
 		/*
 		 * Copy the icigar entry into the rearranged pool
 		 */
@@ -376,8 +376,8 @@ void reModeliCIGARSPairedEnded(
 		{
 			if (already_processed[j] == 1)
 				continue;
-//prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
-//icigar2 = modified_icigars[j];
+			//prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
+			//icigar2 = modified_icigars[j];
 			if (strcmp(modified_icigars[i], modified_icigars[j]) == 0)
 			{
 				//printf ( "\n%s %s %d" , modified_icigars[i] , modified_icigars[j] , strcmp ( modified_icigars[i] , modified_icigars[j] ) );
@@ -836,11 +836,6 @@ void compressPairedEndedAlignments(
 			if (strcmp(curr_alignment->tags[i - 11].name, "NH") == 0)
 			{
 				strcpy(curr_alignment->tags[i - 11].type, "i");
-
-				flag_ignore_mismatches = strtol(
-						split_tags[0],
-						&convert_to_int_temp,
-						10);
 				NH_val = strtol(split_line[2], &convert_to_int_temp, 10);
 				NH_val = NH_val / 2;
 				sprintf(str, "%lld", NH_val);
@@ -857,9 +852,13 @@ void compressPairedEndedAlignments(
 			strcpy(
 					curr_alignment->tags[curr_alignment->number_of_tag_items].type,
 					"i");
+
+			NH_val = strtol(split_line[2], &convert_to_int_temp, 10);
+			NH_val = NH_val / 2;
+			sprintf(str, "%lld", NH_val);
 			strcpy(
 					curr_alignment->tags[curr_alignment->number_of_tag_items].val,
-					split_line[2]);
+					str);
 			curr_alignment->number_of_tag_items++;
 
 		}
