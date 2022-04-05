@@ -70,6 +70,7 @@ def parseCommandLineArguments():
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
     optional_named.add_argument( "--force", "-force", help = "Setting this argument will remove the output directory and start the computation from scratch", action = "store_true" )
     optional_named.add_argument( "--skip_modifying_read_names", "-skip_modifying_read_names", help = "Avoid renaming the reads to save space. Please note that enabling this option will lead to larger file sizes", action = "store_true" )
+    optional_named.add_argument( "--preserve_all_intermediate_files", "-preserve_all_intermediate_files", help = "Set this option to preserve all the intermediate files", action = "store_true" )
 
     # Suppressed arguments
     parser.add_argument( "--logfilename", "-logfilename", help = argparse.SUPPRESS )  # Name of the logfile
@@ -830,8 +831,9 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             keep_these_files.append( file )
     remove_these_files = list( set( all_files ) - set( keep_these_files ) )
 
-    for file in remove_these_files:
-        os.system( "rm -rf " + file )
+    if options.preserve_all_intermediate_files == False:
+        for file in remove_these_files:
+            os.system( "rm -rf " + file )
 
 
 def findEndedness( options, logging ):

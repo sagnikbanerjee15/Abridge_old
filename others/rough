@@ -34,6 +34,7 @@ docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and
 --genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
 --keep_intermediate_error_files \
 --framework docker \
+--preserve_all_intermediate_files \
 1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge.output \
 2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge.error'
 
