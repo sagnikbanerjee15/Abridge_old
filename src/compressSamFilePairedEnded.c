@@ -710,13 +710,8 @@ void compressPairedEndedAlignments(
 			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
 	strcat(temp, str);
 	strcat(temp, "\t");
-	strcat(
-			temp,
-			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases:");
-	sprintf(
-			str,
-			"%lld",
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases);
+	strcat(temp, "flag_ignore_quality_scores_for_matched_bases:");
+	sprintf(str, "%lld", flag_ignore_quality_scores_for_matched_bases);
 	strcat(temp, str);
 	strcat(temp, "\t");
 	strcat(temp, "flag_ignore_alignment_scores:");

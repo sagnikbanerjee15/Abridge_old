@@ -527,7 +527,7 @@ void readAlignmentsAndCompress(
 		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 		short int run_diagnostics,
 		long long int max_input_reads_in_a_single_nucl_loc,
-		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+		short int flag_ignore_quality_scores_for_matched_bases,
 		short int flag_ignore_alignment_scores)
 {
 	/********************************************************************
@@ -756,13 +756,8 @@ void readAlignmentsAndCompress(
 			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
 	strcat(temp, str);
 	strcat(temp, "\t");
-	strcat(
-			temp,
-			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips:");
-	sprintf(
-			str,
-			"%lld",
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	strcat(temp, "flag_ignore_quality_scores_for_matched_bases:");
+	sprintf(str, "%lld", flag_ignore_quality_scores_for_matched_bases);
 	strcat(temp, str);
 	strcat(temp, "\t");
 	strcat(temp, "flag_ignore_alignment_scores:");
