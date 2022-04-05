@@ -117,8 +117,8 @@ def runDockerCommand( logging, name, version, image_location, container_name, vo
         docker_cmd += f" -v {mapping}"
     docker_cmd += f" {image_location}:{version} "
     docker_cmd += f" bash -c '{command}'"
-    os.system( docker_cmd )
     logging.info( f"Running command - {docker_cmd}" )
+    os.system( docker_cmd )
 
 
 def runSingularityCommand( logging, name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
@@ -134,7 +134,6 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     singularity_cmd += f" abridge_{version}.sif "
     singularity_cmd += f" bash -c {command}"
     os.system( singularity_cmd )
-    # print( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
 
 
