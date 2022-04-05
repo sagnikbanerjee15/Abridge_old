@@ -842,7 +842,7 @@ void compressPairedEndedAlignments(
 				strcpy(curr_alignment->tags[i - 11].type, "i");
 
 				flag_ignore_mismatches = strtol(
-						split_on_tab[0],
+						split_tags[0],
 						&convert_to_int_temp,
 						10);
 				NH_val = strtol(split_line[2], &convert_to_int_temp, 10);
