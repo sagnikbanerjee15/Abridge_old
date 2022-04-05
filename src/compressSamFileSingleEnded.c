@@ -122,9 +122,6 @@ void writeToFile(
 					strcat(list_of_read_names, ",");
 			}
 		}
-		printf(
-				"\n flag_ignore_quality_scores_for_matched_bases %d",
-				flag_ignore_quality_scores_for_matched_bases);
 		if (flag_ignore_quality_scores_for_matched_bases == 0) //Write out the entire quality score
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
@@ -184,7 +181,8 @@ void writeToFile(
 						&num_of_types,
 						cigar_items_instance);
 				for (m = 0; m < num_of_types; m++)
-					cigar_length += cigar_items_instance[m].len;
+					if (cigar_items_instance[m].def != 'D')
+						cigar_length += cigar_items_instance[m].len;
 
 				if (qual_score_length != cigar_length)
 				{
