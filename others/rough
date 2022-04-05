@@ -9,7 +9,7 @@ docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and
 --alignIntronMax 100000 \
 --limitBAMsortRAM 107374182400 \
 --outSAMattributes NH HI AS nM NM MD jM jI XS \
---outFileNamePrefix /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_ \
+--outFileqNamePrefix /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_ \
 --outSAMunmapped Within'
 
 docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/star:2.7.9a bash -c 'STAR \

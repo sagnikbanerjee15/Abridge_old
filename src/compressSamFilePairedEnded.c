@@ -812,7 +812,7 @@ void compressPairedEndedAlignments(
 		 fflush (stdout);
 		 }*/
 
-//printf ("\n%s" , line);
+		//printf ("\n%s" , line);
 		number_of_fields = splitByDelimiter(line, '\t', split_line);
 		populateSamAlignmentInstance(
 				curr_alignment,

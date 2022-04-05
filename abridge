@@ -824,9 +824,11 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         if file[-6:] == ".error" or file[-8:] == ".abridge":
             keep_these_files.append( file )
     remove_these_files = list( set( all_files ) - set( keep_these_files ) )
-
+    """
     for file in remove_these_files:
         os.system( "rm -rf " + file )
+
+    """
 
 
 def findEndedness( options, logging ):
