@@ -45,7 +45,7 @@ def parseCommandLineArguments():
     compress_decompress_group = parser.add_mutually_exclusive_group( required = True )
     compress_decompress_group.add_argument( "-cmp", "--compress", help = "Set this option if you wish to compress the alignment file", action = "store_true" )
     compress_decompress_group.add_argument( "-dcmp", "--decompress", help = "Set this option if you wish to decompress the alignment file", action = "store_true" )
-    compress_decompress_group.add_argument( "-r", "--random", help = "Retrieve alignments from random locations", action = "store_true" )
+    # compress_decompress_group.add_argument( "-r", "--random", help = "Retrieve alignments from random locations", action = "store_true" )
     compress_decompress_group.add_argument( "-H", "--header", help = "Print only the header of reference sequences during decompression", action = "store_true" )
 
     # Optional arguments
@@ -828,11 +828,9 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         if file[-6:] == ".error" or file[-8:] == ".abridge":
             keep_these_files.append( file )
     remove_these_files = list( set( all_files ) - set( keep_these_files ) )
-    """
+
     for file in remove_these_files:
         os.system( "rm -rf " + file )
-
-    """
 
 
 def findEndedness( options, logging ):
@@ -1741,15 +1739,6 @@ def main():
             print( "Error in chromosome lengths" )
             sys.exit()
         retrieveAlignmentsRandomly( chromosome, start, end, options )
-
-        """
-        FUTURE VERSION
-        correct,message=verifyPositions(options.positions,chromosome_to_length)
-        if correct==0:
-            print(f"Incorrect positions - {message}")
-        else:
-            sortPositions(options.positions)
-        """
         os.system( f"rm -rf {options.output_directory}" )
 
     if options.generate_overlapping_coverage == True or options.generate_non_overlapping_coverage == True:
