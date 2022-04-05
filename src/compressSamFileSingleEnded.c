@@ -46,7 +46,7 @@ char findMatchCharacterIcigar(char *icigar)
 }
 
 void writeToFile(
-		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+		short int flag_ignore_quality_scores_for_matched_bases,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
@@ -123,7 +123,7 @@ void writeToFile(
 			}
 		}
 
-		if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 0) //Write out the entire quality score
+		if (flag_ignore_quality_scores_for_matched_bases == 0) //Write out the entire quality score
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
 			{
