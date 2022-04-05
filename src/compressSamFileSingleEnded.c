@@ -46,7 +46,7 @@ char findMatchCharacterIcigar(char *icigar)
 }
 
 void writeToFile(
-		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases,
+		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
@@ -123,8 +123,7 @@ void writeToFile(
 			}
 		}
 
-		if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases
-				== 0) //Write out the entire quality score
+		if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 0) //Write out the entire quality score
 		{
 			for (j = 0; j < compressed_ds_pool[i]->num_reads; j++)
 			{
@@ -528,7 +527,7 @@ void readAlignmentsAndCompress(
 		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 		short int run_diagnostics,
 		long long int max_input_reads_in_a_single_nucl_loc,
-		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases,
+		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 		short int flag_ignore_alignment_scores)
 {
 	/********************************************************************
@@ -750,7 +749,7 @@ void readAlignmentsAndCompress(
 	strcat(temp, "\t");
 	strcat(
 			temp,
-			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases:");
+			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips:");
 	sprintf(
 			str,
 			"%lld",
@@ -759,11 +758,11 @@ void readAlignmentsAndCompress(
 	strcat(temp, "\t");
 	strcat(
 			temp,
-			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases:");
+			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips:");
 	sprintf(
 			str,
 			"%lld",
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases);
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
 	strcat(temp, str);
 	strcat(temp, "\t");
 	strcat(temp, "flag_ignore_alignment_scores:");
@@ -935,7 +934,7 @@ void readAlignmentsAndCompress(
 					modified_icigars,
 					cigar_items_instance);
 			writeToFile(
-					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases,
+					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 					fhw_qual,
 					fhw_pass1,
 					compressed_ds_pool_rearranged,
@@ -1055,7 +1054,7 @@ void readAlignmentsAndCompress(
 						modified_icigars,
 						cigar_items_instance);
 				writeToFile(
-						flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases,
+						flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 						fhw_qual,
 						fhw_pass1,
 						compressed_ds_pool_rearranged,
@@ -1120,7 +1119,7 @@ void readAlignmentsAndCompress(
 			modified_icigars,
 			cigar_items_instance);
 	writeToFile(
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases,
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
 			fhw_qual,
 			fhw_pass1,
 			compressed_ds_pool_rearranged,

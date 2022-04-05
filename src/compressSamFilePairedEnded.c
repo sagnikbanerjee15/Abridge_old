@@ -445,7 +445,7 @@ void compressPairedEndedAlignments(
 		long long int max_number_of_alignments,
 		int max_read_length,
 		char *dictionary_filename,
-		short int flag_ignore_scores)
+		short int flag_ignore_alignment_scores)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -703,7 +703,7 @@ void compressPairedEndedAlignments(
 	strcat(temp, "\t");
 	strcat(
 			temp,
-			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases:");
+			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips:");
 	sprintf(
 			str,
 			"%lld",
@@ -895,7 +895,7 @@ void compressPairedEndedAlignments(
 
 		generateIntegratedCigarPairedEnded(
 				curr_alignment,
-				flag_ignore_scores,
+				flag_ignore_alignment_scores,
 				flag_ignore_soft_clippings,
 				flag_ignore_mismatches,
 				flag_ignore_unmapped_sequences,
@@ -1229,7 +1229,7 @@ int main(int argc, char *argv[])
 	short int run_diagnostics;
 	short int ignore_quality_scores_for_matched_bases;
 	short int save_exact_quality_scores;
-	short int ignore_scores;
+	short int ignore_alignment_scores;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 	long long int max_number_of_alignments;
@@ -1262,7 +1262,7 @@ int main(int argc, char *argv[])
 	max_read_length = strtol(argv[15], &temp, 10);
 	strcpy(frequency_of_flags_filename, argv[16]);
 	strcpy(dictionary_filename, argv[17]);
-	ignore_scores = strtol(argv[18], &temp, 10);
+	ignore_alignment_scores = strtol(argv[18], &temp, 10);
 	strcpy(name_of_file_with_read_names_to_short_read_names_and_NH, argv[19]);
 	/********************************************************************/
 
@@ -1285,6 +1285,6 @@ int main(int argc, char *argv[])
 			max_number_of_alignments,
 			max_read_length,
 			dictionary_filename,
-			ignore_scores);
+			ignore_alignment_scores);
 	return 0;
 }
