@@ -1088,7 +1088,51 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         logging.info( f"Running command - {cmd}" )
     files_to_be_removed.append( f"{options.output_directory}/{compression_directory.split('/')[-1]}" )
 
+    # Create the parameter file for fclqc
+    fhw = open( f"{options.output_directory}/parameter.json", "w" )
+    fhw.write( "{\n" )
+    fhw.write( f"\t\"precision\": 52,\n" )
+    fhw.write( f"\t\"file_size\": 1,\n" )
+    fhw.write( f"\t\"thread_num\": {options.cpu},\n" )
+    fhw.write( f"\t\"first_line\": 1,\n" )
+    fhw.write( f"\t\"last_line\": 1\n" )
+    fhw.write( "}\n" )
+    fhw.close()
+
+    cmd = f" main "
+    cmd += f" -d "
+    cmd += f" {fclqc_output_filename} "
+    cmd += f" {fclqc_output_filename}_decompressed "
+    cmd += f" {options.output_directory}/parameter.json "
+
+    if options.framework == "docker":
+        runDockerCommand( logging,
+                          name = "fclqc",
+                            version = list_of_softwares_with_versions['fclqc'],
+                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '100g'
+            )
+
+    elif options.framework == "singularity":
+        runSingularityCommand( logging,
+                            name = "fclqc",
+                            version = list_of_softwares_with_versions['fclqc'],
+                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '100g'
+
+            )
+
     return
+    #================================================================================================================================================================================================================================
+    #================================================================================================================================================================================================================================
     files_to_be_removed.extend( [outputfilename,
                                 unmapped_outputfilename,
                                 name_of_file_with_quality_scores,
