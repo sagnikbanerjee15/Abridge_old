@@ -27,7 +27,7 @@ docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and
 --outSAMunmapped Within' 
 
 
-docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c 'abridge \
+docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c '/project1/ABRIDGE/Abridge/abridge \
 --inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_1.bam \
 --output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge \
 --compress \
@@ -38,3 +38,27 @@ docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and
 --ignore_quality_scores_for_mismatched_bases_and_soft_clips \
 1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge.output \
 2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge.error'
+
+
+docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c '/project1/ABRIDGE/Abridge/abridge \
+--inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_Aligned.sortedByCoord.out.bam \
+--output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge \
+--compress \
+--genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+--keep_intermediate_error_files \
+--framework docker \
+--ignore_quality_scores_for_matched_bases \
+--ignore_quality_scores_for_mismatched_bases_and_soft_clips \
+1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge.output \
+2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge.error'
+
+
+docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c '/project1/ABRIDGE/Abridge/abridge \
+--inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_PE_1.bam \
+--output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_1_abridge \
+--compress \
+--genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+--keep_intermediate_error_files \
+--framework docker \
+1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_1_abridge.output \
+2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_1_abridge.error'

@@ -605,7 +605,10 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         cmd += f" {options.genome}"  # argv[1] - genome_filename
         cmd += f" {options.ignore_soft_clippings}"  # argv[2]
         cmd += f" {options.ignore_mismatches} "  # argv[3]
-        cmd += f" {options.ignore_quality_score_flag} "  # argv[4]
+        if options.ignore_quality_scores_for_mismatched_bases_and_soft_clips == True:
+            cmd += f" 1 "  # argv[4]
+        else:
+            cmd += f" 0 "  # argv[4]
         cmd += f" {options.ignore_unmapped_reads} "  # argv[5]
         cmd += f" {input_filename} "  # argv[6] - Input samfile
         cmd += f" {outputfilename} "  # argv[7] - Output filename
@@ -616,23 +619,20 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f" 0"  # argv[9] - run diagnostics
         cmd += f" {max_input_reads_in_a_single_nucl_loc} "  # argv[10] - max_input_reads_in_a_single_nucl_loc
         cmd += f" {name_of_file_with_max_commas} "  # argv[11] - name_of_file_with_max_commas
-        if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == True:
-            cmd += f" 1 1 "  # argv[12] and argv[13]
-        elif options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
-            cmd += f" 1 0 "  # argv[12] and argv[13]
-        elif options.ignore_quality_scores_for_matched_bases == False and options.save_exact_quality_scores == True:
-            cmd += f" 0 1 "  # argv[12] and argv[13]
-        elif options.ignore_quality_scores_for_matched_bases == False and options.save_exact_quality_scores == False:
-            cmd += f" 0 0 "  # argv[12] and argv[13]
-        cmd += f" {name_of_file_with_quality_scores} "  # argv[14]
-        cmd += f" {max_number_of_alignments} "  # argv[15]
-        cmd += f" {max_read_length} "  # argv[16]
-        cmd += f" {frequency_of_flags_filename} "  # argv[17]
-        cmd += f" {name_of_file_dictionary} "  # argv[18]
-        if options.ignore_alignment_scores == True:
-            cmd += f" 1 "  # argv[19] - save_scores = False
+        if options.ignore_quality_scores_for_matched_bases == True:
+            cmd += f" 1 "  # argv[12]
         else:
-            cmd += f" 0 "  # argv[19] - save_scores = True
+            cmd += f" 0 "  # argv[12]
+        cmd += f" {name_of_file_with_quality_scores} "  # argv[13]
+        cmd += f" {max_number_of_alignments} "  # argv[14]
+        cmd += f" {max_read_length} "  # argv[15]
+        cmd += f" {frequency_of_flags_filename} "  # argv[16]
+        cmd += f" {name_of_file_dictionary} "  # argv[17]
+        if options.ignore_alignment_scores == True:
+            cmd += f" 1 "  # argv[18] - save_scores = False
+        else:
+            cmd += f" 0 "  # argv[18] - save_scores = True
+        cmd += f" {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "  # argv[19]
         cmd += f") "
         # cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -726,36 +726,26 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     ######################################################################################
     # Generate SHA512 for genome file
     ######################################################################################
-    genome_sha512_filename = f"{options.output_directory}/genome_sha512"
-    cmd = f"sha512sum {options.genome} > {genome_sha512_filename}.temp"
+    reference_sha512_filename = f"{options.output_directory}/reference_sha512"
+    cmd = f"sha512sum {options.genome} > {reference_sha512_filename}.temp"
     os.system( cmd )
-    open( genome_sha512_filename, "w" ).write( open( f"{genome_sha512_filename}.temp", "r" ).read().strip().split()[0] )
-    os.system( f"rm {genome_sha512_filename}.temp" )
+    open( reference_sha512_filename, "w" ).write( open( f"{reference_sha512_filename}.temp", "r" ).read().strip().split()[0] )
+    os.system( f"rm {reference_sha512_filename}.temp" )
 
     ######################################################################################
     # Compress files
     ######################################################################################
 
-    ######################################################################################
-    # Best compression (--3) using zpaq
-    ######################################################################################
-
-    # Compress the quality scores with zpaq if save_exact_quality_scores is requested
-
     if options.quiet == False:
         logging.info( "Starting compression with zpaq" )
 
-    zpaq = f" zpaq "
     cmd = f"(/usr/bin/time --verbose "
-    cmd += f" {zpaq} a "
+    cmd += f" zpaq a "
     cmd += f" {options.outputfilename} "
-    cmd += f" {outputfilename} {unmapped_outputfilename} {genome_sha512_filename} "
+    cmd += f" {outputfilename} {unmapped_outputfilename} {reference_sha512_filename} "
     if options.single_ended == False:
         cmd += f" {name_of_file_dictionary} "
-    if options.ignore_quality_scores_for_matched_bases == True and options.save_exact_quality_scores == False:
-        cmd += f" {name_of_file_with_quality_scores_rle} "
-    else:
-        cmd += f" {name_of_file_with_quality_scores} "
+    cmd += f" {name_of_file_with_quality_scores} "
     cmd += f" -m3 -t{options.cpu} -f "
     cmd += f" -noattributes "
     cmd += f") "
@@ -798,7 +788,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     remove_these_files = list( set( all_files ) - set( keep_these_files ) )
 
     for file in remove_these_files:
-        os.system( "rm -f " + file )
+        os.system( "rm -rf " + file )
 
 
 def findEndedness( options, logging ):
