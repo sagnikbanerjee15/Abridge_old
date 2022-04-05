@@ -1539,10 +1539,17 @@ def main():
         os.system( cmd )
     options.genome = f"{options.output_directory}/{genome_filename_without_location}"
 
-    volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
+    if options.compress == True:
+        volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
                     f"{options.output_directory}:{options.output_directory}",
                     f"{options.error_directory}:{options.error_directory}",
                     f"{'/'.join(options.inputfilename.split('/')[:-1])}:{'/'.join(options.inputfilename.split('/')[:-1])}",
+                    ]
+    elif options.decompress == True:
+        volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
+                    f"{options.output_directory}:{options.output_directory}",
+                    f"{options.error_directory}:{options.error_directory}",
+                    f"{'/'.join(options.inputabrfilename.split('/')[:-1])}:{'/'.join(options.inputabrfilename.split('/')[:-1])}",
                     ]
 
     docker_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
