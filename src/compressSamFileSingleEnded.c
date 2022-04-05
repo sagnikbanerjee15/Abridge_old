@@ -181,7 +181,8 @@ void writeToFile(
 						&num_of_types,
 						cigar_items_instance);
 				for (m = 0; m < num_of_types; m++)
-					if (cigar_items_instance[m].def != 'D')
+					if (cigar_items_instance[m].def != 'D'
+							&& cigar_items_instance[m].def != 'N')
 						cigar_length += cigar_items_instance[m].len;
 
 				if (qual_score_length != cigar_length)
