@@ -1053,7 +1053,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     # compression_directory = compression_directory.split("/")[-2]
     fhr.close()
-    cmd = f"zpaq x {options.output_directory}/{filename}.zpaq {'/'.join(compression_directory.split('/')[:-1])} -to {options.output_directory} -t{options.cpu} 2> /dev/null"
+    cmd = f"zpaq x {options.inputabrfilename} {'/'.join(compression_directory.split('/')[:-1])} -to {options.output_directory} -t{options.cpu} 2> /dev/null"
     # os.system( cmd )
 
     if options.framework == "docker":
