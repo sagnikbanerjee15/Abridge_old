@@ -685,29 +685,42 @@ void compressPairedEndedAlignments(
 	/*
 	 * Write the first line in output file
 	 */
+	/*
+	 * Write the first line in output file
+	 */
 	temp[0] = '\0';
+	strcat(temp, "flag_ignore_mismatches:");
 	sprintf(str, "%lld", flag_ignore_mismatches);
 	strcat(temp, str);
 	strcat(temp, "\t");
+	strcat(temp, "flag_ignore_soft_clippings:");
 	sprintf(str, "%lld", flag_ignore_soft_clippings);
 	strcat(temp, str);
 	strcat(temp, "\t");
+	strcat(temp, "flag_ignore_unmapped_sequences:");
 	sprintf(str, "%lld", flag_ignore_unmapped_sequences);
 	strcat(temp, str);
 	strcat(temp, "\t");
+	strcat(
+			temp,
+			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases:");
 	sprintf(
 			str,
 			"%lld",
 			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
 	strcat(temp, str);
 	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_ignore_quality_scores_for_matched_bases);
+	strcat(
+			temp,
+			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases:");
+	sprintf(
+			str,
+			"%lld",
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips_for_matched_bases);
 	strcat(temp, str);
 	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_save_exact_quality_scores);
-	strcat(temp, str);
-	strcat(temp, "\t");
-	sprintf(str, "%lld", flag_ignore_scores);
+	strcat(temp, "flag_ignore_alignment_scores:");
+	sprintf(str, "%lld", flag_ignore_alignment_scores);
 	strcat(temp, str);
 	strcat(temp, "\n");
 	fprintf(fhw_pass1, "%s", temp);
