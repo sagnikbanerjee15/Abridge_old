@@ -102,7 +102,6 @@ char returnDirection(
 
 void writeToFile(
 		short int flag_ignore_quality_scores_for_matched_bases,
-		short int flag_save_exact_quality_scores,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
@@ -202,85 +201,82 @@ void writeToFile(
 							compressed_ds_pool[i]->pointers_to_qual_scores[j])] =
 							'\0';
 				}
-				fprintf(fhw_qual, "%s", qual);
-				if (flag_save_exact_quality_scores == 0)
-				{
-					fprintf(fhw_qual, "%s", "\t");
-					if (flag_ignore_soft_clippings == 1)
-					{
-						/*if ( strcmp (qual , investigate_qual) == 0 )
-						 {
-						 printf ("\nMatch found");
-						 printf ("\nCIGAR: %s" , compressed_ds_pool[i]->cigar);
-						 printf ("\niCIGAR: %s" , compressed_ds_pool[i]->icigar);
-						 fflush (stdout);
-						 }*/
-						splitCigar(
-								compressed_ds_pool[i]->cigar,
-								&num_of_types,
-								cigar_items_instance);
-						if (cigar_items_instance[0].def == 'S'
-								&& compressed_ds_pool[i]->icigar[1] != '\0') // Left soft clip exists
-						{
-							sprintf(str, "%ld", cigar_items_instance[0].len);
-							fprintf(fhw_qual, "%s", str);
-							fprintf(fhw_qual, "%s", "S");
-						}
-					}
-					if (compressed_ds_pool[i]->icigar[1] != '\0')
-					{
-						for (k = 0;
-								compressed_ds_pool[i]->icigar[k + 1] != '~'
-										&& compressed_ds_pool[i]->icigar[k + 1]
-												!= '\0'; k++)
-							fputc(compressed_ds_pool[i]->icigar[k], fhw_qual);
-					}
-					else
-					{
-						/*
-						 * Find the icigar before the ith one which is not compressed
-						 */
-						l = i - 1;
-						while (l >= 0)
-						{
-							if (compressed_ds_pool[l]->icigar[1] != '\0')
-								break;
-							else
-								l--;
-						}
-
-						for (k = 0;
-								compressed_ds_pool[l]->icigar[k + 1] != '~'
-										&& compressed_ds_pool[l]->icigar[k + 1]
-												!= '\0'; k++)
-							fputc(compressed_ds_pool[l]->icigar[k], fhw_qual);
-					}
-					if (flag_ignore_soft_clippings == 1)
-					{
-						//splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-						if (cigar_items_instance[num_of_types - 1].def == 'S'
-								&& compressed_ds_pool[i]->icigar[1] != '\0') // Right soft clip exists
-						{
-							sprintf(
-									str,
-									"%ld",
-									cigar_items_instance[num_of_types - 1].len);
-							fprintf(fhw_qual, "%s", str);
-							fprintf(fhw_qual, "%s", "S");
-						}
-					}
-					fprintf(fhw_qual, "%s", "\t");
-					if (returnDirection(
-							findMatchCharacterIcigar(
-									compressed_ds_pool[i]->icigar,
-									samformatflag_replacer_characters),
-							samflag_dictionary,
-							number_of_unique_samformatflags) == '-')
-						fprintf(fhw_qual, "%s", "2");
-					else
-						fprintf(fhw_qual, "%s", "1");
-				}
 				fprintf(fhw_qual, "%s", "\n");
+				fprintf(fhw_qual, "%s", "\n");
+				fprintf(fhw_qual, "%s", "\n");
+				fprintf(fhw_qual, "%s", qual);
+				fprintf(fhw_qual, "%s", "\n");
+				/*
+				 if (flag_save_exact_quality_scores == 0)
+				 {
+				 fprintf(fhw_qual, "%s", "\t");
+				 if (flag_ignore_soft_clippings == 1)
+				 {
+
+				 splitCigar(
+				 compressed_ds_pool[i]->cigar,
+				 &num_of_types,
+				 cigar_items_instance);
+				 if (cigar_items_instance[0].def == 'S'
+				 && compressed_ds_pool[i]->icigar[1] != '\0') // Left soft clip exists
+				 {
+				 sprintf(str, "%ld", cigar_items_instance[0].len);
+				 fprintf(fhw_qual, "%s", str);
+				 fprintf(fhw_qual, "%s", "S");
+				 }
+				 }
+				 if (compressed_ds_pool[i]->icigar[1] != '\0')
+				 {
+				 for (k = 0;
+				 compressed_ds_pool[i]->icigar[k + 1] != '~'
+				 && compressed_ds_pool[i]->icigar[k + 1] != '\0';
+				 k++)
+				 fputc(compressed_ds_pool[i]->icigar[k], fhw_qual);
+				 }
+				 else
+				 {
+
+				 l = i - 1;
+				 while (l >= 0)
+				 {
+				 if (compressed_ds_pool[l]->icigar[1] != '\0')
+				 break;
+				 else
+				 l--;
+				 }
+
+				 for (k = 0;
+				 compressed_ds_pool[l]->icigar[k + 1] != '~'
+				 && compressed_ds_pool[l]->icigar[k + 1] != '\0';
+				 k++)
+				 fputc(compressed_ds_pool[l]->icigar[k], fhw_qual);
+				 }
+				 if (flag_ignore_soft_clippings == 1)
+				 {
+				 //splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
+				 if (cigar_items_instance[num_of_types - 1].def == 'S'
+				 && compressed_ds_pool[i]->icigar[1] != '\0') // Right soft clip exists
+				 {
+				 sprintf(
+				 str,
+				 "%ld",
+				 cigar_items_instance[num_of_types - 1].len);
+				 fprintf(fhw_qual, "%s", str);
+				 fprintf(fhw_qual, "%s", "S");
+				 }
+				 }
+				 fprintf(fhw_qual, "%s", "\t");
+				 if (returnDirection(
+				 findMatchCharacterIcigar(
+				 compressed_ds_pool[i]->icigar,
+				 samformatflag_replacer_characters),
+				 samflag_dictionary,
+				 number_of_unique_samformatflags) == '-')
+				 fprintf(fhw_qual, "%s", "2");
+				 else
+				 fprintf(fhw_qual, "%s", "1");
+				 }
+				 */
 			}
 		}
 	}
@@ -352,7 +348,7 @@ void reModeliCIGARSPairedEnded(
 		if (already_processed[i] == 1)
 			continue;
 		already_processed[i] = 1;
-		//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar,samformatflag_replacer_characters );
+//prepareIcigarForComparison ( icigar1 , compressed_ds_pool[i]->icigar,samformatflag_replacer_characters );
 		/*
 		 * Copy the icigar entry into the rearranged pool
 		 */
@@ -380,8 +376,8 @@ void reModeliCIGARSPairedEnded(
 		{
 			if (already_processed[j] == 1)
 				continue;
-			//prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
-			//icigar2 = modified_icigars[j];
+//prepareIcigarForComparison ( icigar2 , compressed_ds_pool[j]->icigar );
+//icigar2 = modified_icigars[j];
 			if (strcmp(modified_icigars[i], modified_icigars[j]) == 0)
 			{
 				//printf ( "\n%s %s %d" , modified_icigars[i] , modified_icigars[j] , strcmp ( modified_icigars[i] , modified_icigars[j] ) );
@@ -816,7 +812,7 @@ void compressPairedEndedAlignments(
 		 fflush (stdout);
 		 }*/
 
-		//printf ("\n%s" , line);
+//printf ("\n%s" , line);
 		number_of_fields = splitByDelimiter(line, '\t', split_line);
 		populateSamAlignmentInstance(
 				curr_alignment,
@@ -912,9 +908,9 @@ void compressPairedEndedAlignments(
 
 		if (strlen(prev_reference_name) == 0) // 1st chromosome - initialize stuffs
 		{
-			//continue;
-			//printf ("\n1. compressed_ds_pool_index %d" , compressed_ds_pool_index);
-			//fflush (stdout);
+//continue;
+//printf ("\n1. compressed_ds_pool_index %d" , compressed_ds_pool_index);
+//fflush (stdout);
 			previous_position = current_position;
 			strcpy(prev_reference_name, curr_reference_name);
 			strcpy(qual_scores[quality_score_index], curr_alignment->qual);
@@ -932,11 +928,11 @@ void compressPairedEndedAlignments(
 					- 1] = read_names[quality_score_index];
 			compressed_ds_pool[compressed_ds_pool_index]->position =
 					curr_alignment->start_position;
-			//printf ("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
+//printf ("\n1. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
 			quality_score_index++;
 			compressed_ds_pool_index++;
-			//printf ("\n Writing Reference to file %s %d" , reference_info[reference_sequence_index]->line , reference_sequence_index);
-			//fflush (stdout);
+//printf ("\n Writing Reference to file %s %d" , reference_info[reference_sequence_index]->line , reference_sequence_index);
+//fflush (stdout);
 			reference_sequence_index = findChromosomeIndex(
 					reference_info,
 					prev_reference_name,
@@ -949,9 +945,9 @@ void compressPairedEndedAlignments(
 		}
 		else if (strcmp(prev_reference_name, curr_reference_name) != 0) // New chromosome
 		{
-			//continue;
-			//printf ("\2. ncompressed_ds_pool_index %d" , compressed_ds_pool_index);
-			//fflush (stdout);
+//continue;
+//printf ("\2. ncompressed_ds_pool_index %d" , compressed_ds_pool_index);
+//fflush (stdout);
 			reModeliCIGARSPairedEnded(
 					compressed_ds_pool,
 					compressed_ds_pool_rearranged,
@@ -961,7 +957,6 @@ void compressPairedEndedAlignments(
 					samformatflag_replacer_characters);
 			writeToFile(
 					flag_ignore_quality_scores_for_matched_bases,
-					flag_save_exact_quality_scores,
 					fhw_qual,
 					fhw_pass1,
 					compressed_ds_pool_rearranged,
@@ -984,7 +979,7 @@ void compressPairedEndedAlignments(
 					qual_for_writeToFile);
 			if (max_commas < curr_commas)
 				max_commas = curr_commas;
-			//printf ( "\n%lld %lld" , curr_commas , max_commas );
+//printf ( "\n%lld %lld" , curr_commas , max_commas );
 			compressed_ds_pool_index = 0;
 			previous_position = current_position;
 			strcpy(prev_reference_name, curr_reference_name);
@@ -1000,10 +995,10 @@ void compressPairedEndedAlignments(
 			strcpy(qual_scores[quality_score_index], curr_alignment->qual);
 			strcpy(read_names[quality_score_index], curr_alignment->read_name);
 			quality_score_index++;
-			//printf ("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
+//printf ("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
 			compressed_ds_pool_index++;
-			//printf ("\n Writing Reference to file %s %d" , reference_info[reference_sequence_index]->line , reference_sequence_index);
-			//fflush (stdout);
+//printf ("\n Writing Reference to file %s %d" , reference_info[reference_sequence_index]->line , reference_sequence_index);
+//fflush (stdout);
 			reference_sequence_index = findChromosomeIndex(
 					reference_info,
 					prev_reference_name,
@@ -1088,7 +1083,6 @@ void compressPairedEndedAlignments(
 
 				writeToFile(
 						flag_ignore_quality_scores_for_matched_bases,
-						flag_save_exact_quality_scores,
 						fhw_qual,
 						fhw_pass1,
 						compressed_ds_pool_rearranged,
@@ -1153,7 +1147,7 @@ void compressPairedEndedAlignments(
 			}
 			previous_position = current_position;
 		}
-		//printf ("\nMax_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
+//printf ("\nMax_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d" , compressed_ds_pool[compressed_ds_pool_index]->num_reads , curr_alignment->reference_name , curr_alignment->start_position , compressed_ds_pool_index);
 		reInitializeSamAlignmentInstance(curr_alignment);
 		line_number++;
 	}
@@ -1168,7 +1162,6 @@ void compressPairedEndedAlignments(
 			samformatflag_replacer_characters);
 	writeToFile(
 			flag_ignore_quality_scores_for_matched_bases,
-			flag_save_exact_quality_scores,
 			fhw_qual,
 			fhw_pass1,
 			compressed_ds_pool_rearranged,
