@@ -1013,9 +1013,6 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     if options.ignore_sequence == 0:
         assessMemoryRequirement( f"{options.genome}.fai", options )
 
-    files_to_be_removed = []
-
-    filename = options.inputabrfilename.split( "/" )[-1]
     cmd = f"zpaq l {options.inputabrfilename} > {options.output_directory}/file_list  2> /dev/null"
 
     if options.framework == "docker":
@@ -1106,7 +1103,6 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
                             memory = '100g'
 
             )
-    files_to_be_removed.append( f"{options.output_directory}/{compression_directory.split('/')[-1]}" )
 
     # Create the parameter file for fclqc
     fhw = open( f"{options.output_directory}/parameter.json", "w" )
@@ -1131,6 +1127,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     cmd += f"1> /dev/null "
     cmd += f"2> {options.error_directory}/fclqc_decompress.error"
 
+    print( f"{enc_file_to_be_decompressed.split('001')[0]}001.dec" )
     if os.path.exists( f"{enc_file_to_be_decompressed.split('001')[0]}001.dec" ) == False:
         if options.framework == "docker":
             runDockerCommand( logging,
@@ -1162,6 +1159,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     all_flags = [flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores ]
     all_flags_numeric = []
     for flag in all_flags:
+        print( flag )
         all_flags_numeric.append( int( flag.split( ":" )[-1] ) )
     flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips, flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = all_flags_numeric
     """
