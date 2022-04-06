@@ -321,7 +321,7 @@ void decompressFile(
 				split_on_tilde,
 				read_names,
 				default_quality_value,
-				flag_ignore_scores,
+				flag_ignore_alignment_scores,
 				flag_ignore_mismatches,
 				flag_ignore_soft_clippings,
 				flag_ignore_unmapped_sequences,
@@ -331,7 +331,7 @@ void decompressFile(
 				&total_mapped_reads,
 				fhw,
 				fhr_qual,
-				flag_save_all_quality_scores,
+				flag_ignore_quality_scores_for_matched_bases,
 				number_of_columns,
 				curr_position,
 				current_chromosome,
@@ -424,6 +424,7 @@ int main(int argc, char *argv[])
 	char *temp; //Required for strtoi
 
 	short int flag_ignore_sequence_information;
+	int max_reads_in_each_line;
 	/********************************************************************/
 
 	/********************************************************************
