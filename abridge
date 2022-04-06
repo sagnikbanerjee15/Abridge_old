@@ -1117,9 +1117,11 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     fhw.write( "}\n" )
     fhw.close()
 
+    enc_file_to_be_decompressed = glob.glob( f"{options.output_directory}/*fclqc001.enc" )[0]
+
     cmd = f" main "
     cmd += f" -d "
-    cmd += f" {fclqc_output_filename} "
+    cmd += f" {enc_file_to_be_decompressed} "
     cmd += f" {fclqc_output_filename}_decompressed "
     cmd += f" {options.output_directory}/parameter.json "
 
