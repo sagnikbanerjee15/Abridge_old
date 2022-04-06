@@ -228,7 +228,12 @@ void decompressFile(
 		line_num++;
 		//printf ("\nline_num = %d %s" , line_num , buffer);
 		//if ( line_num == 10 ) break;
-		if (strstr(buffer, "brdg_"))
+		number_of_columns = 0;
+		for (i; buffer[i] != '\0'; i++)
+			if (buffer[i] == '\t')
+				number_of_columns += 1;
+
+		if (number_of_columns == 2)
 			read_names_stored = 1;
 		else
 			read_names_stored = 0;

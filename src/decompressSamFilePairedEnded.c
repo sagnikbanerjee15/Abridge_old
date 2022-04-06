@@ -194,28 +194,55 @@ void decompressFile(
 	line_len = getline(&buffer, &len, fhr);
 	splitByDelimiter(buffer, '\t', split_on_tab);
 
-	flag_ignore_mismatches = strtol(split_on_tab[0], &convert_to_int_temp, 10);
+	splitByDelimiter(split_on_tab[0], ':', split_on_tilde);
+	flag_ignore_mismatches = strtol(
+			split_on_tilde[1],
+			&convert_to_int_temp,
+			10);
+
+	splitByDelimiter(split_on_tab[1], ':', split_on_tilde);
 	flag_ignore_soft_clippings = strtol(
-			split_on_tab[1],
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
+
+	splitByDelimiter(split_on_tab[2], ':', split_on_tilde);
 	flag_ignore_unmapped_sequences = strtol(
-			split_on_tab[2],
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_ignore_quality_score = strtol(
-			split_on_tab[3],
+
+	splitByDelimiter(split_on_tab[3], ':', split_on_tilde);
+	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = strtol(
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_save_all_quality_scores = strtol(
-			split_on_tab[4],
+
+	splitByDelimiter(split_on_tab[4], ':', split_on_tilde);
+	flag_ignore_quality_scores_for_matched_bases = strtol(
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_save_exact_quality_scores = strtol(
-			split_on_tab[5],
+
+	splitByDelimiter(split_on_tab[6], ':', split_on_tilde);
+	flag_ignore_alignment_scores = strtol(
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_ignore_scores = strtol(split_on_tab[6], &convert_to_int_temp, 10);
+
+	printf("\nflag_ignore_mismatches %d", flag_ignore_mismatches);
+	printf("\nflag_ignore_soft_clippings %d", flag_ignore_soft_clippings);
+	printf(
+			"\nflag_ignore_unmapped_sequences %d",
+			flag_ignore_unmapped_sequences);
+	printf(
+			"\nflag_ignore_quality_score %d",
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	printf(
+			"\nflag_save_all_quality_scores %d",
+			flag_ignore_quality_scores_for_matched_bases);
+	printf("\nflag_save_exact_quality_scores %d", flag_ignore_alignment_scores);
+	fflush(stdout);
 
 	line_num = 0;
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
@@ -382,52 +409,6 @@ void decompressFile(
 
 int main(int argc, char *argv[])
 {
-	/********************************************************************
-	 * Variable declaration
-	 ********************************************************************/
-	char abridge_index_filename[FILENAME_LENGTH];
-	char genome_filename[FILENAME_LENGTH];
-	char pass1_filename[FILENAME_LENGTH];
-	char output_sam_filename[FILENAME_LENGTH];
-	char genome_prefix[FILENAME_LENGTH];
-	char name_of_file_with_quality_scores[FILENAME_LENGTH];
-	char default_quality_value[10];
-	char unmapped_filename[FILENAME_LENGTH];
-	char dictionary_name[FILENAME_LENGTH];
-	char *temp; //Required for strtoi
-	int max_reads_in_each_line;
-
-	short int flag_ignore_sequence_information;
-	/********************************************************************/
-
-	/********************************************************************
-	 * Variable initialization
-	 ********************************************************************/
-	strcpy(abridge_index_filename, argv[1]);
-	strcpy(genome_filename, argv[2]);
-	strcpy(output_sam_filename, argv[3]);
-	strcpy(pass1_filename, argv[4]);
-	strcpy(genome_prefix, argv[5]);
-	strcpy(default_quality_value, argv[6]);
-	flag_ignore_sequence_information = strtol(argv[7], &temp, 10);
-	strcpy(unmapped_filename, argv[8]);
-	strcpy(name_of_file_with_quality_scores, argv[9]);
-	strcpy(dictionary_name, argv[10]);
-	max_reads_in_each_line = strtol(argv[11], &temp, 10);
-	/********************************************************************/
-
-	decompressFile(
-			name_of_file_with_quality_scores,
-			abridge_index_filename,
-			genome_filename,
-			output_sam_filename,
-			pass1_filename,
-			genome_prefix,
-			unmapped_filename,
-			default_quality_value,
-			flag_ignore_sequence_information,
-			dictionary_name,
-			max_reads_in_each_line);
 
 	/********************************************************************
 	 * Variable declaration
@@ -470,6 +451,6 @@ int main(int argc, char *argv[])
 			flag_ignore_sequence_information,
 			dictionary_name,
 			max_reads_in_each_line);
-	return 0;
+
 	return 0;
 }
