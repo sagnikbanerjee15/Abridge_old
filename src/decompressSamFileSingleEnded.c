@@ -237,7 +237,7 @@ void decompressFile(
 			read_names_stored = 1;
 		else
 			read_names_stored = 0;
-
+		continue;
 		//printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);
 		if (buffer[0] == '@')
 		{
