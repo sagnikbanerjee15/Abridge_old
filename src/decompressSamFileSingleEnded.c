@@ -229,7 +229,7 @@ void decompressFile(
 		//printf ("\nline_num = %d %s" , line_num , buffer);
 		//if ( line_num == 10 ) break;
 		number_of_columns = 0;
-		for (i; buffer[i] != '\0'; i++)
+		for (i = 0; buffer[i] != '\0'; i++)
 			if (buffer[i] == '\t')
 				number_of_columns += 1;
 
