@@ -3900,7 +3900,7 @@ void writeAlignmentToFileSingleEnded(
 		char *read_prefix,
 		FILE *fhw,
 		FILE *fhr_qual,
-		short int flag_ignore_all_quality_scores,
+		short int flag_ignore_quality_scores_for_matched_bases,
 		char **read_names,
 		short int flag_ignore_alignment_scores)
 {
@@ -3995,8 +3995,8 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, sam_alignment->seq);
 		strcat(line_to_be_written_to_file, "\t");
 
-		if (flag_ignore_all_quality_scores == 1
-				&& (line_len = getline(&buffer, &len, fhr_qual)) != -1)
+		if (flag_ignore_quality_scores_for_matched_bases == 1 && (line_len =
+				getline(&buffer, &len, fhr_qual)) != -1)
 		{
 			buffer[strlen(buffer) - 1] = '\0';
 			strcat(line_to_be_written_to_file, buffer);
