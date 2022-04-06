@@ -1121,7 +1121,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     cmd = f" main "
     cmd += f" -d "
-    cmd += f" {enc_file_to_be_decompressed} "
+    cmd += f" {enc_file_to_be_decompressed.split('001')[0]} "
     cmd += f" {fclqc_output_filename}_decompressed "
     cmd += f" {options.output_directory}/parameter.json "
 
