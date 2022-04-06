@@ -1052,7 +1052,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     fhr.close()
     cmd = f"zpaq x {options.inputabrfilename} {'/'.join(compression_directory.split('/')[:-1])} -to {options.output_directory} -t{options.cpu} 2> /dev/null"
 
-    if os.path.exists.path( f"{options.output_directory}/reference_sha512" ) == False:
+    if os.path.exists( f"{options.output_directory}/reference_sha512" ) == False:
         if options.framework == "docker":
             runDockerCommand( logging,
                               name = "zpaq",
