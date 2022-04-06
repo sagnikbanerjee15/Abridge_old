@@ -3971,6 +3971,10 @@ void writeAlignmentToFileSingleEnded(
 			if (cigar_items_instance[j].def != 'N'
 					&& cigar_items_instance[j].def != 'D')
 				read_length_calculated_from_cigar_string++;
+
+		printf(
+				"\nread_length_calculated_from_cigar_string %d",
+				read_length_calculated_from_cigar_string);
 		if (strlen(sam_alignment->qual)
 				!= read_length_calculated_from_cigar_string)
 		{
