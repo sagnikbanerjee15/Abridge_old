@@ -713,7 +713,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         """
 
     ######################################################################################
-    # Compress Qualtiy scores file
+    # Compress Quality scores file
     ######################################################################################
     number_of_quality_scores = int( open( f"{name_of_total_number_of_alignments_file}" , "r" ).read().strip() )
 
@@ -778,14 +778,14 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     if options.quiet == False:
         logging.info( "Starting compression with zpaq" )
 
-    fclqc_output_filename = f"{fclqc_output_filename}001.enc"
     cmd = f"(/usr/bin/time --verbose "
     cmd += f" zpaq a "
     cmd += f" {options.outputfilename} "  # Final name of the compressed file ending in .abridge
     cmd += f" {outputfilename} "  # The non redundant version of the sam file
     cmd += f" {unmapped_outputfilename} "  # Set of unmapped reads
     cmd += f" {reference_sha512_filename} "  # The 128 bit hash of the reference
-    cmd += f" {fclqc_output_filename} "  # FCLQC compressed quality scores file
+    cmd += f" {fclqc_output_filename}001.enc "  # FCLQC compressed quality scores file
+    cmd += f" {fclqc_output_filename}.prob "  # FCLQC compressed quality probability file
     if options.single_ended == False:
         cmd += f" {name_of_file_dictionary} "
     cmd += f" {name_of_file_with_quality_scores} "
