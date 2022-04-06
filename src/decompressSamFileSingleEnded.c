@@ -323,7 +323,7 @@ void decompressFile(
 				split_on_comma,
 				split_on_tilde,
 				default_quality_value,
-				flag_ignore_scores,
+				flag_ignore_alignment_scores,
 				flag_ignore_mismatches,
 				flag_ignore_soft_clippings,
 				flag_ignore_unmapped_sequences,
