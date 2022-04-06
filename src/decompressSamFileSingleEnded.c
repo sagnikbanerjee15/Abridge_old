@@ -334,7 +334,7 @@ void decompressFile(
 				read_prefix,
 				fhw,
 				fhr_qual,
-				flag_save_all_quality_scores,
+				flag_ignore_quality_scores_for_matched_bases,
 				number_of_columns,
 				curr_position,
 				current_chromosome,
