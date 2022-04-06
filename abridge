@@ -980,6 +980,8 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
     outputfilename, index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary, fclqc_output_filename = other_files
 
+    outputfilename = "inputfilename_compressed"
+
     cmd = f"samtools faidx {options.genome}"
     if os.path.exists( f"{options.genome}.fai" ) == False:
         if options.framework == "docker":
@@ -1119,42 +1121,41 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     enc_file_to_be_decompressed = glob.glob( f"{options.output_directory}/*fclqc001.enc" )[0]
 
-    cmd = f" main "
+    cmd = f"(/usr/bin/time --verbose "
+    cmd += f" main "
     cmd += f" -d "
     cmd += f" {enc_file_to_be_decompressed.split('001')[0]} "
     cmd += f" {fclqc_output_filename}_decompressed "
     cmd += f" {options.output_directory}/parameter.json "
+    cmd += f")"
+    cmd += f"1> /dev/null "
+    cmd += f"2> {options.error_directory}/fclqc_decompress.error"
 
-    if options.framework == "docker":
-        runDockerCommand( logging,
-                          name = "fclqc",
-                            version = list_of_softwares_with_versions['fclqc'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
-                            container_name = f"{options.output_directory.split('/')[-1]}",
-                            volumes = volumes_list,
-                            command = cmd,
-                            cpus = options.cpu,
-                            memory = '100g'
-            )
+    if os.path.exists( f"{enc_file_to_be_decompressed.split('001')[0]}001.dec" ) == False:
+        if options.framework == "docker":
+            runDockerCommand( logging,
+                              name = "fclqc",
+                                version = list_of_softwares_with_versions['fclqc'],
+                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
+                )
 
-    elif options.framework == "singularity":
-        runSingularityCommand( logging,
-                            name = "fclqc",
-                            version = list_of_softwares_with_versions['fclqc'],
-                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
-                            container_name = f"{options.output_directory.split('/')[-1]}",
-                            volumes = volumes_list,
-                            command = cmd,
-                            cpus = options.cpu,
-                            memory = '100g'
+        elif options.framework == "singularity":
+            runSingularityCommand( logging,
+                                name = "fclqc",
+                                version = list_of_softwares_with_versions['fclqc'],
+                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
 
-            )
-
-    files_to_be_removed.extend( [outputfilename,
-                                unmapped_outputfilename,
-                                name_of_file_with_quality_scores,
-                                f"{name_of_file_with_quality_scores}.rle",
-                                f"{options.output_directory}/file_list"] )
+                )
 
     # flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, ignore_quality_scores_for_matched_bases, save_exact_quality_scores, ignore_alignment_scores = list( map( int, open( outputfilename, "rb" ).readline().split() ) )
     flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = open( outputfilename, "rb" ).readline().split()
