@@ -1142,7 +1142,8 @@ void convertIcigarToCigarandMDSingleEnded(
 					cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] =
 					'\0';
-			if (flag_ignore_quality_score == 0)
+			if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips
+					== 0)
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] =
@@ -3969,7 +3970,7 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, sam_alignment->seq);
 		strcat(line_to_be_written_to_file, "\t");
 
-		if (flag_ignore_all_quality_scores == 1
+		if (flag_ignore_all_quality_scores == 0
 				&& (line_len = getline(&buffer, &len, fhr_qual)) != -1)
 		{
 			buffer[strlen(buffer) - 1] = '\0';
