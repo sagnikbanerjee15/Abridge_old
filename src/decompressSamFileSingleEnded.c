@@ -207,7 +207,6 @@ void decompressFile(
 			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_ignore_scores = strtol(split_on_tab[6], &convert_to_int_temp, 10);
 
 	printf("\nflag_ignore_mismatches %d", flag_ignore_mismatches);
 	printf("\nflag_ignore_soft_clippings %d", flag_ignore_soft_clippings);
