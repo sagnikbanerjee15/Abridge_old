@@ -213,10 +213,10 @@ void decompressFile(
 			"\nflag_ignore_unmapped_sequences %d",
 			flag_ignore_unmapped_sequences);
 	printf(
-			"\flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips %d",
+			"\nflag_ignore_quality_scores_for_mismatched_bases_and_soft_clips %d",
 			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
 	printf(
-			"\flag_ignore_quality_scores_for_matched_bases %d",
+			"\nflag_ignore_quality_scores_for_matched_bases %d",
 			flag_ignore_quality_scores_for_matched_bases);
 	printf("\nflag_save_exact_quality_scores %d", flag_ignore_alignment_scores);
 	fflush(stdout);
