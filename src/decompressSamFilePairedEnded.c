@@ -44,9 +44,9 @@ void decompressFile(
 	short int flag_ignore_soft_clippings;
 	short int flag_ignore_unmapped_sequences;
 	short int flag_ignore_quality_score;
-	short int flag_save_all_quality_scores;
-	short int flag_save_exact_quality_scores;
-	short int flag_ignore_scores;
+	short int flag_ignore_quality_scores_for_matched_bases;
+	short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
+	short int flag_ignore_alignment_scores;
 	short int number_of_columns;
 
 	unsigned long long int max_cluster_size;
