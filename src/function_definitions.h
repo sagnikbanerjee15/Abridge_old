@@ -4495,7 +4495,7 @@ void convertToAlignmentSingleEnded(
 				read_prefix,
 				fhw,
 				fhr_qual,
-				flag_ignore_all_quality_scores,
+				flag_ignore_quality_scores_for_matched_bases,
 				read_names,
 				flag_ignore_alignment_scores);
 		(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
