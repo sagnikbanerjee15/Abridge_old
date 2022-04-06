@@ -1162,36 +1162,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         print( flag )
         all_flags_numeric.append( int( flag.split( ":" )[-1] ) )
     flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips, flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = all_flags_numeric
-    """
-    if flag_ignore_mismatches == 1:
-        options.ignore_mismatches = True
-    else:
-        options.ignore_mismatches = False
-    if flag_ignore_soft_clippings == 1:
-        options.ignore_soft_clippings = True
-    else:
-        options.ignore_soft_clippings = False
-    if flag_ignore_unmapped_sequences == 1:
-        options.ignore_unmapped_sequences = True
-    else:
-        options.ignore_unmapped_sequences = False
-    if flag_ignore_quality_score == 1:
-        options.ignore_quality_score = True
-    else:
-        options.ignore_quality_score = False
-    if ignore_quality_scores_for_matched_bases == 1:
-        options.ignore_quality_scores_for_matched_bases = True
-    else:
-        options.ignore_quality_scores_for_matched_bases = False
-    if save_exact_quality_scores == 1:
-        options.save_exact_quality_scores = True
-    else:
-        options.save_exact_quality_scores = False
-    if ignore_alignment_scores == 1:
-        options.ignore_alignment_scores = True
-    else:
-        options.ignore_alignment_scores = False
-    """
+
     name_of_input_file_without_location = options.inputabrfilename.split( "/" )[-1].split( ".abridge" )[0]
     max_reads_in_each_line_filename = f"{options.output_directory}/max_reads_in_each_line_filename"
     output_sam_filename = f"{options.output_directory}/{name_of_input_file_without_location[:-4]}.decompressed.sam"
@@ -1236,33 +1207,55 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         cmd += f" decompressSamFileSingleEnded "  # argv[0] - Name of the program
     else:
         cmd += f" decompressSamFilePairedEnded "  # argv[0] - Name of the program
-    cmd += f" {_index_outputfilename} "  # argv[1] - Abridge index, _index_outputfilename
-    cmd += f" {options.genome} "  # argv[2] - genome file
-    cmd += f" {output_sam_filename} "  # argv[3] - decompressed SAM filename
-    cmd += f" {_outputfilename} "  # argv[4] - Name of the  filename
-    cmd += f" dummy "  # argv[5] - Dummy
-    cmd += f" {options.quality} "  # argv[6] - Quality of reads
-    cmd += f" {options.ignore_sequence}"  # argv[7] - Whether or not to produce sequences from genome file
-    cmd += f" {unmapped_outputfilename}"  # argv[8] - Name of file with unmapped reads
-    cmd += f" {name_of_file_with_quality_scores} "  # argv[9] - Name of file with quality scores
+    cmd += f" {options.genome} "  # argv[1] - genome file
+    cmd += f" {output_sam_filename} "  # argv[2] - decompressed SAM filename
+    cmd += f" {outputfilename} "  # argv[3] - Name of the  filename
+    cmd += f" {options.quality} "  # argv[4] - Quality of reads
+    cmd += f" {options.ignore_sequence}"  # argv[5] - Whether or not to produce sequences from genome file
+    cmd += f" {unmapped_outputfilename}"  # argv[6] - Name of file with unmapped reads
+    cmd += f" {name_of_file_with_quality_scores} "  # argv[7] - Name of file with quality scores
     if os.path.exists( name_of_file_dictionary ) == True:
-        cmd += f" {name_of_file_dictionary} "  # argv[10]
+        cmd += f" {name_of_file_dictionary} "  # argv[8]
 
-        cmd += f" {max_reads_in_each_line} "  # argv[11]
+        cmd += f" {max_reads_in_each_line} "  # argv[8]
     cmd += f") "
-    # cmd += f"1> /dev/null "
+    cmd += f"1> /dev/null "
     if options.keep_intermediate_error_files == True:
         cmd += f"2> {options.error_directory}/{name_of_input_file_without_location}_decompress.error"
     else:
         cmd += f"2> /dev/null"
     if options.quiet == False:
         logging.info( f"Running command - {cmd}" )
-    os.system( cmd )
 
-    for file in files_to_be_removed:
+    if options.framework == "docker":
+        runDockerCommand( logging,
+                          name = "abridge",
+                            version = list_of_softwares_with_versions['abridge'],
+                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '100g'
+            )
+
+    elif options.framework == "singularity":
+        runSingularityCommand( logging,
+                            name = "abridge",
+                            version = list_of_softwares_with_versions['abridge'],
+                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '100g'
+
+            )
+
+    """for file in files_to_be_removed:
         if options.quiet == False:
             logging.info( f"Deleting - {file}" )
-        os.system( "rm -rf " + file )
+        os.system( "rm -rf " + file )"""
 
 
 def generateCoverage( _outputfilename, _index_outputfilename, options ):
