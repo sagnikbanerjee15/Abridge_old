@@ -981,6 +981,8 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     outputfilename, index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary, fclqc_output_filename = other_files
 
     outputfilename = f"{options.output_directory}/inputfilename_compressed"
+    unmapped_outputfilename = f"{options.output_directory}/inputfilename_unmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/inputfilename_qual"
 
     cmd = f"samtools faidx {options.genome}"
     if os.path.exists( f"{options.genome}.fai" ) == False:
@@ -1127,8 +1129,9 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     cmd += f"1> /dev/null "
     cmd += f"2> {options.error_directory}/fclqc_decompress.error"
 
-    print( f"{enc_file_to_be_decompressed.split('001')[0]}001.dec" )
-    if os.path.exists( f"{enc_file_to_be_decompressed.split('001')[0]}001.dec" ) == False:
+    cmd = f"mv {fclqc_output_filename}_decompressed001.dec {name_of_file_with_quality_scores}"
+
+    if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False:
         if options.framework == "docker":
             runDockerCommand( logging,
                               name = "fclqc",
