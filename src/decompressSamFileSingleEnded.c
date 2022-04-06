@@ -209,15 +209,20 @@ void decompressFile(
 			10);
 	flag_ignore_scores = strtol(split_on_tab[6], &convert_to_int_temp, 10);
 
-	/*
-	 printf ("\nflag_ignore_mismatches %d" , flag_ignore_mismatches);
-	 printf ("\nflag_ignore_soft_clippings %d" , flag_ignore_soft_clippings);
-	 printf ("\nflag_ignore_unmapped_sequences %d" , flag_ignore_unmapped_sequences);
-	 printf ("\nflag_ignore_quality_score %d" , flag_ignore_quality_score);
-	 printf ("\nflag_save_all_quality_scores %d" , flag_save_all_quality_scores);
-	 printf ("\nflag_save_exact_quality_scores %d" , flag_save_exact_quality_scores);
-	 fflush (stdout);
-	 */
+	printf("\nflag_ignore_mismatches %d", flag_ignore_mismatches);
+	printf("\nflag_ignore_soft_clippings %d", flag_ignore_soft_clippings);
+	printf(
+			"\nflag_ignore_unmapped_sequences %d",
+			flag_ignore_unmapped_sequences);
+	printf(
+			"\nflag_ignore_quality_score %d",
+			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	printf(
+			"\nflag_save_all_quality_scores %d",
+			flag_ignore_quality_scores_for_matched_bases);
+	printf("\nflag_save_exact_quality_scores %d", flag_ignore_alignment_scores);
+	fflush(stdout);
+
 	line_num = 0;
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
