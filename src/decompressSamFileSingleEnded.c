@@ -221,7 +221,7 @@ void decompressFile(
 			flag_ignore_quality_scores_for_matched_bases);
 	printf("\nflag_save_exact_quality_scores %d", flag_ignore_alignment_scores);
 	fflush(stdout);
-	return;
+
 	line_num = 0;
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
@@ -450,7 +450,6 @@ int main(int argc, char *argv[])
 	max_reads_in_each_line = strtol(argv[8], &temp, 10);
 
 	/********************************************************************/
-	return;
 	decompressFile(
 			name_of_file_with_quality_scores,
 			genome_filename,
