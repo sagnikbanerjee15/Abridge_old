@@ -16,7 +16,8 @@ void decompressFile(
 		char *pass1_filename,
 		char *unmapped_filename,
 		char *default_quality_value,
-		short int flag_ignore_sequence_information)
+		short int flag_ignore_sequence_information,
+		int max_reads_in_each_line)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -41,9 +42,9 @@ void decompressFile(
 	short int flag_ignore_soft_clippings;
 	short int flag_ignore_unmapped_sequences;
 	short int flag_ignore_quality_score;
-	short int flag_save_all_quality_scores;
-	short int flag_save_exact_quality_scores;
-	short int flag_ignore_scores;
+	short int flag_ignore_quality_scores_for_matched_bases;
+	short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
+	short int flag_ignore_alignment_scores;
 	short int number_of_columns;
 	short int read_names_stored;
 
@@ -171,25 +172,39 @@ void decompressFile(
 	line_len = getline(&buffer, &len, fhr);
 	splitByDelimiter(buffer, '\t', split_on_tab);
 
-	flag_ignore_mismatches = strtol(split_on_tab[0], &convert_to_int_temp, 10);
+	splitByDelimiter(split_on_tab[0], ':', split_on_tilde);
+	flag_ignore_mismatches = strtol(
+			split_on_tilde[1],
+			&convert_to_int_temp,
+			10);
+
+	splitByDelimiter(split_on_tab[1], ':', split_on_tilde);
 	flag_ignore_soft_clippings = strtol(
-			split_on_tab[1],
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
+
+	splitByDelimiter(split_on_tab[2], ':', split_on_tilde);
 	flag_ignore_unmapped_sequences = strtol(
-			split_on_tab[2],
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_ignore_quality_score = strtol(
-			split_on_tab[3],
+
+	splitByDelimiter(split_on_tab[3], ':', split_on_tilde);
+	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = strtol(
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_save_all_quality_scores = strtol(
-			split_on_tab[4],
+
+	splitByDelimiter(split_on_tab[4], ':', split_on_tilde);
+	flag_ignore_quality_scores_for_matched_bases = strtol(
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	flag_save_exact_quality_scores = strtol(
-			split_on_tab[5],
+
+	splitByDelimiter(split_on_tab[6], ':', split_on_tilde);
+	flag_ignore_alignment_scores = strtol(
+			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
 	flag_ignore_scores = strtol(split_on_tab[6], &convert_to_int_temp, 10);
@@ -407,6 +422,7 @@ int main(int argc, char *argv[])
 	char default_quality_value[10];
 	char unmapped_filename[FILENAME_LENGTH];
 	char *temp; //Required for strtoi
+	int max_reads_in_each_line;
 
 	short int flag_ignore_sequence_information;
 	/********************************************************************/
@@ -421,6 +437,7 @@ int main(int argc, char *argv[])
 	flag_ignore_sequence_information = strtol(argv[5], &temp, 10);
 	strcpy(unmapped_filename, argv[6]);
 	strcpy(name_of_file_with_quality_scores, argv[7]);
+	max_reads_in_each_line = strtol(argv[8], &temp, 10);
 
 	/********************************************************************/
 
@@ -431,6 +448,7 @@ int main(int argc, char *argv[])
 			pass1_filename,
 			unmapped_filename,
 			default_quality_value,
-			flag_ignore_sequence_information);
+			flag_ignore_sequence_information,
+			max_reads_in_each_line);
 	return 0;
 }
