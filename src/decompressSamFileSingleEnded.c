@@ -225,7 +225,7 @@ void decompressFile(
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
 		line_num++;
-		//printf ("\nline_num = %d %s" , line_num , buffer);
+		printf("\nline_num = %d %s", line_num, buffer);
 		//if ( line_num == 10 ) break;
 		number_of_columns = 0;
 		for (i = 0; buffer[i] != '\0'; i++)
