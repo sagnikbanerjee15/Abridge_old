@@ -3905,10 +3905,14 @@ void writeAlignmentToFileSingleEnded(
 		short int flag_ignore_alignment_scores)
 {
 	int i;
+	int read_length_calculated_from_cigar_string = 0;
+	int num_of_types;
 
 	char line_to_be_written_to_file[MAX_GENERAL_LEN];
 	char temp[100];
 	char *buffer;
+
+	struct Cigar_Items cigar_items_instance[100];
 
 	size_t len = 0;
 	ssize_t line_len;
@@ -3959,6 +3963,19 @@ void writeAlignmentToFileSingleEnded(
 		}
 		strcat(line_to_be_written_to_file, "\t");
 
+		splitCigar(sam_alignment->cigar, num_of_types, cigar_items_instance);
+		read_length_calculated_from_cigar_string = 0;
+		for (j = 0; j < num_of_types; j++)
+			if (cigar_items_instance[j].def != 'N'
+					&& cigar_items_instance[j].def != 'D')
+				read_length_calculated_from_cigar_string++;
+		if (strlen(sam_alignment->qual)
+				!= read_length_calculated_from_cigar_string)
+		{
+			sam_alignment->qual[strlen(sam_alignment->qual)
+					- read_length_calculated_from_cigar_string] = '\0';
+		}
+
 		strcat(line_to_be_written_to_file, sam_alignment->cigar);
 		strcat(line_to_be_written_to_file, "\t");
 
@@ -3974,7 +3991,7 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, sam_alignment->seq);
 		strcat(line_to_be_written_to_file, "\t");
 
-		if (flag_ignore_all_quality_scores == 0
+		if (flag_ignore_all_quality_scores == 1
 				&& (line_len = getline(&buffer, &len, fhr_qual)) != -1)
 		{
 			buffer[strlen(buffer) - 1] = '\0';
@@ -4217,7 +4234,7 @@ void convertToAlignmentPairedEnded(
 				split_on_comma);
 		number_of_reads = splitByDelimiter(split_on_tab[2], ',', read_names);
 	}
-	//return;
+//return;
 	for (j = 0; j < number_of_distinct_cigars_in_a_line; j++)
 	{
 		splitByDelimiter(split_on_comma[j], '-', split_on_dash);
