@@ -320,6 +320,7 @@ void decompressFile(
 						&convert_to_int_temp,
 						10);
 		}
+		continue;
 		//printf ("\nCheckpoint 3 line_num = %d" , line_num);
 		convertToAlignmentSingleEnded(
 				sam_alignment_instance,
