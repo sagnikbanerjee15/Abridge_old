@@ -3912,7 +3912,9 @@ void writeAlignmentToFileSingleEnded(
 	char temp[100];
 	char *buffer;
 
-	struct Cigar_Items cigar_items_instance[100];
+	struct Cigar_Items *cigar_items_instance;
+	cigar_items_instance = (struct Cigar_Items*) malloc(
+			sizeof(struct Cigar_Items) * 100);
 
 	size_t len = 0;
 	ssize_t line_len;
