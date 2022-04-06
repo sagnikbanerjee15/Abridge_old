@@ -788,7 +788,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     cmd += f" {fclqc_output_filename}.prob "  # FCLQC compressed quality probability file
     if options.single_ended == False:
         cmd += f" {name_of_file_dictionary} "
-    cmd += f" {name_of_file_with_quality_scores} "
+    # cmd += f" {name_of_file_with_quality_scores} "
     cmd += f" -m3 -t{options.cpu} -f "
     cmd += f" -noattributes "
     cmd += f") "
