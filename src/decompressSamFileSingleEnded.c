@@ -238,7 +238,6 @@ void decompressFile(
 		else
 			read_names_stored = 0;
 
-		continue;
 		//printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);
 		if (buffer[0] == '@')
 		{
@@ -260,6 +259,7 @@ void decompressFile(
 			//fflush (stdout);
 			continue;
 		}
+		continue;
 		number_of_commas_in_each_line = 0;
 		for (i = 0; buffer[i] != '\0'; i++)
 			if (buffer[i] == ',')
