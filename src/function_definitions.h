@@ -1293,7 +1293,8 @@ void convertIcigarToCigarandMDSingleEnded(
 									'=';
 						}
 
-						if (flag_ignore_quality_score == 0)
+						if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips
+								== 0)
 						{
 							for (j = 0; j < cigar_items_instance[i].len; j++)
 							{
@@ -1348,7 +1349,8 @@ void convertIcigarToCigarandMDSingleEnded(
 									break;
 							}
 						}
-						if (flag_ignore_quality_score == 0)
+						if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips
+								== 0)
 						{
 							i++;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] =
