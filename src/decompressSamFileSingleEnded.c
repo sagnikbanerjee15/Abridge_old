@@ -221,7 +221,7 @@ void decompressFile(
 			flag_ignore_quality_scores_for_matched_bases);
 	printf("\nflag_save_exact_quality_scores %d", flag_ignore_alignment_scores);
 	fflush(stdout);
-
+	return;
 	line_num = 0;
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
@@ -259,7 +259,6 @@ void decompressFile(
 			//fflush (stdout);
 			continue;
 		}
-		continue;
 		number_of_commas_in_each_line = 0;
 		for (i = 0; buffer[i] != '\0'; i++)
 			if (buffer[i] == ',')
