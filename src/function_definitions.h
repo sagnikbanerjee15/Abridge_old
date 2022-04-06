@@ -4514,7 +4514,7 @@ void convertToAlignmentSingleEnded(
 		}
 		fflush (stdout);
 		//printSamAlignmentInstance (sam_alignment_instance , 0);
-		continue;
+		//continue;
 		writeAlignmentToFileSingleEnded(
 				sam_alignment_instance,
 				flag_ignore_sequence_information,
