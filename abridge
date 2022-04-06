@@ -980,7 +980,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
     outputfilename, index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary, fclqc_output_filename = other_files
 
-    outputfilename = "inputfilename_compressed"
+    outputfilename = f"{options.output_directory}/inputfilename_compressed"
 
     cmd = f"samtools faidx {options.genome}"
     if os.path.exists( f"{options.genome}.fai" ) == False:
@@ -1155,7 +1155,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
                 )
 
     # flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, ignore_quality_scores_for_matched_bases, save_exact_quality_scores, ignore_alignment_scores = list( map( int, open( outputfilename, "rb" ).readline().split() ) )
-    flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = open( outputfilename, "rb" ).readline().split()
+    flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = open( outputfilename, "r" ).readline().split()
     all_flags = [flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores ]
     all_flags_numeric = []
     for flag in all_flags:
