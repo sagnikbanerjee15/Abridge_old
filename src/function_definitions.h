@@ -3904,7 +3904,7 @@ void writeAlignmentToFileSingleEnded(
 		char **read_names,
 		short int flag_ignore_alignment_scores)
 {
-	int i;
+	int i, j;
 	int read_length_calculated_from_cigar_string = 0;
 	int num_of_types;
 
