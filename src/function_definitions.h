@@ -1427,7 +1427,7 @@ void convertIcigarToCigarandMDSingleEnded(
 		sam_alignment_instance->seq[i] = '\0';
 		sam_alignment_instance->qual[i] = '\0';
 	}
-	if (flag_ignore_quality_score == 1)
+	if (flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 1)
 	{
 		cigar_items_instance_index = 0;
 		splitCigar(
