@@ -450,7 +450,7 @@ int main(int argc, char *argv[])
 	max_reads_in_each_line = strtol(argv[8], &temp, 10);
 
 	/********************************************************************/
-
+	return;
 	decompressFile(
 			name_of_file_with_quality_scores,
 			genome_filename,
