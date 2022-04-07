@@ -3984,12 +3984,14 @@ void writeAlignmentToFileSingleEnded(
 		read_length_calculated_from_cigar_string = 0;
 		for (j = 0; j < num_of_types; j++)
 		{
-			printf(
-					"\nCIGAR %d %c %d",
-					cigar_items_instance[j].len,
-					cigar_items_instance[j].def,
-					cigar_items_instance[j].def != 'N'
-							&& cigar_items_instance[j].def != 'D');
+			/*
+			 printf(
+			 "\nCIGAR %d %c %d",
+			 cigar_items_instance[j].len,
+			 cigar_items_instance[j].def,
+			 cigar_items_instance[j].def != 'N'
+			 && cigar_items_instance[j].def != 'D');
+			 */
 			if (cigar_items_instance[j].def != 'N'
 					&& cigar_items_instance[j].def != 'D')
 				read_length_calculated_from_cigar_string +=
@@ -3998,13 +4000,15 @@ void writeAlignmentToFileSingleEnded(
 
 		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 1");
 		//fflush(stdout);
-		printf(
-				"\nread_length_calculated_from_cigar_string %d %s",
-				read_length_calculated_from_cigar_string,
-				sam_alignment->cigar);
+
 		if (strlen(sam_alignment->qual)
 				!= read_length_calculated_from_cigar_string)
 		{
+			printf(
+					"\nread_length_calculated_from_cigar_string %d %s read_name %s",
+					read_length_calculated_from_cigar_string,
+					sam_alignment->cigar,
+					read_names[read_name_index]);
 			printf(
 					"\nDifference detected %d",
 					strlen(sam_alignment->qual)
