@@ -133,8 +133,8 @@ void decompressFile(
 	{
 		if (buffer[0] != '@')
 		{
-			if (max_line_len < line_len)
-				max_line_len = line_len;
+			if (max_line_len < strlen(buffer))
+				max_line_len = strlen(buffer);
 
 			int num_commas = 0;
 			for (int i = 0; buffer[i] != '\0'; i++)
