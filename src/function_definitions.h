@@ -4567,7 +4567,7 @@ void convertToAlignmentSingleEnded(
 		fflush (stdout);
 		//printSamAlignmentInstance (sam_alignment_instance , 0);
 		//continue;
-		printf("\nconvertToAlignmentSingleEnded Checkpoint 6");
+		printf("\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d", j);
 		fflush(stdout);
 		writeAlignmentToFileSingleEnded(
 				sam_alignment_instance,
