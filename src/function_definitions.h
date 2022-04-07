@@ -3985,9 +3985,11 @@ void writeAlignmentToFileSingleEnded(
 		for (j = 0; j < num_of_types; j++)
 		{
 			printf(
-					"\nCIGAR %d %c",
+					"\nCIGAR %d %c %d",
 					cigar_items_instance[j].len,
-					cigar_items_instance[j].def);
+					cigar_items_instance[j].def,
+					cigar_items_instance[j].def != 'N'
+							&& cigar_items_instance[j].def != 'D');
 			if (cigar_items_instance[j].def != 'N'
 					&& cigar_items_instance[j].def != 'D')
 				read_length_calculated_from_cigar_string++;
