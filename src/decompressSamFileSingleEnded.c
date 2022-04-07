@@ -278,8 +278,9 @@ void decompressFile(
 		if (max_number_of_commas < number_of_commas_in_each_line)
 			max_number_of_commas = number_of_commas_in_each_line;
 
-		//printf("\nCheckpoint 1 line_num = %d", line_num);
-		//printf("\n2. line_len %d len %d", line_len, len);
+		printf("\nCheckpoint 1 line_num = %d", line_num);
+		printf("\n2. line_len %d len %d", line_len, len);
+		fflush(stdout);
 		if (line_len > COLS_split_on_tab)
 		{
 			//printf ("\nB--> line_len %d COLS_split_on_tab %d" , line_len , COLS_split_on_tab);
@@ -294,7 +295,8 @@ void decompressFile(
 			//fflush (stdout);
 
 		}
-		//printf("\nCheckpoint 2 line_num = %d", line_num);
+		printf("\nCheckpoint 2 line_num = %d", line_num);
+		fflush(stdout);
 		if (max_number_of_commas > ROWS_split_on_comma)
 		{
 			//printf ("\nB--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
@@ -308,8 +310,11 @@ void decompressFile(
 			for (i = 0; i < ROWS_split_on_comma; i++)
 				split_on_comma[i] = (char*) malloc(
 						sizeof(char) * COLS_split_on_comma);
-			//printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
-			//fflush (stdout);
+			printf(
+					"\nA--> max_number_of_commas %d ROWS_split_on_comma %d",
+					max_number_of_commas,
+					ROWS_split_on_comma);
+			fflush(stdout);
 		}
 
 		if (read_names_stored == 0)
