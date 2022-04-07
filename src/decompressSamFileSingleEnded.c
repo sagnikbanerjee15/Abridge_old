@@ -203,6 +203,8 @@ void decompressFile(
 	/********************************************************************/
 
 	writeSequenceHeaders(fhw, genome_filename, 1);
+	printf("\nThis works");
+	fflush(stdout);
 	line_num = 0;
 	line_len = getline(&buffer, &len, fhr);
 	splitByDelimiter(buffer, '\t', split_on_tab);
@@ -212,8 +214,7 @@ void decompressFile(
 			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-	printf("\nThis works");
-	fflush(stdout);
+
 	splitByDelimiter(split_on_tab[1], ':', split_on_tilde);
 	flag_ignore_soft_clippings = strtol(
 			split_on_tilde[1],
