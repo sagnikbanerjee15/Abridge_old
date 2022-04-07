@@ -64,7 +64,7 @@ void decompressFile(
 	int BUFFER_SIZE = 8 * 100 * 1024 * 1024; // 100 MB
 	//int ROWS_split_on_newline = ROWS * 10; //10,000
 	//int COLS_split_on_newline = COLS * 1000; //1,000,000
-	int ROWS_split_on_tab = 10; //10
+	int ROWS_split_on_tab = 5; //10
 	int COLS_split_on_tab = COLS * 10; //100,000
 	int ROWS_split_on_dash = 5; //5
 	int COLS_split_on_dash = MAX_SEQ_LEN * 3; //3,000
@@ -123,6 +123,32 @@ void decompressFile(
 	 for ( i = 0 ; i < ROWS_split_on_newline ; i++ )
 	 split_on_newline[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_newline);
 	 */
+
+	/*
+	 * Find the largest line in the compressed file. Apparently, free and realloc isn't working.
+	 */
+	int max_line_len = 0;
+	int max_commas = 0;
+	while ((line_len = getline(&buffer, &len, fhr)) != -1)
+	{
+		if (buffer[0] != '@')
+		{
+			if (max_line_len < line_len)
+				max_line_len = line_len;
+
+			int num_commas = 0;
+			for (int i = 0; buffer[i] != '\0'; i++)
+				if (buffer[i] == ',')
+					num_commas += 1;
+			if (max_commas < num_commas)
+				max_commas = num_commas;
+		}
+
+	}
+	COLS_split_on_tab = line_len / 2;
+	ROWS_split_on_comma = max_commas;
+	rewind(fhr);
+
 	split_on_tab = (char**) malloc(sizeof(char*) * ROWS_split_on_tab);
 	for (i = 0; i < ROWS_split_on_tab; i++)
 		split_on_tab[i] = (char*) malloc(sizeof(char) * COLS_split_on_tab);
@@ -281,64 +307,51 @@ void decompressFile(
 		printf("\nCheckpoint 1 line_num = %d", line_num);
 		printf("\n2. line_len %d len %d", line_len, len);
 		fflush(stdout);
-		if (line_len > COLS_split_on_tab)
-		{
-			printf(
-					"\nB--> line_len %d COLS_split_on_tab %d",
-					line_len,
-					COLS_split_on_tab);
-			fflush(stdout);
-			/*
-			 for (i = 0; i < ROWS_split_on_tab; i++)
-			 {
-			 printf("\nAttempting to free row %d", i);
-			 fflush(stdout);
-			 free(split_on_tab[i]);
-			 printf("\nSpace freed for row %d", i);
-			 fflush(stdout);
-			 }
-			 printf("\nSpace freed");
-			 fflush(stdout);
-			 */
-			COLS_split_on_tab = line_len + 100;
-			for (i = 0; i < ROWS_split_on_tab; i++)
-			{
-				/*
-				 split_on_tab[i] = (char*) malloc(
-				 sizeof(char) * COLS_split_on_tab);
-				 */
-				split_on_tab[i] = realloc(
-						split_on_tab[i],
-						sizeof(char) * COLS_split_on_tab);
-			}
-			printf(
-					"\nA--> line_len %d COLS_split_on_tab %d",
-					line_len,
-					COLS_split_on_tab);
-			fflush(stdout);
+		/*
+		 if (line_len > COLS_split_on_tab)
+		 {
+		 printf(
+		 "\nB--> line_len %d COLS_split_on_tab %d",
+		 line_len,
+		 COLS_split_on_tab);
+		 fflush(stdout);
+		 COLS_split_on_tab = line_len + 100;
+		 for (i = 0; i < ROWS_split_on_tab; i++)
+		 {
 
-		}
-		printf("\nCheckpoint 2 line_num = %d", line_num);
-		fflush(stdout);
-		if (max_number_of_commas > ROWS_split_on_comma)
-		{
-			//printf ("\nB--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
-			//fflush (stdout);
-			for (i = 0; i < ROWS_split_on_comma; i++)
-				free(split_on_comma[i]);
-			free(split_on_comma);
-			ROWS_split_on_comma = line_len / max_number_of_commas + 10;
-			split_on_comma = (char**) malloc(
-					sizeof(char*) * ROWS_split_on_comma);
-			for (i = 0; i < ROWS_split_on_comma; i++)
-				split_on_comma[i] = (char*) malloc(
-						sizeof(char) * COLS_split_on_comma);
-			printf(
-					"\nA--> max_number_of_commas %d ROWS_split_on_comma %d",
-					max_number_of_commas,
-					ROWS_split_on_comma);
-			fflush(stdout);
-		}
+		 split_on_tab[i] = (char*) realloc(
+		 split_on_tab[i],
+		 sizeof(char) * COLS_split_on_tab);
+		 }
+		 printf(
+		 "\nA--> line_len %d COLS_split_on_tab %d",
+		 line_len,
+		 COLS_split_on_tab);
+		 fflush(stdout);
+
+		 }
+		 printf("\nCheckpoint 2 line_num = %d", line_num);
+		 fflush(stdout);
+		 if (max_number_of_commas > ROWS_split_on_comma)
+		 {
+		 //printf ("\nB--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
+		 //fflush (stdout);
+		 for (i = 0; i < ROWS_split_on_comma; i++)
+		 free(split_on_comma[i]);
+		 free(split_on_comma);
+		 ROWS_split_on_comma = line_len / max_number_of_commas + 10;
+		 split_on_comma = (char**) malloc(
+		 sizeof(char*) * ROWS_split_on_comma);
+		 for (i = 0; i < ROWS_split_on_comma; i++)
+		 split_on_comma[i] = (char*) malloc(
+		 sizeof(char) * COLS_split_on_comma);
+		 printf(
+		 "\nA--> max_number_of_commas %d ROWS_split_on_comma %d",
+		 max_number_of_commas,
+		 ROWS_split_on_comma);
+		 fflush(stdout);
+		 }
+		 */
 
 		if (read_names_stored == 0)
 		{
