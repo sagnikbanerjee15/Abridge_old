@@ -4494,7 +4494,10 @@ void convertToAlignmentSingleEnded(
 				split_on_dash[1],
 				&temp,
 				10);
-
+		printf(
+				"\nnumber_of_repititions_of_the_same_reads %d %s",
+				number_of_repititions_of_the_same_reads,
+				split_on_comma[j]);
 		//printf("\nconvertToAlignmentSingleEnded Checkpoint 2");
 		//fflush(stdout);
 		if (!(split_on_comma[j][1] == '-' && isalpha(split_on_dash[0][0]) != 0))
