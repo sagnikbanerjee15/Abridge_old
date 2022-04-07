@@ -4077,6 +4077,8 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, "\n");
 		fprintf(fhw, "%s", line_to_be_written_to_file);
 	}
+	printf("\nWriting is completed");
+	fflush (stdout);
 }
 
 void writeAlignmentToFilePairedEnded(
