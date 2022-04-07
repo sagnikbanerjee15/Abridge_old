@@ -4451,30 +4451,71 @@ void convertToAlignmentSingleEnded(
 
 	}
 
-	if ((number_of_columns == 1 && read_names_stored == 0)
-			|| (number_of_columns == 2 && read_names_stored == 1))
+	if (read_names_stored == 0)
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
-		for (i = 0; split_on_tab[0][i] != '\0'; i++)
-			if (split_on_tab[0][i] == ',')
-				number_of_commas++;
-		number_of_distinct_cigars_in_a_line = splitByDelimiter(
-				split_on_tab[0],
-				',',
-				split_on_comma);
+		switch (number_of_columns)
+		{
+			case 1:
+			{
+				for (i = 0; split_on_tab[0][i] != '\0'; i++)
+					if (split_on_tab[0][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[0],
+						',',
+						split_on_comma);
+
+			}
+				break;
+			case 2:
+			{
+				for (i = 0; split_on_tab[1][i] != '\0'; i++)
+					if (split_on_tab[1][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[1],
+						',',
+						split_on_comma);
+			}
+				break;
+		}
 	}
-	else if ((number_of_columns == 2 && read_names_stored == 0)
-			|| (number_of_columns == 3 && read_names_stored == 1))
+	else if (read_names_stored == 1)
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
-		for (i = 0; split_on_tab[1][i] != '\0'; i++)
-			if (split_on_tab[1][i] == ',')
-				number_of_commas++;
-		number_of_distinct_cigars_in_a_line = splitByDelimiter(
-				split_on_tab[0],
-				',',
-				split_on_comma);
+		switch (number_of_columns)
+		{
+			case 2:
+			{
+				for (i = 0; split_on_tab[0][i] != '\0'; i++)
+					if (split_on_tab[0][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[0],
+						',',
+						split_on_comma);
+			}
+				break;
+			case 3:
+			{
+				for (i = 0; split_on_tab[1][i] != '\0'; i++)
+					if (split_on_tab[1][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[1],
+						',',
+						split_on_comma);
+			}
+				break;
+		}
+
 	}
+
 	printf(
 			"\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
 			number_of_columns,
