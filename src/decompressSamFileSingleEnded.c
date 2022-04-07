@@ -283,8 +283,11 @@ void decompressFile(
 		fflush(stdout);
 		if (line_len > COLS_split_on_tab)
 		{
-			//printf ("\nB--> line_len %d COLS_split_on_tab %d" , line_len , COLS_split_on_tab);
-			//fflush (stdout);
+			printf(
+					"\nB--> line_len %d COLS_split_on_tab %d",
+					line_len,
+					COLS_split_on_tab);
+			fflush(stdout);
 			for (i = 0; i < ROWS_split_on_tab; i++)
 				free(split_on_tab[i]);
 			COLS_split_on_tab = line_len + 100;
