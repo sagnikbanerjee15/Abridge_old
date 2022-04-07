@@ -288,20 +288,29 @@ void decompressFile(
 					line_len,
 					COLS_split_on_tab);
 			fflush(stdout);
-			for (i = 0; i < ROWS_split_on_tab; i++)
-			{
-				printf("\nAttempting to free row %d", i);
-				fflush(stdout);
-				free(split_on_tab[i]);
-				printf("\nSpace freed for row %d", i);
-				fflush(stdout);
-			}
-			printf("\nSpace freed");
-			fflush(stdout);
+			/*
+			 for (i = 0; i < ROWS_split_on_tab; i++)
+			 {
+			 printf("\nAttempting to free row %d", i);
+			 fflush(stdout);
+			 free(split_on_tab[i]);
+			 printf("\nSpace freed for row %d", i);
+			 fflush(stdout);
+			 }
+			 printf("\nSpace freed");
+			 fflush(stdout);
+			 */
 			COLS_split_on_tab = line_len + 100;
 			for (i = 0; i < ROWS_split_on_tab; i++)
-				split_on_tab[i] = (char*) malloc(
+			{
+				/*
+				 split_on_tab[i] = (char*) malloc(
+				 sizeof(char) * COLS_split_on_tab);
+				 */
+				split_on_tab[i] = realloc(
+						split_on_tab[i],
 						sizeof(char) * COLS_split_on_tab);
+			}
 			printf(
 					"\nA--> line_len %d COLS_split_on_tab %d",
 					line_len,
