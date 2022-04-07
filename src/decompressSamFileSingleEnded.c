@@ -228,20 +228,32 @@ void decompressFile(
 
 		//printf("\nline_num = %d %s", line_num, buffer);
 		//if ( line_num == 10 ) break;
-		number_of_columns = 0;
-		for (i = 0; buffer[i] != '\0'; i++)
-			if (buffer[i] == '\t')
-				number_of_columns += 1;
+		number_of_columns = splitByDelimiter(buffer, '\t', split_on_tab);
 
-		if (number_of_columns == 2)
-			read_names_stored = 1;
-		else
-			read_names_stored = 0;
+		switch (number_of_columns)
+		{
+			case 1:
+				read_names_stored = 0;
+				break;
+			case 2:
+
+				if (strlen(split_on_tab[0])
+						== strlen(itoa(atoi(split_on_tab[0]))))
+				{
+					//its an integer
+					read_names_stored = 0;
+				}
+				else
+					read_names_stored = 1;
+				break;
+			case 3:
+				read_names_stored = 1;
+				break;
+		}
 
 		//printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);
 		if (buffer[0] == '@')
 		{
-			splitByDelimiter(buffer, '\t', split_on_tab);
 			splitByDelimiter(split_on_tab[1], ':', split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
 			strcpy(current_chromosome, split_on_dash[1]);
 			readInEachChromosome(
@@ -300,7 +312,7 @@ void decompressFile(
 			//printf ("\nA--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
 			//fflush (stdout);
 		}
-		number_of_columns = splitByDelimiter(buffer, '\t', split_on_tab);
+
 		if (read_names_stored == 0)
 		{
 			if (number_of_columns == 1)
