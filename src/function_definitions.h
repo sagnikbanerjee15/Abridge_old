@@ -4017,8 +4017,9 @@ void writeAlignmentToFileSingleEnded(
 					- read_length_calculated_from_cigar_string] = '\0';
 		}
 		printf(
-				"\nwriteAlignmentToFileSingleEnded Checkpoint 2 number_of_repititions_of_the_same_reads %d",
-				number_of_repititions_of_the_same_reads);
+				"\nwriteAlignmentToFileSingleEnded Checkpoint 2 number_of_repititions_of_the_same_reads %d Value of i %d",
+				number_of_repititions_of_the_same_reads,
+				i);
 		fflush (stdout);
 
 		strcat(line_to_be_written_to_file, sam_alignment->cigar);
