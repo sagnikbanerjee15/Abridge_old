@@ -3924,7 +3924,8 @@ void writeAlignmentToFileSingleEnded(
 	for (i = 0; i < number_of_repititions_of_the_same_reads; i++)
 	{
 		line_to_be_written_to_file[0] = '\0';
-
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 0");
+		fflush (stdout);
 		/*
 		 * Set up the read name
 		 */
@@ -3973,7 +3974,7 @@ void writeAlignmentToFileSingleEnded(
 				read_length_calculated_from_cigar_string++;
 
 		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 1");
-		fflush (stdout);
+		fflush(stdout);
 		printf(
 				"\nread_length_calculated_from_cigar_string %d",
 				read_length_calculated_from_cigar_string);
