@@ -4013,6 +4013,7 @@ void writeAlignmentToFileSingleEnded(
 					"\nDifference detected %d",
 					strlen(sam_alignment->qual)
 							- read_length_calculated_from_cigar_string);
+			fflush (stdout);
 			sam_alignment->qual[strlen(sam_alignment->qual)
 					- read_length_calculated_from_cigar_string] = '\0';
 		}
