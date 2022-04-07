@@ -154,7 +154,8 @@ void decompressFile(
 		exit(1);
 	}
 	printf(
-			"\nAm here COLS_split_on_tab %d ROWS_split_on_comma %d",
+			"\nAm here line_len %d COLS_split_on_tab %d ROWS_split_on_comma %d",
+			line_len,
 			COLS_split_on_tab,
 			ROWS_split_on_comma);
 	fflush(stdout);
