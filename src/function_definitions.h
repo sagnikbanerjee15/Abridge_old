@@ -4476,9 +4476,10 @@ void convertToAlignmentSingleEnded(
 				split_on_comma);
 	}
 	printf(
-			"\nnumber_of_columns %d read_names_stored %d",
+			"\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
 			number_of_columns,
-			read_names_stored);
+			read_names_stored,
+			number_of_distinct_cigars_in_a_line);
 	//printf("\nconvertToAlignmentSingleEnded Checkpoint 1");
 	//fflush (stdout);
 
