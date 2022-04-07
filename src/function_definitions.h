@@ -4466,6 +4466,9 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[0],
 						',',
 						split_on_comma);
+				printf(
+						"\nInside here 01 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line);
 
 			}
 				break;
@@ -4479,6 +4482,9 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[1],
 						',',
 						split_on_comma);
+				printf(
+						"\nInside here 02 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line);
 			}
 				break;
 		}
@@ -4498,6 +4504,9 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[0],
 						',',
 						split_on_comma);
+				printf(
+						"\nInside here 12 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line);
 			}
 				break;
 			case 3:
@@ -4510,6 +4519,9 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[1],
 						',',
 						split_on_comma);
+				printf(
+						"\nInside here 13 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line);
 			}
 				break;
 		}
@@ -4536,7 +4548,7 @@ void convertToAlignmentSingleEnded(
 				&temp,
 				10);
 		printf(
-				"\nnumber_of_repititions_of_the_same_reads %d %s",
+				"\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
 				number_of_repititions_of_the_same_reads,
 				split_on_comma[j]);
 		//printf("\nconvertToAlignmentSingleEnded Checkpoint 2");
