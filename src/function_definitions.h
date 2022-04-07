@@ -4471,7 +4471,7 @@ void convertToAlignmentSingleEnded(
 			if (split_on_tab[1][i] == ',')
 				number_of_commas++;
 		number_of_distinct_cigars_in_a_line = splitByDelimiter(
-				split_on_tab[1],
+				split_on_tab[0],
 				',',
 				split_on_comma);
 	}
