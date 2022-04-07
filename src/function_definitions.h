@@ -4660,8 +4660,9 @@ void convertToAlignmentSingleEnded(
 				flag_ignore_quality_scores_for_matched_bases,
 				read_names,
 				flag_ignore_alignment_scores);
-		(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
+		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
 		printf("\nconvertToAlignmentSingleEnded Checkpoint 7");
+		fflush(stdout);
 	}
 }
 
