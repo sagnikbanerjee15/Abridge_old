@@ -153,7 +153,10 @@ void decompressFile(
 		printf("Error! File %s not found", pass1_filename);
 		exit(1);
 	}
-	printf("\nAm here max_line_len %d max_commas %d", max_line_len, max_commas);
+	printf(
+			"\nAm here COLS_split_on_tab %d ROWS_split_on_comma %d",
+			COLS_split_on_tab,
+			ROWS_split_on_comma);
 	fflush(stdout);
 
 	split_on_tab = (char**) malloc(sizeof(char*) * ROWS_split_on_tab);
