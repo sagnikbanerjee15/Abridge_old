@@ -9,6 +9,20 @@
 
 long long int total_mapped_reads = 0;
 
+char isNumber(char *text)
+{
+	int j;
+	j = strlen(text);
+	while (j--)
+	{
+		if (text[j] > 47 && text[j] < 58)
+			continue;
+
+		return 0;
+	}
+	return 1;
+}
+
 void decompressFile(
 		char *name_of_file_with_quality_scores,
 		char *genome_filename,
@@ -237,8 +251,7 @@ void decompressFile(
 				break;
 			case 2:
 
-				if (strlen(split_on_tab[0])
-						== strlen(itoa(atoi(split_on_tab[0]))))
+				if (isNumber(split_on_tab[0]) == 1)
 				{
 					//its an integer
 					read_names_stored = 0;
