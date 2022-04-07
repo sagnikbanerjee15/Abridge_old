@@ -290,12 +290,17 @@ void decompressFile(
 			fflush(stdout);
 			for (i = 0; i < ROWS_split_on_tab; i++)
 				free(split_on_tab[i]);
+			printf("\nSpace freed");
+			fflush(stdout);
 			COLS_split_on_tab = line_len + 100;
 			for (i = 0; i < ROWS_split_on_tab; i++)
 				split_on_tab[i] = (char*) malloc(
 						sizeof(char) * COLS_split_on_tab);
-			//printf ("\nA--> line_len %d COLS_split_on_tab %d" , line_len , COLS_split_on_tab);
-			//fflush (stdout);
+			printf(
+					"\nA--> line_len %d COLS_split_on_tab %d",
+					line_len,
+					COLS_split_on_tab);
+			fflush(stdout);
 
 		}
 		printf("\nCheckpoint 2 line_num = %d", line_num);
