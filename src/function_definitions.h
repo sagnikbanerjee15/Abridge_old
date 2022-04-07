@@ -4038,6 +4038,9 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, sam_alignment->seq);
 		strcat(line_to_be_written_to_file, "\t");
 
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3");
+		fflush(stdout);
+
 		if (flag_ignore_quality_scores_for_matched_bases == 1 && (line_len =
 				getline(&buffer, &len, fhr_qual)) != -1)
 		{
@@ -4048,6 +4051,8 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, sam_alignment->qual);
 		strcat(line_to_be_written_to_file, "\t");
 
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 4");
+		fflush(stdout);
 		//Tags
 		strcat(line_to_be_written_to_file, "NH:i:");
 		strcat(line_to_be_written_to_file, sam_alignment->tags[0].val);
@@ -4060,6 +4065,8 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, sam_alignment->tags[1].val);
 			strcat(line_to_be_written_to_file, "\t");
 		}
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 5");
+		fflush(stdout);
 
 		if (flag_ignore_sequence_information == 0)
 		{
@@ -4067,6 +4074,8 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, sam_alignment->tags[2].val);
 			strcat(line_to_be_written_to_file, "\t");
 		}
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 6");
+		fflush(stdout);
 		if (flag_ignore_alignment_scores == 0
 				&& strcmp(sam_alignment->tags[3].val, "X") != 0)
 		{
@@ -4074,6 +4083,8 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, sam_alignment->tags[3].val);
 			strcat(line_to_be_written_to_file, "\t");
 		}
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 7");
+		fflush(stdout);
 
 		strcat(line_to_be_written_to_file, "\n");
 		fprintf(fhw, "%s", line_to_be_written_to_file);
