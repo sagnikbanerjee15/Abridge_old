@@ -203,10 +203,11 @@ void decompressFile(
 	/********************************************************************/
 
 	writeSequenceHeaders(fhw, genome_filename, 1);
-	printf("\nThis works");
-	fflush(stdout);
+
 	line_num = 0;
 	line_len = getline(&buffer, &len, fhr);
+	printf("\nThis works");
+	fflush(stdout);
 	splitByDelimiter(buffer, '\t', split_on_tab);
 
 	splitByDelimiter(split_on_tab[0], ':', split_on_tilde);
