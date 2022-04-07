@@ -144,11 +144,11 @@ void decompressFile(
 				max_commas = num_commas;
 		}
 	}
-	printf("\nAm here max_line_len %d max_commas %d", max_line_len, max_commas);
-	fflush(stdout);
 	COLS_split_on_tab = line_len / 2;
 	ROWS_split_on_comma = max_commas;
 	rewind(fhr);
+	printf("\nAm here max_line_len %d max_commas %d", max_line_len, max_commas);
+	fflush(stdout);
 
 	split_on_tab = (char**) malloc(sizeof(char*) * ROWS_split_on_tab);
 	for (i = 0; i < ROWS_split_on_tab; i++)
@@ -191,6 +191,9 @@ void decompressFile(
 
 	sam_alignment_instance = allocateMemorySam_Alignment();
 	read_prefix[0] = '\0'; // Empty string
+
+	printf("\nMemory has been allocated");
+	fflush(stdout);
 	/********************************************************************/
 
 	writeSequenceHeaders(fhw, genome_filename, 1);
