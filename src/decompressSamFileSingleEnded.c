@@ -322,8 +322,7 @@ void decompressFile(
 						10);
 		}
 		//printf("\nCheckpoint 3 line_num = %d", line_num);
-		if (strstr(buffer, ",3Zg,") == NULL && strstr(buffer, "3Zg,") == NULL
-				&& strstr(buffer, ",3Zg") == NULL)
+		if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 			continue;
 		printf("\nThe compressed data %s", buffer);
 		convertToAlignmentSingleEnded(
