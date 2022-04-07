@@ -290,6 +290,8 @@ void decompressFile(
 			fflush(stdout);
 			for (i = 0; i < ROWS_split_on_tab; i++)
 			{
+				printf("\nAttempting to free row %d", i);
+				fflush(stdout);
 				free(split_on_tab[i]);
 				printf("\nSpace freed for row %d", i);
 				fflush(stdout);
