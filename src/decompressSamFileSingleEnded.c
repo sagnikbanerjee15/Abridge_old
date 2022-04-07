@@ -225,8 +225,7 @@ void decompressFile(
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
 		line_num++;
-		if (strstr(buffer, "3Zg") == NULL)
-			continue;
+
 		//printf("\nline_num = %d %s", line_num, buffer);
 		//if ( line_num == 10 ) break;
 		number_of_columns = 0;
@@ -323,6 +322,8 @@ void decompressFile(
 						10);
 		}
 		//printf("\nCheckpoint 3 line_num = %d", line_num);
+		if (strstr(buffer, "3Zg") == NULL)
+			continue;
 		convertToAlignmentSingleEnded(
 				sam_alignment_instance,
 				whole_genome,
