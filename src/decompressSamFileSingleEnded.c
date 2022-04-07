@@ -324,6 +324,7 @@ void decompressFile(
 		//printf("\nCheckpoint 3 line_num = %d", line_num);
 		if (strstr(buffer, "3Zg") == NULL)
 			continue;
+		printf("\nThe compressed data %s", buffer);
 		convertToAlignmentSingleEnded(
 				sam_alignment_instance,
 				whole_genome,
