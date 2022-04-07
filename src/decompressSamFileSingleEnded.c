@@ -144,7 +144,7 @@ void decompressFile(
 				max_commas = num_commas;
 		}
 	}
-	COLS_split_on_tab = (float) max_line_len / (float) 2;
+	COLS_split_on_tab = max_line_len;
 	ROWS_split_on_comma = max_commas;
 	fclose(fhr);
 	fhr = fopen(pass1_filename, "r");
@@ -154,10 +154,11 @@ void decompressFile(
 		exit(1);
 	}
 	printf(
-			"\nAm here line_len %d COLS_split_on_tab %d ROWS_split_on_comma %d",
+			"\nAm here line_len %d COLS_split_on_tab %d ROWS_split_on_comma %d max_commas*1000 %d",
 			max_line_len,
 			COLS_split_on_tab,
-			ROWS_split_on_comma);
+			ROWS_split_on_comma,
+			max_commas * 1000);
 	fflush(stdout);
 
 	split_on_tab = (char**) malloc(sizeof(char*) * ROWS_split_on_tab);
