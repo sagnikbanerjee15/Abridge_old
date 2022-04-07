@@ -143,8 +143,9 @@ void decompressFile(
 			if (max_commas < num_commas)
 				max_commas = num_commas;
 		}
-
 	}
+	printf("\nAm here");
+	fflush(stdout);
 	COLS_split_on_tab = line_len / 2;
 	ROWS_split_on_comma = max_commas;
 	rewind(fhr);
