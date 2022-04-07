@@ -289,7 +289,11 @@ void decompressFile(
 					COLS_split_on_tab);
 			fflush(stdout);
 			for (i = 0; i < ROWS_split_on_tab; i++)
+			{
 				free(split_on_tab[i]);
+				printf("\nSpace freed for row %d", i);
+				fflush(stdout);
+			}
 			printf("\nSpace freed");
 			fflush(stdout);
 			COLS_split_on_tab = line_len + 100;
