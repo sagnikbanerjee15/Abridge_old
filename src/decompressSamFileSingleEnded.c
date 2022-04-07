@@ -144,7 +144,7 @@ void decompressFile(
 				max_commas = num_commas;
 		}
 	}
-	printf("\nAm here");
+	printf("\nAm here max_line_len %d max_commas %d", max_line_len, max_commas);
 	fflush(stdout);
 	COLS_split_on_tab = line_len / 2;
 	ROWS_split_on_comma = max_commas;
