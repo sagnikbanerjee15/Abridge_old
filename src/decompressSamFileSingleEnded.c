@@ -144,7 +144,7 @@ void decompressFile(
 				max_commas = num_commas;
 		}
 	}
-	COLS_split_on_tab = (float) line_len / (float) 2;
+	COLS_split_on_tab = (float) max_line_len / (float) 2;
 	ROWS_split_on_comma = max_commas;
 	fclose(fhr);
 	fhr = fopen(pass1_filename, "r");
@@ -155,7 +155,7 @@ void decompressFile(
 	}
 	printf(
 			"\nAm here line_len %d COLS_split_on_tab %d ROWS_split_on_comma %d",
-			line_len,
+			max_line_len,
 			COLS_split_on_tab,
 			ROWS_split_on_comma);
 	fflush(stdout);
