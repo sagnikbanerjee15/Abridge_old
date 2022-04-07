@@ -3992,7 +3992,8 @@ void writeAlignmentToFileSingleEnded(
 							&& cigar_items_instance[j].def != 'D');
 			if (cigar_items_instance[j].def != 'N'
 					&& cigar_items_instance[j].def != 'D')
-				read_length_calculated_from_cigar_string++;
+				read_length_calculated_from_cigar_string +=
+						cigar_items_instance[j].len;
 		}
 
 		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 1");
