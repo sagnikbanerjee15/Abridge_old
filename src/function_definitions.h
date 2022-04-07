@@ -4407,11 +4407,11 @@ void convertToAlignmentSingleEnded(
 					split_on_tab[2],
 					',',
 					read_names);
-		/*
-		 printf ("\n Reads read");
-		 for ( i = 0 ; i < read_names_index ; i++ )
-		 printf ("\n%s" , read_names[i]);
-		 */
+
+		printf("\n Reads read");
+		for (i = 0; i < read_names_index; i++)
+			printf("\n%s", read_names[i]);
+
 	}
 
 	if ((number_of_columns == 1 && read_names_stored == 0)
