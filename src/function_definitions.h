@@ -3979,13 +3979,19 @@ void writeAlignmentToFileSingleEnded(
 		//fflush(stdout);
 
 		splitCigar(sam_alignment->cigar, &num_of_types, cigar_items_instance);
-		read_length_calculated_from_cigar_string = 0;
 		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 06");
 		//fflush (stdout);
+		read_length_calculated_from_cigar_string = 0;
 		for (j = 0; j < num_of_types; j++)
+		{
+			printf(
+					"\nCIGAR %d %c",
+					cigar_items_instance[j].len,
+					cigar_items_instance[j].def);
 			if (cigar_items_instance[j].def != 'N'
 					&& cigar_items_instance[j].def != 'D')
 				read_length_calculated_from_cigar_string++;
+		}
 
 		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 1");
 		//fflush(stdout);
