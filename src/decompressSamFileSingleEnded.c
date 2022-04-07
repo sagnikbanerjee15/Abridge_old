@@ -146,7 +146,13 @@ void decompressFile(
 	}
 	COLS_split_on_tab = line_len / 2;
 	ROWS_split_on_comma = max_commas;
-	rewind(fhr);
+	fclose(fhr);
+	fhr = fopen(pass1_filename, "r");
+	if (fhr == NULL)
+	{
+		printf("Error! File %s not found", pass1_filename);
+		exit(1);
+	}
 	printf("\nAm here max_line_len %d max_commas %d", max_line_len, max_commas);
 	fflush(stdout);
 
