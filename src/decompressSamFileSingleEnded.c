@@ -268,8 +268,9 @@ void decompressFile(
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
 		line_num++;
-
-		//printf("\nline_num = %d %s", line_num, buffer);
+		printf("\nStarting new line");
+		printf("\nline_num = %d %s", line_num, buffer);
+		fflush(stdout);
 		//if ( line_num == 10 ) break;
 		number_of_columns = splitByDelimiter(buffer, '\t', split_on_tab);
 
