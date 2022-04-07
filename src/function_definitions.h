@@ -3978,7 +3978,7 @@ void writeAlignmentToFileSingleEnded(
 		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 05");
 		fflush(stdout);
 
-		splitCigar(sam_alignment->cigar, num_of_types, cigar_items_instance);
+		splitCigar(sam_alignment->cigar, &num_of_types, cigar_items_instance);
 		read_length_calculated_from_cigar_string = 0;
 		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 06");
 		fflush(stdout);
