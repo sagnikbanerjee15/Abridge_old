@@ -3945,17 +3945,27 @@ void writeAlignmentToFileSingleEnded(
 			read_name_index++;
 		}
 		strcat(line_to_be_written_to_file, "\t");
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 01");
+		fflush(stdout);
 
 		sprintf(temp, "%d", sam_alignment->samflag);
 		strcat(line_to_be_written_to_file, temp);
 		strcat(line_to_be_written_to_file, "\t");
 
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 02");
+		fflush(stdout);
+
 		strcat(line_to_be_written_to_file, sam_alignment->reference_name);
 		strcat(line_to_be_written_to_file, "\t");
+
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 03");
+		fflush(stdout);
 
 		sprintf(temp, "%d", sam_alignment->start_position);
 		strcat(line_to_be_written_to_file, temp);
 		strcat(line_to_be_written_to_file, "\t");
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 04");
+		fflush(stdout);
 
 		if (flag_ignore_alignment_scores == 1)
 			strcat(line_to_be_written_to_file, "255");
