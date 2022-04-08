@@ -4353,8 +4353,8 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, sam_alignment->qual);
 		strcat(line_to_be_written_to_file, "\t");
 
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 4");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 4");
+		fflush (stdout);
 		//Tags
 		strcat(line_to_be_written_to_file, "NH:i:");
 		strcat(line_to_be_written_to_file, sam_alignment->tags[0].val);
