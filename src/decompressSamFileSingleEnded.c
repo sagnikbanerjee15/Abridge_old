@@ -269,9 +269,11 @@ void decompressFile(
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
 		line_num++;
-		printf("\nStarting new line");
-		printf("\nline_num = %d %d %s", line_num, strlen(buffer), buffer);
-		fflush(stdout);
+		/*
+		 printf("\nStarting new line");
+		 printf("\nline_num = %d %d %s", line_num, strlen(buffer), buffer);
+		 fflush(stdout);
+		 */
 		//if ( line_num == 10 ) break;
 		number_of_columns = splitByDelimiter(buffer, '\t', split_on_tab);
 
@@ -322,10 +324,11 @@ void decompressFile(
 		 if (max_number_of_commas < number_of_commas_in_each_line)
 		 max_number_of_commas = number_of_commas_in_each_line;
 		 */
-
-		printf("\nCheckpoint 1 line_num = %d", line_num);
-		printf("\n2. line_len %d len %d", line_len, len);
-		fflush(stdout);
+		/*
+		 printf("\nCheckpoint 1 line_num = %d", line_num);
+		 printf("\n2. line_len %d len %d", line_len, len);
+		 fflush(stdout);
+		 */
 		if (read_names_stored == 0)
 		{
 			if (number_of_columns == 1)
@@ -346,8 +349,10 @@ void decompressFile(
 						&convert_to_int_temp,
 						10);
 		}
-		printf("\nCheckpoint 3 line_num = %d", line_num);
-		fflush(stdout);
+		/*
+		 printf("\nCheckpoint 3 line_num = %d", line_num);
+		 fflush(stdout);
+		 */
 		/*
 		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 		 continue;
@@ -378,8 +383,10 @@ void decompressFile(
 				current_chromosome,
 				read_names,
 				read_names_stored);
-		printf("\nCheckpoint 4 line_num = %d", line_num);
-		fflush(stdout);
+		/*
+		 printf("\nCheckpoint 4 line_num = %d", line_num);
+		 fflush(stdout);
+		 */
 	}
 
 	//printf ("\nTotal mapped reads: %d" , total_mapped_reads);
