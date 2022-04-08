@@ -4227,8 +4227,8 @@ void writeAlignmentToFileSingleEnded(
 	for (i = 0; i < number_of_repititions_of_the_same_reads; i++)
 	{
 		line_to_be_written_to_file[0] = '\0';
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 0");
-		//fflush (stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 0");
+		fflush (stdout);
 		/*
 		 * Set up the read name
 		 */
@@ -4248,27 +4248,27 @@ void writeAlignmentToFileSingleEnded(
 			read_name_index++;
 		}
 		strcat(line_to_be_written_to_file, "\t");
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 01");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 01");
+		fflush(stdout);
 
 		sprintf(temp, "%d", sam_alignment->samflag);
 		strcat(line_to_be_written_to_file, temp);
 		strcat(line_to_be_written_to_file, "\t");
 
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 02");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 02");
+		fflush(stdout);
 
 		strcat(line_to_be_written_to_file, sam_alignment->reference_name);
 		strcat(line_to_be_written_to_file, "\t");
 
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 03");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 03");
+		fflush(stdout);
 
 		sprintf(temp, "%d", sam_alignment->start_position);
 		strcat(line_to_be_written_to_file, temp);
 		strcat(line_to_be_written_to_file, "\t");
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 04");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 04");
+		fflush(stdout);
 
 		if (flag_ignore_alignment_scores == 1)
 			strcat(line_to_be_written_to_file, "255");
@@ -4278,20 +4278,18 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, temp);
 		}
 		strcat(line_to_be_written_to_file, "\t");
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 05");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 05");
+		fflush(stdout);
 
 		splitCigar(sam_alignment->cigar, &num_of_types, cigar_items_instance);
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 06");
-		//fflush (stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 06");
+		fflush(stdout);
 
-		/*
-		 printf(
-		 "\nwriteAlignmentToFileSingleEnded Checkpoint 2 number_of_repititions_of_the_same_reads %d Value of i %d",
-		 number_of_repititions_of_the_same_reads,
-		 i);
-		 fflush (stdout);
-		 */
+		printf(
+				"\nwriteAlignmentToFileSingleEnded Checkpoint 2 number_of_repititions_of_the_same_reads %d Value of i %d",
+				number_of_repititions_of_the_same_reads,
+				i);
+		fflush(stdout);
 
 		strcat(line_to_be_written_to_file, sam_alignment->cigar);
 		strcat(line_to_be_written_to_file, "\t");
@@ -4308,8 +4306,8 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, sam_alignment->seq);
 		strcat(line_to_be_written_to_file, "\t");
 
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3");
+		fflush(stdout);
 
 		if (flag_ignore_quality_scores_for_matched_bases == 0 && (line_len =
 				getline(&buffer, &len, fhr_qual)) != -1)
@@ -4345,7 +4343,7 @@ void writeAlignmentToFileSingleEnded(
 					"\nDifference detected %d",
 					strlen(sam_alignment->qual)
 							- read_length_calculated_from_cigar_string);
-			fflush (stdout);
+			fflush(stdout);
 			sam_alignment->qual[read_length_calculated_from_cigar_string] =
 					'\0';
 		}
@@ -4354,7 +4352,7 @@ void writeAlignmentToFileSingleEnded(
 		strcat(line_to_be_written_to_file, "\t");
 
 		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 4");
-		fflush (stdout);
+		fflush(stdout);
 		//Tags
 		strcat(line_to_be_written_to_file, "NH:i:");
 		strcat(line_to_be_written_to_file, sam_alignment->tags[0].val);
@@ -4367,8 +4365,8 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, sam_alignment->tags[1].val);
 			strcat(line_to_be_written_to_file, "\t");
 		}
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 5");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 5");
+		fflush(stdout);
 
 		if (flag_ignore_sequence_information == 0)
 		{
@@ -4376,8 +4374,8 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, sam_alignment->tags[2].val);
 			strcat(line_to_be_written_to_file, "\t");
 		}
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 6");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 6");
+		fflush(stdout);
 		if (flag_ignore_alignment_scores == 0
 				&& strcmp(sam_alignment->tags[3].val, "X") != 0)
 		{
@@ -4385,14 +4383,14 @@ void writeAlignmentToFileSingleEnded(
 			strcat(line_to_be_written_to_file, sam_alignment->tags[3].val);
 			strcat(line_to_be_written_to_file, "\t");
 		}
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 7");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 7");
+		fflush(stdout);
 
 		strcat(line_to_be_written_to_file, "\n");
 		fprintf(fhw, "%s", line_to_be_written_to_file);
 
-		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 8");
-		//fflush(stdout);
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 8");
+		fflush(stdout);
 	}
 	printf("\nWriting is completed");
 	fflush (stdout);
