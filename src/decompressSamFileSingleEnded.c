@@ -269,9 +269,9 @@ void decompressFile(
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
 		line_num++;
-		printf("\nStarting new line");
-		printf("\nline_num = %d %d", line_num, strlen(buffer));
-		fflush(stdout);
+		//printf("\nStarting new line");
+		//printf("\nline_num = %d %d", line_num, strlen(buffer));
+		//fflush(stdout);
 		//if ( line_num == 10 ) break;
 		number_of_columns = splitByDelimiter(buffer, '\t', split_on_tab);
 
@@ -323,55 +323,9 @@ void decompressFile(
 		if (max_number_of_commas < number_of_commas_in_each_line)
 			max_number_of_commas = number_of_commas_in_each_line;
 
-		printf("\nCheckpoint 1 line_num = %d", line_num);
-		printf("\n2. line_len %d len %d", line_len, len);
-		fflush(stdout);
-		/*
-		 if (line_len > COLS_split_on_tab)
-		 {
-		 printf(
-		 "\nB--> line_len %d COLS_split_on_tab %d",
-		 line_len,
-		 COLS_split_on_tab);
-		 fflush(stdout);
-		 COLS_split_on_tab = line_len + 100;
-		 for (i = 0; i < ROWS_split_on_tab; i++)
-		 {
-
-		 split_on_tab[i] = (char*) realloc(
-		 split_on_tab[i],
-		 sizeof(char) * COLS_split_on_tab);
-		 }
-		 printf(
-		 "\nA--> line_len %d COLS_split_on_tab %d",
-		 line_len,
-		 COLS_split_on_tab);
-		 fflush(stdout);
-
-		 }
-		 printf("\nCheckpoint 2 line_num = %d", line_num);
-		 fflush(stdout);
-		 if (max_number_of_commas > ROWS_split_on_comma)
-		 {
-		 //printf ("\nB--> max_number_of_commas %d ROWS_split_on_comma %d" , max_number_of_commas , ROWS_split_on_comma);
-		 //fflush (stdout);
-		 for (i = 0; i < ROWS_split_on_comma; i++)
-		 free(split_on_comma[i]);
-		 free(split_on_comma);
-		 ROWS_split_on_comma = line_len / max_number_of_commas + 10;
-		 split_on_comma = (char**) malloc(
-		 sizeof(char*) * ROWS_split_on_comma);
-		 for (i = 0; i < ROWS_split_on_comma; i++)
-		 split_on_comma[i] = (char*) malloc(
-		 sizeof(char) * COLS_split_on_comma);
-		 printf(
-		 "\nA--> max_number_of_commas %d ROWS_split_on_comma %d",
-		 max_number_of_commas,
-		 ROWS_split_on_comma);
-		 fflush(stdout);
-		 }
-		 */
-
+		//printf("\nCheckpoint 1 line_num = %d", line_num);
+		//printf("\n2. line_len %d len %d", line_len, len);
+		//fflush(stdout);
 		if (read_names_stored == 0)
 		{
 			if (number_of_columns == 1)
@@ -397,7 +351,7 @@ void decompressFile(
 		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 		 continue;
 		 */
-		printf("\nThe compressed data %s", buffer);
+		//printf("\nThe compressed data %s", buffer);
 		convertToAlignmentSingleEnded(
 				sam_alignment_instance,
 				whole_genome,
