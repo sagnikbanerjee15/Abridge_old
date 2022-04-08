@@ -4394,8 +4394,8 @@ void writeAlignmentToFileSingleEnded(
 		//printf("\nwriteAlignmentToFileSingleEnded Checkpoint 8");
 		//fflush(stdout);
 	}
-	//printf("\nWriting is completed");
-	//fflush (stdout);
+	printf("\nWriting is completed");
+	fflush (stdout);
 }
 
 void convertToAlignmentSingleEnded(
