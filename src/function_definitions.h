@@ -4321,7 +4321,8 @@ void writeAlignmentToFileSingleEnded(
 		if (flag_ignore_quality_scores_for_matched_bases == 0 && (line_len =
 				getline(&buffer, &len, fhr_qual)) != -1)
 		{
-			buffer[strlen(buffer) - 1] = '\0';
+			if (buffer[strlen(buffer) - 1] == '\n')
+				buffer[strlen(buffer) - 1] = '\0';
 			//strcat(line_to_be_written_to_file, buffer);
 			strcpy(sam_alignment->qual, buffer);
 
