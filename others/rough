@@ -27,42 +27,44 @@ docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and
 --outSAMunmapped Within' 
 
 ####################################################################################################################################################################################
-# COMPRESSION SE Chromosome 1
+# COMPRESSION SE subsample
 
 docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c '/project1/ABRIDGE/Abridge/abridge \
---inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_1.bam \
---output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge_compress \
+--inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_sub_Aligned.sortedByCoord.out.sam \
+--output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_sub_compress \
 --compress \
 --genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
 --keep_intermediate_error_files \
 --framework docker \
 --preserve_all_intermediate_files \
-1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge_compress.output \
-2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_1_abridge_compress.error'
+1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_sub_compress.output \
+2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_sub_compress.error'
 
 # COMPRESSION SE All Chromosomes
 
 docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c '/project1/ABRIDGE/Abridge/abridge \
 --inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_SE_Aligned.sortedByCoord.out.bam \
---output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge_compress \
+--output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_compress \
 --compress \
 --genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
 --keep_intermediate_error_files \
 --framework docker \
-1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge_compress.output \
-2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_abridge_compress.error'
+--preserve_all_intermediate_files \
+1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_compress.output \
+2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_compress.error'
 
-# COMPRESSION PE Chromosome 1
+# COMPRESSION PE subsample
 
 docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c '/project1/ABRIDGE/Abridge/abridge \
---inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_PE_1.bam \
---output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_1_abridge_compress \
+--inputfilename /project1/ABRIDGE/developing_abridge/alignments/SRR17262722_PE_sub_Aligned.sortedByCoord.out.sam \
+--output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_sub_compress \
 --compress \
 --genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
 --keep_intermediate_error_files \
 --framework docker \
-1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_1_abridge_compress.output \
-2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_1_abridge_compress.error'
+--preserve_all_intermediate_files \
+1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_sub_compress.output \
+2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_PE_sub_compress.error'
 
 ####################################################################################################################################################################################
 

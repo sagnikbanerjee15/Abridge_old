@@ -1511,8 +1511,11 @@ def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, r
     elif file_extension == "sam":
         first_line = open( options.inputfilename, "r" ).readline().strip()
         if "SO:coordinate" in first_line:
-            # Nothing to change
-            pass
+            # Copying the input sam file to the output directory
+            cmd = f"cp {options.inputfilename} {options.output_directory}/inputfilename.sam "
+            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
+            remove_these_files.append( options.inputfilename )
+            os.system( cmd )
         else:
             # Sort Samfile by coordinate
             cmd = f"samtools view -bS -@ {options.cpu} {options.inputfilename}|samtools sort -@ {options.cpu}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
