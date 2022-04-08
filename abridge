@@ -69,7 +69,6 @@ def parseCommandLineArguments():
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
     optional_named.add_argument( "--force", "-force", help = "Setting this argument will remove the output directory and start the computation from scratch", action = "store_true" )
-    optional_named.add_argument( "--skip_modifying_read_names", "-skip_modifying_read_names", help = "Avoid renaming the reads to save space. Please note that enabling this option will lead to larger file sizes", action = "store_true" )
     optional_named.add_argument( "--preserve_all_intermediate_files", "-preserve_all_intermediate_files", help = "Set this option to preserve all the intermediate files", action = "store_true" )
 
     # Suppressed arguments
@@ -1062,7 +1061,11 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     fhw.write( "}\n" )
     fhw.close()
 
-    enc_file_to_be_decompressed = glob.glob( f"{options.output_directory}/*fclqc001.enc" )[0]
+    if len( glob.glob( f"{options.output_directory}/*fclqc001.enc" ) ) > 0:
+        enc_file_to_be_decompressed = glob.glob( f"{options.output_directory}/*fclqc001.enc" )[0]
+    else:
+        # enc_file_to_be_decompressed =  f"{options.output_directory}/*fclqc001.enc"
+        os.system( f"touch {name_of_file_with_quality_scores}" )
 
     cmd = f"(/usr/bin/time --verbose "
     cmd += f" main "
@@ -1074,7 +1077,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     cmd += f"1> /dev/null "
     cmd += f"2> {options.error_directory}/fclqc_decompress.error"
 
-    if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False:
+    if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False and len( glob.glob( f"{options.output_directory}/*fclqc001.enc" ) ) > 0:
         if options.framework == "docker":
             runDockerCommand( logging,
                               name = "fclqc",
@@ -1102,7 +1105,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     cmd = f"mv {fclqc_output_filename}_decompressed001.dec {name_of_file_with_quality_scores}"
 
-    if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False:
+    if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False and len( glob.glob( f"{options.output_directory}/*fclqc001.enc" ) ) > 0:
         if options.framework == "docker":
             runDockerCommand( logging,
                               name = "fclqc",
