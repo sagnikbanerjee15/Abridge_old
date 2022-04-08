@@ -1067,12 +1067,38 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     cmd = f"(/usr/bin/time --verbose "
     cmd += f" main "
     cmd += f" -d "
-    cmd += f" {enc_file_to_be_decompressed.split('001')[0]} "
+    cmd += f" {enc_file_to_be_decompressed} "
     cmd += f" {fclqc_output_filename}_decompressed "
     cmd += f" {options.output_directory}/parameter.json "
     cmd += f")"
     cmd += f"1> /dev/null "
     cmd += f"2> {options.error_directory}/fclqc_decompress.error"
+
+    if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False:
+        if options.framework == "docker":
+            runDockerCommand( logging,
+                              name = "fclqc",
+                                version = list_of_softwares_with_versions['fclqc'],
+                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
+                )
+
+        elif options.framework == "singularity":
+            runSingularityCommand( logging,
+                                name = "fclqc",
+                                version = list_of_softwares_with_versions['fclqc'],
+                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                container_name = f"{options.output_directory.split('/')[-1]}",
+                                volumes = volumes_list,
+                                command = cmd,
+                                cpus = options.cpu,
+                                memory = '100g'
+
+                )
 
     cmd = f"mv {fclqc_output_filename}_decompressed001.dec {name_of_file_with_quality_scores}"
 
