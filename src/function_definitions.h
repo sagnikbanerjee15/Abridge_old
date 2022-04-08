@@ -4550,13 +4550,13 @@ void convertToAlignmentSingleEnded(
 		}
 
 	}
-	/*
-	 printf(
-	 "\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
-	 number_of_columns,
-	 read_names_stored,
-	 number_of_distinct_cigars_in_a_line);
-	 */
+
+	printf(
+			"\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
+			number_of_columns,
+			read_names_stored,
+			number_of_distinct_cigars_in_a_line);
+
 	//printf("\nconvertToAlignmentSingleEnded Checkpoint 1");
 	//fflush (stdout);
 	for (j = 0; j < number_of_distinct_cigars_in_a_line; j++)
@@ -4570,14 +4570,14 @@ void convertToAlignmentSingleEnded(
 				split_on_dash[1],
 				&temp,
 				10);
-		/*
-		 printf(
-		 "\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
-		 number_of_repititions_of_the_same_reads,
-		 split_on_comma[j]);
-		 */
-		//printf("\nconvertToAlignmentSingleEnded Checkpoint 2");
-		//fflush(stdout);
+
+		printf(
+				"\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
+				number_of_repititions_of_the_same_reads,
+				split_on_comma[j]);
+
+		printf("\nconvertToAlignmentSingleEnded Checkpoint 2");
+		fflush (stdout);
 		if (!(split_on_comma[j][1] == '-' && isalpha(split_on_dash[0][0]) != 0))
 		{
 			if (flag_ignore_alignment_scores == 0)
@@ -4594,8 +4594,8 @@ void convertToAlignmentSingleEnded(
 				strcpy(sam_alignment_instance->tags[3].val, "X");
 			}
 		}
-		//printf("\nconvertToAlignmentSingleEnded Checkpoint 3");
-		//fflush(stdout);
+		printf("\nconvertToAlignmentSingleEnded Checkpoint 3");
+		fflush(stdout);
 		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
 		sam_alignment_instance->start_position = curr_position;
 
@@ -4614,8 +4614,8 @@ void convertToAlignmentSingleEnded(
 			 printf ("\n==============================================================================================================================");
 			 fflush (stdout);
 			 }*/
-			//printf("\nconvertToAlignmentSingleEnded Checkpoint 4");
-			//fflush(stdout);
+			printf("\nconvertToAlignmentSingleEnded Checkpoint 4");
+			fflush(stdout);
 		}
 		else
 		{
@@ -4647,19 +4647,19 @@ void convertToAlignmentSingleEnded(
 			sprintf(temp, "%d", *read_number);
 			(*read_number)++;
 			strcpy(sam_alignment_instance->read_name, temp);
-			//printf("\nconvertToAlignmentSingleEnded Checkpoint 5");
-			//fflush(stdout);
+			printf("\nconvertToAlignmentSingleEnded Checkpoint 5");
+			fflush(stdout);
 		}
-		fflush (stdout);
+		fflush(stdout);
 		//printSamAlignmentInstance (sam_alignment_instance , 0);
 		//continue;
-		/*
-		 printf(
-		 "\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d number_of_distinct_cigars_in_a_line %d",
-		 j,
-		 number_of_distinct_cigars_in_a_line);
-		 fflush(stdout);
-		 */
+
+		printf(
+				"\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d number_of_distinct_cigars_in_a_line %d",
+				j,
+				number_of_distinct_cigars_in_a_line);
+		fflush(stdout);
+
 		writeAlignmentToFileSingleEnded(
 				sam_alignment_instance,
 				flag_ignore_sequence_information,
@@ -4671,8 +4671,8 @@ void convertToAlignmentSingleEnded(
 				read_names,
 				flag_ignore_alignment_scores);
 		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
-		//printf("\nconvertToAlignmentSingleEnded Checkpoint 7");
-		//fflush(stdout);
+		printf("\nconvertToAlignmentSingleEnded Checkpoint 7");
+		fflush(stdout);
 	}
 }
 

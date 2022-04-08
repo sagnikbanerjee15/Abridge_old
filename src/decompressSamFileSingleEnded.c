@@ -314,13 +314,14 @@ void decompressFile(
 			//fflush (stdout);
 			continue;
 		}
-
-		number_of_commas_in_each_line = 0;
-		for (i = 0; buffer[i] != '\0'; i++)
-			if (buffer[i] == ',')
-				number_of_commas_in_each_line++;
-		if (max_number_of_commas < number_of_commas_in_each_line)
-			max_number_of_commas = number_of_commas_in_each_line;
+		/*
+		 number_of_commas_in_each_line = 0;
+		 for (i = 0; buffer[i] != '\0'; i++)
+		 if (buffer[i] == ',')
+		 number_of_commas_in_each_line++;
+		 if (max_number_of_commas < number_of_commas_in_each_line)
+		 max_number_of_commas = number_of_commas_in_each_line;
+		 */
 
 		printf("\nCheckpoint 1 line_num = %d", line_num);
 		printf("\n2. line_len %d len %d", line_len, len);
