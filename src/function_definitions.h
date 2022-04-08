@@ -4332,7 +4332,8 @@ void writeAlignmentToFileSingleEnded(
 				read_length_calculated_from_cigar_string +=
 						cigar_items_instance[j].len;
 		}
-
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.75");
+		fflush(stdout);
 		if (strlen(sam_alignment->qual)
 				!= read_length_calculated_from_cigar_string)
 		{
