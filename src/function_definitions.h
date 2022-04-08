@@ -4334,7 +4334,7 @@ void writeAlignmentToFileSingleEnded(
 		}
 		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.75");
 		printf(
-				"\%d  %d",
+				"\n%d  %d",
 				strlen(sam_alignment->qual),
 				read_length_calculated_from_cigar_string);
 		fflush(stdout);
