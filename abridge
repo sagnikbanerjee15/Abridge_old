@@ -1137,7 +1137,6 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     all_flags_numeric = []
     for flag in all_flags:
         flag = flag.decode( 'ascii' )
-        print( flag )
         all_flags_numeric.append( int( flag.split( ":" )[-1] ) )
     flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips, flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = all_flags_numeric
 
