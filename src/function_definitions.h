@@ -4317,6 +4317,8 @@ void writeAlignmentToFileSingleEnded(
 			strcpy(sam_alignment->qual, buffer);
 
 		}
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.5");
+		fflush(stdout);
 		/*
 		 else
 		 strcat(line_to_be_written_to_file, sam_alignment->qual);
