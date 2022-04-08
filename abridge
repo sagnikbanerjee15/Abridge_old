@@ -508,34 +508,6 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
                 )
 
-        """
-        ######################################################################################
-        # Index generation
-        ######################################################################################
-        max_commas = int( open( name_of_file_with_max_commas, "r" ).read().strip() )
-        if options.quiet == False:
-            logging.info( f"{name_of_input_file_without_location} max_commas = {max_commas}" )
-
-        cmd = f"(/usr/bin/time --verbose "
-        cmd += f"buildABRIDGEIndex {outputfilename} {name_of_file_with_quality_scores} {index_outputfilename} {max_commas} 0 "
-        if options.ignore_alignment_scores == True:
-            cmd += f" 1 "  # argv[15] - save_scores = False
-        else:
-            cmd += f" 0 "  # argv[15] - save_scores = True
-        cmd += f") "
-        cmd += f"1> /dev/null "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_prep_abridge_index}"
-        else:
-            cmd += f"2> /dev/null"
-        if options.quiet == False:
-            logging.info( f"Starting to build index for {name_of_input_file_without_location}" )
-            logging.info( f"Running cmd - {cmd}" )
-        all_commands.append( [cmd, "dummy"] )
-        os.system( cmd )
-        # pool.map(runCommand,all_commands)
-        """
-
     else:
         # Paired ended
 
@@ -684,33 +656,6 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
                                 memory = '100g'
 
                 )
-        """
-        ######################################################################################
-        # Index generation
-        ######################################################################################
-        max_commas = int( open( name_of_file_with_max_commas, "r" ).read().strip() )
-        if options.quiet == False:
-            logging.info( f"{name_of_input_file_without_location} max_commas = {max_commas}" )
-
-        cmd = f"(/usr/bin/time --verbose "
-        cmd += f"{buildABRIDGEIndex} {outputfilename} {name_of_file_with_quality_scores} {index_outputfilename} {max_commas} 1 "
-        if options.ignore_alignment_scores == True:
-            cmd += f" 1 "
-        else:
-            cmd += f" 0 "
-        cmd += f") "
-        cmd += f"1> /dev/null "
-        if options.keep_intermediate_error_files == True:
-            cmd += f"2> {error_file_prep_abridge_index}"
-        else:
-            cmd += f"2> /dev/null"
-        if options.quiet == False:
-            logging.info( f"Starting to build index for {name_of_input_file_without_location}" )
-            logging.info( f"Running cmd - {cmd}" )
-        all_commands.append( [cmd, "dummy"] )
-        os.system( cmd )
-        # pool.map(runCommand,all_commands)
-        """
 
     ######################################################################################
     # Compress Quality scores file
@@ -826,7 +771,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     all_files = glob.glob( f"{options.output_directory}/*" )
     keep_these_files = []
     for file in all_files:
-        if file[-6:] == ".error" or file[-8:] == ".abridge":
+        if file[-6:] == ".error" or file[-8:] == ".abridge" or file[-3:] == "log":
             keep_these_files.append( file )
     remove_these_files = list( set( all_files ) - set( keep_these_files ) )
 
