@@ -250,21 +250,21 @@ void decompressFile(
 			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
-
-	printf("\nflag_ignore_mismatches %d", flag_ignore_mismatches);
-	printf("\nflag_ignore_soft_clippings %d", flag_ignore_soft_clippings);
-	printf(
-			"\nflag_ignore_unmapped_sequences %d",
-			flag_ignore_unmapped_sequences);
-	printf(
-			"\nflag_ignore_quality_scores_for_mismatched_bases_and_soft_clips %d",
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
-	printf(
-			"\nflag_ignore_quality_scores_for_matched_bases %d",
-			flag_ignore_quality_scores_for_matched_bases);
-	printf("\nflag_save_exact_quality_scores %d", flag_ignore_alignment_scores);
-	fflush(stdout);
-
+	/*
+	 printf("\nflag_ignore_mismatches %d", flag_ignore_mismatches);
+	 printf("\nflag_ignore_soft_clippings %d", flag_ignore_soft_clippings);
+	 printf(
+	 "\nflag_ignore_unmapped_sequences %d",
+	 flag_ignore_unmapped_sequences);
+	 printf(
+	 "\nflag_ignore_quality_scores_for_mismatched_bases_and_soft_clips %d",
+	 flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	 printf(
+	 "\nflag_ignore_quality_scores_for_matched_bases %d",
+	 flag_ignore_quality_scores_for_matched_bases);
+	 printf("\nflag_save_exact_quality_scores %d", flag_ignore_alignment_scores);
+	 fflush(stdout);
+	 */
 	line_num = 0;
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
@@ -295,7 +295,6 @@ void decompressFile(
 				break;
 		}
 
-		//printf ("\nRead present? %d %s" , strstr (buffer , "abridge_") , buffer);
 		if (buffer[0] == '@')
 		{
 			splitByDelimiter(split_on_tab[1], ':', split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
@@ -323,9 +322,9 @@ void decompressFile(
 		if (max_number_of_commas < number_of_commas_in_each_line)
 			max_number_of_commas = number_of_commas_in_each_line;
 
-		//printf("\nCheckpoint 1 line_num = %d", line_num);
-		//printf("\n2. line_len %d len %d", line_len, len);
-		//fflush(stdout);
+		printf("\nCheckpoint 1 line_num = %d", line_num);
+		printf("\n2. line_len %d len %d", line_len, len);
+		fflush(stdout);
 		if (read_names_stored == 0)
 		{
 			if (number_of_columns == 1)
@@ -346,7 +345,8 @@ void decompressFile(
 						&convert_to_int_temp,
 						10);
 		}
-		//printf("\nCheckpoint 3 line_num = %d", line_num);
+		printf("\nCheckpoint 3 line_num = %d", line_num);
+		fflush(stdout);
 		/*
 		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 		 continue;
@@ -377,8 +377,8 @@ void decompressFile(
 				current_chromosome,
 				read_names,
 				read_names_stored);
-		//printf ("\nCheckpoint 4 line_num = %d" , line_num);
-		//fflush (stdout);
+		printf("\nCheckpoint 4 line_num = %d", line_num);
+		fflush(stdout);
 	}
 
 	//printf ("\nTotal mapped reads: %d" , total_mapped_reads);
