@@ -214,8 +214,10 @@ void decompressFile(
 
 	line_num = 0;
 	line_len = getline(&buffer, &len, fhr);
-	printf("\nThis works");
-	fflush(stdout);
+	/*
+	 printf("\nThis works");
+	 fflush(stdout);
+	 */
 	splitByDelimiter(buffer, '\t', split_on_tab);
 
 	splitByDelimiter(split_on_tab[0], ':', split_on_tilde);
@@ -248,7 +250,7 @@ void decompressFile(
 			&convert_to_int_temp,
 			10);
 
-	splitByDelimiter(split_on_tab[6], ':', split_on_tilde);
+	splitByDelimiter(split_on_tab[5], ':', split_on_tilde);
 	flag_ignore_alignment_scores = strtol(
 			split_on_tilde[1],
 			&convert_to_int_temp,
