@@ -269,7 +269,7 @@ void decompressFile(
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
 	{
 		line_num++;
-		//printf("\nStarting new line");
+		printf("\nStarting new line");
 		//printf("\nline_num = %d %d", line_num, strlen(buffer));
 		//fflush(stdout);
 		//if ( line_num == 10 ) break;
