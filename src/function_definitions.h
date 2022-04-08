@@ -4342,10 +4342,9 @@ void writeAlignmentToFileSingleEnded(
 				!= read_length_calculated_from_cigar_string)
 		{
 			printf(
-					"\nread_length_calculated_from_cigar_string %d %s read_name %s",
+					"\nread_length_calculated_from_cigar_string %d %s",
 					read_length_calculated_from_cigar_string,
-					sam_alignment->cigar,
-					read_names[read_name_index - 1]);
+					sam_alignment->cigar);
 			fflush(stdout);
 			printf(
 					"\nDifference detected %d",
