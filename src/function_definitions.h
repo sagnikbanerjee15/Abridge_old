@@ -4350,7 +4350,8 @@ void writeAlignmentToFileSingleEnded(
 			sam_alignment->qual[read_length_calculated_from_cigar_string] =
 					'\0';
 		}
-
+		printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.9");
+		fflush(stdout);
 		strcat(line_to_be_written_to_file, sam_alignment->qual);
 		strcat(line_to_be_written_to_file, "\t");
 
