@@ -1728,11 +1728,6 @@ def main():
         prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
         logging.info( f"Input files have been prepared" )
 
-    if options.inputfilename is not None:
-        input_filename_without_location = options.inputfilename.split( "/" )[-1][:-4]
-    else:
-        input_filename_without_location = options.inputabrfilename.split( "/" )[-1][:-8]
-
     if options.output_directory is None:
         options.output_directory = "/".join( options.inputfilename.split( "/" )[:-1] )
 
