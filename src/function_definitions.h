@@ -3038,7 +3038,9 @@ void readInEachChromosome(
 						+ strlen(
 								whole_genome->nucleotides[whole_genome->number_of_reference_sequences
 										- 1]);
-		printf("\nFreeing %f KBytes", (float) total / (float) 1024);
+		printf(
+				"\nInside readInEachChromosome function Freeing %f KBytes",
+				(float) total / (float) 1024);
 		free(
 				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
 						- 1]);
@@ -4345,7 +4347,7 @@ void writeAlignmentToFileSingleEnded(
 		 read_length_calculated_from_cigar_string);
 		 fflush (stdout);
 		 */
-		if (strlen(sam_alignment->qual)
+		if (strlen(sam_alignment->seq)
 				!= read_length_calculated_from_cigar_string)
 		{
 			/*

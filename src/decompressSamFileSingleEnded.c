@@ -153,13 +153,15 @@ void decompressFile(
 		printf("Error! File %s not found", pass1_filename);
 		exit(1);
 	}
-	printf(
-			"\nAm here line_len %d COLS_split_on_tab %d ROWS_split_on_comma %d max_commas*1000 %d",
-			max_line_len,
-			COLS_split_on_tab,
-			ROWS_split_on_comma,
-			max_commas * 1000);
-	fflush(stdout);
+	/*
+	 printf(
+	 "\nAm here line_len %d COLS_split_on_tab %d ROWS_split_on_comma %d max_commas*1000 %d",
+	 max_line_len,
+	 COLS_split_on_tab,
+	 ROWS_split_on_comma,
+	 max_commas * 1000);
+	 fflush(stdout);
+	 */
 
 	split_on_tab = (char**) malloc(sizeof(char*) * ROWS_split_on_tab);
 	for (i = 0; i < ROWS_split_on_tab; i++)
@@ -202,9 +204,10 @@ void decompressFile(
 
 	sam_alignment_instance = allocateMemorySam_Alignment();
 	read_prefix[0] = '\0'; // Empty string
-
-	printf("\nMemory has been allocated");
-	fflush(stdout);
+	/*
+	 printf("\nMemory has been allocated");
+	 fflush(stdout);
+	 */
 	/********************************************************************/
 
 	writeSequenceHeaders(fhw, genome_filename, 1);
