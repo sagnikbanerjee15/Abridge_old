@@ -1067,17 +1067,17 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         # enc_file_to_be_decompressed =  f"{options.output_directory}/*fclqc001.enc"
         os.system( f"touch {name_of_file_with_quality_scores}" )
 
-    cmd = f"(/usr/bin/time --verbose "
-    cmd += f" main "
-    cmd += f" -d "
-    cmd += f" {enc_file_to_be_decompressed.split('001')[0]} "
-    cmd += f" {fclqc_output_filename}_decompressed "
-    cmd += f" {options.output_directory}/parameter.json "
-    cmd += f")"
-    cmd += f"1> /dev/null "
-    cmd += f"2> {options.error_directory}/fclqc_decompress.error"
-
     if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False and len( glob.glob( f"{options.output_directory}/*fclqc001.enc" ) ) > 0:
+        cmd = f"(/usr/bin/time --verbose "
+        cmd += f" main "
+        cmd += f" -d "
+        cmd += f" {enc_file_to_be_decompressed.split('001')[0]} "
+        cmd += f" {fclqc_output_filename}_decompressed "
+        cmd += f" {options.output_directory}/parameter.json "
+        cmd += f")"
+        cmd += f"1> /dev/null "
+        cmd += f"2> {options.error_directory}/fclqc_decompress.error"
+
         if options.framework == "docker":
             runDockerCommand( logging,
                               name = "fclqc",
