@@ -81,3 +81,16 @@ docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and
 --preserve_all_intermediate_files \
 1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_sub_decompress.output \
 2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_sub_decompress.error'
+
+# DECOMPRESSION SE whole sample
+
+docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge:1.1.0 bash -c '/project1/ABRIDGE/Abridge/abridge \
+--inputabrfilename /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_compress/SRR17262722_SE_Aligned.sortedByCoord.out.abridge \
+--output_directory /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_decompress \
+--decompress \
+--genome /project1/ABRIDGE/developing_abridge/references/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+--keep_intermediate_error_files \
+--framework docker \
+--preserve_all_intermediate_files \
+1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_decompress.output \
+2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_decompress.error'

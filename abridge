@@ -4,9 +4,8 @@
 # The software 'abridge' will compress aligned files to a bare minimum needed for generating assemblies and producing read counts
 #
 # Changelist
-
-# Only a single type of compression zpaq
-# Altering of read names
+#
+# Write meaningful outputs
 ########################################################################################################################################################
 
 from argparse import RawTextHelpFormatter
@@ -30,7 +29,7 @@ from scripts.sortPositionsForRandomAccess import *
 
 
 def parseCommandLineArguments():
-    parser = argparse.ArgumentParser( prog = "run_abridge", description = "Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages", formatter_class = RawTextHelpFormatter )
+    parser = argparse.ArgumentParser( prog = "abridge", description = "Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages", formatter_class = RawTextHelpFormatter )
     required_named = parser.add_argument_group( 'Required arguments' )
     optional_named = parser.add_argument_group( 'Optional arguments' )
 
