@@ -3124,6 +3124,11 @@ void readInEachChromosome(
 				for (i = 0; buffer[i] != '\0'; i++)
 					if (buffer[i] >= 90 && buffer[i] <= 122)
 						buffer[i] -= 32;
+				printf(
+						"\nAttempting to copy reference sequence %d %d",
+						sizeof(whole_genome->reference_sequence_name[0]),
+						strlen(buffer));
+				fflush(stdout);
 				strcpy(
 						whole_genome->nucleotides[whole_genome->number_of_reference_sequences],
 						buffer);
