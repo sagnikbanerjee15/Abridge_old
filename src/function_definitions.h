@@ -3076,7 +3076,7 @@ void readInEachChromosome(
 					char *temp = (char*) realloc(
 							whole_genome->reference_sequence_name[0],
 							(char*) malloc(
-									sizeof(char) * (strlen(buffer) + 10)));
+									sizeof(char) * (strlen(buffer) + 100)));
 					printf("\nRealloc successful");
 					fflush(stdout);
 					whole_genome->reference_sequence_name[0] = temp;
