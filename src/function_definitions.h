@@ -3092,8 +3092,9 @@ void readInEachChromosome(
 									sizeof(char) * (strlen(buffer) + 10));
 				}
 				printf(
-						"\nAttempting to copy reference name %d",
-						sizeof(whole_genome->reference_sequence_name[0]));
+						"\nAttempting to copy reference name %d %d",
+						sizeof(whole_genome->reference_sequence_name[0]),
+						strlen(buffer));
 				fflush (stdout);
 				strcpy(whole_genome->reference_sequence_name[0], buffer);
 				printf("\nCopying of reference name is successful");
