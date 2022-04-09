@@ -3080,6 +3080,8 @@ void readInEachChromosome(
 					printf("\nRealloc successful");
 					fflush(stdout);
 					whole_genome->reference_sequence_name[0] = temp;
+					whole_genome->reference_sequence_name[0][strlen(buffer) + 9] =
+							'\0';
 				}
 				else
 				{
