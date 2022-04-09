@@ -4332,7 +4332,7 @@ void writeAlignmentToFileSingleEnded(
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3");
 		 fflush(stdout);
 		 */
-		if (flag_ignore_quality_scores_for_matched_bases == 0 && (line_len =
+		if (flag_ignore_quality_scores_for_matched_bases == 1 && (line_len =
 				getline(&buffer, &len, fhr_qual)) != -1)
 		{
 			if (buffer[strlen(buffer) - 1] == '\n')

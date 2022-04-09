@@ -322,8 +322,6 @@ void decompressFile(
 			//fflush (stdout);
 			continue;
 		}
-		else
-			continue;
 		/*
 		 number_of_commas_in_each_line = 0;
 		 for (i = 0; buffer[i] != '\0'; i++)
@@ -395,6 +393,8 @@ void decompressFile(
 		 printf("\nCheckpoint 4 line_num = %d", line_num);
 		 fflush(stdout);
 		 */
+		free(buffer);
+		buffer = NULL;
 	}
 
 	//printf ("\nTotal mapped reads: %d" , total_mapped_reads);
