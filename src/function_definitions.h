@@ -3048,7 +3048,9 @@ void readInEachChromosome(
 		free(
 				whole_genome->nucleotides[whole_genome->number_of_reference_sequences
 						- 1]);
+		printf("\nStarting sleep");
 		sleep(10);
+		printf("\nSleep over");
 	}
 	whole_genome->number_of_reference_sequences = 0;
 	//printf ("\n Loading chromosome %s" , chromosome);
