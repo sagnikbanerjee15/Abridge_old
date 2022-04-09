@@ -212,7 +212,7 @@ void decompressFile(
 	/********************************************************************/
 
 	writeSequenceHeaders(fhw, genome_filename, 1);
-	exit(0);
+
 	line_num = 0;
 	line_len = getline(&buffer, &len, fhr);
 	/*
@@ -322,6 +322,8 @@ void decompressFile(
 			//fflush (stdout);
 			continue;
 		}
+		else
+			continue;
 		/*
 		 number_of_commas_in_each_line = 0;
 		 for (i = 0; buffer[i] != '\0'; i++)
