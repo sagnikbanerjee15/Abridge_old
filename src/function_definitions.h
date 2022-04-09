@@ -3080,8 +3080,6 @@ void readInEachChromosome(
 					printf("\nRealloc successful");
 					fflush(stdout);
 					whole_genome->reference_sequence_name[0] = temp;
-					whole_genome->reference_sequence_name[0][strlen(buffer) + 9] =
-							'\0';
 				}
 				else
 				{
@@ -3094,9 +3092,8 @@ void readInEachChromosome(
 									sizeof(char) * (strlen(buffer) + 10));
 				}
 				printf(
-						"\nAttempting to copy reference name %d %d %d",
+						"\nAttempting to copy reference name %d %d",
 						sizeof(whole_genome->reference_sequence_name[0]),
-						strlen(whole_genome->reference_sequence_name[0]),
 						strlen(buffer));
 				fflush (stdout);
 				strcpy(whole_genome->reference_sequence_name[0], buffer);
