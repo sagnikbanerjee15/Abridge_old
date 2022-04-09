@@ -3076,7 +3076,10 @@ void readInEachChromosome(
 						buffer);
 				line_len = getline(&buffer, &len, fhr);
 
-				printf("\nLoading chromosome %s into memory", chromosome);
+				printf(
+						"\nLoading chromosome %s into memory of size %d",
+						chromosome,
+						line_len);
 				whole_genome->nucleotides[whole_genome->number_of_reference_sequences] =
 						(char*) malloc(sizeof(char) * (line_len + 1));
 				for (i = 0; buffer[i] != '\0'; i++)
