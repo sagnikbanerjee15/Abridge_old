@@ -3089,6 +3089,7 @@ void readInEachChromosome(
 						strlen(buffer);
 				whole_genome->number_of_reference_sequences = 1;
 				printf("\nChromosome loaded");
+				free(buffer);
 				break;
 			}
 		}
