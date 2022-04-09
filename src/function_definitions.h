@@ -3071,12 +3071,14 @@ void readInEachChromosome(
 				 */
 				if (whole_genome->number_of_reference_sequences == 1)
 				{
+					printf("\nReallocating memory for sequence name");
 					whole_genome->reference_sequence_name[0] = realloc(
 							whole_genome->reference_sequence_name[0],
 							(char*) malloc(sizeof(char) * (line_len + 1)));
 				}
 				else
 				{
+					printf("\nCreating memory for sequence name");
 					whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] =
 							(char*) malloc(sizeof(char) * (line_len + 1));
 				}
@@ -3091,6 +3093,7 @@ void readInEachChromosome(
 						(float) line_len / (float) (1024 * 1024));
 				if (whole_genome->number_of_reference_sequences == 1)
 				{
+					printf("\nReallocating memory for nucleotide sequence");
 					whole_genome->nucleotides[0] = realloc(
 							whole_genome->nucleotides[0],
 							(char*) malloc(sizeof(char) * (line_len + 1)));
@@ -3098,6 +3101,7 @@ void readInEachChromosome(
 				}
 				else
 				{
+					printf("\nCreating memory for nucleotide sequence");
 					whole_genome->nucleotides[whole_genome->number_of_reference_sequences] =
 							(char*) malloc(sizeof(char) * (line_len + 1));
 				}
