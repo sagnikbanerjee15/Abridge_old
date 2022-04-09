@@ -3068,6 +3068,7 @@ void readInEachChromosome(
 				 printf ("\n Found chromosome %s" , chromosome);
 				 fflush (stdout);
 				 */
+				printf("\nLoading chromosome %s into memory", chromosome);
 				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] =
 						(char*) malloc(sizeof(char) * (line_len + 1));
 				strcpy(
