@@ -9,6 +9,527 @@
 
 long long unsigned int total_mapped_reads = 0;
 
+void writeAlignmentToFileSingleEnded(
+		struct Sam_Alignment *sam_alignment,
+		struct Cigar_Items *cigar_items_instance,
+		short int flag_ignore_sequence_information,
+		int number_of_repititions_of_the_same_reads,
+		char *read_prefix,
+		FILE *fhw,
+		FILE *fhr_qual,
+		short int flag_ignore_quality_scores_for_matched_bases,
+		char **read_names,
+		short int flag_ignore_alignment_scores)
+{
+	int i, j;
+	int read_length_calculated_from_cigar_string = 0;
+	int num_of_types;
+
+	char line_to_be_written_to_file[MAX_GENERAL_LEN];
+	char temp[100];
+	char *buffer;
+	/*
+	 struct Cigar_Items *cigar_items_instance;
+	 cigar_items_instance = (struct Cigar_Items*) malloc(
+	 sizeof(struct Cigar_Items) * 100);
+	 */
+	size_t len = 0;
+	ssize_t line_len;
+
+	int read_name_index = 0;
+
+	for (i = 0; i < number_of_repititions_of_the_same_reads; i++)
+	{
+		line_to_be_written_to_file[0] = '\0';
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 0");
+		 fflush (stdout);
+		 */
+		/*
+		 * Set up the read name
+		 */
+		if (sam_alignment->tags[0].val[0] == '1'
+				&& sam_alignment->tags[0].val[1] == '\0')
+		{
+			strcat(line_to_be_written_to_file, read_prefix);
+			strcat(line_to_be_written_to_file, sam_alignment->read_name);
+			sprintf(temp, "%d", i + 1);
+			strcat(line_to_be_written_to_file, "_");
+			strcat(line_to_be_written_to_file, temp);
+		}
+		else
+		{
+			strcat(line_to_be_written_to_file, read_names[read_name_index]);
+			//printf ("\nRead name %s " , read_names[read_name_index]);
+			read_name_index++;
+		}
+		strcat(line_to_be_written_to_file, "\t");
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 01");
+		 fflush(stdout);
+		 */
+
+		sprintf(temp, "%d", sam_alignment->samflag);
+		strcat(line_to_be_written_to_file, temp);
+		strcat(line_to_be_written_to_file, "\t");
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 02");
+		 fflush(stdout);
+		 */
+		strcat(line_to_be_written_to_file, sam_alignment->reference_name);
+		strcat(line_to_be_written_to_file, "\t");
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 03");
+		 fflush(stdout);
+		 */
+		sprintf(temp, "%d", sam_alignment->start_position);
+		strcat(line_to_be_written_to_file, temp);
+		strcat(line_to_be_written_to_file, "\t");
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 04");
+		 fflush(stdout);
+		 */
+		if (flag_ignore_alignment_scores == 1)
+			strcat(line_to_be_written_to_file, "255");
+		else
+		{
+			sprintf(temp, "%d", sam_alignment->mapping_quality_score);
+			strcat(line_to_be_written_to_file, temp);
+		}
+		strcat(line_to_be_written_to_file, "\t");
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 05");
+		 fflush(stdout);
+		 */
+		splitCigar(sam_alignment->cigar, &num_of_types, cigar_items_instance);
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 06");
+		 fflush(stdout);
+
+		 printf(
+		 "\nwriteAlignmentToFileSingleEnded Checkpoint 2 number_of_repititions_of_the_same_reads %d Value of i %d",
+		 number_of_repititions_of_the_same_reads,
+		 i);
+		 fflush(stdout);
+		 */
+		strcat(line_to_be_written_to_file, sam_alignment->cigar);
+		strcat(line_to_be_written_to_file, "\t");
+
+		strcat(line_to_be_written_to_file, "*");
+		strcat(line_to_be_written_to_file, "\t");
+
+		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file, "\t");
+
+		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file, "\t");
+
+		strcat(line_to_be_written_to_file, sam_alignment->seq);
+		strcat(line_to_be_written_to_file, "\t");
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3");
+		 fflush(stdout);
+		 */
+		if (flag_ignore_quality_scores_for_matched_bases == 0 && (line_len =
+				getline(&buffer, &len, fhr_qual)) != -1)
+		{
+			if (buffer[strlen(buffer) - 1] == '\n')
+				buffer[strlen(buffer) - 1] = '\0';
+			//strcat(line_to_be_written_to_file, buffer);
+			strcpy(sam_alignment->qual, buffer);
+			free(buffer);
+			buffer = NULL;
+
+		}
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.5");
+		 fflush(stdout);
+		 */
+
+		read_length_calculated_from_cigar_string = 0;
+		for (j = 0; j < num_of_types; j++)
+		{
+			if (cigar_items_instance[j].def != 'N'
+					&& cigar_items_instance[j].def != 'D')
+				read_length_calculated_from_cigar_string +=
+						cigar_items_instance[j].len;
+		}
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.75");
+		 printf(
+		 "\n%d  %d",
+		 strlen(sam_alignment->qual),
+		 read_length_calculated_from_cigar_string);
+		 fflush (stdout);
+		 */
+		if (strlen(sam_alignment->qual)
+				!= read_length_calculated_from_cigar_string)
+		{
+			/*
+			 printf(
+			 "\nread_length_calculated_from_cigar_string %d %s",
+			 read_length_calculated_from_cigar_string,
+			 sam_alignment->cigar);
+			 fflush (stdout);
+
+			 printf(
+			 "\nDifference detected %d",
+			 strlen(sam_alignment->qual)
+			 - read_length_calculated_from_cigar_string);
+			 fflush(stdout);
+			 */
+			sam_alignment->qual[read_length_calculated_from_cigar_string] =
+					'\0';
+		}
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.9");
+		 fflush (stdout);
+		 */
+		strcat(line_to_be_written_to_file, sam_alignment->qual);
+		strcat(line_to_be_written_to_file, "\t");
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 4");
+		 fflush(stdout);
+		 */
+		//Tags
+		strcat(line_to_be_written_to_file, "NH:i:");
+		strcat(line_to_be_written_to_file, sam_alignment->tags[0].val);
+		strcat(line_to_be_written_to_file, "\t");
+
+		if (strcmp(sam_alignment->tags[1].val, ".") != 0
+				&& strchr(sam_alignment->cigar, 'N') != NULL)
+		{
+			strcat(line_to_be_written_to_file, "XS:A:");
+			strcat(line_to_be_written_to_file, sam_alignment->tags[1].val);
+			strcat(line_to_be_written_to_file, "\t");
+		}
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 5");
+		 fflush(stdout);
+		 */
+		if (flag_ignore_sequence_information == 0)
+		{
+			strcat(line_to_be_written_to_file, "MD:Z:");
+			strcat(line_to_be_written_to_file, sam_alignment->tags[2].val);
+			strcat(line_to_be_written_to_file, "\t");
+		}
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 6");
+		 fflush(stdout);
+		 */
+		if (flag_ignore_alignment_scores == 0
+				&& strcmp(sam_alignment->tags[3].val, "X") != 0)
+		{
+			strcat(line_to_be_written_to_file, "AS:i:");
+			strcat(line_to_be_written_to_file, sam_alignment->tags[3].val);
+			strcat(line_to_be_written_to_file, "\t");
+		}
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 7");
+		 fflush(stdout);
+		 */
+		strcat(line_to_be_written_to_file, "\n");
+		fprintf(fhw, "%s", line_to_be_written_to_file);
+		/*
+		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 8");
+		 fflush(stdout);
+		 */
+	}
+	/*
+	 printf("\nWriting is completed");
+	 fflush (stdout);
+	 */
+}
+
+void convertToAlignmentSingleEnded(
+		struct Sam_Alignment *sam_alignment_instance,
+		struct Cigar_Items *cigar_items_instance_for_writing_to_file,
+		struct Whole_Genome_Sequence *whole_genome,
+		char **split_on_tab,
+		char **split_on_dash,
+		char **split_on_comma,
+		char **split_on_tilde,
+		char *default_quality_value,
+		short int flag_ignore_alignment_scores,
+		short int flag_ignore_mismatches,
+		short int flag_ignore_soft_clippings,
+		short int flag_ignore_unmapped_sequences,
+		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+		short int flag_ignore_sequence_information,
+		unsigned long long int *read_number,
+		unsigned long long int *total_mapped_reads,
+		char *read_prefix,
+		FILE *fhw,
+		FILE *fhr_qual,
+		short int flag_ignore_quality_scores_for_matched_bases,
+		short int number_of_columns,
+		unsigned long long int curr_position,
+		char *chromosome,
+		char **read_names,
+		short int read_names_stored)
+{
+	/********************************************************************
+	 * Variable declaration
+	 ********************************************************************/
+
+	int number_of_distinct_cigars_in_a_line;
+	int number_of_repititions_of_the_same_reads;
+	int samformatflag;
+
+	int i, j;
+
+	char *temp; //Useless
+	char *distinct_icigars_in_a_line;
+	char *icigar;
+
+	int read_names_index = 0;
+	/********************************************************************/
+
+	/********************************************************************
+	 * Variable initialization
+	 ********************************************************************/
+
+	/********************************************************************/
+
+	if (read_names_stored == 1)
+	{
+		if (number_of_columns == 2)
+			read_names_index = splitByDelimiter(
+					split_on_tab[1],
+					',',
+					read_names);
+		else if (number_of_columns == 3)
+			read_names_index = splitByDelimiter(
+					split_on_tab[2],
+					',',
+					read_names);
+		/*
+		 printf("\n Reads read");
+		 for (i = 0; i < read_names_index; i++)
+		 printf("\n%s", read_names[i]);
+		 */
+
+	}
+
+	if (read_names_stored == 0)
+	{
+		int max_number_of_commas = 0, number_of_commas = 0;
+		switch (number_of_columns)
+		{
+			case 1:
+			{
+				for (i = 0; split_on_tab[0][i] != '\0'; i++)
+					if (split_on_tab[0][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[0],
+						',',
+						split_on_comma);
+				/*
+				 printf(
+				 "\nInside here 01 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line);
+				 */
+			}
+				break;
+			case 2:
+			{
+				for (i = 0; split_on_tab[1][i] != '\0'; i++)
+					if (split_on_tab[1][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[1],
+						',',
+						split_on_comma);
+				/*
+				 printf(
+				 "\nInside here 02 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line);
+				 */
+			}
+				break;
+		}
+	}
+	else if (read_names_stored == 1)
+	{
+		int max_number_of_commas = 0, number_of_commas = 0;
+		switch (number_of_columns)
+		{
+			case 2:
+			{
+				for (i = 0; split_on_tab[0][i] != '\0'; i++)
+					if (split_on_tab[0][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[0],
+						',',
+						split_on_comma);
+				/*
+				 printf(
+				 "\nInside here 12 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line);
+				 */
+			}
+				break;
+			case 3:
+			{
+				for (i = 0; split_on_tab[1][i] != '\0'; i++)
+					if (split_on_tab[1][i] == ',')
+						number_of_commas++;
+
+				number_of_distinct_cigars_in_a_line = splitByDelimiter(
+						split_on_tab[1],
+						',',
+						split_on_comma);
+				/*
+				 printf(
+				 "\nInside here 13 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line);
+				 */
+			}
+				break;
+		}
+
+	}
+	/*
+	 printf(
+	 "\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
+	 number_of_columns,
+	 read_names_stored,
+	 number_of_distinct_cigars_in_a_line);
+	 */
+	//printf("\nconvertToAlignmentSingleEnded Checkpoint 1");
+	//fflush (stdout);
+	for (j = 0; j < number_of_distinct_cigars_in_a_line; j++)
+	{
+		splitByDelimiter(split_on_comma[j], '-', split_on_dash);
+		if (flag_ignore_alignment_scores == 0)
+			splitByDelimiter(split_on_dash[0], '~', split_on_tilde);
+		else
+			strcpy(split_on_tilde[0], split_on_dash[0]);
+		number_of_repititions_of_the_same_reads = strtol(
+				split_on_dash[1],
+				&temp,
+				10);
+		/*
+		 printf(
+		 "\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
+		 number_of_repititions_of_the_same_reads,
+		 split_on_comma[j]);
+
+		 printf("\nconvertToAlignmentSingleEnded Checkpoint 2");
+		 fflush (stdout);
+		 */
+		if (!(split_on_comma[j][1] == '-' && isalpha(split_on_dash[0][0]) != 0))
+		{
+			if (flag_ignore_alignment_scores == 0)
+			{
+				sam_alignment_instance->mapping_quality_score = strtol(
+						split_on_tilde[1],
+						&temp,
+						10);
+				strcpy(sam_alignment_instance->tags[3].val, split_on_tilde[2]);
+			}
+			else
+			{
+				sam_alignment_instance->mapping_quality_score = 255;
+				strcpy(sam_alignment_instance->tags[3].val, "X");
+			}
+		}
+		/*
+		 printf("\nconvertToAlignmentSingleEnded Checkpoint 3");
+		 fflush(stdout);
+		 */
+		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
+		sam_alignment_instance->start_position = curr_position;
+
+		if (split_on_comma[j][1] == '-' && isalpha(split_on_dash[0][0]) != 0)
+		{
+			// Use the same cigar
+			sprintf(temp, "%d", *read_number);
+			(*read_number)++;
+			strcpy(sam_alignment_instance->read_name, temp);
+			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
+			 {
+			 printf ("\nSame iCIGAR");
+			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
+			 printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
+			 printf ("\nMD String: %s" , sam_alignment_instance->tags[2].val);
+			 printf ("\n==============================================================================================================================");
+			 fflush (stdout);
+			 }*/
+			/*
+			 printf("\nconvertToAlignmentSingleEnded Checkpoint 4");
+			 fflush(stdout);
+			 */
+		}
+		else
+		{
+			strcpy(sam_alignment_instance->icigar, split_on_tilde[0]);
+			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
+			//fflush (stdout);
+			//printf ("\nConvertion started");
+			convertIcigarToCigarandMDSingleEnded(
+					whole_genome,
+					sam_alignment_instance,
+					chromosome,
+					flag_ignore_mismatches,
+					flag_ignore_soft_clippings,
+					flag_ignore_unmapped_sequences,
+					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+					flag_ignore_sequence_information,
+					default_quality_value);
+			//printf ("\nConvertion completed");
+			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
+			 {
+			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
+			 printf ("\nWeird Location cigar %s number_of_repititions_of_the_same_reads %d" , sam_alignment_instance->icigar , number_of_repititions_of_the_same_reads);
+			 printf ("\nMD String: %s" , sam_alignment_instance->tags[2].val);
+			 printf ("\n split_on_dash[0] %s split_on_dash[1] %s" , split_on_dash[0] , split_on_dash[1]);
+			 printf ("\nsplit_on_dash[0][1] == '-' %d isalpha (split_on_dash[0][0])  %d" , split_on_dash[0][1] == '-' , isalpha (split_on_dash[0][0]));
+			 printf ("\n==============================================================================================================================");
+			 fflush (stdout);
+			 }*/
+			sprintf(temp, "%d", *read_number);
+			(*read_number)++;
+			strcpy(sam_alignment_instance->read_name, temp);
+			/*
+			 printf("\nconvertToAlignmentSingleEnded Checkpoint 5");
+			 fflush(stdout);
+			 */
+		}
+		fflush(stdout);
+		//printSamAlignmentInstance (sam_alignment_instance , 0);
+		//continue;
+		/*
+		 printf(
+		 "\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d number_of_distinct_cigars_in_a_line %d",
+		 j,
+		 number_of_distinct_cigars_in_a_line);
+		 fflush(stdout);
+		 */
+		writeAlignmentToFileSingleEnded(
+				sam_alignment_instance,
+				cigar_items_instance_for_writing_to_file,
+				flag_ignore_sequence_information,
+				number_of_repititions_of_the_same_reads,
+				read_prefix,
+				fhw,
+				fhr_qual,
+				flag_ignore_quality_scores_for_matched_bases,
+				read_names,
+				flag_ignore_alignment_scores);
+		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
+		/*
+		 printf("\nconvertToAlignmentSingleEnded Checkpoint 7");
+		 fflush(stdout);
+		 */
+	}
+}
+
 void decompressFile(
 		char *name_of_file_with_quality_scores,
 		char *genome_filename,
@@ -92,6 +613,7 @@ void decompressFile(
 	struct Sam_Alignment **sam_alignment_pool;
 	struct Sam_Alignment *sam_alignment_instance;
 	struct Whole_Genome_Sequence *whole_genome;
+	struct Cigar_Items *cigar_items_instance_for_writing;
 	/********************************************************************/
 
 	/********************************************************************
@@ -191,6 +713,9 @@ void decompressFile(
 			sizeof(char) * FILENAME_LENGTH);
 	current_chromosome = (char*) malloc(sizeof(char) * 100);
 
+	cigar_items_instance_for_writing = (struct Cigar_Items*) malloc(
+			sizeof(struct Cigar_Items) * 100);
+
 	//buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
 	abridge_index = allocateMemoryAbridge_Index();
 	sam_alignment = allocateMemorySam_Alignment();
@@ -256,6 +781,7 @@ void decompressFile(
 			split_on_tilde[1],
 			&convert_to_int_temp,
 			10);
+
 	/*
 	 printf("\nflag_ignore_mismatches %d", flag_ignore_mismatches);
 	 printf("\nflag_ignore_soft_clippings %d", flag_ignore_soft_clippings);
@@ -366,6 +892,7 @@ void decompressFile(
 		//printf("\nThe compressed data %s", buffer);
 		convertToAlignmentSingleEnded(
 				sam_alignment_instance,
+				cigar_items_instance_for_writing,
 				whole_genome,
 				split_on_tab,
 				split_on_dash,
