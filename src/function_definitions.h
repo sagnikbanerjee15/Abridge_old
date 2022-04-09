@@ -3029,30 +3029,28 @@ void readInEachChromosome(
 	}
 
 	//printf ("\nwhole_genome->number_of_reference_sequences %d" , whole_genome->number_of_reference_sequences);
-	if (whole_genome->number_of_reference_sequences == 1)
-	{
-		int total =
-				strlen(
-						whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
-								- 1])
-						+ strlen(
-								whole_genome->nucleotides[whole_genome->number_of_reference_sequences
-										- 1]);
-		printf(
-				"\nInside readInEachChromosome function Freeing %f MB Loading chromosome %s",
-				(float) total / (float) (1024 * 1024),
-				chromosome);
-		free(
-				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
-						- 1]);
-		free(
-				whole_genome->nucleotides[whole_genome->number_of_reference_sequences
-						- 1]);
-		printf("\nStarting sleep");
-		sleep(10);
-		printf("\nSleep over");
-	}
-	whole_genome->number_of_reference_sequences = 0;
+	/*if (whole_genome->number_of_reference_sequences == 1)
+	 {
+	 int total =
+	 strlen(
+	 whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
+	 - 1])
+	 + strlen(
+	 whole_genome->nucleotides[whole_genome->number_of_reference_sequences
+	 - 1]);
+	 printf(
+	 "\nInside readInEachChromosome function Freeing %f MB Loading chromosome %s",
+	 (float) total / (float) (1024 * 1024),
+	 chromosome);
+	 free(
+	 whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
+	 - 1]);
+	 free(
+	 whole_genome->nucleotides[whole_genome->number_of_reference_sequences
+	 - 1]);
+	 }
+	 */
+	//whole_genome->number_of_reference_sequences = 0;
 	//printf ("\n Loading chromosome %s" , chromosome);
 	//fflush (stdout);
 	while ((line_len = getline(&buffer, &len, fhr)) != -1)
@@ -3071,9 +3069,17 @@ void readInEachChromosome(
 				 printf ("\n Found chromosome %s" , chromosome);
 				 fflush (stdout);
 				 */
-
-				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] =
-						(char*) malloc(sizeof(char) * (line_len + 1));
+				if (whole_genome->number_of_reference_sequences == 1)
+				{
+					whole_genome->reference_sequence_name[0] = realloc(
+							whole_genome->reference_sequence_name[0],
+							(char*) malloc(sizeof(char) * (line_len + 1)));
+				}
+				else
+				{
+					whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] =
+							(char*) malloc(sizeof(char) * (line_len + 1));
+				}
 				strcpy(
 						whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences],
 						buffer);
@@ -3083,8 +3089,18 @@ void readInEachChromosome(
 						"\nLoading chromosome %s into memory of size %f MB",
 						chromosome,
 						(float) line_len / (float) (1024 * 1024));
-				whole_genome->nucleotides[whole_genome->number_of_reference_sequences] =
-						(char*) malloc(sizeof(char) * (line_len + 1));
+				if (whole_genome->number_of_reference_sequences == 1)
+				{
+					whole_genome->nucleotides[0] = realloc(
+							whole_genome->nucleotides[0],
+							(char*) malloc(sizeof(char) * (line_len + 1)));
+
+				}
+				else
+				{
+					whole_genome->nucleotides[whole_genome->number_of_reference_sequences] =
+							(char*) malloc(sizeof(char) * (line_len + 1));
+				}
 				for (i = 0; buffer[i] != '\0'; i++)
 					if (buffer[i] >= 90 && buffer[i] <= 122)
 						buffer[i] -= 32;
@@ -3575,7 +3591,7 @@ int findSamFormatFlagPairedEnded(
 	int samformatflag = -1;
 	XS[0] = 'X';
 	XS[1] = '\0';
-	//printf ("\nicigar %s" , icigar);
+//printf ("\nicigar %s" , icigar);
 	for (i = 0; i < icigar_length; i++)
 	{
 		if ((icigar[i] != 'a' && icigar[i] != 't' && icigar[i] != 'g'
@@ -4596,8 +4612,8 @@ void convertToAlignmentSingleEnded(
 	 read_names_stored,
 	 number_of_distinct_cigars_in_a_line);
 	 */
-	//printf("\nconvertToAlignmentSingleEnded Checkpoint 1");
-	//fflush (stdout);
+//printf("\nconvertToAlignmentSingleEnded Checkpoint 1");
+//fflush (stdout);
 	for (j = 0; j < number_of_distinct_cigars_in_a_line; j++)
 	{
 		splitByDelimiter(split_on_comma[j], '-', split_on_dash);
