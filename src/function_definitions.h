@@ -4339,6 +4339,8 @@ void writeAlignmentToFileSingleEnded(
 				buffer[strlen(buffer) - 1] = '\0';
 			//strcat(line_to_be_written_to_file, buffer);
 			strcpy(sam_alignment->qual, buffer);
+			free(buffer);
+			buffer = NULL;
 
 		}
 		/*
