@@ -144,6 +144,7 @@ void decompressFile(
 				max_commas = num_commas;
 		}
 	}
+	exit(0);
 	COLS_split_on_tab = max_line_len;
 	ROWS_split_on_comma = max_commas;
 	fclose(fhr);

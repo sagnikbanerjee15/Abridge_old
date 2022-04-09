@@ -3020,7 +3020,7 @@ void readInEachChromosome(
 	int i;
 	int j;
 
-//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
+	//buffer = (char*) malloc(sizeof(char) * pow(2, 32));
 	fhr = fopen(genome_filename, "r");
 	if (fhr == NULL)
 	{
@@ -3028,7 +3028,7 @@ void readInEachChromosome(
 		exit(1);
 	}
 
-//printf ("\nwhole_genome->number_of_reference_sequences %d" , whole_genome->number_of_reference_sequences);
+	//printf ("\nwhole_genome->number_of_reference_sequences %d" , whole_genome->number_of_reference_sequences);
 	if (whole_genome->number_of_reference_sequences == 1)
 	{
 		int total =
@@ -3089,7 +3089,6 @@ void readInEachChromosome(
 						strlen(buffer);
 				whole_genome->number_of_reference_sequences = 1;
 				printf("\nChromosome loaded");
-				free(buffer);
 				break;
 			}
 		}
