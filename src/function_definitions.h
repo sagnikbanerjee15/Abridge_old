@@ -3073,7 +3073,7 @@ void readInEachChromosome(
 				{
 					printf("\nReallocating memory for sequence name");
 					fflush (stdout);
-					whole_genome->reference_sequence_name[0] = realloc(
+					whole_genome->reference_sequence_name[0] = (char*) realloc(
 							whole_genome->reference_sequence_name[0],
 							(char*) malloc(sizeof(char) * (line_len + 1)));
 				}
@@ -3098,7 +3098,7 @@ void readInEachChromosome(
 				{
 					printf("\nReallocating memory for nucleotide sequence");
 					fflush(stdout);
-					whole_genome->nucleotides[0] = realloc(
+					whole_genome->nucleotides[0] = (char*) realloc(
 							whole_genome->nucleotides[0],
 							(char*) malloc(sizeof(char) * (line_len + 1)));
 
