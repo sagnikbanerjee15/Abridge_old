@@ -4332,7 +4332,7 @@ void writeAlignmentToFileSingleEnded(
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3");
 		 fflush(stdout);
 		 */
-		if (flag_ignore_quality_scores_for_matched_bases == 1 && (line_len =
+		if (flag_ignore_quality_scores_for_matched_bases == 0 && (line_len =
 				getline(&buffer, &len, fhr_qual)) != -1)
 		{
 			if (buffer[strlen(buffer) - 1] == '\n')
@@ -4712,16 +4712,18 @@ void convertToAlignmentSingleEnded(
 		 number_of_distinct_cigars_in_a_line);
 		 fflush(stdout);
 		 */
-		writeAlignmentToFileSingleEnded(
-				sam_alignment_instance,
-				flag_ignore_sequence_information,
-				number_of_repititions_of_the_same_reads,
-				read_prefix,
-				fhw,
-				fhr_qual,
-				flag_ignore_quality_scores_for_matched_bases,
-				read_names,
-				flag_ignore_alignment_scores);
+		/*
+		 writeAlignmentToFileSingleEnded(
+		 sam_alignment_instance,
+		 flag_ignore_sequence_information,
+		 number_of_repititions_of_the_same_reads,
+		 read_prefix,
+		 fhw,
+		 fhr_qual,
+		 flag_ignore_quality_scores_for_matched_bases,
+		 read_names,
+		 flag_ignore_alignment_scores);
+		 */
 		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
 		/*
 		 printf("\nconvertToAlignmentSingleEnded Checkpoint 7");
