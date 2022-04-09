@@ -7,7 +7,7 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-long long int total_mapped_reads = 0;
+long long unsigned int total_mapped_reads = 0;
 
 void decompressFile(
 		char *name_of_file_with_quality_scores,
