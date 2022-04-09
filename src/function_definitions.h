@@ -3126,14 +3126,12 @@ void readInEachChromosome(
 						buffer[i] -= 32;
 				printf(
 						"\nAttempting to copy reference sequence %d %d",
-						sizeof(whole_genome->reference_sequence_name[0]),
+						sizeof(whole_genome->nucleotides[0]),
 						strlen(buffer));
 				fflush(stdout);
-				strcpy(
-						whole_genome->nucleotides[whole_genome->number_of_reference_sequences],
-						buffer);
-				whole_genome->reference_sequence_length[whole_genome->number_of_reference_sequences] =
-						strlen(buffer);
+				strcpy(whole_genome->nucleotides[0], buffer);
+
+				whole_genome->reference_sequence_length[0] = strlen(buffer);
 				whole_genome->number_of_reference_sequences = 1;
 				printf("\nChromosome loaded");
 				fflush(stdout);
