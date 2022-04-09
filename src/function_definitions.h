@@ -3088,16 +3088,16 @@ void readInEachChromosome(
 					whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences] =
 							(char*) malloc(sizeof(char) * (line_len + 1));
 				}
-				strcpy(
-						whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences],
-						buffer);
+				strcpy(whole_genome->reference_sequence_name[0], buffer);
+				printf("\nCopying of reference name is successful");
+				fflush (stdout);
 				line_len = getline(&buffer, &len, fhr);
 
 				printf(
 						"\nLoading chromosome %s into memory of size %f MB",
 						chromosome,
 						(float) line_len / (float) (1024 * 1024));
-				fflush (stdout);
+				fflush(stdout);
 				if (whole_genome->number_of_reference_sequences == 1)
 				{
 					printf("\nReallocating memory for nucleotide sequence");
@@ -3111,8 +3111,8 @@ void readInEachChromosome(
 				{
 					printf("\nCreating memory for nucleotide sequence");
 					fflush(stdout);
-					whole_genome->nucleotides[whole_genome->number_of_reference_sequences] =
-							(char*) malloc(sizeof(char) * (line_len + 1));
+					whole_genome->nucleotides[0] = (char*) malloc(
+							sizeof(char) * (strlen(buffer) + 1));
 				}
 				for (i = 0; buffer[i] != '\0'; i++)
 					if (buffer[i] >= 90 && buffer[i] <= 122)
