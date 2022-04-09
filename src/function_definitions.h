@@ -3038,21 +3038,22 @@ void readInEachChromosome(
 						+ strlen(
 								whole_genome->nucleotides[whole_genome->number_of_reference_sequences
 										- 1]);
-
-		printf(
-				"\nInside readInEachChromosome function Freeing %f MB Loading chromosome %s",
-				(float) total / (float) (1024 * 1024),
-				chromosome);
-		free(
-				whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
-						- 1]);
-		whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
-				- 1] = NULL;
-		free(
-				whole_genome->nucleotides[whole_genome->number_of_reference_sequences
-						- 1]);
-		whole_genome->nucleotides[whole_genome->number_of_reference_sequences
-				- 1] = NULL;
+		/*
+		 printf(
+		 "\nInside readInEachChromosome function Freeing %f MB Loading chromosome %s",
+		 (float) total / (float) (1024 * 1024),
+		 chromosome);
+		 free(
+		 whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
+		 - 1]);
+		 whole_genome->reference_sequence_name[whole_genome->number_of_reference_sequences
+		 - 1] = NULL;
+		 free(
+		 whole_genome->nucleotides[whole_genome->number_of_reference_sequences
+		 - 1]);
+		 whole_genome->nucleotides[whole_genome->number_of_reference_sequences
+		 - 1] = NULL;
+		 */
 
 	}
 	whole_genome->number_of_reference_sequences = 0;
