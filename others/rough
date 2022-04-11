@@ -94,3 +94,4 @@ docker run --rm -v /project1:/project1 ghcr.io/sagnikbanerjee15/docker_tools_and
 --preserve_all_intermediate_files \
 1> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_decompress.output \
 2> /project1/ABRIDGE/developing_abridge/ABRIDGE/SRR17262722_SE_decompress.error'
+
