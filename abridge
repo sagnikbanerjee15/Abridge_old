@@ -34,11 +34,11 @@ def parseCommandLineArguments():
     optional_named = parser.add_argument_group( 'Optional arguments' )
 
     # Required arguments
-    required_named.add_argument( "-o", "--output_directory", help = "Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile" )
+    required_named.add_argument( "-o", "--output_directory", help = "Enter the name of the output directory. If nothing is specified then the compressed file will be put in the same location as the input samfile", required = True )
     required_named.add_argument( "-g", "--genome", help = "Enter a single fasta file for the reference", required = True )
 
     input_group = parser.add_mutually_exclusive_group( required = True )
-    input_group.add_argument( "-isam", "--inputfilename", help = "Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time." )
+    input_group.add_argument( "-ialigned", "--inputalignedfilename", help = "Enter the name of the alignment file you wish to compress. Alignments in SAM format only is expected. Ensure that the file is sorted by coordinate. Also, files must have the header section with the reference information available. You can compress only one file at a time." )
     input_group.add_argument( "-iabr", "--inputabrfilename", help = "Enter the name of the compressed alignment files you wish to merge. These files must be compressed using abridge. You can decompress only one file at a time." )
 
     compress_decompress_group = parser.add_mutually_exclusive_group( required = True )
@@ -91,13 +91,11 @@ def parseCommandLineArguments():
     optional_named.add_argument( "-mem", "--max_memory", help = argparse.SUPPRESS, default = 10 )  # help="Enter the maximum memory allowed (in GB)"
     optional_named.add_argument( "-t", "--produce_tags", help = argparse.SUPPRESS, nargs = "*" )  # help="Enter a comma separated list of tags that you want abridge to produce during decompression. By default abridge will generate NH, MD and XS tags."
     return parser.parse_args()
-
-
+        
 def configureLogger( options ):
     if os.path.exists( options.logfilename ) == True:
         os.system( f"rm -f {options.logfilename}" )
     logging.basicConfig( format = '%(asctime)s - %(message)s', datefmt = '%d-%b-%y %H:%M:%S', level = logging.DEBUG, filename = options.logfilename )
-
 
 def runDockerCommand( logging, name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
@@ -118,7 +116,6 @@ def runDockerCommand( logging, name, version, image_location, container_name, vo
     logging.info( f"Running command - {docker_cmd}" )
     os.system( docker_cmd )
 
-
 def runSingularityCommand( logging, name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
     Runs the command in a Singularity container
@@ -134,22 +131,48 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     os.system( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
 
-
+def executeCommand(software, version, cmd, framework):
+    """
+    Executes the command within the requested framework
+    """
+    if options.framework == "docker":
+        runDockerCommand( logging,
+                          name = software,
+                            version = version,
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '1g'
+            )
+    elif options.framework == "singularity":
+        runSingularityCommand( logging,
+                               name = software,
+                            version = version,
+                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '1g'
+                            )
+        
 def validateCommandLineArguments( options ):
     """
     """
-    if options.compress == True and options.inputfilename is None and options.inputabrfilename is not None:
-        print( "For compression you need to provide a list of space spearated samfiles using -isam " )
+    if options.compress == True and options.inputalignedfilename is None and options.inputabrfilename is not None:
+        print( "For compression you need to provide a list of space spearated samfiles using -ialigned " )
         if options.quiet == False:
-            logging.info( "For compression you need to provide a list of space spearated samfiles using -isam " )
+            logging.info( "For compression you need to provide one aligned file in either SAM or BAM format using -ialigned " )
         sys.exit()
-    if options.decompress == True and options.inputfilename is not None and options.inputabrfilename is None:
-        print( "For decompression you need to provide a list of abridge compressed files using -iabr" )
+    if options.decompress == True and options.inputalignedfilename is not None and options.inputabrfilename is None:
+        print( "For decompression you need to provide one abridge compressed file using -iabr" )
         if options.quiet == False:
             logging.info( "For decompression you need to provide a list of abridge compressed files using -iabr" )
         sys.exit()
-    if options.inputfilename is not None:
-        inputfiles = options.inputfilename
+    if options.inputalignedfilename is not None:
+        inputfiles = options.inputalignedfilename
     else:
         inputfiles = options.inputabrfilename
 
@@ -160,11 +183,11 @@ def validateCommandLineArguments( options ):
         sys.exit()
 
     # Check if the input format is sam
-    if options.inputfilename is not None:
-        if ( options.inputfilename[-3:] != "sam" and options.inputfilename[-3:] != "bam" ) and options.compress == True:
-            print( f"The input file {options.inputfilename} needs to be in either sam or bam format. Exiting..." )
+    if options.inputalignedfilename is not None:
+        if ( options.inputalignedfilename[-3:] != "sam" and options.inputalignedfilename[-3:] != "bam" ) and options.compress == True:
+            print( f"The input file {options.inputalignedfilename} needs to be in either sam or bam format. Exiting..." )
             if options.quiet == False:
-                logging.info( f"The input file {options.inputfilename} needs to be in sam format. Exiting..." )
+                logging.info( f"The input file {options.inputalignedfilename} needs to be in sam format. Exiting..." )
             sys.exit()
 
     options.files_for_removal = []
@@ -183,7 +206,7 @@ def validateCommandLineArguments( options ):
         print( f"You need to provide one compressed file for random access" )
         sys.exit()
 
-    if options.random == True and options.inputfilename is not None:
+    if options.random == True and options.inputalignedfilename is not None:
         print( f"You need to provide one compressed file for random access" )
         sys.exit()
     """
@@ -265,19 +288,18 @@ def validateCommandLineArguments( options ):
                 logging.info( "You can specify only one among -d, -bg or -bga" )
             sys.exit()
 
-    if options.inputfilename is not None:
-        input_filename_without_location = options.inputfilename.split( "/" )[-1][:-4]
+    if options.inputalignedfilename is not None:
+        input_filename_without_location = options.inputalignedfilename.split( "/" )[-1][:-4]
     else:
         input_filename_without_location = options.inputabrfilename.split( "/" )[-1][:-8]
     options.outputfilename = f"{options.output_directory}/{input_filename_without_location}.abridge"
 
-
 def checkSAMAlignments( options, logging ):
-    """
+    """NOT CALLED REMOVE IN NEXT VERSION
     """
 
-    if "SO:coordinate" not in open( f"{options.inputfilename}", "r" ).readline():
-        print( f"The file {options.inputfilename} is not sorted. Exiting" )
+    if "SO:coordinate" not in open( f"{options.inputalignedfilename}", "r" ).readline():
+        print( f"The file {options.inputalignedfilename} is not sorted. Exiting" )
         if options.quiet == False:
             logging.info( f"The file {file} is not sorted. Exiting" )
         sys.exit()
@@ -285,7 +307,7 @@ def checkSAMAlignments( options, logging ):
     # Verify that all the headers are exactly same
     headers = []
 
-    fhr = open( f"{options.inputfilename}", "r" )
+    fhr = open( f"{options.inputalignedfilename}", "r" )
     header = ""
     for line in fhr:
         if line[:3] == '@SQ' or line[:3] == "@HD":
@@ -304,7 +326,6 @@ def checkSAMAlignments( options, logging ):
             sys.exit()
     return NH_present
 
-
 def cleanUp( options ):
     # Remove the genome files
     genome_filename_without_location = options.genome.split( "/" )[-1]
@@ -316,11 +337,9 @@ def cleanUp( options ):
         cmd = f"rm -rf {file}"
         os.system( cmd )
 
-
 def runCommand( eachpinput ):
     cmd, dummy = eachpinput
     os.system( cmd )
-
 
 def constructFileNames( input_filename, options ):
     name_of_input_file_without_location = input_filename.split( "/" )[-1][:-4]
@@ -360,13 +379,12 @@ def constructFileNames( input_filename, options ):
     # compressed_files = [compressed_abridged_filename_br,compressed_abridged_filename_zpaq]
     return  delete_these_files, other_files, error_files
 
-
 def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     """
     """
     pool = multiprocessing.Pool( processes = int( options.cpu ) )
     files_to_be_removed = []
-    input_filename = options.inputfilename
+    input_filename = options.inputalignedfilename
     name_of_input_file_without_location = input_filename.split( "/" )[-1]
     delete_these_files, other_files, error_files = constructFileNames( input_filename, options )
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
@@ -382,8 +400,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         ######################################################################################
 
         all_commands = []
-        # for input_filename in options.inputfilename:
-        input_filename = options.inputfilename
+        # for input_filename in options.inputalignedfilename:
+        input_filename = options.inputalignedfilename
         if options.quiet == False:
             logging.info( f"Starting compression for {input_filename}" )
 
@@ -407,7 +425,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runDockerCommand( logging,
                               name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -419,7 +437,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runSingularityCommand( logging,
                                 name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -432,8 +450,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         #  Execute the compress SAM file command for single ended reads
         ######################################################################################
         all_commands = []
-        # for input_filename in options.inputfilename:
-        input_filename = options.inputfilename
+        # for input_filename in options.inputalignedfilename:
+        input_filename = options.inputalignedfilename
         if options.quiet == False:
             logging.info( f"Starting for {input_filename}" )
         max_input_reads_in_a_single_nucl_loc = int( open( name_of_max_input_reads_file, "r" ).read().strip() )
@@ -485,7 +503,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runDockerCommand( logging,
                               name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -497,7 +515,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runSingularityCommand( logging,
                                 name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -515,8 +533,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         # Find total number of alignments
         ######################################################################################
         all_commands = []
-        # for input_filename in options.inputfilename:
-        input_filename = options.inputfilename
+        # for input_filename in options.inputalignedfilename:
+        input_filename = options.inputalignedfilename
         if options.quiet == False:
             logging.info( f"Starting  for {input_filename}" )
 
@@ -536,7 +554,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runDockerCommand( logging,
                               name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -548,7 +566,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runSingularityCommand( logging,
                                 name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -558,8 +576,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
                 )
 
         all_commands = []
-        # for input_filename in options.inputfilename:
-        input_filename = options.inputfilename
+        # for input_filename in options.inputalignedfilename:
+        input_filename = options.inputalignedfilename
         if options.quiet == False:
             logging.info( f"Generating for {input_filename}" )
 
@@ -573,8 +591,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         # pool.map(runCommand,all_commands)
 
         all_commands = []
-        # for input_filename in options.inputfilename:
-        input_filename = options.inputfilename
+        # for input_filename in options.inputalignedfilename:
+        input_filename = options.inputalignedfilename
         if options.quiet == False:
             logging.info( f"Starting  for {input_filename}" )
 
@@ -634,7 +652,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runDockerCommand( logging,
                               name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -646,7 +664,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             runSingularityCommand( logging,
                                 name = "abridge",
                                 version = list_of_softwares_with_versions['abridge'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -684,7 +702,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         runDockerCommand( logging,
                           name = "fclqc",
                             version = list_of_softwares_with_versions['fclqc'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -696,7 +714,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         runSingularityCommand( logging,
                             name = "fclqc",
                             version = list_of_softwares_with_versions['fclqc'],
-                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -745,7 +763,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         runDockerCommand( logging,
                           name = "zpaq",
                             version = list_of_softwares_with_versions['zpaq'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/zpaq",
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -757,7 +775,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         runSingularityCommand( logging,
                             name = "zpaq",
                             version = list_of_softwares_with_versions['zpaq'],
-                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/zpaq",
+                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -777,12 +795,11 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         for file in remove_these_files:
             os.system( "rm -rf " + file )
 
-
 def findEndedness( options, logging ):
     """
     """
     endedness = []
-    fhr = open( f"{options.inputfilename}", "r" )
+    fhr = open( f"{options.inputalignedfilename}", "r" )
     for line in fhr:
         if line[0] != '@':
             samformatflag = int( line.strip().split()[1] )
@@ -799,12 +816,11 @@ def findEndedness( options, logging ):
     else:
         options.single_ended = False
 
-
 def collectReferenceSequenceNameAndLength( options, logging ):
     """
     """
     reference_to_length = {}
-    fhr = open( f"{options.inputfilename[0][:-3]}header", "r" )
+    fhr = open( f"{options.inputalignedfilename[0][:-3]}header", "r" )
     for line in fhr:
         if line[:3] == "@SQ":
             useless, reference_name, reference_length = line.strip().split( "\t" )
@@ -813,7 +829,6 @@ def collectReferenceSequenceNameAndLength( options, logging ):
             reference_to_length[reference_name] = reference_length
     fhr.close()
     options.reference_to_length = reference_to_length
-
 
 def findChromosomes( filename ):
     chromosomes = []
@@ -824,8 +839,9 @@ def findChromosomes( filename ):
     fhr.close()
     return list( set( chromosomes ) )
 
-
 def mergeAbridgeData( options ):
+    """NOT CALLED REMOVE IN NEXT VERSION
+    """
     pool = multiprocessing.Pool( processes = int( options.cpu ) )
 
     cmd = f"samtools faidx {options.genome}"
@@ -912,7 +928,6 @@ def mergeAbridgeData( options ):
     for file in files_to_be_removed:
         os.system( "rm " + file )
 
-
 def decompressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     """
     """
@@ -923,9 +938,9 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename = delete_these_files
     outputfilename, index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary, fclqc_output_filename = other_files
 
-    outputfilename = f"{options.output_directory}/inputfilename_compressed"
-    unmapped_outputfilename = f"{options.output_directory}/inputfilename_unmapped"
-    name_of_file_with_quality_scores = f"{options.output_directory}/inputfilename_qual"
+    outputfilename = f"{options.output_directory}/inputalignedfilename_compressed"
+    unmapped_outputfilename = f"{options.output_directory}/inputalignedfilename_unmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/inputalignedfilename_qual"
 
     cmd = f"samtools faidx {options.genome}"
     if os.path.exists( f"{options.genome}.fai" ) == False:
@@ -933,7 +948,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runDockerCommand( logging,
                               name = "samtools",
                                 version = list_of_softwares_with_versions['samtools'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/samtools",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -945,7 +960,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runSingularityCommand( logging,
                                 name = "samtools",
                                 version = list_of_softwares_with_versions['samtools'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/samtools",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -964,7 +979,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runDockerCommand( logging,
                           name = "zpaq",
                             version = list_of_softwares_with_versions['zpaq'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/zpaq",
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -976,7 +991,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runSingularityCommand( logging,
                             name = "zpaq",
                             version = list_of_softwares_with_versions['zpaq'],
-                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/zpaq",
+                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1001,7 +1016,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runDockerCommand( logging,
                               name = "zpaq",
                                 version = list_of_softwares_with_versions['zpaq'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/zpaq",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -1013,7 +1028,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runSingularityCommand( logging,
                                 name = "zpaq",
                                 version = list_of_softwares_with_versions['zpaq'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/zpaq",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -1028,7 +1043,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runDockerCommand( logging,
                           name = "fclqc",
                             version = list_of_softwares_with_versions['fclqc'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1040,7 +1055,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runSingularityCommand( logging,
                             name = "fclqc",
                             version = list_of_softwares_with_versions['fclqc'],
-                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1081,7 +1096,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runDockerCommand( logging,
                               name = "fclqc",
                                 version = list_of_softwares_with_versions['fclqc'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -1093,7 +1108,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runSingularityCommand( logging,
                                 name = "fclqc",
                                 version = list_of_softwares_with_versions['fclqc'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -1109,7 +1124,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runDockerCommand( logging,
                               name = "fclqc",
                                 version = list_of_softwares_with_versions['fclqc'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -1121,7 +1136,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
             runSingularityCommand( logging,
                                 name = "fclqc",
                                 version = list_of_softwares_with_versions['fclqc'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/fclqc",
+                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
                                 container_name = f"{options.output_directory.split('/')[-1]}",
                                 volumes = volumes_list,
                                 command = cmd,
@@ -1151,7 +1166,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runDockerCommand( logging,
                           name = "abridge",
                             version = list_of_softwares_with_versions['abridge'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1163,7 +1178,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runSingularityCommand( logging,
                             name = "abridge",
                             version = list_of_softwares_with_versions['abridge'],
-                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1201,7 +1216,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runDockerCommand( logging,
                           name = "abridge",
                             version = list_of_softwares_with_versions['abridge'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1213,7 +1228,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         runSingularityCommand( logging,
                             name = "abridge",
                             version = list_of_softwares_with_versions['abridge'],
-                            image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
+                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1226,7 +1241,6 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         if options.quiet == False:
             logging.info( f"Deleting - {file}" )
         os.system( "rm -rf " + file )"""
-
 
 def generateCoverage( _outputfilename, _index_outputfilename, options ):
     generateCoverage = options.softwares["generateCoverage"]
@@ -1309,7 +1323,6 @@ def generateCoverage( _outputfilename, _index_outputfilename, options ):
         logging.info( f"Running command - {cmd}" )
     os.system( cmd )
 
-
 def retrieveAlignmentsRandomly( chromosome, start, end, options ):
     """
     DEPRECATED - WILL BE REMOVED
@@ -1383,149 +1396,87 @@ def retrieveAlignmentsRandomly( chromosome, start, end, options ):
     # sys.stdout.flush()
     os.system( cmd )
 
-
-def prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging ):
+def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging ):
     """
     Performs the following operations:
     - Checks if the input file is a bamfile or samfile
     - Prepares a samfile coordinate sorted
     """
-
-    file_extension = options.inputfilename[-3:]
-    if file_extension == "bam":
-        cmd = f"samtools view -h -@ {options.cpu} {options.inputfilename}|head > {options.output_directory}/header"
+    inputalignedfilename_fullpath, inputalignedfilename_onlypath, inputalignedfilename_onlyfilename, inputalignedfilename_onlybasename, inputalignedfilename_onlyextension = seggregateInformationFromFilename(options.inputalignedfilename)
+    
+    if inputalignedfilename_onlyextension == "bam":
+        cmd = f"samtools view -h -@ {options.cpu} {options.inputalignedfilename}|head > {options.output_directory}/header"
         remove_these_files.append( f"{options.output_directory}/header" )
-
-        if options.framework == "docker":
-            runDockerCommand( logging,
-                              name = "samtools",
-                                version = list_of_softwares_with_versions['samtools'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '1g'
-                )
-        elif options.framework == "singularity":
-            runSingularityCommand( logging,
-                                   name = "samtools",
-                                version = list_of_softwares_with_versions['samtools'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '1g'
-                                )
+        
+        software = "samtools"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(software, version, cmd, options.framework)
 
         first_line = open( f"{options.output_directory}/header" , "r" ).readline().strip()
         if "SO:coordinate" in first_line:
             # Convert to Sam file
-            cmd = f"samtools view -h -@ {options.cpu} {options.inputfilename} > {options.output_directory}/inputfilename.sam "
-            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
-            remove_these_files.append( options.inputfilename )
+            cmd = f"samtools view -h -@ {options.cpu} {options.inputalignedfilename} > {options.output_directory}/inputalignedfilename.sam "
+            options.inputalignedfilename = f"{options.output_directory}/inputalignedfilename.sam"
+            remove_these_files.append( options.inputalignedfilename )
 
-            if os.path.exists( f"{options.output_directory}/inputfilename.sam" ) == True:return
-            if options.framework == "docker":
-                runDockerCommand( logging,
-                                  name = "samtools",
-                                    version = list_of_softwares_with_versions['samtools'],
-                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                    container_name = f"{options.output_directory.split('/')[-1]}",
-                                    volumes = volumes_list,
-                                    command = cmd,
-                                    cpus = options.cpu,
-                                    memory = '100g'
-                    )
-
-            elif options.framework == "singularity":
-                runSingularityCommand( logging,
-                                       name = "samtools",
-                                    version = list_of_softwares_with_versions['samtools'],
-                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                    container_name = f"{options.output_directory.split('/')[-1]}",
-                                    volumes = volumes_list,
-                                    command = cmd,
-                                    cpus = options.cpu,
-                                    memory = '100g'
-                                    )
+            if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
+            software = "samtools"
+            version = list_of_softwares_with_versions[software]
+            executeCommand(software, version, cmd, options.framework)
         else:
             # Need to sort by coordinate
-            cmd = f"samtools sort -@ {options.cpu} {options.inputfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
-            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
-            remove_these_files.append( options.inputfilename )
+            cmd = f"samtools sort -@ {options.cpu} {options.inputalignedfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputalignedfilename.sam "
+            options.inputalignedfilename = f"{options.output_directory}/inputalignedfilename.sam"
+            remove_these_files.append( options.inputalignedfilename )
 
-            if os.path.exists( f"{options.output_directory}/inputfilename.sam" ) == True:return
-            if options.framework == "docker":
-                runDockerCommand( logging,
-                                    name = "samtools",
-                                    version = list_of_softwares_with_versions['samtools'],
-                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                    container_name = f"{options.output_directory.split('/')[-1]}",
-                                    volumes = volumes_list,
-                                    command = cmd,
-                                    cpus = options.cpu,
-                                    memory = '100g'
-                    )
-
-            elif options.framework == "singularity":
-                runSingularityCommand( logging,
-                                    name = "samtools",
-                                    version = list_of_softwares_with_versions['samtools'],
-                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                    container_name = f"{options.output_directory.split('/')[-1]}",
-                                    volumes = volumes_list,
-                                    command = cmd,
-                                    cpus = options.cpu,
-                                    memory = '100g'
-                    )
+            if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
+            software = "samtools"
+            version = list_of_softwares_with_versions[software]
+            executeCommand(software, version, cmd, options.framework)
 
     elif file_extension == "sam":
-        first_line = open( options.inputfilename, "r" ).readline().strip()
+        first_line = open( options.inputalignedfilename, "r" ).readline().strip()
         if "SO:coordinate" in first_line:
             # Copying the input sam file to the output directory
-            cmd = f"cp {options.inputfilename} {options.output_directory}/inputfilename.sam "
-            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
-            remove_these_files.append( options.inputfilename )
+            cmd = f"cp {options.inputalignedfilename} {options.output_directory}/inputalignedfilename.sam "
+            options.inputalignedfilename = f"{options.output_directory}/inputalignedfilename.sam"
+            remove_these_files.append( options.inputalignedfilename )
             os.system( cmd )
         else:
             # Sort Samfile by coordinate
-            cmd = f"samtools view -bS -@ {options.cpu} {options.inputfilename}|samtools sort -@ {options.cpu}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputfilename.sam "
-            options.inputfilename = f"{options.output_directory}/inputfilename.sam"
-            remove_these_files.append( options.inputfilename )
+            cmd = f"samtools view -bS -@ {options.cpu} {options.inputalignedfilename}|samtools sort -@ {options.cpu}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputalignedfilename.sam "
+            options.inputalignedfilename = f"{options.output_directory}/inputalignedfilename.sam"
+            remove_these_files.append( options.inputalignedfilename )
 
-            if os.path.exists( f"{options.output_directory}/inputfilename.sam" ) == True:return
-            if options.framework == "docker":
-                runDockerCommand( logging,
-                                  name = "samtools",
-                                    version = list_of_softwares_with_versions['samtools'],
-                                    image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                    container_name = f"{options.output_directory.split('/')[-1]}",
-                                    volumes = volumes_list,
-                                    command = cmd,
-                                    cpus = options.cpu,
-                                    memory = '100g'
-                    )
+            if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
+            software = "samtools"
+            version = list_of_softwares_with_versions[software]
+            executeCommand(software, version, cmd, options.framework)
 
-            elif options.framework == "singularity":
-                runSingularityCommand( logging,
-                                    name = "samtools",
-                                    version = list_of_softwares_with_versions['samtools'],
-                                    image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                    container_name = f"{options.output_directory.split('/')[-1]}",
-                                    volumes = volumes_list,
-                                    command = cmd,
-                                    cpus = options.cpu,
-                                    memory = '100g'
-
-                    )
-
-
-def alterReadNamesAndAddNHTag( options, logging, list_of_softwares_with_versions, volumes_list , remove_these_files ):
+def returnTagList(samfilename):
     """
+    Returns a dictionary of tags.
+    For example:
+    {"NH": 1 #NH tag is present
+    "XS": 0 #XS tag is absent
+    "MD": 0 #MD tag is absent
+    }
+    Python will take a very long time to execute especially for samples with no spliced reads. 
+    Hence using C for this purpose.
     """
-    cmd = f"cat {options.inputfilename}|grep -v ^@|cut -f1|awk -vOFS=\"\\t\" " + "'{print $0,NR}'|sort "
+    
+    cmd = "findAllTags "
+
+def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging ):
+    """
+    
+    """
+    
+    # Check which tags are already present in the aligned file
+    present_tags = returnTagList(options.inputalignedfilename)
+    
+    
+    cmd = f"cat {options.inputalignedfilename}|grep -v ^@|cut -f1|awk -vOFS=\"\\t\" " + "'{print $0,NR}'|sort "
     cmd += f"> {options.output_directory}/sorted_read_names"
     if os.path.exists( f"{options.output_directory}/sorted_read_names" ) == False:
         os.system( cmd )
@@ -1548,30 +1499,9 @@ def alterReadNamesAndAddNHTag( options, logging, list_of_softwares_with_versions
 
     cmd = f"associateShortNamesToReads {options.output_directory}/sorted_read_names_with_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names "
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" ) == False:
-        if options.framework == "docker":
-            runDockerCommand( logging,
-                              name = "abridge",
-                                version = list_of_softwares_with_versions['abridge'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-                )
-
-        elif options.framework == "singularity":
-            runSingularityCommand( logging,
-                                name = "abridge",
-                                version = list_of_softwares_with_versions['abridge'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/abridge",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-
-                )
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(software, version, cmd, options.framework)
 
     logging.info( "" )
 
@@ -1590,6 +1520,20 @@ def alterReadNamesAndAddNHTag( options, logging, list_of_softwares_with_versions
         cmd = f"mv {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos_temp {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos"
         os.system( cmd )
 
+def seggregateInformationFromFilename(filename):
+    """
+    Extracts the following information from the filename:
+    
+    - The location of the file (without the filename itself)
+    - The actual filename
+    - The basename (actual filename without the extension)
+    - The file extension  
+    """
+    filename_location = "/".join(filename.split("/")[:-1])
+    filename_extension = filename.split(".")[-1]
+    filename_full = filename.split("/")[-1]
+    filename_base = ".".join(filename_full.split(".")[:-1])
+    return filename, filename_location, filename_full, filename_base, filename_extension
 
 def main():
     commandLineArg = sys.argv
@@ -1613,29 +1557,27 @@ def main():
         logging.info( "validateCommandLineArguments() execution is complete" )
 
     remove_these_files = []
-
+    
+    genome_fullpath, genome_onlypath, genome_onlyfilename, genome_onlybasename, genome_onlyextension = seggregateInformationFromFilename(options.genome)
+    if options.compress == True:  
+        inputalignedfilename_fullpath, inputalignedfilename_onlypath, inputalignedfilename_onlyfilename, inputalignedfilename_onlybasename, inputalignedfilename_onlyextension = seggregateInformationFromFilename(options.inputalignedfilename)
+    elif options.decompress == True:
+        inputabrfilename_fullpath, inputabrfilename_onlypath, inputabrfilename_onlyfilename, inputabrfilename_onlybasename, inputabrfilename_onlyextension = seggregateInformationFromFilename(options.inputabrfilename)
+    
     if options.error_directory is None:
         options.error_directory = options.output_directory
-
-    genome_filename_without_location = options.genome.split( "/" )[-1]
-    if os.path.exists( f"{options.output_directory}/{genome_filename_without_location}" ) == False:
-        cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.output_directory}/{genome_filename_without_location}"
-        if options.quiet == False:
-            logging.info( f"Running command - {cmd}" )
-        os.system( cmd )
-    options.genome = f"{options.output_directory}/{genome_filename_without_location}"
-
+    
     if options.compress == True:
-        volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
+        volumes_list = [f"{genome_onlypath}:{genome_onlypath}",
                     f"{options.output_directory}:{options.output_directory}",
                     f"{options.error_directory}:{options.error_directory}",
-                    f"{'/'.join(options.inputfilename.split('/')[:-1])}:{'/'.join(options.inputfilename.split('/')[:-1])}",
+                    f"{inputalignedfilename_onlypath}:{inputalignedfilename_onlypath}",
                     ]
     elif options.decompress == True:
-        volumes_list = [f"{'/'.join(options.genome.split('/')[:-1])}:{'/'.join(options.genome.split('/')[:-1])}",
+        volumes_list = [f"{genome_onlypath}:{genome_onlypath}",
                     f"{options.output_directory}:{options.output_directory}",
                     f"{options.error_directory}:{options.error_directory}",
-                    f"{'/'.join(options.inputabrfilename.split('/')[:-1])}:{'/'.join(options.inputabrfilename.split('/')[:-1])}",
+                    f"{inputabrfilename_onlypath}:{inputabrfilename_onlypath}",
                     ]
 
     docker_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
@@ -1657,6 +1599,8 @@ def main():
             framework_of_choice = "singularity"
         else:
             framework_of_choice = "docker"
+    
+    
 
     ################################################################################################################################################################################################################################################
     # Pull down docker or singularity images
@@ -1670,62 +1614,51 @@ def main():
     if framework_of_choice == "docker":
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
-            os.system( f"docker pull ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
+            os.system( f"docker pull ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
     else:
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
-            os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/{software}:{version}" )
+            os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
     ################################################################################################################################################################################################################################################
 
-    cmd = f"samtools faidx {options.output_directory}/{genome_filename_without_location}"
 
-    if os.path.exists( f"{options.output_directory}/{genome_filename_without_location}.fai" ) == False:
-        if options.framework == "docker":
-            runDockerCommand( logging,
-                              name = "samtools",
-                                version = list_of_softwares_with_versions['samtools'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-                )
+    ################################################################################################################################################################################################################################################
+    # Convert to single line fasta file
+    ################################################################################################################################################################################################################################################
+    if os.path.exists( f"{options.output_directory}/{genome_onlyfilename}" ) == False:
+        cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.output_directory}/{genome_onlyfilename}"
+        
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(software, version, cmd, options.framework)
+    options.genome = f"{options.output_directory}/{genome_onlyfilename}"
+    remove_these_files.append(options.genome)
+    remove_these_files.append(f"options.genome{.fai}")
+    ################################################################################################################################################################################################################################################
+    
+    
+    ################################################################################################################################################################################################################################################
+    # Generate index for genome
+    ################################################################################################################################################################################################################################################
+    cmd = f"samtools faidx {options.genome}"
 
-        elif options.framework == "singularity":
-            runSingularityCommand( logging,
-                                name = "samtools",
-                                version = list_of_softwares_with_versions['samtools'],
-                                image_location = "ghcr.io/sagnikbanerjee15/docker_tools_and_pipelines/samtools",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-
-                )
+    software = "samtools"
+    version = list_of_softwares_with_versions[software]
+    executeCommand(software, version, cmd, options.framework)
+    ################################################################################################################################################################################################################################################
 
     if options.compress == True:
-        prepareInputFilesForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
-        logging.info( f"Input files have been prepared" )
+        createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
+        logging.info( f"Position sorted SAM input file has been generated" )
 
-    if options.output_directory is None:
-        options.output_directory = "/".join( options.inputfilename.split( "/" )[:-1] )
-
-    for line in pprint.pformat( options ).split( '\n' ):
-        logging.info( line )
-
-    if options.compress == True:
-        alterReadNamesAndAddNHTag( options, logging, list_of_softwares_with_versions, volumes_list, remove_these_files )
+        alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
         if options.quiet == False:
             logging.info( f"Read names have been altered and NH tags have been added" )
 
-    if options.compress == True:
         findEndedness( options, logging )
         if options.quiet == False:
             logging.info( f"findEndedness() execution is complete" )
 
-    if options.compress == True:
         compressSamFile( options, list_of_softwares_with_versions, volumes_list )
         if options.quiet == False:
             logging.info( f"compressSamFile() execution is complete" )
@@ -1740,15 +1673,15 @@ def main():
 
     if options.header == True:
         """
-        cmd=f"7za e {options.inputfilename[0]} -y"
+        cmd=f"7za e {options.inputalignedfilename[0]} -y"
         if options.quiet == False:
             logging.info(f"Running command - {cmd}")
         os.system(cmd)
         """
-        cmd = f"cat {options.inputfilename[0][:-3]}|grep ^@ > {options.inputfilename[0][:-3]}.headers"
+        cmd = f"cat {options.inputalignedfilename[0][:-3]}|grep ^@ > {options.inputalignedfilename[0][:-3]}.headers"
         os.system( cmd )
-        # print(open(f"{options.inputfilename[0][:-3]}.headers","r").read())
-        os.system( f"rm -f {options.inputfilename[0][:-3]}.headers" )
+        # print(open(f"{options.inputalignedfilename[0][:-3]}.headers","r").read())
+        os.system( f"rm -f {options.inputalignedfilename[0][:-3]}.headers" )
     """
     if options.random == True:
         input_filename = options.inputabrfilename
