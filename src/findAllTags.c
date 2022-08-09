@@ -97,7 +97,7 @@ int main (int argc, char **argv)
 	struct arguments arguments;
 	FILE *outstream;
 
-	char waters[] = "a place to stay --\"the gunners dream\", Roger Waters, 1983\n";
+	char waters[] = "a place to stay 	--\"the gunners dream\", Roger Waters, 1983\n";
 
 	/* Set argument defaults */
 	arguments.outfile = NULL;
