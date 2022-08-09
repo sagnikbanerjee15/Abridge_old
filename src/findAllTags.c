@@ -78,14 +78,13 @@ static char args_doc[] = "ARG1 ARG2";
  DOC.  Field 4 in ARGP.
  Program documentation.
  */
-static char doc[] = "argex -- A program to demonstrate how to code command-line options
-and arguments.\vFrom the GNU C Tutorial.";
+static char doc[] = "argex -- A program to demonstrate how to code command-line options and arguments.\vFrom the GNU C Tutorial.";
 
 /*
  The ARGP structure itself.
  */
 static struct argp argp =
-{	options, parse_opt, args_doc, doc};
+{ options , parse_opt , args_doc , doc };
 
 /*
  The main function.
@@ -98,44 +97,7 @@ int main (int argc, char **argv)
 	struct arguments arguments;
 	FILE *outstream;
 
-	char waters[] = "a place to stay
-	enough to
-	eat somewhere
-	old heroes
-	shuffle safely
-	down the
-	street where
-	you can
-	speak out
-	loud about
-	your doubts
-	and fears
-	and what
-	's more no-one ever disappears
-	you never
-	hear their
-	standard issue
-	kicking in
-	your door
-	you can
-	relax on
-	both sides
-	of the
-	tracks and
-	maniacs don
-	't blow holes in bandsmen by remote control
-	and everyone
-	has recourse
-	to the
-	law and
-	no - one
-	kills the
-	children anymore
-	and no
-	-one
-	kills the
-	children anymore
-	--\"the gunners dream\", Roger Waters, 1983\n";
+	char waters[] = "a place to stay --\"the gunners dream\", Roger Waters, 1983\n";
 
 	/* Set argument defaults */
 	arguments.outfile = NULL;
