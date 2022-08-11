@@ -6,6 +6,8 @@ CFLAGS = -Ofast -g
 
 INSTALLDIR ?= /usr/local/bin
 
+CC=gcc
+
 all: $(PROGS)
 
 %: %.c
