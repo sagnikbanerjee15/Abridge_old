@@ -1709,11 +1709,11 @@ def main():
         createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
         logging.info( f"Position sorted SAM input file has been generated" )
         
-        return
         alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
         if options.quiet == False:
             logging.info( f"Read names have been altered and NH tags have been added" )
-
+        
+        return
         findEndedness( options, logging )
         if options.quiet == False:
             logging.info( f"findEndedness() execution is complete" )
