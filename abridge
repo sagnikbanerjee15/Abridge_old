@@ -1496,7 +1496,7 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     # Output file contains 2 columns - 
     # $1 - Long read name
     # $2 - Line number where the read appears
-    cmd = f"cat {options.inputalignedfilename}|grep -v ^@|awk -vOFS=\"\\t\" " + " '{print $1,NR}'|sort "
+    cmd = f"printReadNamesAndLineNumbers -i {options.inputalignedfilename}|sort "
     cmd += f"> {options.output_directory}/sorted_read_names"
     if os.path.exists( f"{options.output_directory}/sorted_read_names" ) == False:
         software = "abridge"
