@@ -52,8 +52,7 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 		case ARGP_KEY_END:
 			// Reached the last key.
 			// Check if our inputsamfilename and outputfilename REQUIRED "options" have been set to non-default values
-			if ( strcmp( arguments->inputsamfilename, "" ) == 0
-					|| strcmp( arguments->outputfilename, "" ) == 0 )
+			if ( strcmp( arguments->inputsamfilename, "" ) == 0 )
 			{
 				argp_usage( state );
 			}
@@ -94,7 +93,7 @@ void printReadNamesAndLineNumbers( char *inputfilename )
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	line_number = ( char* ) malloc( sizeof(char) * 100 );
+	read_name = ( char* ) malloc( sizeof(char) * 100 );
 
 	/********************************************************************/
 
@@ -128,8 +127,6 @@ int main( int argc, char **argv )
 
 	argp_parse( &argp, argc, argv, 0, 0, &arguments );
 	/********************************************************************/
-	printReadNamesAndLineNumbers(
-			arguments.inputsamfilename,
-	);
+	printReadNamesAndLineNumbers( arguments.inputsamfilename );
 	return 0;
 }
