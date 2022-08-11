@@ -6,7 +6,9 @@
 # include "data_structure_definitions.h"
 # include "function_definitions.h"
 
-void findMaximumNumberOfReadsInEachLine (char *pass1filename, char *output_filename)
+void findMaximumNumberOfReadsInEachLine(
+		char *pass1filename,
+		char *output_filename )
 {
 	/********************************************************************
 	 * Variable declaration
@@ -33,43 +35,45 @@ void findMaximumNumberOfReadsInEachLine (char *pass1filename, char *output_filen
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen (pass1filename , "r");
+	fhr = fopen( pass1filename, "r" );
 	if ( fhr == NULL )
 	{
-		printf ("Error! File %s not found" , pass1filename);
-		exit (1);
+		printf( "Error! File %s not found", pass1filename );
+		exit( 1 );
 	}
-	fhw = fopen (output_filename , "w");
+	fhw = fopen( output_filename, "w" );
 	if ( fhw == NULL )
 	{
-		printf ("%s File cannot be created" , output_filename);
-		exit (1);
+		printf( "%s File cannot be created", output_filename );
+		exit( 1 );
 	}
 	/********************************************************************/
 
-	while ( ( line_len = getline ( &line , &len , fhr) ) != -1 )
-		if ( line[0] != '@' ) break;
+	while ( (line_len = getline( &line, &len, fhr )) != -1 )
+		if ( line[0] != '@' )
+			break;
 
 	max_reads_in_each_line = 0;
 	do
 	{
 		number_of_commas_in_each_line = 1;
-		for ( i = 0 ; line[i] != '\0' ; i++ )
-			if ( line[i] == ',' ) number_of_commas_in_each_line++;
+		for ( i = 0; line[i] != '\0'; i++ )
+			if ( line[i] == ',' )
+				number_of_commas_in_each_line++;
 		if ( max_number_of_commas < number_of_commas_in_each_line )
 			max_number_of_commas = number_of_commas_in_each_line;
 
-	} while ( ( line_len = getline ( &line , &len , fhr) ) != -1 );
+	} while ( (line_len = getline( &line, &len, fhr )) != -1 );
 
-	sprintf(str , "%lld" , max_number_of_commas);
-	strcat(str , "\n");
-	fprintf (fhw , "%s" , str);
+	sprintf( str, "%lld", max_number_of_commas );
+	strcat( str, "\n" );
+	fprintf( fhw, "%s", str );
 
-	fclose (fhr);
-	fclose (fhw);
+	fclose( fhr );
+	fclose( fhw );
 }
 
-int main (int argc, char *argv[])
+int main( int argc, char *argv[] )
 {
 	/********************************************************************
 	 * Variable declaration
@@ -83,10 +87,10 @@ int main (int argc, char *argv[])
 	 * Variable initialization
 	 ********************************************************************/
 
-	strcpy(pass1filename , argv[1]);
-	strcpy(output_filename , argv[2]);
+	strcpy( pass1filename, argv[1] );
+	strcpy( output_filename, argv[2] );
 
 	/********************************************************************/
-	findMaximumNumberOfReadsInEachLine (pass1filename , output_filename);
+	findMaximumNumberOfReadsInEachLine( pass1filename, output_filename );
 
 }

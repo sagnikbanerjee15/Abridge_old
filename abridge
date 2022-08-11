@@ -131,7 +131,7 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     os.system( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
 
-def executeCommand(software, version, cmd, framework):
+def executeCommand(options, software, version, volumes_list, cmd):
     """
     Executes the command within the requested framework
     """
@@ -1410,7 +1410,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
         
         software = "samtools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(software, version, cmd, options.framework)
+        executeCommand(options, software, version, volumes_list, cmd)
 
         first_line = open( f"{options.output_directory}/header" , "r" ).readline().strip()
         if "SO:coordinate" in first_line:
@@ -1422,7 +1422,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(software, version, cmd, options.framework)
+            executeCommand(options, software, version, volumes_list, cmd)
         else:
             # Need to sort by coordinate
             cmd = f"samtools sort -@ {options.cpu} {options.inputalignedfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputalignedfilename.sam "
@@ -1432,9 +1432,9 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(software, version, cmd, options.framework)
+            executeCommand(options, software, version, volumes_list, cmd)
 
-    elif file_extension == "sam":
+    elif inputalignedfilename_onlyextension == "sam":
         first_line = open( options.inputalignedfilename, "r" ).readline().strip()
         if "SO:coordinate" in first_line:
             # Copying the input sam file to the output directory
@@ -1451,9 +1451,9 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(software, version, cmd, options.framework)
+            executeCommand(options, software, version, volumes_list, cmd)
 
-def returnTagList(samfilename):
+def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_versions, volumes_list):
     """
     Returns a dictionary of tags.
     For example:
@@ -1465,52 +1465,109 @@ def returnTagList(samfilename):
     Hence using C for this purpose.
     """
     
-    cmd = "findAllTags "
+    cmd  = f" findAllTags "
+    cmd += f" --inputsamfilename {samfilename}" 
+    cmd += f" --outputfilename {tagfilename}"
+    
+    software = "abridge"
+    version = list_of_softwares_with_versions[software]
+    executeCommand(options, software, version, volumes_list, cmd)
+    
+    tag_presence = {}
+    fhr = open(tagfilename, "r")
+    for line in fhr:
+        tag_name, tag_value = line.strip().split(":")
+        tag_presence[tag_name] = int(tag_value)
+    fhr.close()
+    
+    os.system(f"rm {tagfilename}")
+    return tag_presence
 
 def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging ):
     """
-    
+    Reduce the length of the read names
+    Add more tags as required
     """
     
     # Check which tags are already present in the aligned file
-    present_tags = returnTagList(options.inputalignedfilename)
+    present_tags = returnTagList(options, options.inputalignedfilename, f"{options.output_directory}/temp_file_tags", list_of_softwares_with_versions, volumes_list)
     
-    
+    # Sort read names - to bring together multiple alignments of the same read and same mate pairs of PE reads
+    # Output file contains 2 columns - 
+    # $1 - Long read name
+    # $2 - Line number where the read appears
     cmd = f"cat {options.inputalignedfilename}|grep -v ^@|cut -f1|awk -vOFS=\"\\t\" " + "'{print $0,NR}'|sort "
     cmd += f"> {options.output_directory}/sorted_read_names"
     if os.path.exists( f"{options.output_directory}/sorted_read_names" ) == False:
-        os.system( cmd )
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, cmd)
+        remove_these_files.append( f"{options.output_directory}/sorted_read_names" )
 
     logging.info( "Read names sorted" )
 
+    # Count the number of multi maps of each read. Note that uniquely mapped PE reads will have a value of 2.
+    # Output file contains 2 columns - 
+    # $1 - Long read name
+    # $2 - Number of times the read name appears 
     cmd = f"cat {options.output_directory}/sorted_read_names" + "|cut -f1|uniq -c|awk -vOFS=\"\\t\" '{print $2,$1}'"
     cmd += f"> {options.output_directory}/NH_vals"
     if os.path.exists( f"{options.output_directory}/NH_vals" ) == False:
-        os.system( cmd )
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, cmd)
+        remove_these_files.append( f"{options.output_directory}/NH_vals" )
 
-    logging.info( "" )
+    logging.info( "NH value has been calculated" )
 
+    # Merge two files to associate the read names with their correspondng NH values
+    # Output file contains 3 columns - 
+    # $1 - Long read name
+    # $2 - Line number where the long read appears
+    # $3 - Number of times the read name appears
     cmd = f"join {options.output_directory}/sorted_read_names {options.output_directory}/NH_vals" + " |awk -vOFS=\"\\t\" '{print $1,$2,$3}' "
     cmd += f" > {options.output_directory}/sorted_read_names_with_NH"
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH" ) == False:
-        os.system( cmd )
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, cmd)
+        remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH" )
 
-    logging.info( "" )
+    logging.info( "Read names have been associated with their corresponding NH values" )
 
+    # Generate short name of reads
+    # Output file contains 4 columns - 
+    # $1 - Long read name
+    # $2 - Line number where the long read appears
+    # $3 - Number of times the read name appears
+    # $4 - Short read name
     cmd = f"associateShortNamesToReads {options.output_directory}/sorted_read_names_with_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names "
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(software, version, cmd, options.framework)
+        executeCommand(options, software, version, volumes_list, cmd)
+        remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" )
 
-    logging.info( "" )
+    logging.info( "Short read names have been generated" )
 
+    # Sort the short read names according to actual position of the long reads in the inputsamfile
+    # To save time, the short reads are not copied back to the main inputsamfile. During compression,
+    # this file will be provided as input and the program will read from this file simultaneously replace 
+    # the long read names with the short read names
+    # Output file contains 4 columns - 
+    # $1 - Long read name
+    # $2 - Line number where the long read appears
+    # $3 - Number of times the read name appears
+    # $4 - Short read name
     cmd = f"sort -nk2,2 {options.output_directory}/sorted_read_names_with_NH_and_short_read_names "
     cmd += f" > {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos"
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" ) == False:
-        os.system( cmd )
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, cmd)
+        remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" )
 
-    logging.info( "" )
+    logging.info( "Reads sorted according to their actual position" )
 
     if options.skip_shortening_read_names == True:
         cmd = f"cat {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos|awk -v OFS=\"\\t\" " + " '{$4=$1}' "
@@ -1630,10 +1687,10 @@ def main():
         
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(software, version, cmd, options.framework)
+        executeCommand(options, software, version, volumes_list, cmd)
     options.genome = f"{options.output_directory}/{genome_onlyfilename}"
     remove_these_files.append(options.genome)
-    remove_these_files.append(f"options.genome{.fai}")
+    remove_these_files.append(f"{options.genome}.fai")
     ################################################################################################################################################################################################################################################
     
     
@@ -1644,7 +1701,7 @@ def main():
 
     software = "samtools"
     version = list_of_softwares_with_versions[software]
-    executeCommand(software, version, cmd, options.framework)
+    executeCommand(options, software, version, volumes_list, cmd)
     ################################################################################################################################################################################################################################################
 
     if options.compress == True:
