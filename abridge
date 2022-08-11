@@ -1683,7 +1683,7 @@ def main():
     # Convert to single line fasta file
     ################################################################################################################################################################################################################################################
     if os.path.exists( f"{options.output_directory}/{genome_onlyfilename}" ) == False:
-        cmd = f"perl -pe '/^>/ ? print \"\\n\" : chomp' {options.genome} | tail -n +2 > {options.output_directory}/{genome_onlyfilename}"
+        cmd = f"perl -pe \'/^>/ ? print \"\\n\" : chomp\' {options.genome} | tail -n +2 > {options.output_directory}/{genome_onlyfilename}"
         
         software = "abridge"
         version = list_of_softwares_with_versions[software]
@@ -1727,6 +1727,8 @@ def main():
 
     ###################################################################################################################  EXAMINED TILL HERE
     return
+
+
 
     if options.header == True:
         """
