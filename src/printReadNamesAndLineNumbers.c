@@ -95,6 +95,12 @@ void printReadNamesAndLineNumbers( char *inputfilename )
 	 ********************************************************************/
 	read_name = ( char* ) malloc( sizeof(char) * 100 );
 
+	fhr = fopen( inputfilename, "r" );
+	if ( fhr == NULL )
+	{
+		printf( "Error! File %s not found", inputfilename );
+		exit( 1 );
+	}
 	/********************************************************************/
 
 	while ( (line_len = getline( &line, &len, fhr )) != -1 )
@@ -113,6 +119,8 @@ void printReadNamesAndLineNumbers( char *inputfilename )
 		printf( "\n" );
 		line_number++;
 	} while ( (line_len = getline( &line, &len, fhr )) != -1 );
+
+	fclose( fhr );
 }
 
 int main( int argc, char **argv )
