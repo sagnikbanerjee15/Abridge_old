@@ -2,8 +2,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <argp.h>
-# include "data_structure_definitions.h"
-# include "function_definitions.h"
 
 // Set up the argument parser
 const char *argp_program_version = "abridge printReadNamesAndLineNumbers 1.2.0";
