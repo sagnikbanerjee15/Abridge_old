@@ -103,6 +103,7 @@ void printReadNamesAndLineNumbers( char *inputfilename )
 	line_number = 0;
 	do
 	{
+		j = 0;
 		for ( i = 0; line[i] != '\t'; i++ )
 			read_name[j++] = line[i];
 
