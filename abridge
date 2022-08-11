@@ -1685,9 +1685,10 @@ def main():
     if os.path.exists( f"{options.output_directory}/{genome_onlyfilename}" ) == False:
         cmd = f"perl -pe \'/^>/ ? print \"\\n\" : chomp\' {options.genome} | tail -n +2 > {options.output_directory}/{genome_onlyfilename}"
         
-        software = "abridge"
-        version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, cmd)
+        #software = "abridge"
+        #version = list_of_softwares_with_versions[software]
+        #executeCommand(options, software, version, volumes_list, cmd)
+        os.system(cmd)
     options.genome = f"{options.output_directory}/{genome_onlyfilename}"
     remove_these_files.append(options.genome)
     remove_these_files.append(f"{options.genome}.fai")
