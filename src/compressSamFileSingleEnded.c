@@ -31,7 +31,7 @@ static struct argp_option options[] =
 { "flag_ignore_soft_clippings", 's', "", 0, "Set this flag to ignore soft clippings", 0 },
 { "flag_ignore_mismatches", 'm', "", 0, "Set this flag to ignore mismatches", 0 },
 { "flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips", 'p', "", 0, "Set this flag to ignore quality scores for mismatched bases and soft clips", 0 },
-{ "flag_ignore_unmapped_sequences", 'u', "", 0, "Set this flag to ignore unmapped sequences along with their quality scores", 0 },
+{ "flag_ignore_unmapped_sequences", 'e', "", 0, "Set this flag to ignore unmapped sequences along with their quality scores", 0 },
 { "run_diagnostics", 'd', "", 0, "Set this flag to run diagnostics and print out a verbose report", 0 },
 { "flag_ignore_quality_scores_for_matched_bases", 'b', "", 0, "Set this flag to ignore quality scores for nucleotide bases that match to the provided reference", 0 },
 { "flag_ignore_alignment_scores", 'a', "", 0, "Set this flag to ignore the alignment scores (Column 5 of SAM file)", 0 },
@@ -106,7 +106,7 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 		case 'p':
 			arguments->flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = 1;
 			break;
-		case 'u':
+		case 'e':
 			arguments->flag_ignore_unmapped_sequences = 1;
 			break;
 		case 'd':
