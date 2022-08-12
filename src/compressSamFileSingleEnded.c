@@ -1352,14 +1352,15 @@ int main( int argc, char *argv[] )
 			name_of_file_with_read_names_to_short_read_names_and_NH,
 			arguments.name_of_file_with_read_names_to_short_read_names_and_NH );
 
-	flag_ignore_alignment_scores = arguments.flag_ignore_alignment_scores;
+	flag_ignore_alignment_scores = arguments.flag_ignore_alignment_scores; // Ignore the column 5 of SAM alignment file which is often set to 255
 	flag_ignore_soft_clippings = arguments.flag_ignore_soft_clippings;
 	flag_ignore_mismatches = arguments.flag_ignore_mismatches;
 	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = arguments.flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
 	flag_ignore_unmapped_sequences = arguments.flag_ignore_unmapped_sequences;
+	flag_ignore_quality_scores_for_matched_bases = arguments.flag_ignore_quality_scores_for_matched_bases;
 	run_diagnostics = arguments.run_diagnostics;
 	max_input_reads_in_a_single_nucl_loc = arguments.max_input_reads_in_a_single_nucl_loc;
-	flag_ignore_quality_scores_for_matched_bases = arguments.flag_ignore_quality_scores_for_matched_bases;
+
 	/********************************************************************/
 
 	/*

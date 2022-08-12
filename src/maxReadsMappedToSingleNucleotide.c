@@ -8,9 +8,9 @@
 # include "function_definitions.h"
 
 // Set up the argument parser
-const char *argp_program_version = "abridge compressSamFileSingleEnded 1.2.0";
+const char *argp_program_version = "abridge maxReadsMappedToSingleNucleotide 1.2.0";
 const char *argp_program_bug_address = "sagnikbanerjee15@gmail.com";
-static char doc[] = "compressSamFileSingleEnded will accept an alignment file in SAM format and remove all redundant information. It will preserve only the information that has been requested by the user.";
+static char doc[] = "maxReadsMappedToSingleNucleotide will accept an alignment file in SAM format calculate the highest number of reads that are mapped to any nucleotide. Additionally, the program will also output the total number of alignments and the maximum read length";
 static char args_doc[] = "";  // No standard arguments
 							  // (i.e. arguments without "names")
 
