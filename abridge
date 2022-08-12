@@ -1513,9 +1513,11 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     cmd = f"cat {options.output_directory}/sorted_read_names" + "|cut -f1|uniq -c|awk -vOFS=\"\\t\" '{print $2,$1}'"
     cmd += f"> {options.output_directory}/NH_vals"
     if os.path.exists( f"{options.output_directory}/NH_vals" ) == False:
-        software = "abridge"
+        """software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, cmd)
+        executeCommand(options, software, version, volumes_list, cmd)"""
+        os.system(cmd)
+        logging.info(f"Running cmd - {cmd}")
         remove_these_files.append( f"{options.output_directory}/NH_vals" )
 
     logging.info( "NH value has been calculated" )
@@ -1528,9 +1530,11 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     cmd = f"join {options.output_directory}/sorted_read_names {options.output_directory}/NH_vals" + " |awk -vOFS=\"\\t\" '{print $1,$2,$3}' "
     cmd += f" > {options.output_directory}/sorted_read_names_with_NH"
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH" ) == False:
-        software = "abridge"
+        """software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, cmd)
+        executeCommand(options, software, version, volumes_list, cmd)"""
+        os.system(cmd)
+        logging.info(f"Running cmd - {cmd}")
         remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH" )
 
     logging.info( "Read names have been associated with their corresponding NH values" )
