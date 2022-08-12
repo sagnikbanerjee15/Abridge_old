@@ -19,8 +19,8 @@ static char args_doc[] = "";  // No standard arguments
 
 static struct argp_option options[] =
 {
-{ "inputsamfilename", 'i', "SAMFILENAME", 0, "inputsamfilename of object to download", 0 },
-{ "outputfilename", 'o', "TEXTFILENAME", 0, "Directory to save downloaded object to", 0 },
+{ "inputsamfilename", 'i', "SAMFILENAME", 0, "Enter the name of the SAM filename", 0 },
+{ "outputfilename", 'o', "TEXTFILENAME", 0, "Enter the name of the output filename", 0 },
 { 0, 0, 0, 0, 0, 0 } // Last entry should be all zeros in all fields
 };
 

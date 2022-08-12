@@ -1490,7 +1490,11 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     """
     
     # Check which tags are already present in the aligned file
-    present_tags = returnTagList(options, options.inputalignedfilename, f"{options.output_directory}/temp_file_tags", list_of_softwares_with_versions, volumes_list)
+    tags_present = returnTagList(options, options.inputalignedfilename, f"{options.output_directory}/temp_file_tags", list_of_softwares_with_versions, volumes_list)
+    
+    if tags_present["NH"] == 1 and options.skip_shortening_read_names == True: 
+        logging.info("Skipping the generation of short read names")
+        return tags_present
     
     # Sort read names - to bring together multiple alignments of the same read and same mate pairs of PE reads
     # Output file contains 2 columns - 
@@ -1548,6 +1552,8 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     cmd  = f"associateShortNamesToReads "
     cmd += f" --inputfilename {options.output_directory}/sorted_read_names_with_NH "
     cmd += f" --outputfilename {options.output_directory}/sorted_read_names_with_NH_and_short_read_names "
+    if options.skip_shortening_read_names == True:
+        cmd += f" --skipshorteningreadname "
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
@@ -1574,14 +1580,8 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
         remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" )
 
     logging.info( "Reads sorted according to their actual position" )
-
-    if options.skip_shortening_read_names == True:
-        cmd = f"cat {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos|awk -v OFS=\"\\t\" " + " '{$4=$1}' "
-        cmd += f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos_temp"
-        os.system( cmd )
-
-        cmd = f"mv {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos_temp {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos"
-        os.system( cmd )
+    
+    return tags_present
 
 def seggregateInformationFromFilename(filename):
     """
@@ -1662,8 +1662,6 @@ def main():
             framework_of_choice = "singularity"
         else:
             framework_of_choice = "docker"
-    
-    
 
     ################################################################################################################################################################################################################################################
     # Pull down docker or singularity images
@@ -1713,17 +1711,53 @@ def main():
 
     if options.compress == True:
         createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
-        logging.info( f"Position sorted SAM input file has been generated" )
+        if options.quiet == False:
+            logging.info( f"Position sorted SAM input file has been generated" )
         
-        alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
+        tags_present = alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
         if options.quiet == False:
             logging.info( f"Read names have been altered and NH tags have been added" )
         
-        return
+        if tags_present["MD"] == 0:
+            ################################################################################################################################################################################################################################################
+            # Use samtools to add MD tag
+            ################################################################################################################################################################################################################################################
+            cmd  = f" samtools "
+            cmd += f" view "
+            cmd += f" -@ {options.cpu} "
+            cmd += f" -o {options.inputalignedfilename[:-4]}.temp.bam "
+            cmd += f" {options.inputalignedfilename} "
+            software = "samtools"
+            version = list_of_softwares_with_versions[software]
+            executeCommand(options, software, version, volumes_list, cmd)
+            
+            cmd  = f" samtools "
+            cmd += f" calmd -bAr "
+            cmd += f" -@ {options.cpu} "
+            cmd += f" {options.inputalignedfilename[:-4]}.temp.bam "
+            cmd += f" {options.genome} "
+            cmd += f" > {options.inputalignedfilename[:-4]}.MD_added.bam"
+            software = "samtools"
+            version = list_of_softwares_with_versions[software]
+            executeCommand(options, software, version, volumes_list, cmd)
+            
+            cmd  = f"samtools "
+            cmd += f" view "
+            cmd += f" -h "
+            cmd += f" -@ {options.cpu} "
+            cmd += f" {options.inputalignedfilename[:-4]}.MD_added.bam "
+            cmd += f" > {options.inputalignedfilename}"
+            software = "samtools"
+            version = list_of_softwares_with_versions[software]
+            executeCommand(options, software, version, volumes_list, cmd)
+            
+            cmd = f"rm {options.inputalignedfilename[:-4]}.temp.bam {options.inputalignedfilename[:-4]}.MD_added.bam "
+            os.system(cmd)
+            
         findEndedness( options, logging )
         if options.quiet == False:
             logging.info( f"findEndedness() execution is complete" )
-
+        
         compressSamFile( options, list_of_softwares_with_versions, volumes_list )
         if options.quiet == False:
             logging.info( f"compressSamFile() execution is complete" )
