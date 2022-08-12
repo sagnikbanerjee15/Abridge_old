@@ -1545,7 +1545,9 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     # $2 - Line number where the long read appears
     # $3 - Number of times the read name appears
     # $4 - Short read name
-    cmd = f"associateShortNamesToReads {options.output_directory}/sorted_read_names_with_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names "
+    cmd  = f"associateShortNamesToReads "
+    cmd += f" -- inputfilename {options.output_directory}/sorted_read_names_with_NH "
+    cmd += f" --outputfilename {options.output_directory}/sorted_read_names_with_NH_and_short_read_names "
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
