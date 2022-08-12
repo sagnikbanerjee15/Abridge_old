@@ -125,8 +125,18 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 		case ARGP_KEY_END:
 			// Reached the last key.
 			// Check if our inputsamfilename and outputfilename REQUIRED "options" have been set to non-default values
-			if ( strcmp( arguments->inputsamfilename, "" ) == 0
-					|| strcmp( arguments->outputfilename, "" ) == 0 )
+			if ( strcmp( arguments->input_sam_filename, "" ) == 0
+					|| strcmp( arguments->output_abridge_filename, "" ) == 0
+					|| strcmp( arguments->genome_filename, "" ) == 0
+					|| strcmp( arguments->unmapped_filename, "" ) == 0
+					|| strcmp( arguments->name_of_file_with_max_commas, "" )
+							== 0
+					|| strcmp( arguments->name_of_file_with_quality_scores, "" )
+							== 0
+					|| strcmp(
+							arguments->name_of_file_with_read_names_to_short_read_names_and_NH,
+							"" ) == 0
+					|| arguments->max_input_reads_in_a_single_nucl_loc == 0 )
 			{
 				argp_usage( state );
 			}
