@@ -253,8 +253,10 @@ int main( int argc, char *argv[] )
 
 	// Parse our arguments; every option seen by parse_opt will be reflected in arguments.
 	// Default values.
-	arguments.inputsamfilename = ""; // Empty string - only contains null character
-	arguments.outputfilename = "";
+	arguments.input_sam_filename = ""; // Empty string - only contains null character
+	arguments.output_filename = "";
+	arguments.name_of_total_number_of_alignments_filename = "";
+	arguments.name_of_file_max_read_length = "";
 
 	argp_parse( &argp, argc, argv, 0, 0, &arguments );
 	/********************************************************************
