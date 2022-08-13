@@ -28,13 +28,13 @@ static struct argp_option options[] =
 { "name_of_file_with_max_commas", 'c', "MAX_COMMAS_FILENAME", 0, "Enter the name of the file that contains the value of maximum number of commas", 0 },
 { "name_of_file_with_quality_scores", 'q', "QUALITY_SCORES_FILENAME", 0, "Enter the name of the file where the quality scores will be stored. This file will be compressed later", 0 },
 { "name_of_file_with_read_names_to_short_read_names_and_NH", 'r', "SHORT_NAMES_NH_FILENAME", 0, "Enter the name of the file that contains the mapping between the long name to the short name and the NH values", 0 },
-{ "flag_ignore_soft_clippings", 's', "", 0, "Set this flag to ignore soft clippings", 0 },
-{ "flag_ignore_mismatches", 'm', "", 0, "Set this flag to ignore mismatches", 0 },
-{ "flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips", 'p', "", 0, "Set this flag to ignore quality scores for mismatched bases and soft clips", 0 },
-{ "flag_ignore_unmapped_sequences", 'e', "", 0, "Set this flag to ignore unmapped sequences along with their quality scores", 0 },
-{ "run_diagnostics", 'd', "", 0, "Set this flag to run diagnostics and print out a verbose report", 0 },
-{ "flag_ignore_quality_scores_for_matched_bases", 'b', "", 0, "Set this flag to ignore quality scores for nucleotide bases that match to the provided reference", 0 },
-{ "flag_ignore_alignment_scores", 'a', "", 0, "Set this flag to ignore the alignment scores (Column 5 of SAM file)", 0 },
+{ "flag_ignore_soft_clippings", 's', 0, 0, "Set this flag to ignore soft clippings", 0 },
+{ "flag_ignore_mismatches", 'm', 0, 0, "Set this flag to ignore mismatches", 0 },
+{ "flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips", 'p', 0, 0, "Set this flag to ignore quality scores for mismatched bases and soft clips", 0 },
+{ "flag_ignore_unmapped_sequences", 'e', 0, 0, "Set this flag to ignore unmapped sequences along with their quality scores", 0 },
+{ "run_diagnostics", 'd', 0, 0, "Set this flag to run diagnostics and print out a verbose report", 0 },
+{ "flag_ignore_quality_scores_for_matched_bases", 'b', 0, 0, "Set this flag to ignore quality scores for nucleotide bases that match to the provided reference", 0 },
+{ "flag_ignore_alignment_scores", 'a', 0, 0, "Set this flag to ignore the alignment scores (Column 5 of SAM file)", 0 },
 { "max_input_reads_in_a_single_nucl_loc", 'n', "MAX_READS_IN_ONE_NUCL", 0, "Enter the value of the maximum number of input reads mapped to a single nucleotide", 0 },
 { 0, 0, 0, 0, 0, 0 } // Last entry should be all zeros in all fields
 };
@@ -109,9 +109,6 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 		case 'e':
 			arguments->flag_ignore_unmapped_sequences = 1;
 			break;
-		case 'd':
-			arguments->run_diagnostics = 1;
-			break;
 		case 'b':
 			arguments->flag_ignore_quality_scores_for_matched_bases = 1;
 			break;
@@ -120,6 +117,9 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 			break;
 		case 'n':
 			arguments->max_input_reads_in_a_single_nucl_loc = 1;
+			break;
+		case 'd':
+			arguments->run_diagnostics = 1;
 			break;
 
 		case ARGP_KEY_END:
