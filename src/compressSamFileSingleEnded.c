@@ -122,7 +122,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			break;
 		case 'n':
 			arguments->max_input_reads_in_a_single_nucl_loc = strtoull (arg ,
-					eptr ,
+					&eptr ,
 					10);
 			break;
 
