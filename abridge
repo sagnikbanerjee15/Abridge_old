@@ -127,7 +127,7 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     # singularity_cmd += f" --hostname {container_name}"
     for mapping in volumes:
         singularity_cmd += f" -B {mapping}"
-    singularity_cmd += f" {image_location}:{version} "
+    singularity_cmd += f" {image_location} "
     singularity_cmd += f" bash -c '{command}'"
     os.system( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
@@ -418,7 +418,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, cmd)
+        executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
         
 
         ######################################################################################
@@ -468,7 +468,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, cmd)
+        executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
         return
 
     else:
@@ -1441,7 +1441,7 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
         remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" )
 
     logging.info( "Short read names have been generated" )
@@ -1460,7 +1460,7 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
         remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" )
 
     logging.info( "Reads sorted according to their actual position" )
