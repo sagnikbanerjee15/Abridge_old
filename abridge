@@ -1531,6 +1531,9 @@ def main():
     if docker_installed == 0 and singularity_installed == 0:
         print( "You need to have either docker or singularity installed" )
         sys.exit()
+        
+    logging.info(f"Value of docker_installed {docker_installed}")
+    logging.info(f"Value of singularity_installed {singularity_installed}")
 
     framework_of_choice = ""
     if options.framework == "docker":
