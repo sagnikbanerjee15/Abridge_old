@@ -9,6 +9,7 @@ cd ../Abridge && git pull && cd - && rm -rf SRR13711353_SE_compress_test && nohu
 
 # singularity pulls
 singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/abridge:1.1.0 docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0
+singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/samtools:1.14 docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/samtools:1.14
 singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/zpaq:715 docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq:715
 singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/fclqc:latest docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc:latest
 
