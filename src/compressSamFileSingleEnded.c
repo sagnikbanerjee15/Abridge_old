@@ -1253,6 +1253,7 @@ int main (int argc, char *argv[])
 	run_diagnostics = arguments.run_diagnostics;
 	max_input_reads_in_a_single_nucl_loc = arguments.max_input_reads_in_a_single_nucl_loc;
 
+	exit (1);
 	/********************************************************************/
 
 	/*
