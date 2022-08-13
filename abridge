@@ -21,6 +21,7 @@ import random
 import glob
 import time
 import subprocess
+from shutil import which
 from pprint import pformat
 
 from scripts.assessMemoryRequirement import *
@@ -1490,8 +1491,6 @@ def main():
     if options.force == True:
         os.system( f"rm -rf {options.output_directory}" )
     os.system( f"mkdir -p {options.output_directory}/singularity_images" )
-    os.system( f"which docker > {options.output_directory}/find_docker" )
-    os.system( f"which singularity > {options.output_directory}/find_singularity" )
     if options.logfilename is None:
         options.logfilename = f"{options.output_directory}/progress.log"
 
@@ -1526,8 +1525,8 @@ def main():
                     f"{inputabrfilename_onlypath}:{inputabrfilename_onlypath}",
                     ]
 
-    docker_installed = 1 if "not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
-    singularity_installed = 1 if "not found" not in open( f"{options.output_directory}/find_singularity", "r" ).read() else 0
+    docker_installed = 1 if which('docker') is not None else 0
+    singularity_installed = 1 if which('singularity') is not None else 0
 
     if docker_installed == 0 and singularity_installed == 0:
         print( "You need to have either docker or singularity installed" )
