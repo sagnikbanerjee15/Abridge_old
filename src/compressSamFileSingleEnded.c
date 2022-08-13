@@ -73,6 +73,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	/* Get the input argument from argp_parse, which we
 	 know is a pointer to our arguments structure. */
 	struct arguments *arguments = state->input;
+	char *eptr;
 
 	// Figure out which option we are parsing, and decide how to store it
 	switch ( key )
@@ -116,11 +117,13 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 		case 'a':
 			arguments->flag_ignore_alignment_scores = 1;
 			break;
-		case 'n':
-			arguments->max_input_reads_in_a_single_nucl_loc = 1;
-			break;
 		case 'd':
 			arguments->run_diagnostics = 1;
+			break;
+		case 'n':
+			arguments->max_input_reads_in_a_single_nucl_loc = strtoull (arg ,
+					eptr ,
+					10);
 			break;
 
 		case ARGP_KEY_END:
@@ -1253,7 +1256,6 @@ int main (int argc, char *argv[])
 	run_diagnostics = arguments.run_diagnostics;
 	max_input_reads_in_a_single_nucl_loc = arguments.max_input_reads_in_a_single_nucl_loc;
 
-	exit (1);
 	/********************************************************************/
 
 	/*
