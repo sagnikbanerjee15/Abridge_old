@@ -1308,9 +1308,9 @@ int main( int argc, char *argv[] )
 	arguments.flag_ignore_mismatches = 0;
 	arguments.flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = 0;
 	arguments.flag_ignore_unmapped_sequences = 0;
-	arguments.run_diagnostics = 0;
 	arguments.flag_ignore_quality_scores_for_matched_bases = 0;
 	arguments.flag_ignore_alignment_scores = 0;
+	arguments.run_diagnostics = 0;
 	arguments.max_input_reads_in_a_single_nucl_loc = 0;
 
 	argp_parse( &argp, argc, argv, 0, 0, &arguments );
@@ -1344,7 +1344,9 @@ int main( int argc, char *argv[] )
 	strcpy( input_samfilename, arguments.input_sam_filename );
 	strcpy( output_abridgefilename, arguments.output_abridge_filename );
 	strcpy( unmapped_filename, arguments.unmapped_filename );
-	strcpy( name_of_file_with_max_commas, argv[11] );
+	strcpy(
+			name_of_file_with_max_commas,
+			arguments.name_of_file_with_max_commas );
 	strcpy(
 			name_of_file_with_quality_scores,
 			arguments.name_of_file_with_quality_scores );

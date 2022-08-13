@@ -434,26 +434,30 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
         cmd = f"(/usr/bin/time --verbose "
         cmd += f" compressSamFileSingleEnded "
-        cmd += f" --genome_filename {options.genome}"
-        cmd += f" --flag_ignore_soft_clippings {options.ignore_soft_clippings}"  
-        cmd += f" --flag_ignore_mismatches {options.ignore_mismatches} "  # argv[3]
+        cmd += f" --genome_filename {options.genome}"        
+        cmd += f" --name_of_file_with_quality_scores {name_of_file_with_quality_scores} "
+        cmd += f" --input_sam_filename {input_filename} "
+        cmd += f" --output_abridge_filename {outputfilename} "
+        cmd += f" --unmapped_filename {unmapped_outputfilename} "
+        cmd += f" --max_input_reads_in_a_single_nucl_loc {max_input_reads_in_a_single_nucl_loc} "
+        cmd += f" --name_of_file_with_max_commas {name_of_file_with_max_commas} "
+        cmd += f" --name_of_file_with_read_names_to_short_read_names_and_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "
+        
+        if options.ignore_soft_clippings == True:
+            cmd += f" --flag_ignore_soft_clippings"
+        if options.ignore_mismatches == True:  
+            cmd += f" --flag_ignore_mismatches "
         if options.ignore_quality_scores_for_mismatched_bases_and_soft_clips == True:
             cmd += f" --flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips "
         if options.ignore_unmapped_reads == True:
             cmd += f" --flag_ignore_unmapped_sequences "
-        cmd += f" --input_sam_filename {input_filename} "
-        cmd += f" --output_abridge_filename {outputfilename} "
-        cmd += f" --unmapped_filename {unmapped_outputfilename} "
         if options.run_diagnostics == True:
             cmd += f" --run_diagnostics "
-        cmd += f" --max_input_reads_in_a_single_nucl_loc {max_input_reads_in_a_single_nucl_loc} "
-        cmd += f" --name_of_file_with_max_commas {name_of_file_with_max_commas} "
         if options.ignore_quality_scores_for_matched_bases == True:
             cmd += f" --flag_ignore_quality_scores_for_matched_bases "
-        cmd += f" --name_of_file_with_quality_scores {name_of_file_with_quality_scores} "
         if options.ignore_alignment_scores == True:
             cmd += f" --flag_ignore_alignment_scores "
-        cmd += f" --name_of_file_with_read_names_to_short_read_names_and_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "
+        
         cmd += f") "
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
@@ -463,6 +467,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
         if options.quiet == False:
             logging.info( f"Running command - {cmd}" )
+        
         software = "abridge"
         version = list_of_softwares_with_versions[software]
         executeCommand(options, software, version, volumes_list, cmd)
@@ -590,31 +595,10 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f"2> {error_file_compress_}"
         else:
             cmd += f"2> /dev/null"
-
-        if options.framework == "docker":
-            runDockerCommand( logging,
-                              name = "abridge",
-                                version = list_of_softwares_with_versions['abridge'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-                )
-
-        elif options.framework == "singularity":
-            runSingularityCommand( logging,
-                                name = "abridge",
-                                version = list_of_softwares_with_versions['abridge'],
-                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-
-                )
+            
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, cmd)
 
     ######################################################################################
     # Compress Quality scores file
@@ -641,30 +625,9 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     cmd += f" 1> /dev/null "
     cmd += f" 2> {error_fclqc}"
 
-    if options.framework == "docker":
-        runDockerCommand( logging,
-                          name = "fclqc",
-                            version = list_of_softwares_with_versions['fclqc'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
-                            container_name = f"{options.output_directory.split('/')[-1]}",
-                            volumes = volumes_list,
-                            command = cmd,
-                            cpus = options.cpu,
-                            memory = '100g'
-            )
-
-    elif options.framework == "singularity":
-        runSingularityCommand( logging,
-                            name = "fclqc",
-                            version = list_of_softwares_with_versions['fclqc'],
-                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc",
-                            container_name = f"{options.output_directory.split('/')[-1]}",
-                            volumes = volumes_list,
-                            command = cmd,
-                            cpus = options.cpu,
-                            memory = '100g'
-
-            )
+    software = "fclqc"
+    version = list_of_softwares_with_versions[software]
+    executeCommand(options, software, version, volumes_list, cmd)
 
     ######################################################################################
     # Generate SHA512 for genome file
@@ -702,30 +665,9 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     else:
         cmd += f"2> /dev/null"
 
-    if options.framework == "docker":
-        runDockerCommand( logging,
-                          name = "zpaq",
-                            version = list_of_softwares_with_versions['zpaq'],
-                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
-                            container_name = f"{options.output_directory.split('/')[-1]}",
-                            volumes = volumes_list,
-                            command = cmd,
-                            cpus = options.cpu,
-                            memory = '100g'
-            )
-
-    elif options.framework == "singularity":
-        runSingularityCommand( logging,
-                            name = "zpaq",
-                            version = list_of_softwares_with_versions['zpaq'],
-                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq",
-                            container_name = f"{options.output_directory.split('/')[-1]}",
-                            volumes = volumes_list,
-                            command = cmd,
-                            cpus = options.cpu,
-                            memory = '100g'
-
-            )
+    software = "zpaq"
+    version = list_of_softwares_with_versions[software]
+    executeCommand(options, software, version, volumes_list, cmd)
 
     all_files = glob.glob( f"{options.output_directory}/*" )
     keep_these_files = []
