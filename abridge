@@ -469,8 +469,6 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         software = "abridge"
         version = list_of_softwares_with_versions[software]
         executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
-        return
-
     else:
         # Paired ended
 
