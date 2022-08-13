@@ -151,7 +151,7 @@ def executeCommand(options, software, version, volumes_list, cmd):
         runSingularityCommand( logging,
                                name = software,
                             version = version,
-                            image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
