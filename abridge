@@ -484,41 +484,23 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             logging.info( f"Starting  for {input_filename}" )
 
         cmd = f"(/usr/bin/time --verbose "
-        cmd += f" maxReadsMappedToSingleNucleotide "
-        cmd += f" {input_filename} "
-        cmd += f" {name_of_max_input_reads_file} "
-        cmd += f" {name_of_total_number_of_alignments_file} "
-        cmd += f" {name_of_file_max_read_length} "
+        cmd += f" maxReadsMappedToSingleNucleotide  "
+        cmd += f" --input_sam_filename {input_filename} "
+        cmd += f" --output_filename {name_of_max_input_reads_file}"
+        cmd += f" --name_of_total_number_of_alignments_filename  {name_of_total_number_of_alignments_file} "
+        cmd += f" --name_of_file_max_read_length {name_of_file_max_read_length}"
         cmd += f")"
         cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
             cmd += f"2> {error_file_max_input_reads}"
         else:
             cmd += f"2> /dev/null"
-        if options.framework == "docker":
-            runDockerCommand( logging,
-                              name = "abridge",
-                                version = list_of_softwares_with_versions['abridge'],
-                                image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-                )
-
-        elif options.framework == "singularity":
-            runSingularityCommand( logging,
-                                name = "abridge",
-                                version = list_of_softwares_with_versions['abridge'],
-                                image_location = "ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge",
-                                container_name = f"{options.output_directory.split('/')[-1]}",
-                                volumes = volumes_list,
-                                command = cmd,
-                                cpus = options.cpu,
-                                memory = '100g'
-
-                )
+        if options.quiet == False:
+            logging.info( f"Running command - {cmd}" )
+        
+        software = "abridge"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
 
         all_commands = []
         # for input_filename in options.inputalignedfilename:
@@ -531,9 +513,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         cmd += f" |grep -v ^@ "
         cmd += f" |cut -f2|uniq "
         cmd += f" |sort|uniq > {frequency_of_flags_filename}"
-        all_commands.append( [cmd, "dummy"] )
         os.system( cmd )
-        # pool.map(runCommand,all_commands)
 
         all_commands = []
         # for input_filename in options.inputalignedfilename:
@@ -552,40 +532,40 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         max_read_length = int( open( name_of_file_max_read_length, "r" ).read().strip() )
         if options.quiet == False:
             logging.info( f"{name_of_input_file_without_location} max_read_length = {max_read_length}" )
-
+    
         cmd = f"(/usr/bin/time --verbose "
         cmd += f" compressSamFilePairedEnded"  # argv[0] - name of the program
-        cmd += f" {options.genome}"  # argv[1] - genome_filename
-        cmd += f" {options.ignore_soft_clippings}"  # argv[2]
-        cmd += f" {options.ignore_mismatches} "  # argv[3]
+        cmd += f" --genome_filename {options.genome}"  # argv[1] - genome_filename
+        cmd += f" --input_sam_filename {input_filename} "  # argv[6] - Input samfile
+        cmd += f" --output_abridge_filename {outputfilename} "  # argv[7] - Output filename
+        cmd += f" --unmapped_filename {unmapped_outputfilename} "  # argv[8] - Filename for unmapped reads
+        cmd += f" --max_input_reads_in_a_single_nucl_loc {max_input_reads_in_a_single_nucl_loc} "  # argv[10] - max_input_reads_in_a_single_nucl_loc
+        cmd += f" --name_of_file_with_max_commas {name_of_file_with_max_commas} "  # argv[11] - name_of_file_with_max_commas
+        cmd += f" --name_of_file_with_quality_scores {name_of_file_with_quality_scores} "  # argv[13]
+        cmd += f" --name_of_file_with_read_names_to_short_read_names_and_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "
+        
+        if options.ignore_soft_clippings == True:
+            cmd += f" --flag_ignore_soft_clippings"
+        if options.ignore_mismatches == True:  
+            cmd += f" --flag_ignore_mismatches "
         if options.ignore_quality_scores_for_mismatched_bases_and_soft_clips == True:
-            cmd += f" 1 "  # argv[4]
-        else:
-            cmd += f" 0 "  # argv[4]
-        cmd += f" {options.ignore_unmapped_reads} "  # argv[5]
-        cmd += f" {input_filename} "  # argv[6] - Input samfile
-        cmd += f" {outputfilename} "  # argv[7] - Output filename
-        cmd += f" {unmapped_outputfilename} "  # argv[8] - Filename for unmapped reads
+            cmd += f" --flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips "
+        if options.ignore_unmapped_reads == True:
+            cmd += f" --flag_ignore_unmapped_sequences "
         if options.run_diagnostics == True:
-            cmd += f" 1"  # argv[9] - run diagnostics
-        else:
-            cmd += f" 0"  # argv[9] - run diagnostics
-        cmd += f" {max_input_reads_in_a_single_nucl_loc} "  # argv[10] - max_input_reads_in_a_single_nucl_loc
-        cmd += f" {name_of_file_with_max_commas} "  # argv[11] - name_of_file_with_max_commas
+            cmd += f" --run_diagnostics "
         if options.ignore_quality_scores_for_matched_bases == True:
-            cmd += f" 1 "  # argv[12]
-        else:
-            cmd += f" 0 "  # argv[12]
-        cmd += f" {name_of_file_with_quality_scores} "  # argv[13]
-        cmd += f" {max_number_of_alignments} "  # argv[14]
-        cmd += f" {max_read_length} "  # argv[15]
-        cmd += f" {frequency_of_flags_filename} "  # argv[16]
-        cmd += f" {name_of_file_dictionary} "  # argv[17]
+            cmd += f" --flag_ignore_quality_scores_for_matched_bases "
         if options.ignore_alignment_scores == True:
-            cmd += f" 1 "  # argv[18] - save_scores = False
-        else:
-            cmd += f" 0 "  # argv[18] - save_scores = True
-        cmd += f" {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "  # argv[19]
+            cmd += f" --flag_ignore_alignment_scores "
+        
+        
+        cmd += f" --max_number_of_alignments {max_number_of_alignments} "  # argv[14]
+        cmd += f" --max_read_length {max_read_length} "  # argv[15]
+        cmd += f" --frequency_of_flags_filename {frequency_of_flags_filename} "  # argv[16]
+        cmd += f" --name_of_file_dictionary {name_of_file_dictionary} "  # argv[17]
+        
+        cmd += f" --name_of_file_with_read_names_to_short_read_names_and_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "  # argv[19]
         cmd += f") "
         # cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:

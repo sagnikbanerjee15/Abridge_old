@@ -2294,7 +2294,7 @@ void generateIntegratedCigarPairedEnded (
 	int AS_tag_index;
 	int print_outputs = 0;
 	int perfect_alignment_indicator = 0;
-	int spliced_alignment_indicator = 0;
+	//int spliced_alignment_indicator = 0;
 	char str[1000];
 	char temp_str[5];
 	char M_replacement_character;
@@ -2305,14 +2305,14 @@ void generateIntegratedCigarPairedEnded (
 			&curr_alignment->number_of_cigar_items ,
 			curr_alignment->cigar_items);
 
-	for ( i = 0 ; i < curr_alignment->number_of_cigar_items ; i++ )
-	{
-		if ( curr_alignment->cigar_items[i].def == 'N' )
-		{
-			spliced_alignment_indicator = 1;
-			break;
-		}
-	}
+	/*for ( i = 0 ; i < curr_alignment->number_of_cigar_items ; i++ )
+	 {
+	 if ( curr_alignment->cigar_items[i].def == 'N' )
+	 {
+	 spliced_alignment_indicator = 1;
+	 break;
+	 }
+	 }*/
 	/*
 	 * Process each alignment to extract soft clipped portion of reads
 	 */
@@ -2386,8 +2386,10 @@ void generateIntegratedCigarPairedEnded (
 	{
 		if ( strcmp (curr_alignment->tags[i].name , "MD") == 0 )
 			MD_tag_index = i;
-		if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
-			XS_tag_index = i;
+		/*
+		 if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
+		 XS_tag_index = i;
+		 */
 		if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 			NH_tag_index = i;
 		if ( strcmp (curr_alignment->tags[i].name , "NM") == 0 )
