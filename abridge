@@ -1619,7 +1619,7 @@ def main():
             cmd += f" {options.inputalignedfilename} "
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
             
             cmd  = f" samtools "
             cmd += f" calmd -bAr "
@@ -1629,7 +1629,7 @@ def main():
             cmd += f" > {options.inputalignedfilename[:-4]}.MD_added.bam"
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
             
             cmd  = f"samtools "
             cmd += f" view "
@@ -1639,7 +1639,7 @@ def main():
             cmd += f" > {options.inputalignedfilename}"
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
             
             cmd = f"rm {options.inputalignedfilename[:-4]}.temp.bam {options.inputalignedfilename[:-4]}.MD_added.bam "
             os.system(cmd)
