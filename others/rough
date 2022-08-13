@@ -3,8 +3,12 @@ fclqc
 
 cd /Users/baners23/work/ABRIDGE/Abridge
 git add .; git commit -m "push"; git push; cd ../../dockerized_tools_and_pipelines; git add .; git commit -m "push"; git push; cd -;
-docker rmi ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0; git pull; docker build -t ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0 .; docker push ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0 
+docker rmi ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0; git pull; docker build -t ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0 .; docker push ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0
+# Small sample 
 cd ../Abridge && git pull && cd - && rm -rf SRR13711353_SE_compress_test && nohup /work/ABRIDGE/Abridge/abridge -ialigned /work/ABRIDGE/testing/SRR13711353_SE_small.sam --compress -o /work/ABRIDGE/testing/SRR13711353_SE_compress_test --genome /work/ABRIDGE/testing/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa --preserve_all_intermediate_files --keep_intermediate_error_files > /work/ABRIDGE/testing/SRR13711353_SE_compress_test.output 2> /work/ABRIDGE/testing/SRR13711353_SE_compress_test.error &
+
+# Whole sample
+cd /project/maizegdb/sagnik/ABRIDGE/Abridge && git pull && cd /project/maizegdb/sagnik/ABRIDGE/testing && rm -rf SRR13711353_SE_compress_test && nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge -ialigned /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE.sam --compress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa --preserve_all_intermediate_files --keep_intermediate_error_files > /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test.output 2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test.error &
 
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
 
