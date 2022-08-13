@@ -132,7 +132,7 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     os.system( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
 
-def executeCommand(options, software, version, volumes_list, cmd):
+def executeCommand(options, software, version, volumes_list, singularity_sif_location, cmd):
     """
     Executes the command within the requested framework
     """
@@ -149,9 +149,9 @@ def executeCommand(options, software, version, volumes_list, cmd):
             )
     elif options.framework == "singularity":
         runSingularityCommand( logging,
-                               name = software,
+                            name = software,
                             version = version,
-                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
+                            image_location = singularity_sif_location,
                             container_name = f"{options.output_directory.split('/')[-1]}",
                             volumes = volumes_list,
                             command = cmd,
@@ -1596,7 +1596,7 @@ def main():
 
     software = "samtools"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
     ################################################################################################################################################################################################################################################
 
     if options.compress == True:
