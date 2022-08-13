@@ -1774,7 +1774,7 @@ void generateIntegratedCigarSingleEnded (
 	int AS_tag_index;
 	int print_outputs = 0;
 	int perfect_alignment_indicator = 0;
-	int spliced_alignment_indicator = 0;
+	//int spliced_alignment_indicator = 0;
 	char str[1000];
 	char temp_str[5];
 	char M_replacement_character;
@@ -1785,14 +1785,15 @@ void generateIntegratedCigarSingleEnded (
 			&curr_alignment->number_of_cigar_items ,
 			curr_alignment->cigar_items);
 
-	for ( i = 0 ; i < curr_alignment->number_of_cigar_items ; i++ )
-	{
-		if ( curr_alignment->cigar_items[i].def == 'N' )
-		{
-			spliced_alignment_indicator = 1;
-			break;
-		}
-	}
+	/*for ( i = 0 ; i < curr_alignment->number_of_cigar_items ; i++ )
+	 {
+	 if ( curr_alignment->cigar_items[i].def == 'N' )
+	 {
+	 spliced_alignment_indicator = 1;
+	 break;
+	 }
+	 }
+	 */
 	/*
 	 * Process each alignment to extract soft clipped portion of reads
 	 */
@@ -1856,7 +1857,7 @@ void generateIntegratedCigarSingleEnded (
 	/*
 	 * Find the different tags
 	 */
-	XS_tag_index = -1;
+	//XS_tag_index = -1;
 	NH_tag_index = -1;
 	NM_tag_index = -1;
 	nM_tag_index = -1;
@@ -1866,8 +1867,10 @@ void generateIntegratedCigarSingleEnded (
 	{
 		if ( strcmp (curr_alignment->tags[i].name , "MD") == 0 )
 			MD_tag_index = i;
-		if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
-			XS_tag_index = i;
+		/*
+		 if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
+		 XS_tag_index = i;
+		 */
 		if ( strcmp (curr_alignment->tags[i].name , "NH") == 0 )
 			NH_tag_index = i;
 		if ( strcmp (curr_alignment->tags[i].name , "NM") == 0 )
@@ -2047,91 +2050,93 @@ void generateIntegratedCigarSingleEnded (
 	/*
 	 * Change the iCIGAR representation to reflect the samformatflag and XS tag
 	 */
-	if ( spliced_alignment_indicator == 0 )
+	//if ( spliced_alignment_indicator == 0 )
+	//{
+	switch ( curr_alignment->samflag )
 	{
-		switch ( curr_alignment->samflag )
-		{
-			case 0:
-				M_replacement_character = 'B';
-				break;
-			case 16:
-				M_replacement_character = 'E';
-				break;
-			case 256:
-				M_replacement_character = 'F';
-				break;
-			case 272:
-				M_replacement_character = 'H';
-				break;
-		}
-		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
-			if ( curr_alignment->icigar[i] == 'M' )
-				curr_alignment->icigar[i] = M_replacement_character;
+		case 0:
+			M_replacement_character = 'B';
+			break;
+		case 16:
+			M_replacement_character = 'E';
+			break;
+		case 256:
+			M_replacement_character = 'F';
+			break;
+		case 272:
+			M_replacement_character = 'H';
+			break;
 	}
-	else
-	{
-		if ( XS_tag_index == -1 )
-		{
-			switch ( curr_alignment->samflag )
-			{
-				case 0:
-					M_replacement_character = 'B';
-					break;
-				case 16:
-					M_replacement_character = 'E';
-					break;
-				case 256:
-					M_replacement_character = 'F';
-					break;
-				case 272:
-					M_replacement_character = 'H';
-					break;
-			}
-		}
-		else
-		{
-			if ( strcmp (curr_alignment->tags[XS_tag_index].val , "+") == 0 )
-			{
-				switch ( curr_alignment->samflag )
-				{
-					case 0:
-						M_replacement_character = 'J';
-						break;
-					case 16:
-						M_replacement_character = 'K';
-						break;
-					case 256:
-						M_replacement_character = 'L';
-						break;
-					case 272:
-						M_replacement_character = 'O';
-						break;
-				}
-			}
-			else if ( strcmp (curr_alignment->tags[XS_tag_index].val , "-") == 0 )
-			{
-				switch ( curr_alignment->samflag )
-				{
-					case 0:
-						M_replacement_character = 'P';
-						break;
-					case 16:
-						M_replacement_character = 'Q';
-						break;
-					case 256:
-						M_replacement_character = 'R';
-						break;
-					case 272:
-						M_replacement_character = 'U';
-						break;
-				}
-			}
+	for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
+		if ( curr_alignment->icigar[i] == 'M' )
+			curr_alignment->icigar[i] = M_replacement_character;
+	//}
+	/*
+	 else
+	 {
+	 if ( XS_tag_index == -1 )
+	 {
+	 switch ( curr_alignment->samflag )
+	 {
+	 case 0:
+	 M_replacement_character = 'B';
+	 break;
+	 case 16:
+	 M_replacement_character = 'E';
+	 break;
+	 case 256:
+	 M_replacement_character = 'F';
+	 break;
+	 case 272:
+	 M_replacement_character = 'H';
+	 break;
+	 }
+	 }
+	 else
+	 {
+	 if ( strcmp (curr_alignment->tags[XS_tag_index].val , "+") == 0 )
+	 {
+	 switch ( curr_alignment->samflag )
+	 {
+	 case 0:
+	 M_replacement_character = 'J';
+	 break;
+	 case 16:
+	 M_replacement_character = 'K';
+	 break;
+	 case 256:
+	 M_replacement_character = 'L';
+	 break;
+	 case 272:
+	 M_replacement_character = 'O';
+	 break;
+	 }
+	 }
+	 else if ( strcmp (curr_alignment->tags[XS_tag_index].val , "-") == 0 )
+	 {
+	 switch ( curr_alignment->samflag )
+	 {
+	 case 0:
+	 M_replacement_character = 'P';
+	 break;
+	 case 16:
+	 M_replacement_character = 'Q';
+	 break;
+	 case 256:
+	 M_replacement_character = 'R';
+	 break;
+	 case 272:
+	 M_replacement_character = 'U';
+	 break;
+	 }
+	 }
 
-		}
-		for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
-			if ( curr_alignment->icigar[i] == 'M' )
-				curr_alignment->icigar[i] = M_replacement_character;
-	}
+	 }
+	 for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
+	 if ( curr_alignment->icigar[i] == 'M' )
+	 curr_alignment->icigar[i] = M_replacement_character;
+	 }
+	 */
 
 	/*
 	 * Append the cigar with mapping quality score and the alignment score (if available)
