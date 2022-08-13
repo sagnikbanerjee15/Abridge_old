@@ -27,15 +27,57 @@ from pprint import pformat
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser( prog = "sampleMixtureOfAlignments", description = "sampleMixtureOfAlignments reads in a SAM alignment file and selects a variety of alignments to ensure all types of scenarios is represented.", formatter_class = RawTextHelpFormatter )
     required_named = parser.add_argument_group( 'Required arguments' )
+    optional_named = parser.add_argument_group( 'Optional arguments' )
 
     # Required arguments
-    required_named.add_argument( "-o", "--output_filename", help = "Enter the name of the input samfile", required = True )
-    required_named.add_argument( "-i", "--input_filename", help = "Enter the name of the output samfile", required = True )
+    required_named.add_argument( "-i", "--input_filename", help = "Enter the name of the input samfile", required = True )
+    required_named.add_argument( "-p", "--output_filename_prefix", help = "Enter the name of the output prefix", required = True )
+    
+    # Optional arguments
+    optional_named.add_argument( "-n", "--num_of_alignments", help = "Enter the number of alignments to sample from each category", default = 10000)
+    optional_named.add_argument( "-l", "--read_length", help = "Enter the read length", default = 151)
 
 def selectAlignments(options):
+    """INCOMPLETE
+    Only 1000 alignments of each category
     """
-    Only 1000 alignments of 
-    """
+    # Extract non-spliced alignments that are a perfect match to the reference
+    cmd  = f"cat <(cat {options.input_filename}| grep ^@) "
+    cmd += f" <(cat {options.input_filename}| grep -v ^@| awk '$6 ~ /N/' | grep MD:Z:{options.read_length} | shuf -n {options.num_of_alignments}) "
+    cmd += f" > {options.output_filename_prefix}_non_spliced_perfect_match.sam "
+    os.system(cmd)
+    
+    fhr = open(options.input_filename, "r")
+    header_section = ""
+    line_numbers = {
+        "no_mismatches_no_insertion_no_deletion_no_soft_clips_no_splices": [],
+        "no_mismatches_no_insertion_no_deletion_no_soft_clips_with_splices": []}
+    for line_num,line in enumerate(fhr):
+        if line[0] == "@":
+            header_section += line
+            continue
+        
+        cigar = line.strip().split("\t")[5]
+        tags = line.strip().split("\t")[12:]
+        # Non-spliced alignments
+        if 'N' not in cigar:
+            
+            # Fully mapped reads with a perfect match to the reference
+            if f"MD:Z{options.read_length}" in line:
+                line_numbers["no_mismatches_no_insertion_no_deletion_no_soft_clips_no_splices"].append(line_num)
+            
+                
+                
+                
+        else:# Spliced alignments
+            # Fully mapped reads with a perfect match to the reference
+            if f"MD:Z{options.read_length}" in line:
+                line_numbers["no_mismatches_no_insertion_no_deletion_no_soft_clips_with_splices"].append(line_num)
+        
+    fhr.close()
+    
+    
+    
 
 def main():
     commandLineArg = sys.argv

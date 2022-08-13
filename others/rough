@@ -8,3 +8,18 @@ cd ../Abridge && git pull && cd - && rm -rf SRR13711353_SE_compress_test && nohu
 
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
 
+###################################################################
+# Commands for creating smaller sam file for testing purpose
+###################################################################
+
+# Extract headers
+cat SRR13711353_SE.sam | grep ^@ > SRR13711353_SE_headers.sam
+
+# Extract non-spliced alignments that are a perfect match to the reference
+cat <(cat SRR13711353_SE_headers.sam| grep ^@ ) <(cat SRR13711353_SE.sam | awk '$6 !~ /N/' | grep MD:Z:151 | shuf -n 10000) > SRR13711353_SE_non_spliced_perfect.sam
+
+# Extract spliced alignments that are a perfect match to the reference
+cat <(cat SRR13711353_SE_headers.sam| grep ^@ ) <(cat SRR13711353_SE.sam | awk '$6 ~ /N/' | grep MD:Z:151 | shuf -n 10000) > SRR13711353_SE_spliced_perfect.sam
+
+# Extract non-spliced alignments that contain mismatches
+cat <(cat SRR13711353_SE_headers.sam| grep ^@ ) <(cat SRR13711353_SE.sam | awk '$6 !~ /N/' | grep -E "MD:Z:[0-9]*[ATGC]*[0-9]*" | shuf -n 10000) > SRR13711353_SE_non_spliced_perfect.sam
