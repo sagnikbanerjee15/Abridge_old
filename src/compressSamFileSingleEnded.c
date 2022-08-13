@@ -245,8 +245,12 @@ void writeToFile (
 
 		strcat(line_to_be_written_to_file , compressed_ds_pool[i]->icigar);
 		strcat(line_to_be_written_to_file , "-");
-		sprintf(str , "%ld" , compressed_ds_pool[i]->num_reads);
-		strcat(line_to_be_written_to_file , str);
+		// Write the number of reads only if it is greater than one - will save some space
+		if ( compressed_ds_pool[i]->num_reads > 1 )
+		{
+			sprintf(str , "%ld" , compressed_ds_pool[i]->num_reads);
+			strcat(line_to_be_written_to_file , str);
+		}
 		if ( i != compressed_ds_pool_total - 1 )
 		strcat(line_to_be_written_to_file , ",");
 
