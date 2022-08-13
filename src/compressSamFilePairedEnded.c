@@ -32,7 +32,7 @@ static struct argp_option options[] =
 { "name_of_file_with_read_names_to_short_read_names_and_NH" , 'r' , "SHORT_NAMES_NH_FILENAME" , 0 , "Enter the name of the file that contains the mapping between the long name to the short name and the NH values" , 0 } ,
 
 { "frequency_of_flags_filename" , 'f' , "FREQUENCY_OF_FLAGS_FILENAME" , 0 , "Enter the name of the file which has the frequency of flags" , 0 } ,
-{ "name_of_file_dictionary" , 'b' , "DICTIONARY_FILENAME" , 0 , "Enter the name of the dictionary" , 0 } ,
+{ "name_of_file_dictionary" , 't' , "DICTIONARY_FILENAME" , 0 , "Enter the name of the dictionary" , 0 } ,
 
 { "flag_ignore_soft_clippings" , 's' , 0 , 0 , "Set this flag to ignore soft clippings" , 0 } ,
 { "flag_ignore_mismatches" , 'm' , 0 , 0 , "Set this flag to ignore mismatches" , 0 } ,
@@ -96,7 +96,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 		case 'f':
 			arguments->frequency_of_flags_filename = arg;
 			break;
-		case 'b':
+		case 't':
 			arguments->name_of_file_dictionary = arg;
 			break;
 
