@@ -7,3 +7,4 @@ docker rmi ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0
 cd ../Abridge && git pull && cd - && rm -rf SRR13711353_SE_compress_test && nohup /work/ABRIDGE/Abridge/abridge -ialigned /work/ABRIDGE/testing/SRR13711353_SE_small.sam --compress -o /work/ABRIDGE/testing/SRR13711353_SE_compress_test --genome /work/ABRIDGE/testing/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa --preserve_all_intermediate_files --keep_intermediate_error_files > /work/ABRIDGE/testing/SRR13711353_SE_compress_test.output 2> /work/ABRIDGE/testing/SRR13711353_SE_compress_test.error &
 
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
+
