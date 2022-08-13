@@ -58,7 +58,6 @@ struct arguments
 	int flag_ignore_quality_scores_for_matched_bases;
 	int flag_ignore_alignment_scores;
 	unsigned long long int max_input_reads_in_a_single_nucl_loc;
-
 };
 
 /*
