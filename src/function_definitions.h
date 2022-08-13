@@ -3188,9 +3188,9 @@ long long int extractNHfromicigar (char *icigar, int icigar_length)
 		if ( isdigit (icigar[i]) == 0 ) break;
 		//nh_val = nh_val * 10 + icigar[i] - 48;
 		nh_val_string[j++ ] = icigar[i];
+		nh_val_string[j] = '\0';
 	}
 	icigar[i + 1] = '\0';
-	nh_val_string[j] = '\0';
 
 	k = j - 1;
 	for ( i = 0 ; i < j ; i++ )
