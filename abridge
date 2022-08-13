@@ -1526,8 +1526,8 @@ def main():
                     f"{inputabrfilename_onlypath}:{inputabrfilename_onlypath}",
                     ]
 
-    docker_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
-    singularity_installed = 1 if "Command not found" not in open( f"{options.output_directory}/find_singularity", "r" ).read() else 0
+    docker_installed = 1 if "not found" not in open( f"{options.output_directory}/find_docker", "r" ).read() else 0
+    singularity_installed = 1 if "not found" not in open( f"{options.output_directory}/find_singularity", "r" ).read() else 0
 
     if docker_installed == 0 and singularity_installed == 0:
         print( "You need to have either docker or singularity installed" )
