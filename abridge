@@ -1355,7 +1355,7 @@ def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_vers
     
     software = "abridge"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, cmd)
+    executeCommand(options, software, version, volumes_list,  f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
     
     tag_presence = {}
     fhr = open(tagfilename, "r")
