@@ -1527,6 +1527,11 @@ def main():
 
     docker_installed = 1 if which('docker') is not None else 0
     singularity_installed = 1 if which('singularity') is not None else 0
+    
+    if docker_installed == 1:
+        options.framework = "docker"
+    if singularity_installed == 1:
+        options.framework = "singularity"
 
     if docker_installed == 0 and singularity_installed == 0:
         print( "You need to have either docker or singularity installed" )
