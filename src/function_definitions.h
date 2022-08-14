@@ -1954,7 +1954,7 @@ void generateIntegratedCigarSingleEnded (
 	{
 		if ( left_soft_clip_point != 0 && right_soft_clip_point == 0 )
 		{
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -1973,7 +1973,7 @@ void generateIntegratedCigarSingleEnded (
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point != 0 )
 		{
 			strcpy (curr_alignment->temp , curr_alignment->icigar);
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -1990,7 +1990,7 @@ void generateIntegratedCigarSingleEnded (
 		}
 		else if ( left_soft_clip_point != 0 && right_soft_clip_point != 0 )
 		{
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -2007,7 +2007,7 @@ void generateIntegratedCigarSingleEnded (
 
 			strcat (curr_alignment->temp , curr_alignment->icigar);
 
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -2475,7 +2475,7 @@ void generateIntegratedCigarPairedEnded (
 	{
 		if ( left_soft_clip_point != 0 && right_soft_clip_point == 0 )
 		{
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -2494,7 +2494,7 @@ void generateIntegratedCigarPairedEnded (
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point != 0 )
 		{
 			strcpy (curr_alignment->temp , curr_alignment->icigar);
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -2511,7 +2511,7 @@ void generateIntegratedCigarPairedEnded (
 		}
 		else if ( left_soft_clip_point != 0 && right_soft_clip_point != 0 )
 		{
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -2528,7 +2528,7 @@ void generateIntegratedCigarPairedEnded (
 
 			strcat (curr_alignment->temp , curr_alignment->icigar);
 
-			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
