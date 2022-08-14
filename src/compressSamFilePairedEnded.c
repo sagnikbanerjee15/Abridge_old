@@ -986,6 +986,7 @@ void compressPairedEndedAlignments (
 				flag_ignore_mismatches ,
 				flag_ignore_unmapped_sequences ,
 				flag_ignore_all_quality_scores ,
+				flag_ignore_quality_scores_for_matched_bases ,
 				whole_genome ,
 				sam_alignment_instance_diagnostics ,
 				number_of_records_read ,
