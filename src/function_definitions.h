@@ -599,7 +599,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_score,
+		short int flag_ignore_all_quality_score,
 		short int flag_ignore_sequence_information,
 		char *default_quality_value,
 		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
@@ -700,7 +700,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		{
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] = '\0';
-			if ( flag_ignore_quality_score == 0 )
+			if ( flag_ignore_all_quality_score == 0 )
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
@@ -713,7 +713,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		{
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index + 1] = '\0';
-			if ( flag_ignore_quality_score == 0 )
+			if ( flag_ignore_all_quality_score == 0 )
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
@@ -780,7 +780,7 @@ void convertIcigarToCigarandMDPairedEnded (
 							sam_alignment_instance->md_extended[MD_extended_index++ ] = '%';
 							break;
 					}
-					if ( flag_ignore_quality_score == 0 )
+					if ( flag_ignore_all_quality_score == 0 )
 					{
 						i++;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
@@ -817,7 +817,7 @@ void convertIcigarToCigarandMDPairedEnded (
 							sam_alignment_instance->md_extended[MD_extended_index++ ] = '=';
 						}
 
-						if ( flag_ignore_quality_score == 0 )
+						if ( flag_ignore_all_quality_score == 0 )
 						{
 							for ( j = 0 ; j < cigar_items_instance[i].len ;
 									j++ )
@@ -859,7 +859,7 @@ void convertIcigarToCigarandMDPairedEnded (
 									break;
 							}
 						}
-						if ( flag_ignore_quality_score == 0 )
+						if ( flag_ignore_all_quality_score == 0 )
 						{
 							i++;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
@@ -925,7 +925,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		sam_alignment_instance->seq[i] = '\0';
 		sam_alignment_instance->qual[i] = '\0';
 	}
-	if ( flag_ignore_quality_score == 1 )
+	if ( flag_ignore_all_quality_score == 1 )
 	{
 		cigar_items_instance_index = 0;
 		splitCigar (sam_alignment_instance->cigar ,
@@ -952,7 +952,7 @@ void convertIcigarToCigarandMDSingleEnded (
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+		short int flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips,
 		short int flag_ignore_sequence_information,
 		char *default_quality_value)
 {
@@ -1043,7 +1043,7 @@ void convertIcigarToCigarandMDSingleEnded (
 		{
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] = '\0';
-			if ( flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+			if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
@@ -1056,7 +1056,7 @@ void convertIcigarToCigarandMDSingleEnded (
 		{
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index + 1] = '\0';
-			if ( flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+			if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
@@ -1123,7 +1123,7 @@ void convertIcigarToCigarandMDSingleEnded (
 							sam_alignment_instance->md_extended[MD_extended_index++ ] = '%';
 							break;
 					}
-					if ( flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+					if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 					{
 						i++;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
@@ -1160,7 +1160,7 @@ void convertIcigarToCigarandMDSingleEnded (
 							sam_alignment_instance->md_extended[MD_extended_index++ ] = '=';
 						}
 
-						if ( flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+						if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 						{
 							for ( j = 0 ; j < cigar_items_instance[i].len ;
 									j++ )
@@ -1202,7 +1202,7 @@ void convertIcigarToCigarandMDSingleEnded (
 									break;
 							}
 						}
-						if ( flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+						if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 						{
 							i++;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
@@ -1267,7 +1267,7 @@ void convertIcigarToCigarandMDSingleEnded (
 		sam_alignment_instance->seq[i] = '\0';
 		sam_alignment_instance->qual[i] = '\0';
 	}
-	if ( flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips == 1 )
+	if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 1 )
 	{
 		cigar_items_instance_index = 0;
 		splitCigar (sam_alignment_instance->cigar ,
@@ -1455,7 +1455,8 @@ void designIntegratedCIGARS (
 		char *md_extended,
 		char *icigar,
 		char **splices,
-		short int flag_ignore_quality_score,
+		short int flag_ignore_all_quality_score,
+		short int flag_ignore_quality_scores_for_matched_bases,
 		short int flag_ignore_mismatches)
 {
 	int i;
@@ -1671,7 +1672,7 @@ void designIntegratedCIGARS (
 			{
 
 				temp_convert_int_to_string[0] = md_extended[i];
-				if ( flag_ignore_quality_score == 0 )
+				if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 ) // Retain the quality scores for the mismatch/insertion
 				{
 					temp_convert_int_to_string[1] = soft_clips_removed_qual[i];
 					temp_convert_int_to_string[2] = '\0';
@@ -1750,7 +1751,8 @@ void generateIntegratedCigarSingleEnded (
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_score,
+		short int flag_ignore_all_quality_score,
+		short int flag_ignore_quality_scores_for_matched_bases,
 		struct Whole_Genome_Sequence *whole_genome,
 		struct Sam_Alignment *sam_alignment_instance_diagnostics,
 		long long int number_of_records_read,
@@ -1857,7 +1859,7 @@ void generateIntegratedCigarSingleEnded (
 	/*
 	 * Find the different tags
 	 */
-	//XS_tag_index = -1;
+	XS_tag_index = -1;
 	NH_tag_index = -1;
 	NM_tag_index = -1;
 	nM_tag_index = -1;
@@ -1899,7 +1901,8 @@ void generateIntegratedCigarSingleEnded (
 				curr_alignment->md_extended ,
 				curr_alignment->icigar ,
 				curr_alignment->splices ,
-				flag_ignore_quality_score ,
+				flag_ignore_all_quality_score ,
+				flag_ignore_quality_scores_for_matched_bases ,
 				flag_ignore_mismatches);
 	else
 	{
@@ -1951,7 +1954,7 @@ void generateIntegratedCigarSingleEnded (
 	{
 		if ( left_soft_clip_point != 0 && right_soft_clip_point == 0 )
 		{
-			if ( flag_ignore_quality_score == 0 )
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -1970,10 +1973,7 @@ void generateIntegratedCigarSingleEnded (
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point != 0 )
 		{
 			strcpy (curr_alignment->temp , curr_alignment->icigar);
-			if ( flag_ignore_quality_score == 1 )
-				strcat (curr_alignment->temp ,
-						curr_alignment->soft_clippings.right);
-			else
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -1985,10 +1985,12 @@ void generateIntegratedCigarSingleEnded (
 				}
 				curr_alignment->temp[j] = '\0';
 			}
+			else strcat (curr_alignment->temp ,
+					curr_alignment->soft_clippings.right);
 		}
 		else if ( left_soft_clip_point != 0 && right_soft_clip_point != 0 )
 		{
-			if ( flag_ignore_quality_score == 0 )
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -2002,11 +2004,10 @@ void generateIntegratedCigarSingleEnded (
 			}
 			else strcpy (curr_alignment->temp ,
 					curr_alignment->soft_clippings.left);
+
 			strcat (curr_alignment->temp , curr_alignment->icigar);
-			if ( flag_ignore_quality_score == 1 )
-				strcat (curr_alignment->temp ,
-						curr_alignment->soft_clippings.right);
-			else
+
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -2018,6 +2019,8 @@ void generateIntegratedCigarSingleEnded (
 				}
 				curr_alignment->temp[j] = '\0';
 			}
+			else strcat (curr_alignment->temp ,
+					curr_alignment->soft_clippings.right);
 		}
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point == 0 )
 		{
@@ -2176,7 +2179,7 @@ void generateIntegratedCigarSingleEnded (
 				flag_ignore_mismatches ,
 				flag_ignore_soft_clippings ,
 				flag_ignore_unmapped_sequences ,
-				flag_ignore_quality_score ,
+				flag_ignore_all_quality_score ,
 				0 ,
 				&dummy);
 		/************************************************************************
@@ -2267,7 +2270,8 @@ void generateIntegratedCigarPairedEnded (
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_score,
+		short int flag_ignore_all_quality_score,
+		short int flag_ignore_quality_scores_for_matched_bases,
 		struct Whole_Genome_Sequence *whole_genome,
 		struct Sam_Alignment *sam_alignment_instance_diagnostics,
 		long long int number_of_records_read,
@@ -2418,7 +2422,8 @@ void generateIntegratedCigarPairedEnded (
 				curr_alignment->md_extended ,
 				curr_alignment->icigar ,
 				curr_alignment->splices ,
-				flag_ignore_quality_score ,
+				flag_ignore_all_quality_score ,
+				flag_ignore_quality_scores_for_matched_bases ,
 				flag_ignore_mismatches);
 	else
 	{
@@ -2470,7 +2475,7 @@ void generateIntegratedCigarPairedEnded (
 	{
 		if ( left_soft_clip_point != 0 && right_soft_clip_point == 0 )
 		{
-			if ( flag_ignore_quality_score == 0 )
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -2489,10 +2494,7 @@ void generateIntegratedCigarPairedEnded (
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point != 0 )
 		{
 			strcpy (curr_alignment->temp , curr_alignment->icigar);
-			if ( flag_ignore_quality_score == 1 )
-				strcat (curr_alignment->temp ,
-						curr_alignment->soft_clippings.right);
-			else
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -2504,10 +2506,12 @@ void generateIntegratedCigarPairedEnded (
 				}
 				curr_alignment->temp[j] = '\0';
 			}
+			else strcat (curr_alignment->temp ,
+					curr_alignment->soft_clippings.right);
 		}
 		else if ( left_soft_clip_point != 0 && right_soft_clip_point != 0 )
 		{
-			if ( flag_ignore_quality_score == 0 )
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -2521,11 +2525,10 @@ void generateIntegratedCigarPairedEnded (
 			}
 			else strcpy (curr_alignment->temp ,
 					curr_alignment->soft_clippings.left);
+
 			strcat (curr_alignment->temp , curr_alignment->icigar);
-			if ( flag_ignore_quality_score == 1 )
-				strcat (curr_alignment->temp ,
-						curr_alignment->soft_clippings.right);
-			else
+
+			if ( flag_ignore_all_quality_score == 0 || flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -2537,6 +2540,8 @@ void generateIntegratedCigarPairedEnded (
 				}
 				curr_alignment->temp[j] = '\0';
 			}
+			else strcat (curr_alignment->temp ,
+					curr_alignment->soft_clippings.right);
 		}
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point == 0 )
 		{
@@ -2627,7 +2632,7 @@ void generateIntegratedCigarPairedEnded (
 				flag_ignore_mismatches ,
 				flag_ignore_soft_clippings ,
 				flag_ignore_unmapped_sequences ,
-				flag_ignore_quality_score ,
+				flag_ignore_all_quality_score ,
 				0 ,
 				&dummy ,
 				samflag_dictionary ,
@@ -3061,7 +3066,7 @@ void readAbridgeIndex (
 		short int *flag_ignore_mismatches,
 		short int *flag_ignore_soft_clippings,
 		short int *flag_ignore_unmapped_sequences,
-		short int *flag_ignore_quality_score,
+		short int *flag_ignore_all_quality_score,
 		short int *flag_ignore_all_quality_scores,
 		short int *flag_ignore_alignment_scores)
 {
@@ -3102,7 +3107,9 @@ void readAbridgeIndex (
 			*flag_ignore_unmapped_sequences = strtol (split_line[2] ,
 					&temp ,
 					10);
-			*flag_ignore_quality_score = strtol (split_line[3] , &temp , 10);
+			*flag_ignore_all_quality_score = strtol (split_line[3] ,
+					&temp ,
+					10);
 			*flag_ignore_all_quality_scores = strtol (split_line[4] ,
 					&temp ,
 					10);
@@ -3663,7 +3670,7 @@ void convertToAlignmentPairedEnded (
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_score,
+		short int flag_ignore_all_quality_score,
 		short int flag_ignore_sequence_information,
 		unsigned long long int *read_number,
 		unsigned long long int *total_mapped_reads,
@@ -3786,7 +3793,7 @@ void convertToAlignmentPairedEnded (
 					flag_ignore_mismatches ,
 					flag_ignore_soft_clippings ,
 					flag_ignore_unmapped_sequences ,
-					flag_ignore_quality_score ,
+					flag_ignore_all_quality_score ,
 					flag_ignore_sequence_information ,
 					default_quality_value ,
 					samflag_dictionary ,

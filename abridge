@@ -50,15 +50,16 @@ def parseCommandLineArguments():
 
     # Optional arguments    
     optional_named.add_argument( "-skip_shortening_read_names", "--skip_shortening_read_names", help = "Request abridge to skip the step to reduce the size of read names. This options takes a bit longer but leads to much higher compression without adding to decompression time", action = "store_true" )
-    optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
     
-    optional_named.add_argument( "-ss", "--ignore_alignment_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
-    optional_named.add_argument( "-igqual", "--ignore_quality_scores_for_mismatched_bases_and_soft_clips", help = "Ignore all quality scores", action = "store_true" )
-    optional_named.add_argument( "-gsc", "--ignore_soft_clippings", help = "No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference", action = "store_true" )
-    optional_named.add_argument( "-gm", "--ignore_mismatches", help = "All mismatches will be ignored", action = "store_true" )
-    optional_named.add_argument( "-gs", "--ignore_sequence", help = "No nucleotide sequence will be produced during decompression", action = "store_true" )
-    optional_named.add_argument( "-gu", "--ignore_unmapped_reads", help = "Request abridge to discard all reads that are unmapped", action = "store_true" )
-    optional_named.add_argument( "-sq", "--ignore_quality_scores_for_matched_bases", help = "Request abridge to save all quality scores", action = 'store_true' )
+    optional_named.add_argument( "-igas", "--ignore_alignment_scores", help = "Request abrigde to store the mapping quality scores and the alignment score (provided it is available through the AS tag)", action = "store_true" )
+    optional_named.add_argument( "-igqualmmbsc", "--ignore_all_quality_scores", help = "Ignore all quality scores", action = "store_true" )
+    optional_named.add_argument( "-igqualmb", "--ignore_quality_scores_for_matched_bases", help = "Request abridge to save all quality scores", action = 'store_true' )
+    optional_named.add_argument( "-igsc", "--ignore_soft_clippings", help = "No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference", action = "store_true" )
+    optional_named.add_argument( "-igm", "--ignore_mismatches", help = "All mismatches will be ignored", action = "store_true" )
+    optional_named.add_argument( "-igu", "--ignore_unmapped_reads", help = "Request abridge to discard all reads that are unmapped", action = "store_true" )
+    
+    optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
+    optional_named.add_argument( "-igs", "--ignore_sequence", help = "No nucleotide sequence will be produced during decompression", action = "store_true" )
     
     optional_named.add_argument( "-q", "--quiet", help = "Prevent abridge from printing any log information. By default logging is enables", action = "store_true" )
     optional_named.add_argument( "-n", "--cpu", help = "Enter the number of CPU cores to be used. This option will be used during compression or decompression.", default = 1 )
@@ -219,6 +220,7 @@ def validateCommandLineArguments( options ):
     else:
         os.system( f"mkdir -p {options.error_directory}" )
 
+    """
     options.softwares["determineEndedness"] = "determineEndedness"
     options.softwares["compressSamFileSingleEnded"] = "compressSamFileSingleEnded"
     options.softwares["compressSamFileSingleEndedPass2"] = "compressSamFileSingleEndedPass2"
@@ -240,7 +242,11 @@ def validateCommandLineArguments( options ):
     options.softwares["findMaximumNumberOfReadsInEachLine"] = "findMaximumNumberOfReadsInEachLine"
     options.softwares["maxReadsInEachLine"] = "maxReadsInEachLine"
     options.softwares["associateShortNamesToReads"] = "associateShortNamesToReads"
-
+    """
+    
+    if options.flag_ignore_all_quality_scores == True:
+        options.flag_ignore_quality_scores_for_matched_bases = True
+    
     if options.decompress == True:
         if options.inputabrfilename[-8:] != ".abridge":
             print( f"The input file {options.inputabrfilename} needs to be in abridge format. Exiting..." )
@@ -432,8 +438,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f" --flag_ignore_soft_clippings"
         if options.ignore_mismatches == True:  
             cmd += f" --flag_ignore_mismatches "
-        if options.ignore_quality_scores_for_mismatched_bases_and_soft_clips == True:
-            cmd += f" --flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips "
+        if options.ignore_all_quality_scores == True:
+            cmd += f" --flag_ignore_all_quality_scores "
         if options.ignore_unmapped_reads == True:
             cmd += f" --flag_ignore_unmapped_sequences "
         if options.run_diagnostics == True:
@@ -532,8 +538,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f" --flag_ignore_soft_clippings"
         if options.ignore_mismatches == True:  
             cmd += f" --flag_ignore_mismatches "
-        if options.ignore_quality_scores_for_mismatched_bases_and_soft_clips == True:
-            cmd += f" --flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips "
+        if options.ignore_all_quality_scores == True:
+            cmd += f" --flag_ignore_all_quality_scores "
         if options.ignore_unmapped_reads == True:
             cmd += f" --flag_ignore_unmapped_sequences "
         if options.run_diagnostics == True:
@@ -989,13 +995,13 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
                 )
 
     # flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, ignore_quality_scores_for_matched_bases, save_exact_quality_scores, ignore_alignment_scores = list( map( int, open( outputfilename, "rb" ).readline().split() ) )
-    flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = open( outputfilename, "rb" ).readline().split()
-    all_flags = [flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores ]
+    flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_all_quality_scores   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = open( outputfilename, "rb" ).readline().split()
+    all_flags = [flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_all_quality_scores   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores ]
     all_flags_numeric = []
     for flag in all_flags:
         flag = flag.decode( 'ascii' )
         all_flags_numeric.append( int( flag.split( ":" )[-1] ) )
-    flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips, flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = all_flags_numeric
+    flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_all_quality_scores, flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = all_flags_numeric
 
     name_of_input_file_without_location = options.inputabrfilename.split( "/" )[-1].split( ".abridge" )[0]
     max_reads_in_each_line_filename = f"{options.output_directory}/max_reads_in_each_line_filename"

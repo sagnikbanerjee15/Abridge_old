@@ -36,7 +36,7 @@ static struct argp_option options[] =
 
 { "flag_ignore_soft_clippings" , 's' , 0 , 0 , "Set this flag to ignore soft clippings" , 0 } ,
 { "flag_ignore_mismatches" , 'm' , 0 , 0 , "Set this flag to ignore mismatches" , 0 } ,
-{ "flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips" , 'p' , 0 , 0 , "Set this flag to ignore quality scores for mismatched bases and soft clips" , 0 } ,
+{ "flag_ignore_all_quality_scores" , 'p' , 0 , 0 , "Set this flag to ignore quality scores for mismatched bases and soft clips" , 0 } ,
 { "flag_ignore_unmapped_sequences" , 'e' , 0 , 0 , "Set this flag to ignore unmapped sequences along with their quality scores" , 0 } ,
 { "flag_ignore_quality_scores_for_matched_bases" , 'b' , 0 , 0 , "Set this flag to ignore quality scores for nucleotide bases that match to the provided reference" , 0 } ,
 { "flag_ignore_alignment_scores" , 'a' , 0 , 0 , "Set this flag to ignore the alignment scores (Column 5 of SAM file)" , 0 } ,
@@ -63,7 +63,7 @@ struct arguments
 	char *name_of_file_with_read_names_to_short_read_names_and_NH;
 	int flag_ignore_soft_clippings;
 	int flag_ignore_mismatches;
-	int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
+	int flag_ignore_all_quality_scores;
 	int flag_ignore_unmapped_sequences;
 	int run_diagnostics;
 	int flag_ignore_quality_scores_for_matched_bases;
@@ -128,7 +128,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			arguments->flag_ignore_mismatches = 1;
 			break;
 		case 'p':
-			arguments->flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = 1;
+			arguments->flag_ignore_all_quality_scores = 1;
 			break;
 		case 'e':
 			arguments->flag_ignore_unmapped_sequences = 1;
@@ -271,6 +271,7 @@ char returnDirection (
 
 void writeToFile (
 		short int flag_ignore_quality_scores_for_matched_bases,
+		short int flag_ignore_all_quality_scores,
 		FILE *fhw_qual,
 		FILE *fhw_pass1,
 		struct Compressed_DS **compressed_ds_pool,
@@ -332,7 +333,7 @@ void writeToFile (
 			strcat(list_of_read_names , ",");
 		}
 
-		if ( flag_ignore_quality_scores_for_matched_bases == 0 )
+		if ( flag_ignore_all_quality_scores == 0 && flag_ignore_quality_scores_for_matched_bases == 0 )
 		{
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 			{
@@ -571,7 +572,7 @@ void compressPairedEndedAlignments (
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+		short int flag_ignore_all_quality_scores,
 		short int run_diagnostics,
 		long long int max_input_reads_in_a_single_nucl_loc,
 		short int flag_ignore_quality_scores_for_matched_bases,
@@ -812,11 +813,8 @@ void compressPairedEndedAlignments (
 	sprintf(str , "%lld" , flag_ignore_unmapped_sequences);
 	strcat(temp , str);
 	strcat(temp , "\t");
-	strcat(temp ,
-			"flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips:");
-	sprintf(str ,
-			"%lld" ,
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	strcat(temp , "flag_ignore_all_quality_scores:");
+	sprintf(str , "%lld" , flag_ignore_all_quality_scores);
 	strcat(temp , str);
 	strcat(temp , "\t");
 	strcat(temp , "flag_ignore_quality_scores_for_matched_bases:");
@@ -987,7 +985,7 @@ void compressPairedEndedAlignments (
 				flag_ignore_soft_clippings ,
 				flag_ignore_mismatches ,
 				flag_ignore_unmapped_sequences ,
-				flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips ,
+				flag_ignore_all_quality_scores ,
 				whole_genome ,
 				sam_alignment_instance_diagnostics ,
 				number_of_records_read ,
@@ -1044,6 +1042,7 @@ void compressPairedEndedAlignments (
 					modified_icigars ,
 					samformatflag_replacer_characters);
 			writeToFile (flag_ignore_quality_scores_for_matched_bases ,
+					flag_ignore_all_quality_scores ,
 					fhw_qual ,
 					fhw_pass1 ,
 					compressed_ds_pool_rearranged ,
@@ -1150,6 +1149,7 @@ void compressPairedEndedAlignments (
 				//fflush (stdout);
 
 				writeToFile (flag_ignore_quality_scores_for_matched_bases ,
+						flag_ignore_all_quality_scores ,
 						fhw_qual ,
 						fhw_pass1 ,
 						compressed_ds_pool_rearranged ,
@@ -1219,6 +1219,7 @@ void compressPairedEndedAlignments (
 			modified_icigars ,
 			samformatflag_replacer_characters);
 	writeToFile (flag_ignore_quality_scores_for_matched_bases ,
+			flag_ignore_all_quality_scores ,
 			fhw_qual ,
 			fhw_pass1 ,
 			compressed_ds_pool_rearranged ,
@@ -1272,7 +1273,7 @@ int main (int argc, char *argv[])
 
 	arguments.flag_ignore_soft_clippings = 0;
 	arguments.flag_ignore_mismatches = 0;
-	arguments.flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = 0;
+	arguments.flag_ignore_all_quality_scores = 0;
 	arguments.flag_ignore_unmapped_sequences = 0;
 	arguments.flag_ignore_quality_scores_for_matched_bases = 0;
 	arguments.flag_ignore_alignment_scores = 0;
@@ -1299,7 +1300,7 @@ int main (int argc, char *argv[])
 
 	short int flag_ignore_soft_clippings;
 	short int flag_ignore_mismatches;
-	short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
+	short int flag_ignore_all_quality_scores;
 	short int flag_ignore_unmapped_sequences;
 	short int flag_ignore_quality_scores_for_matched_bases;
 	short int run_diagnostics;
@@ -1331,7 +1332,7 @@ int main (int argc, char *argv[])
 
 	flag_ignore_soft_clippings = arguments.flag_ignore_soft_clippings;
 	flag_ignore_mismatches = arguments.flag_ignore_mismatches;
-	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = arguments.flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
+	flag_ignore_all_quality_scores = arguments.flag_ignore_all_quality_scores;
 	flag_ignore_unmapped_sequences = arguments.flag_ignore_unmapped_sequences;
 	flag_ignore_quality_scores_for_matched_bases = arguments.flag_ignore_quality_scores_for_matched_bases;
 	flag_ignore_alignment_scores = arguments.flag_ignore_alignment_scores;
@@ -1354,7 +1355,7 @@ int main (int argc, char *argv[])
 			flag_ignore_soft_clippings ,
 			flag_ignore_mismatches ,
 			flag_ignore_unmapped_sequences ,
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips ,
+			flag_ignore_all_quality_scores ,
 			run_diagnostics ,
 			max_input_reads_in_a_single_nucl_loc ,
 			flag_ignore_quality_scores_for_matched_bases ,
