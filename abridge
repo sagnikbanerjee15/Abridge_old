@@ -244,8 +244,8 @@ def validateCommandLineArguments( options ):
     options.softwares["associateShortNamesToReads"] = "associateShortNamesToReads"
     """
     
-    if options.flag_ignore_all_quality_scores == True:
-        options.flag_ignore_quality_scores_for_matched_bases = True
+    if options.ignore_all_quality_scores == True:
+        options.ignore_quality_scores_for_matched_bases = True
     
     if options.decompress == True:
         if options.inputabrfilename[-8:] != ".abridge":
