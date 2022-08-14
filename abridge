@@ -45,32 +45,35 @@ def parseCommandLineArguments():
     compress_decompress_group = parser.add_mutually_exclusive_group( required = True )
     compress_decompress_group.add_argument( "-cmp", "--compress", help = "Set this option if you wish to compress the alignment file", action = "store_true" )
     compress_decompress_group.add_argument( "-dcmp", "--decompress", help = "Set this option if you wish to decompress the alignment file", action = "store_true" )
-    # compress_decompress_group.add_argument( "-r", "--random", help = "Retrieve alignments from random locations", action = "store_true" )
     compress_decompress_group.add_argument( "-H", "--header", help = "Print only the header of reference sequences during decompression", action = "store_true" )
+    # compress_decompress_group.add_argument( "-r", "--random", help = "Retrieve alignments from random locations", action = "store_true" )
 
-    # Optional arguments
-    # optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
+    # Optional arguments    
     optional_named.add_argument( "-skip_shortening_read_names", "--skip_shortening_read_names", help = "Request abridge to skip the step to reduce the size of read names. This options takes a bit longer but leads to much higher compression without adding to decompression time", action = "store_true" )
+    optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
+    
     optional_named.add_argument( "-ss", "--ignore_alignment_scores", help = "Request abrigde to store the quality scores and the alignment score", action = "store_true" )
     optional_named.add_argument( "-igqual", "--ignore_quality_scores_for_mismatched_bases_and_soft_clips", help = "Ignore all quality scores", action = "store_true" )
-    optional_named.add_argument( "-qual", "--quality", help = "Enter dummy quality scores while decompressing", default = 'I' )
     optional_named.add_argument( "-gsc", "--ignore_soft_clippings", help = "No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference", action = "store_true" )
     optional_named.add_argument( "-gm", "--ignore_mismatches", help = "All mismatches will be ignored", action = "store_true" )
     optional_named.add_argument( "-gs", "--ignore_sequence", help = "No nucleotide sequence will be produced during decompression", action = "store_true" )
     optional_named.add_argument( "-gu", "--ignore_unmapped_reads", help = "Request abridge to discard all reads that are unmapped", action = "store_true" )
     optional_named.add_argument( "-sq", "--ignore_quality_scores_for_matched_bases", help = "Request abridge to save all quality scores", action = 'store_true' )
-    # optional_named.add_argument( "-aq", "--save_exact_quality_scores", help = "Adjust quality scores for matched bases to achieve better encoding. For more details please check ...", action = "store_true" )
+    
     optional_named.add_argument( "-q", "--quiet", help = "Prevent abridge from printing any log information. By default logging is enables", action = "store_true" )
     optional_named.add_argument( "-n", "--cpu", help = "Enter the number of CPU cores to be used. This option will be used during compression or decompression.", default = 1 )
     optional_named.add_argument( "-run_diagnostics", "--run_diagnostics", help = "abridge will run diagnostics on the cigar compression and decompression. It will exit on discovery of any discrepancies", action = "store_true" )
-    # optional_named.add_argument( "-p", "--positions", help = "Enter the position as chromosome:start-end from which reads will be retrieved" )
-    # optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
     optional_named.add_argument( "--keep_intermediate_error_files", "-keep_intermediate_error_files", help = "Set this argument if you wish to preserve the intermediate error files to assess time and memory usage. Default behaviour is to delete those", action = "store_true" )
     optional_named.add_argument( "--error_directory", "-edir", help = "Enter a directory where all error files will be stored. If nothing is specified then error files will be stored in the output directory" )
     optional_named.add_argument( "--framework", "-fm", help = "Enter your choice of framework", choices = ["docker", "singularity"], default = "docker" )
     optional_named.add_argument( "--force", "-force", help = "Setting this argument will remove the output directory and start the computation from scratch", action = "store_true" )
     optional_named.add_argument( "--preserve_all_intermediate_files", "-preserve_all_intermediate_files", help = "Set this option to preserve all the intermediate files", action = "store_true" )
-
+    
+    # optional_named.add_argument( "-aq", "--save_exact_quality_scores", help = "Adjust quality scores for matched bases to achieve better encoding. For more details please check ...", action = "store_true" )
+    # optional_named.add_argument( "-p", "--positions", help = "Enter the position as chromosome:start-end from which reads will be retrieved" )
+    # optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
+    # optional_named.add_argument( "-l", "--level", help = "This can accept an integer from the set (1,2,3). If level is set to 1 then abridge will perform the fastest but low compression. abridge will use brotli to compress. Decompression will be fast. Setting level to 2 will prompt abridge to perform the medium level compression using 7z. Compression will take time but decompression will be fast. If level is set to 3 then abridge will perform the best compression using 7paq. Both compression and decompression will take average time to complete", type = int, default = 2 )
+    
     # Suppressed arguments
     parser.add_argument( "--logfilename", "-logfilename", help = argparse.SUPPRESS )  # Name of the logfile
     parser.add_argument( "--files_for_removal", "-files_for_removal", help = argparse.SUPPRESS )  # Files will be removed later
@@ -216,10 +219,6 @@ def validateCommandLineArguments( options ):
     else:
         os.system( f"mkdir -p {options.error_directory}" )
 
-    # ignore_quality_scores_for_matched_bases has higher priority
-    if options.ignore_quality_scores_for_matched_bases == False and options.ignore_quality_scores_for_mismatched_bases_and_soft_clips == False:
-        options.ignore_quality_scores_for_mismatched_bases_and_soft_clips = True
-
     options.softwares["determineEndedness"] = "determineEndedness"
     options.softwares["compressSamFileSingleEnded"] = "compressSamFileSingleEnded"
     options.softwares["compressSamFileSingleEndedPass2"] = "compressSamFileSingleEndedPass2"
@@ -248,21 +247,6 @@ def validateCommandLineArguments( options ):
             if options.quiet == False:
                 logging.info( f"The input file {options.inputabrfilename} needs to be in abridge format. Exiting..." )
             sys.exit()
-
-    if options.ignore_soft_clippings == True:
-        options.ignore_soft_clippings = 1
-    else:
-        options.ignore_soft_clippings = 0
-
-    if options.ignore_mismatches == True:
-        options.ignore_mismatches = 1
-    else:
-        options.ignore_mismatches = 0
-
-    if options.ignore_sequence == True:
-        options.ignore_sequence = 1
-    else:
-        options.ignore_sequence = 0
 
     if options.generate_overlapping_coverage == False and options.generate_non_overlapping_coverage == False:
         if True in [options.d, options.bg, options.bga, options.split]:
@@ -351,7 +335,7 @@ def constructFileNames( input_filename, options ):
     unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_unmapped"
     name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}_qual"
     name_of_file_with_quality_scores_rle = f"{options.output_directory}/{name_of_input_file_without_location}_qual_rle"
-    name_of_file_dictionary = f"{options.output_directory}/{name_of_input_file_without_location}.dictionary"
+    name_of_file_dictionary = f"{options.output_directory}/{name_of_input_file_without_location}_dictionary"
     fclqc_output_filename = f"{options.output_directory}/{name_of_input_file_without_location}_qual_compressed_fclqc"
 
     error_file_max_input_reads = f"{name_of_max_input_reads_file}.error"
@@ -534,14 +518,14 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             logging.info( f"{name_of_input_file_without_location} max_read_length = {max_read_length}" )
     
         cmd = f"(/usr/bin/time --verbose "
-        cmd += f" compressSamFilePairedEnded"  # argv[0] - name of the program
-        cmd += f" --genome_filename {options.genome}"  # argv[1] - genome_filename
-        cmd += f" --input_sam_filename {input_filename} "  # argv[6] - Input samfile
-        cmd += f" --output_abridge_filename {outputfilename} "  # argv[7] - Output filename
-        cmd += f" --unmapped_filename {unmapped_outputfilename} "  # argv[8] - Filename for unmapped reads
-        cmd += f" --max_input_reads_in_a_single_nucl_loc {max_input_reads_in_a_single_nucl_loc} "  # argv[10] - max_input_reads_in_a_single_nucl_loc
-        cmd += f" --name_of_file_with_max_commas {name_of_file_with_max_commas} "  # argv[11] - name_of_file_with_max_commas
-        cmd += f" --name_of_file_with_quality_scores {name_of_file_with_quality_scores} "  # argv[13]
+        cmd += f" compressSamFilePairedEnded "
+        cmd += f" --genome_filename {options.genome}"
+        cmd += f" --input_sam_filename {input_filename} "
+        cmd += f" --output_abridge_filename {outputfilename} "
+        cmd += f" --unmapped_filename {unmapped_outputfilename} "
+        cmd += f" --max_input_reads_in_a_single_nucl_loc {max_input_reads_in_a_single_nucl_loc} "
+        cmd += f" --name_of_file_with_max_commas {name_of_file_with_max_commas} "
+        cmd += f" --name_of_file_with_quality_scores {name_of_file_with_quality_scores} "
         cmd += f" --name_of_file_with_read_names_to_short_read_names_and_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "
         
         if options.ignore_soft_clippings == True:
@@ -559,15 +543,12 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         if options.ignore_alignment_scores == True:
             cmd += f" --flag_ignore_alignment_scores "
         
-        
-        cmd += f" --max_number_of_alignments {max_number_of_alignments} "  # argv[14]
-        cmd += f" --max_read_length {max_read_length} "  # argv[15]
-        cmd += f" --frequency_of_flags_filename {frequency_of_flags_filename} "  # argv[16]
-        cmd += f" --name_of_file_dictionary {name_of_file_dictionary} "  # argv[17]
-        
-        cmd += f" --name_of_file_with_read_names_to_short_read_names_and_NH {options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos "  # argv[19]
+        cmd += f" --max_number_of_alignments {max_number_of_alignments} "  
+        cmd += f" --max_read_length {max_read_length} "  
+        cmd += f" --frequency_of_flags_filename {frequency_of_flags_filename} "  
+        cmd += f" --name_of_file_dictionary {name_of_file_dictionary} "  
         cmd += f") "
-        # cmd += f"1> /dev/null "
+        cmd += f"1> /dev/null "
         if options.keep_intermediate_error_files == True:
             cmd += f"2> {error_file_compress_}"
         else:
