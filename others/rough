@@ -22,7 +22,7 @@ singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR137
 
 # Whole sample
 cd /project/maizegdb/sagnik/ABRIDGE/Abridge && git pull && cd /project/maizegdb/sagnik/ABRIDGE/testing && rm -rf SRR13711353_PE_compress_test
-rm -rf SRR13711353_PE_compress_test/inputalignedfilename* inputalignedfilename/sorted_read_names* inputalignedfilename/*abridge 
+rm -rf SRR13711353_SE_compress_test/inputalignedfilename* SRR13711353_SE_compress_test/sorted_read_names* SRR13711353_SE_compress_test/*abridge
 nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 -ialigned /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE.sam \
 --compress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test \
@@ -33,6 +33,7 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test.error &
 
 
+rm -rf SRR13711353_PE_compress_test/inputalignedfilename* SRR13711353_PE_compress_test/sorted_read_names* SRR13711353_PE_compress_test/*abridge 
 nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 -ialigned /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE.sam \
 --compress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test \

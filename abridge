@@ -52,7 +52,7 @@ def parseCommandLineArguments():
     optional_named.add_argument( "-skip_shortening_read_names", "--skip_shortening_read_names", help = "Request abridge to skip the step to reduce the size of read names. This options takes a bit longer but leads to much higher compression without adding to decompression time", action = "store_true" )
     
     optional_named.add_argument( "-igas", "--ignore_alignment_scores", help = "Request abrigde to store the mapping quality scores and the alignment score (provided it is available through the AS tag)", action = "store_true" )
-    optional_named.add_argument( "-igqualmmbsc", "--ignore_all_quality_scores", help = "Ignore all quality scores", action = "store_true" )
+    optional_named.add_argument( "-igquala", "--ignore_all_quality_scores", help = "Ignore all quality scores", action = "store_true" )
     optional_named.add_argument( "-igqualmb", "--ignore_quality_scores_for_matched_bases", help = "Request abridge to save all quality scores", action = 'store_true' )
     optional_named.add_argument( "-igsc", "--ignore_soft_clippings", help = "No soft clippings will be stored. Read will be trimmed down to only the portion which matched to nucleotides in the reference", action = "store_true" )
     optional_named.add_argument( "-igm", "--ignore_mismatches", help = "All mismatches will be ignored", action = "store_true" )
