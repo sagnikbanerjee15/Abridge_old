@@ -281,6 +281,8 @@ void convertToAlignmentSingleEnded (
 	char *icigar;
 
 	int read_names_index = 0;
+
+	short int number_of_items_separated_by_underscore;
 	/********************************************************************/
 
 	/********************************************************************
@@ -393,12 +395,14 @@ void convertToAlignmentSingleEnded (
 	//fflush (stdout);
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
-		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
+		number_of_items_separated_by_underscore = splitByDelimiter (split_on_comma[j] ,
+				'-' ,
+				split_on_dash);
 		if ( flag_ignore_alignment_scores == 0 )
 			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		else
 		strcpy(split_on_tilde[0] , split_on_dash[0]);
-		if ( strlen (split_on_dash[1]) > 0 )
+		if ( number_of_items_separated_by_underscore > 1 )
 		{
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] ,
 					&temp ,

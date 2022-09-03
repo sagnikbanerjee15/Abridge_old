@@ -15,17 +15,65 @@ singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR137
 singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/fclqc:latest docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc:latest
 
 rm -rf ~/.singularity
-rm /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/abridge:1.1.0 ; singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/abridge:1.1.0 docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/abridge:1.1.0
-singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/samtools:1.14 docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/samtools:1.14
-singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/zpaq:715 docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq:715
-singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/fclqc:latest docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc:latest
+rm /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/abridge:1.1.0 
+cp /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/* /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/
+
+mkdir -p /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_decompress_test/singularity_images
+cp /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/* /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_decompress_test/singularity_images/
+
+mkdir -p /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_decompress_test/singularity_images
+cp /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/singularity_images/* /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_decompress_test/singularity_images/
+
+mkdir -p /project/maizegdb/sagnik/ABRIDGE/testing/reference/star_index
+STAR \
+--runMode genomeGenerate \
+--runThreadN 45 \
+--genomeDir /project/maizegdb/sagnik/ABRIDGE/testing/reference/star_index \
+--genomeFastaFiles /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
+--genomeSAindexNbases 12
+
+# Single ended
+
+STAR \
+--runThreadN 45 \
+--genomeDir /project/maizegdb/sagnik/ABRIDGE/testing/reference/star_index \
+--readFilesIn /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_0.fastq \
+--outFilterMultimapNmax 10000 \
+--outFilterMismatchNmax 10 \
+--limitBAMsortRAM 107374182400 \
+--outFilterScoreMinOverLread 0.60 \
+--outFilterMatchNminOverLread 0.60 \
+--outSAMattributes NH HI AS nM NM MD jM jI XS \
+--outFileNamePrefix /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_ \
+--outSAMtype BAM SortedByCoordinate \
+--alignIntronMin 20 \
+--alignIntronMax 10000 \
+--outReadsUnmapped  Within
+
+# Paired ended
+
+STAR \
+--runThreadN 45 \
+--genomeDir /project/maizegdb/sagnik/ABRIDGE/testing/reference/star_index \
+--readFilesIn /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_1.fastq /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_2.fastq \
+--outFilterMultimapNmax 10000 \
+--outFilterMismatchNmax 10 \
+--limitBAMsortRAM 107374182400 \
+--outFilterScoreMinOverLread 0.60 \
+--outFilterMatchNminOverLread 0.60 \
+--outSAMattributes NH HI AS nM NM MD jM jI XS \
+--outFileNamePrefix /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_ \
+--outSAMtype BAM SortedByCoordinate \
+--alignIntronMin 20 \
+--alignIntronMax 10000 \
+--outReadsUnmapped  Within
 
 
 #####################################################################################################################################################
 # Compress
 #####################################################################################################################################################
 # Whole sample
-cd /project/maizegdb/sagnik/ABRIDGE/Abridge && git pull && cd /project/maizegdb/sagnik/ABRIDGE/testing && rm -rf SRR13711353_PE_compress_test
+
 rm -rf SRR13711353_SE_compress_test/inputalignedfilename* SRR13711353_SE_compress_test/sorted_read_names* SRR13711353_SE_compress_test/*abridge
 nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 -ialigned /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE.sam \
