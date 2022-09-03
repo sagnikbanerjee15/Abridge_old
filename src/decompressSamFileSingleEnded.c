@@ -395,17 +395,12 @@ void convertToAlignmentSingleEnded (
 	//fflush (stdout);
 	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
-		number_of_items_separated_by_underscore = splitByDelimiter (split_on_comma[j] ,
-				'-' ,
-				split_on_dash);
+		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
 		if ( flag_ignore_alignment_scores == 0 )
 			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		else
 		strcpy(split_on_tilde[0] , split_on_dash[0]);
-		printf ("\n%d %s" ,
-				number_of_items_separated_by_underscore ,
-				split_on_comma[j]);
-		if ( number_of_items_separated_by_underscore > 1 )
+		if ( split_on_comma[j][strlen (split_on_comma[j]) - 2] != '-' )
 		{
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] ,
 					&temp ,
