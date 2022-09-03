@@ -777,6 +777,7 @@ void decompressFile (
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		line_num++;
+		if ( line_num == 4 ) return;
 		/*
 		 printf("\nStarting new line");
 		 printf("\nline_num = %d %d %s", line_num, strlen(buffer), buffer);
@@ -792,7 +793,7 @@ void decompressFile (
 				break;
 			case 2:
 
-				if ( isNumber (split_on_tab[0]) == 1 )
+				if ( isNumber (split_on_tab[0]) == 1 ) // Change this - check for - in the column 1
 				{
 					//its an integer
 					read_names_stored = 0;
