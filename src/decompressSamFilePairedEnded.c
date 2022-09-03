@@ -94,7 +94,7 @@ void convertToAlignmentPairedEnded (
 		if ( flag_ignore_alignment_scores == 0 )
 			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		else strcpy(split_on_tilde[0] , split_on_dash[0]);
-		if ( split_on_comma[j][strlen (split_on_comma[j]) - 2] != '-' )
+		if ( split_on_comma[j][strlen (split_on_comma[j]) - 1] != '-' )
 		{
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] ,
 					&temp ,

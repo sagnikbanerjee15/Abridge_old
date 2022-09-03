@@ -401,13 +401,14 @@ void convertToAlignmentSingleEnded (
 			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		else
 		strcpy(split_on_tilde[0] , split_on_dash[0]);
-		if ( split_on_comma[j][strlen (split_on_comma[j]) - 2] != '-' )
+		if ( split_on_comma[j][strlen (split_on_comma[j]) - 1] != '-' )
 		{
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] ,
 					&temp ,
 					10);
 		}
 		else number_of_repititions_of_the_same_reads = 1;
+
 		/*
 		 printf(
 		 "\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
