@@ -20,6 +20,10 @@ singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR137
 singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/zpaq:715 docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/zpaq:715
 singularity pull --disable-cache /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/singularity_images/fclqc:latest docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/fclqc:latest
 
+
+#####################################################################################################################################################
+# Compress
+#####################################################################################################################################################
 # Whole sample
 cd /project/maizegdb/sagnik/ABRIDGE/Abridge && git pull && cd /project/maizegdb/sagnik/ABRIDGE/testing && rm -rf SRR13711353_PE_compress_test
 rm -rf SRR13711353_SE_compress_test/inputalignedfilename* SRR13711353_SE_compress_test/sorted_read_names* SRR13711353_SE_compress_test/*abridge
@@ -44,6 +48,19 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test.error &
 
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
+
+#####################################################################################################################################################
+# Deompress
+#####################################################################################################################################################
+
+nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
+--inputabrfilename /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test/SRR13711353_SE.abridge \
+--decompress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_decompress_test \
+--genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
+--preserve_all_intermediate_files \
+--keep_intermediate_error_files \
+> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_decompress_test.output \
+2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_decompress_test.error &
 
 ###################################################################
 # Commands for creating smaller sam file for testing purpose
