@@ -37,7 +37,8 @@ void writeAlignmentToFileSingleEnded (
 	ssize_t line_len;
 
 	int read_name_index = 0;
-
+	printf ("\nInside writeAlignments %d" ,
+			number_of_repititions_of_the_same_reads);
 	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
