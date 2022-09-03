@@ -777,7 +777,8 @@ void decompressFile (
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		line_num++;
-		if ( line_num == 4 ) return;
+		if ( line_num == 5 ) return;
+		printf ("\n%s" , buffer);
 		/*
 		 printf("\nStarting new line");
 		 printf("\nline_num = %d %d %s", line_num, strlen(buffer), buffer);
