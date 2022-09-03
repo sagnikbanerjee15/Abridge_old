@@ -9,7 +9,7 @@
 
 long long unsigned int total_mapped_reads = 0;
 
-void writeAlignmentToFileSingleEnded(
+void writeAlignmentToFileSingleEnded (
 		struct Sam_Alignment *sam_alignment,
 		struct Cigar_Items *cigar_items_instance,
 		short int flag_ignore_sequence_information,
@@ -38,7 +38,7 @@ void writeAlignmentToFileSingleEnded(
 
 	int read_name_index = 0;
 
-	for (i = 0; i < number_of_repititions_of_the_same_reads; i++)
+	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
 		/*
@@ -48,60 +48,61 @@ void writeAlignmentToFileSingleEnded(
 		/*
 		 * Set up the read name
 		 */
-		if (sam_alignment->tags[0].val[0] == '1'
-				&& sam_alignment->tags[0].val[1] == '\0')
+		if ( sam_alignment->tags[0].val[0] == '1' && sam_alignment->tags[0].val[1] == '\0' )
 		{
-			strcat(line_to_be_written_to_file, read_prefix);
-			strcat(line_to_be_written_to_file, sam_alignment->read_name);
-			sprintf(temp, "%d", i + 1);
-			strcat(line_to_be_written_to_file, "_");
-			strcat(line_to_be_written_to_file, temp);
+			strcat(line_to_be_written_to_file , read_prefix);
+			strcat(line_to_be_written_to_file , sam_alignment->read_name);
+			sprintf(temp , "%d" , i + 1);
+			strcat(line_to_be_written_to_file , "_");
+			strcat(line_to_be_written_to_file , temp);
 		}
 		else
 		{
-			strcat(line_to_be_written_to_file, read_names[read_name_index]);
+			strcat(line_to_be_written_to_file , read_names[read_name_index]);
 			//printf ("\nRead name %s " , read_names[read_name_index]);
 			read_name_index++;
 		}
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "\t");
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 01");
 		 fflush(stdout);
 		 */
 
-		sprintf(temp, "%d", sam_alignment->samflag);
-		strcat(line_to_be_written_to_file, temp);
-		strcat(line_to_be_written_to_file, "\t");
+		sprintf(temp , "%d" , sam_alignment->samflag);
+		strcat(line_to_be_written_to_file , temp);
+		strcat(line_to_be_written_to_file , "\t");
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 02");
 		 fflush(stdout);
 		 */
-		strcat(line_to_be_written_to_file, sam_alignment->reference_name);
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , sam_alignment->reference_name);
+		strcat(line_to_be_written_to_file , "\t");
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 03");
 		 fflush(stdout);
 		 */
-		sprintf(temp, "%d", sam_alignment->start_position);
-		strcat(line_to_be_written_to_file, temp);
-		strcat(line_to_be_written_to_file, "\t");
+		sprintf(temp , "%d" , sam_alignment->start_position);
+		strcat(line_to_be_written_to_file , temp);
+		strcat(line_to_be_written_to_file , "\t");
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 04");
 		 fflush(stdout);
 		 */
-		if (flag_ignore_alignment_scores == 1)
-			strcat(line_to_be_written_to_file, "255");
+		if ( flag_ignore_alignment_scores == 1 )
+			strcat(line_to_be_written_to_file , "255");
 		else
 		{
-			sprintf(temp, "%d", sam_alignment->mapping_quality_score);
-			strcat(line_to_be_written_to_file, temp);
+			sprintf(temp , "%d" , sam_alignment->mapping_quality_score);
+			strcat(line_to_be_written_to_file , temp);
 		}
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "\t");
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 05");
 		 fflush(stdout);
 		 */
-		splitCigar(sam_alignment->cigar, &num_of_types, cigar_items_instance);
+		splitCigar (sam_alignment->cigar ,
+				&num_of_types ,
+				cigar_items_instance);
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 06");
 		 fflush(stdout);
@@ -112,32 +113,33 @@ void writeAlignmentToFileSingleEnded(
 		 i);
 		 fflush(stdout);
 		 */
-		strcat(line_to_be_written_to_file, sam_alignment->cigar);
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , sam_alignment->cigar);
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "*");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "*");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "0");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "0");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "0");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "0");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, sam_alignment->seq);
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , sam_alignment->seq);
+		strcat(line_to_be_written_to_file , "\t");
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3");
 		 fflush(stdout);
 		 */
-		if (flag_ignore_quality_scores_for_matched_bases == 0 && (line_len =
-				getline(&buffer, &len, fhr_qual)) != -1)
+		if ( flag_ignore_quality_scores_for_matched_bases == 0 && ( line_len = getline ( &buffer ,
+				&len ,
+				fhr_qual) ) != -1 )
 		{
-			if (buffer[strlen(buffer) - 1] == '\n')
-				buffer[strlen(buffer) - 1] = '\0';
+			if ( buffer[strlen (buffer) - 1] == '\n' )
+				buffer[strlen (buffer) - 1] = '\0';
 			//strcat(line_to_be_written_to_file, buffer);
-			strcpy(sam_alignment->qual, buffer);
-			free(buffer);
+			strcpy(sam_alignment->qual , buffer);
+			free (buffer);
 			buffer = NULL;
 
 		}
@@ -147,12 +149,10 @@ void writeAlignmentToFileSingleEnded(
 		 */
 
 		read_length_calculated_from_cigar_string = 0;
-		for (j = 0; j < num_of_types; j++)
+		for ( j = 0 ; j < num_of_types ; j++ )
 		{
-			if (cigar_items_instance[j].def != 'N'
-					&& cigar_items_instance[j].def != 'D')
-				read_length_calculated_from_cigar_string +=
-						cigar_items_instance[j].len;
+			if ( cigar_items_instance[j].def != 'N' && cigar_items_instance[j].def != 'D' )
+				read_length_calculated_from_cigar_string += cigar_items_instance[j].len;
 		}
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.75");
@@ -162,8 +162,7 @@ void writeAlignmentToFileSingleEnded(
 		 read_length_calculated_from_cigar_string);
 		 fflush (stdout);
 		 */
-		if (strlen(sam_alignment->qual)
-				!= read_length_calculated_from_cigar_string)
+		if ( strlen (sam_alignment->qual) != read_length_calculated_from_cigar_string )
 		{
 			/*
 			 printf(
@@ -178,58 +177,57 @@ void writeAlignmentToFileSingleEnded(
 			 - read_length_calculated_from_cigar_string);
 			 fflush(stdout);
 			 */
-			sam_alignment->qual[read_length_calculated_from_cigar_string] =
-					'\0';
+			sam_alignment->qual[read_length_calculated_from_cigar_string] = '\0';
 		}
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 3.9");
 		 fflush (stdout);
 		 */
-		strcat(line_to_be_written_to_file, sam_alignment->qual);
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , sam_alignment->qual);
+		strcat(line_to_be_written_to_file , "\t");
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 4");
 		 fflush(stdout);
 		 */
 		//Tags
-		strcat(line_to_be_written_to_file, "NH:i:");
-		strcat(line_to_be_written_to_file, sam_alignment->tags[0].val);
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "NH:i:");
+		strcat(line_to_be_written_to_file , sam_alignment->tags[0].val);
+		strcat(line_to_be_written_to_file , "\t");
 
-		if (strcmp(sam_alignment->tags[1].val, ".") != 0
-				&& strchr(sam_alignment->cigar, 'N') != NULL)
+		if ( strcmp (sam_alignment->tags[1].val , ".") != 0 && strchr (sam_alignment->cigar ,
+				'N') != NULL )
 		{
-			strcat(line_to_be_written_to_file, "XS:A:");
-			strcat(line_to_be_written_to_file, sam_alignment->tags[1].val);
-			strcat(line_to_be_written_to_file, "\t");
+			strcat(line_to_be_written_to_file , "XS:A:");
+			strcat(line_to_be_written_to_file , sam_alignment->tags[1].val);
+			strcat(line_to_be_written_to_file , "\t");
 		}
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 5");
 		 fflush(stdout);
 		 */
-		if (flag_ignore_sequence_information == 0)
+		if ( flag_ignore_sequence_information == 0 )
 		{
-			strcat(line_to_be_written_to_file, "MD:Z:");
-			strcat(line_to_be_written_to_file, sam_alignment->tags[2].val);
-			strcat(line_to_be_written_to_file, "\t");
+			strcat(line_to_be_written_to_file , "MD:Z:");
+			strcat(line_to_be_written_to_file , sam_alignment->tags[2].val);
+			strcat(line_to_be_written_to_file , "\t");
 		}
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 6");
 		 fflush(stdout);
 		 */
-		if (flag_ignore_alignment_scores == 0
-				&& strcmp(sam_alignment->tags[3].val, "X") != 0)
+		if ( flag_ignore_alignment_scores == 0 && strcmp (sam_alignment->tags[3].val ,
+				"X") != 0 )
 		{
-			strcat(line_to_be_written_to_file, "AS:i:");
-			strcat(line_to_be_written_to_file, sam_alignment->tags[3].val);
-			strcat(line_to_be_written_to_file, "\t");
+			strcat(line_to_be_written_to_file , "AS:i:");
+			strcat(line_to_be_written_to_file , sam_alignment->tags[3].val);
+			strcat(line_to_be_written_to_file , "\t");
 		}
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 7");
 		 fflush(stdout);
 		 */
-		strcat(line_to_be_written_to_file, "\n");
-		fprintf(fhw, "%s", line_to_be_written_to_file);
+		strcat(line_to_be_written_to_file , "\n");
+		fprintf (fhw , "%s" , line_to_be_written_to_file);
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 8");
 		 fflush(stdout);
@@ -241,7 +239,7 @@ void writeAlignmentToFileSingleEnded(
 	 */
 }
 
-void convertToAlignmentSingleEnded(
+void convertToAlignmentSingleEnded (
 		struct Sam_Alignment *sam_alignment_instance,
 		struct Cigar_Items *cigar_items_instance_for_writing_to_file,
 		struct Whole_Genome_Sequence *whole_genome,
@@ -291,17 +289,15 @@ void convertToAlignmentSingleEnded(
 
 	/********************************************************************/
 
-	if (read_names_stored == 1)
+	if ( read_names_stored == 1 )
 	{
-		if (number_of_columns == 2)
-			read_names_index = splitByDelimiter(
-					split_on_tab[1],
-					',',
+		if ( number_of_columns == 2 )
+			read_names_index = splitByDelimiter (split_on_tab[1] ,
+					',' ,
 					read_names);
-		else if (number_of_columns == 3)
-			read_names_index = splitByDelimiter(
-					split_on_tab[2],
-					',',
+		else if ( number_of_columns == 3 )
+			read_names_index = splitByDelimiter (split_on_tab[2] ,
+					',' ,
 					read_names);
 		/*
 		 printf("\n Reads read");
@@ -311,20 +307,18 @@ void convertToAlignmentSingleEnded(
 
 	}
 
-	if (read_names_stored == 0)
+	if ( read_names_stored == 0 )
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
-		switch (number_of_columns)
+		switch ( number_of_columns )
 		{
 			case 1:
 			{
-				for (i = 0; split_on_tab[0][i] != '\0'; i++)
-					if (split_on_tab[0][i] == ',')
-						number_of_commas++;
+				for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
+					if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 
-				number_of_distinct_cigars_in_a_line = splitByDelimiter(
-						split_on_tab[0],
-						',',
+				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] ,
+						',' ,
 						split_on_comma);
 				/*
 				 printf(
@@ -335,13 +329,11 @@ void convertToAlignmentSingleEnded(
 				break;
 			case 2:
 			{
-				for (i = 0; split_on_tab[1][i] != '\0'; i++)
-					if (split_on_tab[1][i] == ',')
-						number_of_commas++;
+				for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
+					if ( split_on_tab[1][i] == ',' ) number_of_commas++;
 
-				number_of_distinct_cigars_in_a_line = splitByDelimiter(
-						split_on_tab[1],
-						',',
+				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] ,
+						',' ,
 						split_on_comma);
 				/*
 				 printf(
@@ -352,20 +344,18 @@ void convertToAlignmentSingleEnded(
 				break;
 		}
 	}
-	else if (read_names_stored == 1)
+	else if ( read_names_stored == 1 )
 	{
 		int max_number_of_commas = 0, number_of_commas = 0;
-		switch (number_of_columns)
+		switch ( number_of_columns )
 		{
 			case 2:
 			{
-				for (i = 0; split_on_tab[0][i] != '\0'; i++)
-					if (split_on_tab[0][i] == ',')
-						number_of_commas++;
+				for ( i = 0 ; split_on_tab[0][i] != '\0' ; i++ )
+					if ( split_on_tab[0][i] == ',' ) number_of_commas++;
 
-				number_of_distinct_cigars_in_a_line = splitByDelimiter(
-						split_on_tab[0],
-						',',
+				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[0] ,
+						',' ,
 						split_on_comma);
 				/*
 				 printf(
@@ -376,13 +366,11 @@ void convertToAlignmentSingleEnded(
 				break;
 			case 3:
 			{
-				for (i = 0; split_on_tab[1][i] != '\0'; i++)
-					if (split_on_tab[1][i] == ',')
-						number_of_commas++;
+				for ( i = 0 ; split_on_tab[1][i] != '\0' ; i++ )
+					if ( split_on_tab[1][i] == ',' ) number_of_commas++;
 
-				number_of_distinct_cigars_in_a_line = splitByDelimiter(
-						split_on_tab[1],
-						',',
+				number_of_distinct_cigars_in_a_line = splitByDelimiter (split_on_tab[1] ,
+						',' ,
 						split_on_comma);
 				/*
 				 printf(
@@ -403,17 +391,20 @@ void convertToAlignmentSingleEnded(
 	 */
 	//printf("\nconvertToAlignmentSingleEnded Checkpoint 1");
 	//fflush (stdout);
-	for (j = 0; j < number_of_distinct_cigars_in_a_line; j++)
+	for ( j = 0 ; j < number_of_distinct_cigars_in_a_line ; j++ )
 	{
-		splitByDelimiter(split_on_comma[j], '-', split_on_dash);
-		if (flag_ignore_alignment_scores == 0)
-			splitByDelimiter(split_on_dash[0], '~', split_on_tilde);
+		splitByDelimiter (split_on_comma[j] , '-' , split_on_dash);
+		if ( flag_ignore_alignment_scores == 0 )
+			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		else
-			strcpy(split_on_tilde[0], split_on_dash[0]);
-		number_of_repititions_of_the_same_reads = strtol(
-				split_on_dash[1],
-				&temp,
-				10);
+		strcpy(split_on_tilde[0] , split_on_dash[0]);
+		if ( strlen (split_on_dash[1]) > 0 )
+		{
+			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] ,
+					&temp ,
+					10);
+		}
+		else number_of_repititions_of_the_same_reads = 1;
 		/*
 		 printf(
 		 "\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
@@ -423,20 +414,19 @@ void convertToAlignmentSingleEnded(
 		 printf("\nconvertToAlignmentSingleEnded Checkpoint 2");
 		 fflush (stdout);
 		 */
-		if (!(split_on_comma[j][1] == '-' && isalpha(split_on_dash[0][0]) != 0))
+		if ( ! ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 ) )
 		{
-			if (flag_ignore_alignment_scores == 0)
+			if ( flag_ignore_alignment_scores == 0 )
 			{
-				sam_alignment_instance->mapping_quality_score = strtol(
-						split_on_tilde[1],
-						&temp,
+				sam_alignment_instance->mapping_quality_score = strtol (split_on_tilde[1] ,
+						&temp ,
 						10);
-				strcpy(sam_alignment_instance->tags[3].val, split_on_tilde[2]);
+				strcpy(sam_alignment_instance->tags[3].val , split_on_tilde[2]);
 			}
 			else
 			{
 				sam_alignment_instance->mapping_quality_score = 255;
-				strcpy(sam_alignment_instance->tags[3].val, "X");
+				strcpy(sam_alignment_instance->tags[3].val , "X");
 			}
 		}
 		/*
@@ -446,12 +436,12 @@ void convertToAlignmentSingleEnded(
 		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
 		sam_alignment_instance->start_position = curr_position;
 
-		if (split_on_comma[j][1] == '-' && isalpha(split_on_dash[0][0]) != 0)
+		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 		{
 			// Use the same cigar
-			sprintf(temp, "%d", *read_number);
-			(*read_number)++;
-			strcpy(sam_alignment_instance->read_name, temp);
+			sprintf(temp , "%d" , *read_number);
+			( *read_number )++;
+			strcpy(sam_alignment_instance->read_name , temp);
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nSame iCIGAR");
@@ -468,19 +458,18 @@ void convertToAlignmentSingleEnded(
 		}
 		else
 		{
-			strcpy(sam_alignment_instance->icigar, split_on_tilde[0]);
+			strcpy(sam_alignment_instance->icigar , split_on_tilde[0]);
 			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
 			//fflush (stdout);
 			//printf ("\nConvertion started");
-			convertIcigarToCigarandMDSingleEnded(
-					whole_genome,
-					sam_alignment_instance,
-					chromosome,
-					flag_ignore_mismatches,
-					flag_ignore_soft_clippings,
-					flag_ignore_unmapped_sequences,
-					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
-					flag_ignore_sequence_information,
+			convertIcigarToCigarandMDSingleEnded (whole_genome ,
+					sam_alignment_instance ,
+					chromosome ,
+					flag_ignore_mismatches ,
+					flag_ignore_soft_clippings ,
+					flag_ignore_unmapped_sequences ,
+					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips ,
+					flag_ignore_sequence_information ,
 					default_quality_value);
 			//printf ("\nConvertion completed");
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
@@ -493,15 +482,15 @@ void convertToAlignmentSingleEnded(
 			 printf ("\n==============================================================================================================================");
 			 fflush (stdout);
 			 }*/
-			sprintf(temp, "%d", *read_number);
-			(*read_number)++;
-			strcpy(sam_alignment_instance->read_name, temp);
+			sprintf(temp , "%d" , *read_number);
+			( *read_number )++;
+			strcpy(sam_alignment_instance->read_name , temp);
 			/*
 			 printf("\nconvertToAlignmentSingleEnded Checkpoint 5");
 			 fflush(stdout);
 			 */
 		}
-		fflush(stdout);
+		fflush (stdout);
 		//printSamAlignmentInstance (sam_alignment_instance , 0);
 		//continue;
 		/*
@@ -511,16 +500,15 @@ void convertToAlignmentSingleEnded(
 		 number_of_distinct_cigars_in_a_line);
 		 fflush(stdout);
 		 */
-		writeAlignmentToFileSingleEnded(
-				sam_alignment_instance,
-				cigar_items_instance_for_writing_to_file,
-				flag_ignore_sequence_information,
-				number_of_repititions_of_the_same_reads,
-				read_prefix,
-				fhw,
-				fhr_qual,
-				flag_ignore_quality_scores_for_matched_bases,
-				read_names,
+		writeAlignmentToFileSingleEnded (sam_alignment_instance ,
+				cigar_items_instance_for_writing_to_file ,
+				flag_ignore_sequence_information ,
+				number_of_repititions_of_the_same_reads ,
+				read_prefix ,
+				fhw ,
+				fhr_qual ,
+				flag_ignore_quality_scores_for_matched_bases ,
+				read_names ,
 				flag_ignore_alignment_scores);
 		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
 		/*
@@ -530,7 +518,7 @@ void convertToAlignmentSingleEnded(
 	}
 }
 
-void decompressFile(
+void decompressFile (
 		char *name_of_file_with_quality_scores,
 		char *genome_filename,
 		char *output_sam_filename,
@@ -619,25 +607,24 @@ void decompressFile(
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	fhr = fopen(pass1_filename, "r");
-	if (fhr == NULL)
+	fhr = fopen (pass1_filename , "r");
+	if ( fhr == NULL )
 	{
-		printf("Error! File %s not found", pass1_filename);
-		exit(1);
+		printf ("Error! File %s not found" , pass1_filename);
+		exit (1);
 	}
-	fhr_qual = fopen(name_of_file_with_quality_scores, "r");
-	if (fhr_qual == NULL)
+	fhr_qual = fopen (name_of_file_with_quality_scores , "r");
+	if ( fhr_qual == NULL )
 	{
-		printf("Error! File %s not found", name_of_file_with_quality_scores);
-		exit(1);
+		printf ("Error! File %s not found" , name_of_file_with_quality_scores);
+		exit (1);
 	}
-	fhw = fopen(output_sam_filename, "w");
-	if (fhw == NULL)
+	fhw = fopen (output_sam_filename , "w");
+	if ( fhw == NULL )
 	{
-		printf(
-				"Error! File %s cannot be opened for writing",
+		printf ("Error! File %s cannot be opened for writing" ,
 				output_sam_filename);
-		exit(1);
+		exit (1);
 	}
 
 	/*
@@ -651,30 +638,28 @@ void decompressFile(
 	 */
 	int max_line_len = 0;
 	int max_commas = 0;
-	while ((line_len = getline(&buffer, &len, fhr)) != -1)
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
-		if (buffer[0] != '@')
+		if ( buffer[0] != '@' )
 		{
-			if (max_line_len < strlen(buffer))
-				max_line_len = strlen(buffer);
+			if ( max_line_len < strlen (buffer) )
+				max_line_len = strlen (buffer);
 
 			int num_commas = 0;
-			for (int i = 0; buffer[i] != '\0'; i++)
-				if (buffer[i] == ',')
-					num_commas += 1;
-			if (max_commas < num_commas)
-				max_commas = num_commas;
+			for ( int i = 0 ; buffer[i] != '\0' ; i++ )
+				if ( buffer[i] == ',' ) num_commas += 1;
+			if ( max_commas < num_commas ) max_commas = num_commas;
 		}
 	}
 
 	COLS_split_on_tab = max_line_len;
 	ROWS_split_on_comma = max_commas;
-	fclose(fhr);
-	fhr = fopen(pass1_filename, "r");
-	if (fhr == NULL)
+	fclose (fhr);
+	fhr = fopen (pass1_filename , "r");
+	if ( fhr == NULL )
 	{
-		printf("Error! File %s not found", pass1_filename);
-		exit(1);
+		printf ("Error! File %s not found" , pass1_filename);
+		exit (1);
 	}
 	/*
 	 printf(
@@ -686,49 +671,44 @@ void decompressFile(
 	 fflush(stdout);
 	 */
 
-	split_on_tab = (char**) malloc(sizeof(char*) * ROWS_split_on_tab);
-	for (i = 0; i < ROWS_split_on_tab; i++)
-		split_on_tab[i] = (char*) malloc(sizeof(char) * COLS_split_on_tab);
+	split_on_tab = ( char** ) malloc (sizeof(char*) * ROWS_split_on_tab);
+	for ( i = 0 ; i < ROWS_split_on_tab ; i++ )
+		split_on_tab[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_tab);
 
-	split_on_dash = (char**) malloc(sizeof(char*) * ROWS_split_on_dash);
-	for (i = 0; i < ROWS_split_on_dash; i++)
-		split_on_dash[i] = (char*) malloc(sizeof(char) * COLS_split_on_dash);
+	split_on_dash = ( char** ) malloc (sizeof(char*) * ROWS_split_on_dash);
+	for ( i = 0 ; i < ROWS_split_on_dash ; i++ )
+		split_on_dash[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_dash);
 
-	split_on_comma = (char**) malloc(sizeof(char*) * ROWS_split_on_comma);
-	for (i = 0; i < ROWS_split_on_comma; i++)
-		split_on_comma[i] = (char*) malloc(sizeof(char) * COLS_split_on_comma);
+	split_on_comma = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		split_on_comma[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 
-	split_on_tilde = (char**) malloc(sizeof(char*) * ROWS_split_on_comma);
-	for (i = 0; i < ROWS_split_on_comma; i++)
-		split_on_tilde[i] = (char*) malloc(sizeof(char) * COLS_split_on_comma);
+	split_on_tilde = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		split_on_tilde[i] = ( char* ) malloc (sizeof(char) * COLS_split_on_comma);
 
-	read_names = (char**) malloc(sizeof(char*) * ROWS_split_on_comma);
-	for (i = 0; i < ROWS_split_on_comma; i++)
-		read_names[i] = (char*) malloc(sizeof(char) * 100);
+	read_names = ( char** ) malloc (sizeof(char*) * ROWS_split_on_comma);
+	for ( i = 0 ; i < ROWS_split_on_comma ; i++ )
+		read_names[i] = ( char* ) malloc (sizeof(char) * 100);
 
-	output_prefix_without_path = (char*) malloc(sizeof(char) * MAX_SEQ_LEN);
-	sequence_portions_from_reference = (char**) malloc(
-			sizeof(char*) * MAX_POOL_SIZE);
-	fasta_file_with_expressed_portions = (char*) malloc(
-			sizeof(char) * FILENAME_LENGTH);
-	current_chromosome = (char*) malloc(sizeof(char) * 100);
+	output_prefix_without_path = ( char* ) malloc (sizeof(char) * MAX_SEQ_LEN);
+	sequence_portions_from_reference = ( char** ) malloc (sizeof(char*) * MAX_POOL_SIZE);
+	fasta_file_with_expressed_portions = ( char* ) malloc (sizeof(char) * FILENAME_LENGTH);
+	current_chromosome = ( char* ) malloc (sizeof(char) * 100);
 
-	cigar_items_instance_for_writing = (struct Cigar_Items*) malloc(
-			sizeof(struct Cigar_Items) * 100);
+	cigar_items_instance_for_writing = ( struct Cigar_Items* ) malloc (sizeof(struct Cigar_Items) * 100);
 
 	//buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
-	abridge_index = allocateMemoryAbridge_Index();
-	sam_alignment = allocateMemorySam_Alignment();
-	whole_genome = (struct Whole_Genome_Sequence*) malloc(
-			sizeof(struct Whole_Genome_Sequence));
+	abridge_index = allocateMemoryAbridge_Index ();
+	sam_alignment = allocateMemorySam_Alignment ();
+	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
 
 	whole_genome->number_of_reference_sequences = 0;
-	whole_genome->nucleotides = (char**) malloc(sizeof(char*) * 1);
-	whole_genome->reference_sequence_name = (char**) malloc(sizeof(char*) * 1);
-	whole_genome->reference_sequence_length = (unsigned long long int*) malloc(
-			sizeof(unsigned long long int) * 1);
+	whole_genome->nucleotides = ( char** ) malloc (sizeof(char*) * 1);
+	whole_genome->reference_sequence_name = ( char** ) malloc (sizeof(char*) * 1);
+	whole_genome->reference_sequence_length = ( unsigned long long int* ) malloc (sizeof(unsigned long long int) * 1);
 
-	sam_alignment_instance = allocateMemorySam_Alignment();
+	sam_alignment_instance = allocateMemorySam_Alignment ();
 	read_prefix[0] = '\0'; // Empty string
 	/*
 	 printf("\nMemory has been allocated");
@@ -736,50 +716,44 @@ void decompressFile(
 	 */
 	/********************************************************************/
 
-	writeSequenceHeaders(fhw, genome_filename, 1);
+	writeSequenceHeaders (fhw , genome_filename , 1);
 
 	line_num = 0;
-	line_len = getline(&buffer, &len, fhr);
+	line_len = getline ( &buffer , &len , fhr);
 	/*
 	 printf("\nThis works");
 	 fflush(stdout);
 	 */
-	splitByDelimiter(buffer, '\t', split_on_tab);
+	splitByDelimiter (buffer , '\t' , split_on_tab);
 
-	splitByDelimiter(split_on_tab[0], ':', split_on_tilde);
-	flag_ignore_mismatches = strtol(
-			split_on_tilde[1],
-			&convert_to_int_temp,
+	splitByDelimiter (split_on_tab[0] , ':' , split_on_tilde);
+	flag_ignore_mismatches = strtol (split_on_tilde[1] ,
+			&convert_to_int_temp ,
 			10);
 
-	splitByDelimiter(split_on_tab[1], ':', split_on_tilde);
-	flag_ignore_soft_clippings = strtol(
-			split_on_tilde[1],
-			&convert_to_int_temp,
+	splitByDelimiter (split_on_tab[1] , ':' , split_on_tilde);
+	flag_ignore_soft_clippings = strtol (split_on_tilde[1] ,
+			&convert_to_int_temp ,
 			10);
 
-	splitByDelimiter(split_on_tab[2], ':', split_on_tilde);
-	flag_ignore_unmapped_sequences = strtol(
-			split_on_tilde[1],
-			&convert_to_int_temp,
+	splitByDelimiter (split_on_tab[2] , ':' , split_on_tilde);
+	flag_ignore_unmapped_sequences = strtol (split_on_tilde[1] ,
+			&convert_to_int_temp ,
 			10);
 
-	splitByDelimiter(split_on_tab[3], ':', split_on_tilde);
-	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = strtol(
-			split_on_tilde[1],
-			&convert_to_int_temp,
+	splitByDelimiter (split_on_tab[3] , ':' , split_on_tilde);
+	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = strtol (split_on_tilde[1] ,
+			&convert_to_int_temp ,
 			10);
 
-	splitByDelimiter(split_on_tab[4], ':', split_on_tilde);
-	flag_ignore_quality_scores_for_matched_bases = strtol(
-			split_on_tilde[1],
-			&convert_to_int_temp,
+	splitByDelimiter (split_on_tab[4] , ':' , split_on_tilde);
+	flag_ignore_quality_scores_for_matched_bases = strtol (split_on_tilde[1] ,
+			&convert_to_int_temp ,
 			10);
 
-	splitByDelimiter(split_on_tab[5], ':', split_on_tilde);
-	flag_ignore_alignment_scores = strtol(
-			split_on_tilde[1],
-			&convert_to_int_temp,
+	splitByDelimiter (split_on_tab[5] , ':' , split_on_tilde);
+	flag_ignore_alignment_scores = strtol (split_on_tilde[1] ,
+			&convert_to_int_temp ,
 			10);
 
 	/*
@@ -798,7 +772,7 @@ void decompressFile(
 	 fflush(stdout);
 	 */
 	line_num = 0;
-	while ((line_len = getline(&buffer, &len, fhr)) != -1)
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		line_num++;
 		/*
@@ -807,43 +781,40 @@ void decompressFile(
 		 fflush(stdout);
 		 */
 		//if ( line_num == 10 ) break;
-		number_of_columns = splitByDelimiter(buffer, '\t', split_on_tab);
+		number_of_columns = splitByDelimiter (buffer , '\t' , split_on_tab);
 
-		switch (number_of_columns)
+		switch ( number_of_columns )
 		{
 			case 1:
 				read_names_stored = 0;
 				break;
 			case 2:
 
-				if (isNumber(split_on_tab[0]) == 1)
+				if ( isNumber (split_on_tab[0]) == 1 )
 				{
 					//its an integer
 					read_names_stored = 0;
 				}
-				else
-					read_names_stored = 1;
+				else read_names_stored = 1;
 				break;
 			case 3:
 				read_names_stored = 1;
 				break;
 		}
 
-		if (buffer[0] == '@')
+		if ( buffer[0] == '@' )
 		{
-			splitByDelimiter(split_on_tab[1], ':', split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
-			strcpy(current_chromosome, split_on_dash[1]);
-			readInEachChromosome(
-					genome_filename,
-					whole_genome,
+			splitByDelimiter (split_on_tab[1] , ':' , split_on_dash); // Using split_on_dash so as to save memory and not create a new data structure
+			strcpy(current_chromosome , split_on_dash[1]);
+			readInEachChromosome (genome_filename ,
+					whole_genome ,
 					current_chromosome);
 			do
 			{
-				line_len = getline(&buffer, &len, fhr);
-			}
-			while (buffer[0] == '@' && line_len != -1);
+				line_len = getline ( &buffer , &len , fhr);
+			} while ( buffer[0] == '@' && line_len != -1 );
 			curr_position = 0;
-			fseek(fhr, -line_len, SEEK_CUR);
+			fseek (fhr , -line_len , SEEK_CUR);
 			//printf ("\nline_num = %d" , line_num);
 			//fflush (stdout);
 			continue;
@@ -861,25 +832,21 @@ void decompressFile(
 		 printf("\n2. line_len %d len %d", line_len, len);
 		 fflush(stdout);
 		 */
-		if (read_names_stored == 0)
+		if ( read_names_stored == 0 )
 		{
-			if (number_of_columns == 1)
+			if ( number_of_columns == 1 )
 				curr_position++;
-			else
-				curr_position += strtol(
-						split_on_tab[0],
-						&convert_to_int_temp,
-						10);
+			else curr_position += strtol (split_on_tab[0] ,
+					&convert_to_int_temp ,
+					10);
 		}
-		else if (read_names_stored == 1)
+		else if ( read_names_stored == 1 )
 		{
-			if (number_of_columns == 2)
+			if ( number_of_columns == 2 )
 				curr_position++;
-			else
-				curr_position += strtol(
-						split_on_tab[0],
-						&convert_to_int_temp,
-						10);
+			else curr_position += strtol (split_on_tab[0] ,
+					&convert_to_int_temp ,
+					10);
 		}
 		/*
 		 printf("\nCheckpoint 3 line_num = %d", line_num);
@@ -890,37 +857,36 @@ void decompressFile(
 		 continue;
 		 */
 		//printf("\nThe compressed data %s", buffer);
-		convertToAlignmentSingleEnded(
-				sam_alignment_instance,
-				cigar_items_instance_for_writing,
-				whole_genome,
-				split_on_tab,
-				split_on_dash,
-				split_on_comma,
-				split_on_tilde,
-				default_quality_value,
-				flag_ignore_alignment_scores,
-				flag_ignore_mismatches,
-				flag_ignore_soft_clippings,
-				flag_ignore_unmapped_sequences,
-				flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
-				flag_ignore_sequence_information,
-				&read_number,
-				&total_mapped_reads,
-				read_prefix,
-				fhw,
-				fhr_qual,
-				flag_ignore_quality_scores_for_matched_bases,
-				number_of_columns,
-				curr_position,
-				current_chromosome,
-				read_names,
+		convertToAlignmentSingleEnded (sam_alignment_instance ,
+				cigar_items_instance_for_writing ,
+				whole_genome ,
+				split_on_tab ,
+				split_on_dash ,
+				split_on_comma ,
+				split_on_tilde ,
+				default_quality_value ,
+				flag_ignore_alignment_scores ,
+				flag_ignore_mismatches ,
+				flag_ignore_soft_clippings ,
+				flag_ignore_unmapped_sequences ,
+				flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips ,
+				flag_ignore_sequence_information ,
+				&read_number ,
+				&total_mapped_reads ,
+				read_prefix ,
+				fhw ,
+				fhr_qual ,
+				flag_ignore_quality_scores_for_matched_bases ,
+				number_of_columns ,
+				curr_position ,
+				current_chromosome ,
+				read_names ,
 				read_names_stored);
 		/*
 		 printf("\nCheckpoint 4 line_num = %d", line_num);
 		 fflush(stdout);
 		 */
-		free(buffer);
+		free (buffer);
 		buffer = NULL;
 	}
 
@@ -929,71 +895,71 @@ void decompressFile(
 	/*
 	 * Write all unmapped reads to samfile
 	 */
-	fhr = fopen(unmapped_filename, "r");
-	if (fhr == NULL)
+	fhr = fopen (unmapped_filename , "r");
+	if ( fhr == NULL )
 	{
-		printf("Error! File not found");
-		exit(1);
+		printf ("Error! File not found");
+		exit (1);
 	}
 	line_number = 1;
-	free(buffer);
+	free (buffer);
 	buffer = NULL;
-	while ((line_len = getline(&buffer, &len, fhr)) != -1)
+	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
-		strcpy(sam_alignment->seq, buffer);
-		line_len = getline(&buffer, &len, fhr);
-		strcpy(sam_alignment->qual, buffer);
+		strcpy(sam_alignment->seq , buffer);
+		line_len = getline ( &buffer , &len , fhr);
+		strcpy(sam_alignment->qual , buffer);
 
 		line_to_be_written_to_file[0] = '\0';
-		strcat(line_to_be_written_to_file, "unmapped_");
-		sprintf(temp, "%d", line_number);
-		strcat(line_to_be_written_to_file, temp);
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "unmapped_");
+		sprintf(temp , "%d" , line_number);
+		strcat(line_to_be_written_to_file , temp);
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "4");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "4");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "*");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "*");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "0");
-		strcat(line_to_be_written_to_file, "\t");
+		strcat(line_to_be_written_to_file , "0");
+		strcat(line_to_be_written_to_file , "\t");
 
-		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file , "0");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "*");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "*");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "*");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "*");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "0");
 
-		strcat(line_to_be_written_to_file, "\t");
-		strcat(line_to_be_written_to_file, "0");
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "0");
 
-		strcat(line_to_be_written_to_file, "\t");
-		sam_alignment->seq[strlen(sam_alignment->seq) - 1] = '\0';
-		strcat(line_to_be_written_to_file, sam_alignment->seq);
+		strcat(line_to_be_written_to_file , "\t");
+		sam_alignment->seq[strlen (sam_alignment->seq) - 1] = '\0';
+		strcat(line_to_be_written_to_file , sam_alignment->seq);
 
-		strcat(line_to_be_written_to_file, "\t");
-		sam_alignment->qual[strlen(sam_alignment->qual) - 1] = '\0';
-		strcat(line_to_be_written_to_file, sam_alignment->qual);
+		strcat(line_to_be_written_to_file , "\t");
+		sam_alignment->qual[strlen (sam_alignment->qual) - 1] = '\0';
+		strcat(line_to_be_written_to_file , sam_alignment->qual);
 
-		strcat(line_to_be_written_to_file, "\tNH:i:0\tHI:i:0\tnM:i:1\tuT:A:1");
+		strcat(line_to_be_written_to_file , "\tNH:i:0\tHI:i:0\tnM:i:1\tuT:A:1");
 
-		strcat(line_to_be_written_to_file, "\n");
-		fprintf(fhw, "%s", line_to_be_written_to_file);
+		strcat(line_to_be_written_to_file , "\n");
+		fprintf (fhw , "%s" , line_to_be_written_to_file);
 
 		line_number++;
 	}
 
-	fclose(fhw);
-	fclose(fhr);
+	fclose (fhw);
+	fclose (fhr);
 }
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	/********************************************************************
 	 * Variable declaration
@@ -1014,24 +980,23 @@ int main(int argc, char *argv[])
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	strcpy(genome_filename, argv[1]);
-	strcpy(output_sam_filename, argv[2]);
-	strcpy(pass1_filename, argv[3]);
-	strcpy(default_quality_value, argv[4]);
-	flag_ignore_sequence_information = strtol(argv[5], &temp, 10);
-	strcpy(unmapped_filename, argv[6]);
-	strcpy(name_of_file_with_quality_scores, argv[7]);
-	max_reads_in_each_line = strtol(argv[8], &temp, 10);
+	strcpy(genome_filename , argv[1]);
+	strcpy(output_sam_filename , argv[2]);
+	strcpy(pass1_filename , argv[3]);
+	strcpy(default_quality_value , argv[4]);
+	flag_ignore_sequence_information = strtol (argv[5] , &temp , 10);
+	strcpy(unmapped_filename , argv[6]);
+	strcpy(name_of_file_with_quality_scores , argv[7]);
+	max_reads_in_each_line = strtol (argv[8] , &temp , 10);
 
 	/********************************************************************/
-	decompressFile(
-			name_of_file_with_quality_scores,
-			genome_filename,
-			output_sam_filename,
-			pass1_filename,
-			unmapped_filename,
-			default_quality_value,
-			flag_ignore_sequence_information,
+	decompressFile (name_of_file_with_quality_scores ,
+			genome_filename ,
+			output_sam_filename ,
+			pass1_filename ,
+			unmapped_filename ,
+			default_quality_value ,
+			flag_ignore_sequence_information ,
 			max_reads_in_each_line);
 	return 0;
 }

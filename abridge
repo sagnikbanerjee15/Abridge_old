@@ -790,7 +790,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     name_of_input_file_without_location = options.inputabrfilename.split( "/" )[-1].split( ".abridge" )[0]
     max_reads_in_each_line_filename = f"{options.output_directory}/max_reads_in_each_line_filename"
-    output_sam_filename = f"{options.output_directory}/{name_of_input_file_without_location[:-4]}_decompressed.sam"
+    output_sam_filename = f"{options.output_directory}/{name_of_input_file_without_location[:-3]}_decompressed.sam"
 
     cmd = f" maxReadsInEachLine "
     cmd += f" {outputfilename} "
