@@ -402,6 +402,9 @@ void convertToAlignmentSingleEnded (
 			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		else
 		strcpy(split_on_tilde[0] , split_on_dash[0]);
+		printf ("\n%d %s" ,
+				number_of_items_separated_by_underscore ,
+				split_on_comma[j]);
 		if ( number_of_items_separated_by_underscore > 1 )
 		{
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] ,
