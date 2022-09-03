@@ -774,6 +774,11 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     cmd = f"mv {fclqc_output_filename}_decompressed001.dec {name_of_file_with_quality_scores}"
 
+    if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False and len( glob.glob( f"{options.output_directory}/*fclqc001.enc" ) ) > 0:
+        software = "fclqc"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+
     # flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, ignore_quality_scores_for_matched_bases, save_exact_quality_scores, ignore_alignment_scores = list( map( int, open( outputfilename, "rb" ).readline().split() ) )
     flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_all_quality_scores   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = open( outputfilename, "rb" ).readline().split()
     all_flags = [flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_all_quality_scores   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores ]
