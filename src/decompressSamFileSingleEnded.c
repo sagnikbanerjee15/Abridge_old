@@ -502,6 +502,8 @@ void convertToAlignmentSingleEnded (
 		 number_of_distinct_cigars_in_a_line);
 		 fflush(stdout);
 		 */
+
+		printf ("\nWriting alignment for %s" , sam_alignment_instance->icigar);
 		writeAlignmentToFileSingleEnded (sam_alignment_instance ,
 				cigar_items_instance_for_writing_to_file ,
 				flag_ignore_sequence_information ,
@@ -860,7 +862,7 @@ void decompressFile (
 		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 		 continue;
 		 */
-		//printf("\nThe compressed data %s", buffer);
+		printf ("\nThe compressed data %s" , buffer);
 		convertToAlignmentSingleEnded (sam_alignment_instance ,
 				cigar_items_instance_for_writing ,
 				whole_genome ,
