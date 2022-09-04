@@ -807,17 +807,18 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
         cmd += f" decompressSamFileSingleEnded "  # argv[0] - Name of the program
     else:
         cmd += f" decompressSamFilePairedEnded "  # argv[0] - Name of the program
-    cmd += f" {options.genome} "  # argv[1] - genome file
-    cmd += f" {output_sam_filename} "  # argv[2] - decompressed SAM filename
-    cmd += f" {outputfilename} "  # argv[3] - Name of the  filename
-    cmd += f" {options.quality} "  # argv[4] - Quality of reads
-    cmd += f" {options.ignore_sequence}"  # argv[5] - Whether or not to produce sequences from genome file
-    cmd += f" {unmapped_outputfilename}"  # argv[6] - Name of file with unmapped reads
-    cmd += f" {name_of_file_with_quality_scores} "  # argv[7] - Name of file with quality scores
+    cmd += f" --reference {options.genome} "  # argv[1] - genome file
+    cmd += f" --outputfilename {output_sam_filename} "  # argv[2] - decompressed SAM filename
+    cmd += f" --compressedfile {outputfilename} "  # argv[3] - Name of the  filename
+    cmd += f" --mockquality {options.quality} "  # argv[4] - Quality of reads
+    if options.ignore_sequence:
+        cmd += f" --ignoresequence"  # argv[5] - Whether or not to produce sequences from genome file
+    cmd += f" --unmappedreadsfilename {unmapped_outputfilename}"  # argv[6] - Name of file with unmapped reads
+    cmd += f" --qualityscoresfilename {name_of_file_with_quality_scores} "  # argv[7] - Name of file with quality scores
     if os.path.exists( name_of_file_dictionary ) == True:
-        cmd += f" {name_of_file_dictionary} "  # argv[8]
+        cmd += f" --dictionaryfilename {name_of_file_dictionary} "  # argv[8]
 
-    cmd += f" {max_reads_in_each_line} "  # argv[9]
+    cmd += f" --maxreadsineachline {max_reads_in_each_line} "  # argv[9]
     cmd += f") "
     cmd += f"1> /dev/null "
     if options.keep_intermediate_error_files == True:
