@@ -88,61 +88,6 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
                             memory = '1g'
                             )
 
-#####################################################################################################################################################################
-# Variable declaration
-#####################################################################################################################################################################
-
-
-framework_of_choice = "singularity"
-transfer_to_temp_directory = True # Change this flag if transfer of data and results to temporary data storage is not required
-
-list_of_directories = []
-
-MAIN_OUTPUT_DIRECTORY = "/project/maizegdb/sagnik/ABRIDGE/testing" 
-TEMP_OUTPUT_DIRECTORY = "/90daydata/maizegdb/sagnik/ABRIDGE/testing"
-list_of_directories.append(MAIN_OUTPUT_DIRECTORY)
-list_of_directories.append(TEMP_OUTPUT_DIRECTORY)
-
-volumes_list = [f"{MAIN_OUTPUT_DIRECTORY}:{MAIN_OUTPUT_DIRECTORY}",
-                f"{TEMP_OUTPUT_DIRECTORY}:{TEMP_OUTPUT_DIRECTORY}"
-                ]
-
-SINGULARITY_IMAGES = f"{MAIN_OUTPUT_DIRECTORY}/singularity_images"
-list_of_directories.append(SINGULARITY_IMAGES)
-
-REFERENCE_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/reference"
-REFERENCE_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/reference"
-list_of_directories.append(REFERENCE_MAIN_OUTPUT_DIRECTORY)
-list_of_directories.append(REFERENCE_TEMP_OUTPUT_DIRECTORY)
-
-STAR_INDEX_GENOME_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/star_index/genome"
-STAR_INDEX_GENOME_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/star_index/genome"
-list_of_directories.append(STAR_INDEX_GENOME_MAIN_OUTPUT_DIRECTORY)
-list_of_directories.append(STAR_INDEX_GENOME_TEMP_OUTPUT_DIRECTORY)
-
-SRA_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/sra_files"
-SRA_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/sra_files"
-list_of_directories.append(SRA_MAIN_OUTPUT_DIRECTORY)
-list_of_directories.append(SRA_TEMP_OUTPUT_DIRECTORY)
-
-FASTQ_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/fastq_files"
-FASTQ_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/fastq_files"
-list_of_directories.append(FASTQ_MAIN_OUTPUT_DIRECTORY)
-list_of_directories.append(FASTQ_TEMP_OUTPUT_DIRECTORY)
-
-reference = {"ARATH":
-                {"genome":
-                    {
-                    "web_link":"http://ftp.ensemblgenomes.org/pub/plants/release-54/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz",
-                    "local_main": f"{REFERENCE_MAIN_OUTPUT_DIRECTORY}/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-                    "local_temp": f"{REFERENCE_TEMP_OUTPUT_DIRECTORY}/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
-                    "sra": "SRR13711353"
-                    }
-                }
-            }
-
-sra_id = "SRR13711353"
-
 def main():
     list_of_softwares_with_versions = {"sratools":"3.0.0",
                                        "star":"2.7.9a",
@@ -161,75 +106,54 @@ def main():
     else:
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
-            os.system( f"singularity pull {SINGULARITY_IMAGES}/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
+            os.system( f"singularity pull /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
 
-    #####################################################################################################################################################################
-    # Download reference files and sra data
-    #####################################################################################################################################################################
+    OUTPUT_DIRECTORY_MAIN = "/project/maizegdb/sagnik/ABRIDGE/testing"
+    OUTPUT_DIRECTORY_TEMP = "/90dayadata/maizegdb/sagnik/ABRIDGE/testing"
     
-    # Download reference
-    if os.path.exists(reference["ARATH"]["genome"]["local_main"]) == False and os.path.exists(reference["ARATH"]["genome"]["local_temp"]): 
-        web_link = reference["ARATH"]["genome"]["web_link"]
-        output_filename = reference["ARATH"]["genome"]["local_main"]
-        cmd = f"wget -O {output_filename}.gz {web_link} "
-        os.system(cmd)
-        
-        cmd = f"gunzip {output_filename}.gz"
-        
-    # Download SRA file
-    if os.path.exists(f"{SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra") == False and os.path.exists(f"{SRA_TEMP_OUTPUT_DIRECTORY}/{sra_id}.sra") == False:
-        cmd  = f" prefetch "
-        cmd += f" -o {SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra "
-        cmd += f" {sra_id} "
-        
-        software = "sratools"
-        version = list_of_softwares_with_versions[software]
-        executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
-        
-    # Execute fasterq-dump
-    if (os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False) and (os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False):
-        cmd  = f"fasterq-dump "
-        cmd += f" --progress "
-        cmd += f" --threads {CPU} "
-        cmd += f" --outdir {FASTQ_MAIN_OUTPUT_DIRECTORY}/"
-        cmd += f" --split-files "
-        cmd += f" --seq-defline '$ac_$sn_$rl_$ri' "
-        cmd += f" {sra_id} "
-        
-        software = "sratools"
-        version = list_of_softwares_with_versions[software]
-        executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
-        
-        cmd  = f" cat "
-        cmd += f" {FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_1.fastq "
-        cmd += f" {FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_2.fastq "
-        cmd += f" > {FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_0.fastq"
-        os.system(cmd)
-        
-        cmd  = f"fasterq-dump "
-        cmd += f" --progress "
-        cmd += f" --threads {CPU} "
-        cmd += f" --outdir {FASTQ_MAIN_OUTPUT_DIRECTORY}/"
-        cmd += f" --split-files "
-        cmd += f" --seq-defline '$ac_$sn_$rl/$ri' "
-        cmd += f" {sra_id} "
-        
-        software = "sratools"
-        version = list_of_softwares_with_versions[software]
-        executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
-        
-        
+    sra_id = "SRR13711353"
     
-    if transfer_to_temp_directory:
-        file_origin = reference["ARATH"]["genome"]["local_main"]
-        file_dest = reference["ARATH"]["genome"]["local_temp"] 
-        cmd = f"mv {file_origin} {file_dest}"
-        os.system(cmd)
-        
-        file_origin = f"{SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra"
-        file_dest = f"{SRA_TEMP_OUTPUT_DIRECTORY}/{sra_id}.sra" 
-        cmd = f"mv {file_origin} {file_dest}"
-        os.system(cmd)
+    for ended in ["SE","PE"]:
+        for alignment_type in ["all_tags_Aligned.sortedByCoord.out.sam", "no_tags_Aligned.out.sam"]:
+            alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}"
+            
+            for ignore_alignment_scores in [0, 1]:
+                for ignore_all_quality_scores in [0, 1]:
+                    for ignore_quality_scores_for_matched_bases in [0, 1]:
+                        for ignore_soft_clippings in [0, 1]:
+                            for ignore_mismatches in [0, 1]:
+                                for ignore_unmapped_reads in [0, 1]:
+                                    for skip_shortening_read_names in [0, 1]:
+                                        cmd  = f" /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge "
+                                        cmd += f" --compress "
+                                        
+                                        if ignore_alignment_scores == 1:
+                                            cmd += f" --ignore_alignment_scores "
+                                        if ignore_all_quality_scores == 1:
+                                            cmd += f" --ignore_all_quality_scores "
+                                        if ignore_quality_scores_for_matched_bases == 1:
+                                            cmd += f" --ignore_quality_scores_for_matched_bases "
+                                        if ignore_soft_clippings == 1:
+                                            cmd += " --ignore_soft_clippings "
+                                        if ignore_mismatches == 1:
+                                            cmd += " --ignore_mismatches "
+                                        if ignore_unmapped_reads == 1:
+                                            cmd += " --ignore_unmapped_reads "
+                                        if skip_shortening_read_names == 1:
+                                            cmd += f" --skip_shortening_read_names "
+                                            
+                                        cmd += f" --inputalignedfilename  {alignment_filename} "
+                                        cmd += f" --keep_intermediate_error_files "
+                                        cmd += f" --preserve_all_intermediate_files "
+                                        cmd += f" --inputabrfilename {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}"
+                                        cmd += f" 1> {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}.output "
+                                        cmd += f" 2> {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}.error"
+                                        print(f"Starting - {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}")
+                                        os.system(cmd)
+                                        print(f"Completed - {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}")
+                                            
+    
+                                        
     
     
 
