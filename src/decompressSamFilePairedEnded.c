@@ -10,6 +10,13 @@
 
 long long int total_mapped_reads = 0;
 
+// Set up the argument parser
+const char *argp_program_version = "abridge decompressSamFilePairedEnded 1.2.0";
+const char *argp_program_bug_address = "sagnikbanerjee15@gmail.com";
+static char doc[] = "decompressSamFilePairedEnded will accept an compressed file and associated quality scores and decompress those to SAM alignments";
+static char args_doc[] = "";  // No standard arguments
+							  // (i.e. arguments without "names")
+
 static struct argp_option options[] =
 {
 { "reference" , 'r' , "referencefilename" , 0 , "Name of the reference file in fasta format" , 0 } ,
@@ -100,6 +107,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	}
 	return 0;
 }
+
+static struct argp argp =
+{ options , parse_opt , args_doc , doc , 0 , 0 , 0 };
 
 void convertToAlignmentPairedEnded (
 		struct Sam_Alignment *sam_alignment_instance,

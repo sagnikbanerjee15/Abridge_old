@@ -10,6 +10,13 @@
 
 long long unsigned int total_mapped_reads = 0;
 
+// Set up the argument parser
+const char *argp_program_version = "abridge decompressSamFileSingleEnded 1.2.0";
+const char *argp_program_bug_address = "sagnikbanerjee15@gmail.com";
+static char doc[] = "decompressSamFileSingleEnded will accept an compressed file and associated quality scores and decompress those to SAM alignments";
+static char args_doc[] = "";  // No standard arguments
+							  // (i.e. arguments without "names")
+
 /*
  * Options.  Field 1 in ARGP.
  * Order of fields: {NAME, KEY, ARG, FLAGS, DOC, GROUP}.
@@ -100,6 +107,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	}
 	return 0;
 }
+
+static struct argp argp =
+{ options , parse_opt , args_doc , doc , 0 , 0 , 0 };
 
 void writeAlignmentToFileSingleEnded (
 		struct Sam_Alignment *sam_alignment,
