@@ -47,13 +47,12 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     singularity_cmd += f" {image_location} "
     singularity_cmd += f" bash -c '{command}'"
     os.system( singularity_cmd )
-    logging.info( f"Running command - {singularity_cmd}" )
+    print( f"Running command - {singularity_cmd}" )
 
 def executeCommand(framework_of_choice, software, version, volumes_list, singularity_sif_location, cmd):
     """
     Executes the command within the requested framework
     """
-    print(f"Executing {cmd}")
     if framework_of_choice == "docker":
         runDockerCommand( logging,
                           name = software,
