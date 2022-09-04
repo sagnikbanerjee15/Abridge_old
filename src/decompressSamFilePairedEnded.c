@@ -120,17 +120,19 @@ void convertToAlignmentPairedEnded (
 		char **split_on_tilde,
 		char **read_names,
 		char *default_quality_value,
+
 		short int flag_ignore_alignment_scores,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
 		short int flag_ignore_all_quality_score,
 		short int flag_ignore_sequence_information,
+		short int flag_ignore_quality_scores_for_matched_bases,
+
 		unsigned long long int *read_number,
 		unsigned long long int *total_mapped_reads,
 		FILE *fhw,
 		FILE *fhr_qual,
-		short int flag_ignore_all_quality_scores,
 		short int number_of_columns,
 		unsigned long long int curr_position,
 		char *chromosome,
@@ -253,6 +255,7 @@ void convertToAlignmentPairedEnded (
 					flag_ignore_soft_clippings ,
 					flag_ignore_unmapped_sequences ,
 					flag_ignore_all_quality_score ,
+					flag_ignore_quality_scores_for_matched_bases ,
 					flag_ignore_sequence_information ,
 					default_quality_value ,
 					samflag_dictionary ,
@@ -345,8 +348,8 @@ void decompressFile (
 	int number_of_entries_in_cluster;
 	int number_of_elements_after_split_on_delimiter;
 	int BUFFER_SIZE = 8 * 100 * 1024 * 1024; // 100 MB
-	//int ROWS_split_on_newline = ROWS * 10; //10,000
-	//int COLS_split_on_newline = COLS * 1000; //1,000,000
+//int ROWS_split_on_newline = ROWS * 10; //10,000
+//int COLS_split_on_newline = COLS * 1000; //1,000,000
 	int ROWS_split_on_tab = 10; //10
 	int COLS_split_on_tab = COLS * 10; //100,000
 	int ROWS_split_on_dash = 5; //5
@@ -357,7 +360,7 @@ void decompressFile (
 	int COLS_split_on_tilde = MAX_SEQ_LEN * 3; //3000
 	int number_of_unique_samformatflags;
 
-	//char **split_on_newline;
+//char **split_on_newline;
 	char **split_on_tab;
 	char **split_on_dash;
 	char **split_on_comma;
@@ -443,7 +446,7 @@ void decompressFile (
 	fasta_file_with_expressed_portions = ( char* ) malloc (sizeof(char) * FILENAME_LENGTH);
 	current_chromosome = ( char* ) malloc (sizeof(char) * 100);
 
-	//buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
+//buffer = ( char* ) malloc (sizeof(char) * BUFFER_SIZE);
 	abridge_index = allocateMemoryAbridge_Index ();
 	sam_alignment = allocateMemorySam_Alignment ();
 	whole_genome = ( struct Whole_Genome_Sequence* ) malloc (sizeof(struct Whole_Genome_Sequence));
@@ -497,19 +500,19 @@ void decompressFile (
 	flag_ignore_alignment_scores = strtol (split_on_tilde[1] ,
 			&convert_to_int_temp ,
 			10);
-
-	printf ("\nflag_ignore_mismatches %d" , flag_ignore_mismatches);
-	printf ("\nflag_ignore_soft_clippings %d" , flag_ignore_soft_clippings);
-	printf ("\nflag_ignore_unmapped_sequences %d" ,
-			flag_ignore_unmapped_sequences);
-	printf ("\nflag_ignore_quality_score %d" ,
-			flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
-	printf ("\nflag_save_all_quality_scores %d" ,
-			flag_ignore_quality_scores_for_matched_bases);
-	printf ("\nflag_save_exact_quality_scores %d" ,
-			flag_ignore_alignment_scores);
-	fflush (stdout);
-
+	/*
+	 printf ("\nflag_ignore_mismatches %d" , flag_ignore_mismatches);
+	 printf ("\nflag_ignore_soft_clippings %d" , flag_ignore_soft_clippings);
+	 printf ("\nflag_ignore_unmapped_sequences %d" ,
+	 flag_ignore_unmapped_sequences);
+	 printf ("\nflag_ignore_quality_score %d" ,
+	 flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	 printf ("\nflag_save_all_quality_scores %d" ,
+	 flag_ignore_quality_scores_for_matched_bases);
+	 printf ("\nflag_save_exact_quality_scores %d" ,
+	 flag_ignore_alignment_scores);
+	 fflush (stdout);
+	 */
 	line_num = 0;
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
@@ -584,17 +587,19 @@ void decompressFile (
 				split_on_tilde ,
 				read_names ,
 				default_quality_value ,
+
 				flag_ignore_alignment_scores ,
 				flag_ignore_mismatches ,
 				flag_ignore_soft_clippings ,
 				flag_ignore_unmapped_sequences ,
 				flag_ignore_quality_score ,
 				flag_ignore_sequence_information ,
+				flag_ignore_quality_scores_for_matched_bases ,
+
 				&read_number ,
 				&total_mapped_reads ,
 				fhw ,
 				fhr_qual ,
-				flag_ignore_quality_scores_for_matched_bases ,
 				number_of_columns ,
 				curr_position ,
 				current_chromosome ,
@@ -675,8 +680,8 @@ int main (int argc, char *argv[])
 
 	struct arguments arguments;
 
-	// Parse our arguments; every option seen by parse_opt will be reflected in arguments.
-	// Default values.
+// Parse our arguments; every option seen by parse_opt will be reflected in arguments.
+// Default values.
 	arguments.reference = ""; // Empty string - only contains null character
 	arguments.outputfilename = "";
 	arguments.compressedfile = "";

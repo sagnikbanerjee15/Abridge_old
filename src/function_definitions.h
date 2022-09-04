@@ -600,6 +600,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
 		short int flag_ignore_all_quality_score,
+		short int flag_ignore_quality_scores_for_matched_bases,
 		short int flag_ignore_sequence_information,
 		char *default_quality_value,
 		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
@@ -700,7 +701,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		{
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] = '\0';
-			if ( flag_ignore_all_quality_score == 0 )
+			if ( flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
@@ -713,7 +714,7 @@ void convertIcigarToCigarandMDPairedEnded (
 		{
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index] = cigar_items_instance[i].def - 32;
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index + 1] = '\0';
-			if ( flag_ignore_all_quality_score == 0 )
+			if ( flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
@@ -780,7 +781,7 @@ void convertIcigarToCigarandMDPairedEnded (
 							sam_alignment_instance->md_extended[MD_extended_index++ ] = '%';
 							break;
 					}
-					if ( flag_ignore_all_quality_score == 0 )
+					if ( flag_ignore_quality_scores_for_matched_bases == 1 )
 					{
 						i++;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
@@ -817,7 +818,7 @@ void convertIcigarToCigarandMDPairedEnded (
 							sam_alignment_instance->md_extended[MD_extended_index++ ] = '=';
 						}
 
-						if ( flag_ignore_all_quality_score == 0 )
+						if ( flag_ignore_quality_scores_for_matched_bases == 1 )
 						{
 							for ( j = 0 ; j < cigar_items_instance[i].len ;
 									j++ )
@@ -859,7 +860,7 @@ void convertIcigarToCigarandMDPairedEnded (
 									break;
 							}
 						}
-						if ( flag_ignore_all_quality_score == 0 )
+						if ( flag_ignore_quality_scores_for_matched_bases == 1 )
 						{
 							i++;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
