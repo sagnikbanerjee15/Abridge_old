@@ -31,7 +31,7 @@ static struct argp_option options[] =
 { "ignoresequence" , 's' , 0 , 0 , "Flag to ignore sequence generation during decompression" , 0 } ,
 { "unmappedreadsfilename" , 'u' , "unmappedreadsfilename" , 0 , "Name of the file with unmapped reads" , 0 } ,
 { "qualityscoresfilename" , 'q' , "qualityscoresfilename" , 0 , "Name of the file with quality scores" , 0 } ,
-{ "maxreadsineachline" , 'x' , 0 , 0 , "Maximum number of reads mapped to a single reference nucleotide position" , 0 } ,
+{ "maxreadsineachline" , 'x' , "maxreadsineachline" , 0 , "Maximum number of reads mapped to a single reference nucleotide position" , 0 } ,
 { 0 , 0 , 0 , 0 , 0 , 0 } // Last entry should be all zeros in all fields
 };
 
@@ -96,7 +96,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			// Check if our inputsamfilename and outputfilename REQUIRED "options" have been set to non-default values
 			if ( strcmp (arguments->reference , "") == 0 || strcmp (arguments->outputfilename ,
 					"") == 0 || strcmp (arguments->compressedfile , "") == 0 || strcmp (arguments->unmappedreadsfilename ,
-					"") == 0 || strcmp (arguments->qualityscoresfilename , "") == 0 )
+					"") == 0 || strcmp (arguments->qualityscoresfilename , "") == 0 || arguments->maxreadsineachline == 0 )
 			{
 				argp_usage (state);
 			}
@@ -1076,6 +1076,7 @@ int main (int argc, char *argv[])
 	arguments.mockquality = "I";
 	arguments.qualityscoresfilename = "";
 	arguments.unmappedreadsfilename = "";
+	arguments.maxreadsineachline = 0;
 
 	argp_parse ( &argp , argc , argv , 0 , 0 , &arguments);
 
