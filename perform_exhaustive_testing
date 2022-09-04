@@ -94,7 +94,7 @@ def main():
                                        "samtools":"1.14"
                                     }
         
-        
+    framework_of_choice = "singularity"
     if framework_of_choice == "docker":
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
