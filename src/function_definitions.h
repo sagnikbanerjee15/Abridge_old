@@ -1049,7 +1049,7 @@ void convertIcigarToCigarandMDSingleEnded (
 			sam_alignment_instance->soft_clippings.left[left_soft_clip_index + 1] = '\0';
 			if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 			{
-				i++;
+				//i++;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def - 90;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index + 1] = '\0';
 			}
@@ -1062,7 +1062,7 @@ void convertIcigarToCigarandMDSingleEnded (
 			sam_alignment_instance->soft_clippings.right[right_soft_clip_index + 1] = '\0';
 			if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 			{
-				i++;
+				//i++;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def - 90;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index + 1] = '\0';
 			}
@@ -3214,6 +3214,7 @@ long long int extractNHfromicigar (char *icigar, int icigar_length)
 
 	j = 0;
 	nh_val_string[j] = '\0';
+
 	for ( i = icigar_length - 1 ; i >= 0 ; i-- )
 	{
 		if ( isdigit (icigar[i]) == 0 ) break;
