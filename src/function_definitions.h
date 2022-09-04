@@ -1283,7 +1283,13 @@ void convertIcigarToCigarandMDSingleEnded (
 		for ( i = 0 ; i < length_of_read ; i++ )
 			sam_alignment_instance->qual[i] = default_quality_value[0];
 		sam_alignment_instance->qual[i] = '\0';
-		//printf ("\ncigar %s cigar_items_instance_index = %d length_of_read = %d %s" , sam_alignment_instance->cigar , cigar_items_instance_index , length_of_read , sam_alignment_instance->qual);
+		printf ("\nicigar %s cigar %s MD %s cigar_items_instance_index = %d length_of_read = %d %s" ,
+				sam_alignment_instance->icigar ,
+				sam_alignment_instance->cigar ,
+				sam_alignment_instance->tags[2].val ,
+				cigar_items_instance_index ,
+				length_of_read ,
+				sam_alignment_instance->qual);
 	}
 }
 
