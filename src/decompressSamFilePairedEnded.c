@@ -685,6 +685,7 @@ int main (int argc, char *argv[])
 	arguments.mockquality = "I";
 	arguments.qualityscoresfilename = "";
 	arguments.unmappedreadsfilename = "";
+	arguments.maxreadsineachline = 0;
 
 	argp_parse ( &argp , argc , argv , 0 , 0 , &arguments);
 
