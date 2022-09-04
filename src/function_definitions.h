@@ -1038,6 +1038,9 @@ void convertIcigarToCigarandMDSingleEnded (
 
 	for ( i = 0 ; i < icigar_items_instance_index ; i++ )
 	{
+		printf ("\n Currently processing %s %d" ,
+				cigar_items_instance[i].def ,
+				cigar_items_instance[i].len);
 		if ( processing_left_soft_clip == 1 && isCharacterInString ("atgcn" ,
 				cigar_items_instance[i].def) )
 		{
@@ -1175,33 +1178,31 @@ void convertIcigarToCigarandMDSingleEnded (
 					else if ( isCharacterInString (mismatch_characters ,
 							cigar_items_instance[i].def) )
 					{
-						if ( isCharacterInString (mismatch_characters ,
-								cigar_items_instance[i].def) )
+
+						switch ( cigar_items_instance[i].def )
 						{
-							switch ( cigar_items_instance[i].def )
-							{
-								case '&':
-									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'A';
-									sam_alignment_instance->md_extended[MD_extended_index++ ] = '&';
-									break;
-								case '\'':
-									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'T';
-									sam_alignment_instance->md_extended[MD_extended_index++ ] = '\'';
-									break;
-								case '(':
-									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'G';
-									sam_alignment_instance->md_extended[MD_extended_index++ ] = '(';
-									break;
-								case ')':
-									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'C';
-									sam_alignment_instance->md_extended[MD_extended_index++ ] = ')';
-									break;
-								case '*':
-									sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'N';
-									sam_alignment_instance->md_extended[MD_extended_index++ ] = '*';
-									break;
-							}
+							case '&':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'A';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '&';
+								break;
+							case '\'':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'T';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '\'';
+								break;
+							case '(':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'G';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '(';
+								break;
+							case ')':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'C';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = ')';
+								break;
+							case '*':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'N';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '*';
+								break;
 						}
+
 						if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 						{
 							i++;
