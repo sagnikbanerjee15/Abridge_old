@@ -1210,7 +1210,7 @@ void convertIcigarToCigarandMDSingleEnded (
 
 						if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
 						{
-							i++;
+							//i++;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
 							soft_clips_removed_qual_index++;
