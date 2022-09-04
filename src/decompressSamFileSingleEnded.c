@@ -37,8 +37,6 @@ void writeAlignmentToFileSingleEnded (
 	ssize_t line_len;
 
 	int read_name_index = 0;
-	printf ("\nInside writeAlignments %d" ,
-			number_of_repititions_of_the_same_reads);
 	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
 	{
 		line_to_be_written_to_file[0] = '\0';
@@ -505,7 +503,6 @@ void convertToAlignmentSingleEnded (
 		 fflush(stdout);
 		 */
 
-		printf ("\nWriting alignment for %s" , sam_alignment_instance->icigar);
 		writeAlignmentToFileSingleEnded (sam_alignment_instance ,
 				cigar_items_instance_for_writing_to_file ,
 				flag_ignore_sequence_information ,
@@ -781,8 +778,6 @@ void decompressFile (
 	while ( ( line_len = getline ( &buffer , &len , fhr) ) != -1 )
 	{
 		line_num++;
-		if ( line_num == 5 ) return;
-		printf ("\n%s" , buffer);
 		/*
 		 printf("\nStarting new line");
 		 printf("\nline_num = %d %d %s", line_num, strlen(buffer), buffer);
@@ -864,7 +859,6 @@ void decompressFile (
 		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 		 continue;
 		 */
-		printf ("\nThe compressed data %s" , buffer);
 		convertToAlignmentSingleEnded (sam_alignment_instance ,
 				cigar_items_instance_for_writing ,
 				whole_genome ,

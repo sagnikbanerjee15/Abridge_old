@@ -80,7 +80,6 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 --compress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test \
 --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
 --preserve_all_intermediate_files --keep_intermediate_error_files \
---ignore_alignment_scores \
 1> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test.output \
 2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test.error &
 
@@ -109,6 +108,16 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 --keep_intermediate_error_files \
 > /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_decompress_test.output \
 2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_decompress_test.error &
+
+
+nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
+--inputabrfilename /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test/SRR13711353_PE.abridge \
+--decompress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_decompress_test \
+--genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa \
+--preserve_all_intermediate_files \
+--keep_intermediate_error_files \
+> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_decompress_test.output \
+2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_decompress_test.error &
 
 ###################################################################
 # Commands for creating smaller sam file for testing purpose
