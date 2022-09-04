@@ -1150,68 +1150,72 @@ void convertIcigarToCigarandMDSingleEnded (
 					cigar_items_instance[i].def) )
 			{
 				num = 0;
-
-				if ( isCharacterInString ("BEFHJKLOPQRU" ,
-						cigar_items_instance[i].def) )
+				while ( i < icigar_items_instance_index && ( isCharacterInString ("BEFHJKLOPQRU" ,
+						cigar_items_instance[i].def) || isCharacterInString (mismatch_characters ,
+						cigar_items_instance[i].def) ) )
 				{
-					for ( j = 0 ; j < cigar_items_instance[i].len ; j++ )
-					{
-						sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = '-';
-						sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index] = '\0';
-						sam_alignment_instance->md_extended[MD_extended_index++ ] = '=';
-					}
-
-					if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+					if ( isCharacterInString ("BEFHJKLOPQRU" ,
+							cigar_items_instance[i].def) )
 					{
 						for ( j = 0 ; j < cigar_items_instance[i].len ; j++ )
 						{
-							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = default_quality_value[0];
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = '-';
+							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index] = '\0';
+							sam_alignment_instance->md_extended[MD_extended_index++ ] = '=';
+						}
+
+						if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+						{
+							for ( j = 0 ; j < cigar_items_instance[i].len ;
+									j++ )
+							{
+								sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = default_quality_value[0];
+								sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
+								soft_clips_removed_qual_index++;
+							}
+						}
+						num += cigar_items_instance[i].len;
+					}
+					else if ( isCharacterInString (mismatch_characters ,
+							cigar_items_instance[i].def) )
+					{
+						switch ( cigar_items_instance[i].def )
+						{
+							case '&':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'A';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '&';
+								break;
+							case '\'':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'T';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '\'';
+								break;
+							case '(':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'G';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '(';
+								break;
+							case ')':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'C';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = ')';
+								break;
+							case '*':
+								sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'N';
+								sam_alignment_instance->md_extended[MD_extended_index++ ] = '*';
+								break;
+						}
+
+						if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
+						{
+							i++;
+							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
 							soft_clips_removed_qual_index++;
 						}
+						num++;
 					}
-					num += cigar_items_instance[i].len;
+					i++;
+					flag = 1;
 				}
-				else if ( isCharacterInString (mismatch_characters ,
-						cigar_items_instance[i].def) )
-				{
-					switch ( cigar_items_instance[i].def )
-					{
-						case '&':
-							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'A';
-							sam_alignment_instance->md_extended[MD_extended_index++ ] = '&';
-							break;
-						case '\'':
-							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'T';
-							sam_alignment_instance->md_extended[MD_extended_index++ ] = '\'';
-							break;
-						case '(':
-							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'G';
-							sam_alignment_instance->md_extended[MD_extended_index++ ] = '(';
-							break;
-						case ')':
-							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'C';
-							sam_alignment_instance->md_extended[MD_extended_index++ ] = ')';
-							break;
-						case '*':
-							sam_alignment_instance->soft_clips_removed_seq[soft_clips_removed_seq_index++ ] = 'N';
-							sam_alignment_instance->md_extended[MD_extended_index++ ] = '*';
-							break;
-					}
-
-					if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 0 )
-					{
-						i++;
-						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def - 90;
-						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index + 1] = '\0';
-						soft_clips_removed_qual_index++;
-					}
-					num++;
-				}
-				//i++;
-				flag = 1;
-
-				//i--;
+				i--;
 				sprintf (temp , "%d" , num);
 				strcat (sam_alignment_instance->cigar , temp);
 				strcat (sam_alignment_instance->cigar , "M");
