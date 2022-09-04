@@ -91,6 +91,10 @@ TEMP_OUTPUT_DIRECTORY = "/90daydata/maizegdb/sagnik/ABRIDGE/testing"
 list_of_directories.append(MAIN_OUTPUT_DIRECTORY)
 list_of_directories.append(TEMP_OUTPUT_DIRECTORY)
 
+volumes_list = [f"{MAIN_OUTPUT_DIRECTORY}:{MAIN_OUTPUT_DIRECTORY}",
+                f"{TEMP_OUTPUT_DIRECTORY}:{TEMP_OUTPUT_DIRECTORY}"
+                ]
+
 SINGULARITY_IMAGES = f"{MAIN_OUTPUT_DIRECTORY}/singularity_images"
 list_of_directories.append(SINGULARITY_IMAGES)
 
