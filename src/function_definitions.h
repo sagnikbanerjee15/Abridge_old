@@ -1274,7 +1274,7 @@ void convertIcigarToCigarandMDSingleEnded (
 		sam_alignment_instance->seq[i] = '\0';
 		sam_alignment_instance->qual[i] = '\0';
 	}
-	if ( flag_ignore_all_quality_scores_for_mismatched_bases_and_soft_clips == 1 )
+	if ( flag_ignore_all_quality_scores == 1 )
 	{
 		cigar_items_instance_index = 0;
 		splitCigar (sam_alignment_instance->cigar ,
@@ -1769,7 +1769,7 @@ void generateIntegratedCigarSingleEnded (
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_mismatches,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_all_quality_score,
+		short int flag_ignore_all_quality_scores,
 		short int flag_ignore_quality_scores_for_matched_bases,
 		struct Whole_Genome_Sequence *whole_genome,
 		struct Sam_Alignment *sam_alignment_instance_diagnostics,
@@ -1919,7 +1919,7 @@ void generateIntegratedCigarSingleEnded (
 				curr_alignment->md_extended ,
 				curr_alignment->icigar ,
 				curr_alignment->splices ,
-				flag_ignore_all_quality_score ,
+				flag_ignore_all_quality_scores ,
 				flag_ignore_quality_scores_for_matched_bases ,
 				flag_ignore_mismatches);
 	else
@@ -1972,7 +1972,7 @@ void generateIntegratedCigarSingleEnded (
 	{
 		if ( left_soft_clip_point != 0 && right_soft_clip_point == 0 )
 		{
-			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_scores == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -1991,7 +1991,7 @@ void generateIntegratedCigarSingleEnded (
 		else if ( left_soft_clip_point == 0 && right_soft_clip_point != 0 )
 		{
 			strcpy (curr_alignment->temp , curr_alignment->icigar);
-			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_scores == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -2008,7 +2008,7 @@ void generateIntegratedCigarSingleEnded (
 		}
 		else if ( left_soft_clip_point != 0 && right_soft_clip_point != 0 )
 		{
-			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_scores == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = 0;
 				for ( i = 0 ;
@@ -2025,7 +2025,7 @@ void generateIntegratedCigarSingleEnded (
 
 			strcat (curr_alignment->temp , curr_alignment->icigar);
 
-			if ( flag_ignore_all_quality_score == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
+			if ( flag_ignore_all_quality_scores == 0 && flag_ignore_quality_scores_for_matched_bases == 1 )
 			{
 				int j = strlen (curr_alignment->temp);
 				for ( i = 0 ;
@@ -2197,7 +2197,8 @@ void generateIntegratedCigarSingleEnded (
 				flag_ignore_mismatches ,
 				flag_ignore_soft_clippings ,
 				flag_ignore_unmapped_sequences ,
-				flag_ignore_all_quality_score ,
+				flag_ignore_all_quality_scores ,
+				flag_ignore_quality_scores_for_matched_bases ,
 				0 ,
 				&dummy);
 		/************************************************************************
