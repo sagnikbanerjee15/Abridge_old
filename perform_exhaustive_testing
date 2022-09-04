@@ -53,6 +53,7 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
     """
     Executes the command within the requested framework
     """
+    print(f"Executing {cmd}")
     if framework_of_choice == "docker":
         runDockerCommand( logging,
                           name = software,
