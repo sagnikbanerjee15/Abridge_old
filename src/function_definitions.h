@@ -1291,6 +1291,11 @@ void convertIcigarToCigarandMDSingleEnded (
 				length_of_read ,
 				sam_alignment_instance->qual);
 	}
+
+	printf ("\nicigar %s cigar %s MD %s " ,
+			sam_alignment_instance->icigar ,
+			sam_alignment_instance->cigar ,
+			sam_alignment_instance->tags[2].val);
 }
 
 void extractSubString (char *str, char *substr, int start_index, int end_index)
