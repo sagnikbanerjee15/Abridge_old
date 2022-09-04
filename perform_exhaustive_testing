@@ -93,10 +93,6 @@ def main():
                                        "star":"2.7.9a",
                                        "samtools":"1.14"
                                     }
-
-    # Create all directories
-    for directory in list_of_directories:
-        os.system(f"mkdir -p {directory}")
         
         
     if framework_of_choice == "docker":
@@ -150,6 +146,7 @@ def main():
                                         cmd += f" 2> {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}.error"
                                         print(f"Starting - {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}")
                                         os.system(cmd)
+                                        sys.stdout.flush()
                                         print(f"Completed - {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}")
                                         
                                         cmd = f"mv {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names} {OUTPUT_DIRECTORY_MAIN}"
