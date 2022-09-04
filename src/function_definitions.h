@@ -1038,9 +1038,10 @@ void convertIcigarToCigarandMDSingleEnded (
 
 	for ( i = 0 ; i < icigar_items_instance_index ; i++ )
 	{
-		printf ("\n Currently processing %c %d" ,
+		printf ("\n Currently processing %c %d icigar_items_instance_index %d" ,
 				cigar_items_instance[i].def ,
-				cigar_items_instance[i].len);
+				cigar_items_instance[i].len ,
+				icigar_items_instance_index);
 		if ( processing_left_soft_clip == 1 && isCharacterInString ("atgcn" ,
 				cigar_items_instance[i].def) )
 		{
@@ -1178,7 +1179,6 @@ void convertIcigarToCigarandMDSingleEnded (
 					else if ( isCharacterInString (mismatch_characters ,
 							cigar_items_instance[i].def) )
 					{
-
 						switch ( cigar_items_instance[i].def )
 						{
 							case '&':
