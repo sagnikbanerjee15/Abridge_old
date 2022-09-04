@@ -57,6 +57,7 @@ def runSingularityCommand(name, version, image_location, container_name, volumes
         singularity_cmd += f" {command}"
     
     print( f"Running command - {singularity_cmd}" )
+    sys.stdout.flush()
     os.system( singularity_cmd )
     
 
