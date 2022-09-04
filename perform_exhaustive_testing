@@ -42,12 +42,20 @@ def runSingularityCommand(name, version, image_location, container_name, volumes
     """
 
     # Runs the main command
-    singularity_cmd = f" singularity exec  "
-    # singularity_cmd += f" --hostname {container_name}"
-    for mapping in volumes:
-        singularity_cmd += f" -B {mapping}"
-    singularity_cmd += f" {image_location} "
-    singularity_cmd += f" bash -c '{command}'"
+    
+    if "sratools" not in image_location:
+        singularity_cmd = f" singularity exec  "
+        for mapping in volumes:
+            singularity_cmd += f" -B {mapping}"
+        singularity_cmd += f" {image_location} "
+        singularity_cmd += f" bash -c '{command}'"
+    else:
+        singularity_cmd = f" singularity exec  "
+        for mapping in volumes:
+            singularity_cmd += f" -B {mapping}"
+        singularity_cmd += f" {image_location} "
+        singularity_cmd += f" {command}"
+    
     print( f"Running command - {singularity_cmd}" )
     os.system( singularity_cmd )
     
