@@ -1038,7 +1038,7 @@ void convertIcigarToCigarandMDSingleEnded (
 
 	for ( i = 0 ; i < icigar_items_instance_index ; i++ )
 	{
-		printf ("\n Currently processing %s %d" ,
+		printf ("\n Currently processing %c %d" ,
 				cigar_items_instance[i].def ,
 				cigar_items_instance[i].len);
 		if ( processing_left_soft_clip == 1 && isCharacterInString ("atgcn" ,
