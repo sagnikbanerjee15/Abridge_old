@@ -1107,6 +1107,7 @@ int main (int argc, char *argv[])
 	strcpy(name_of_file_with_quality_scores , arguments.qualityscoresfilename);
 	max_reads_in_each_line = arguments.maxreadsineachline;
 
+	return 0;
 	/********************************************************************/
 	decompressFile (name_of_file_with_quality_scores ,
 			genome_filename ,
