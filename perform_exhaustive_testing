@@ -78,6 +78,7 @@ def executeCommand(options, software, version, volumes_list, singularity_sif_loc
 #####################################################################################################################################################################
 
 CPU = 45
+framework_of_choice = "singularitu"
 transfer_to_temp_directory = True # Change this flag if transfer of data and results to temporary data storage is not required
 
 list_of_directories = []
