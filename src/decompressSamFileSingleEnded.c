@@ -24,7 +24,6 @@ static struct argp_option options[] =
 { "ignoresequence" , 's' , 0 , 0 , "Flag to ignore sequence generation during decompression" , 0 } ,
 { "unmappedreadsfilename" , 'u' , 0 , "unmappedreadsfilename" , "Name of the file with unmapped reads" , 0 } ,
 { "qualityscoresfilename" , 'q' , 0 , "qualityscoresfilename" , "Name of the file with quality scores" , 0 } ,
-{ "dictionaryfilename" , 'd' , 0 , "dictionaryfilename" , "Name of the dictionary" , 0 } ,
 { "maxreadsineachline" , 'x' , 0 , "maxreadsineachline" , "Maximum number of reads mapped to a single reference nucleotide position" , 0 } ,
 { 0 , 0 , 0 , 0 , 0 , 0 } // Last entry should be all zeros in all fields
 };
@@ -66,7 +65,6 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 		case 'o':
 			arguments->outputfilename = arg;
 			break;
-
 		case 'c':
 			arguments->compressedfile = arg;
 			break;
@@ -81,9 +79,6 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			break;
 		case 'q':
 			arguments->qualityscoresfilename = arg;
-			break;
-		case 'd':
-			arguments->dictionaryfilename = arg;
 			break;
 		case 'x':
 			arguments->maxreadsineachline = strtol (arg , &temp , 10);
@@ -1067,7 +1062,6 @@ int main (int argc, char *argv[])
 	arguments.reference = ""; // Empty string - only contains null character
 	arguments.outputfilename = "";
 	arguments.compressedfile = "";
-	arguments.dictionaryfilename = "";
 	arguments.ignoresequence = 0;
 	arguments.mockquality = "I";
 	arguments.qualityscoresfilename = "";
@@ -1101,7 +1095,7 @@ int main (int argc, char *argv[])
 	flag_ignore_sequence_information = arguments.ignoresequence;
 	strcpy(unmapped_filename , arguments.unmappedreadsfilename);
 	strcpy(name_of_file_with_quality_scores , arguments.qualityscoresfilename);
-	max_reads_in_each_line = arguments->maxreadsineachline;
+	max_reads_in_each_line = arguments.maxreadsineachline;
 
 	/********************************************************************/
 	decompressFile (name_of_file_with_quality_scores ,
