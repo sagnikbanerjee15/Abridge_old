@@ -153,7 +153,7 @@ def main():
                                         
                                         print(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}[:-4].abridge")
                                         print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type}[:-4].abridge")
-                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}[:-4].abridge") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type}[:-4].abridge") == False:
+                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type[:-4]}.abridge") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-4]}.abridge") == False:
                                             os.system(cmd)
                                             cmd = f"mv {output_directory} {OUTPUT_DIRECTORY_TEMP}/abridge_compressed"
                                             os.system(cmd)
