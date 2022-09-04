@@ -337,27 +337,35 @@ void writeToFile (
 		{
 			for ( j = 0 ; j < compressed_ds_pool[i]->num_reads ; j++ )
 			{
-				if ( returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar ,
-						samformatflag_replacer_characters) ,
-						samflag_dictionary ,
-						number_of_unique_samformatflags) == '+' )
-				{
-					for ( k = 0 ;
-							compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
-							k++ )
-						qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
-					qual[k] = '\0';
-				}
-				else if ( returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar ,
-						samformatflag_replacer_characters) ,
-						samflag_dictionary ,
-						number_of_unique_samformatflags) == '-' )
-				{
-					for ( k = strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 ;
-							k >= 0 ; k-- )
-						qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
-					qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j])] = '\0';
-				}
+				/*
+				 // Reversing quality scores if the read was mapped to the reverse strand
+				 if ( returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar ,
+				 samformatflag_replacer_characters) ,
+				 samflag_dictionary ,
+				 number_of_unique_samformatflags) == '+' )
+				 {
+				 for ( k = 0 ;
+				 compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
+				 k++ )
+				 qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+				 qual[k] = '\0';
+				 }
+				 else if ( returnDirection (findMatchCharacterIcigar (compressed_ds_pool[i]->icigar ,
+				 samformatflag_replacer_characters) ,
+				 samflag_dictionary ,
+				 number_of_unique_samformatflags) == '-' )
+				 {
+				 for ( k = strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 ;
+				 k >= 0 ; k-- )
+				 qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+				 qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j])] = '\0';
+				 }*/
+
+				for ( k = 0 ;
+						compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
+						k++ )
+					qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+				qual[k] = '\0';
 				fprintf (fhw_qual , "%s" , "\n");
 				fprintf (fhw_qual , "%s" , "\n");
 				fprintf (fhw_qual , "%s" , "\n");

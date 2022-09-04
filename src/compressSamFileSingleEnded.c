@@ -292,13 +292,22 @@ void writeToFile (
 					case 'O':
 					case 'Q':
 					case 'U':
-						for ( k = strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 ;
-								k >= 0 ; k-- )
-						{
-							qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
-							//printf ("\n Read name check %s" , compressed_ds_pool[i]->pointers_to_read_names[j]);
-						}
-						qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j])] = '\0';
+						/*
+						 //Reverse the quality scores if alignment was to the other strand
+						 for ( k = strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 ;
+						 k >= 0 ; k-- )
+						 {
+						 qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j]) - 1 - k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+						 //printf ("\n Read name check %s" , compressed_ds_pool[i]->pointers_to_read_names[j]);
+						 }
+						 qual[strlen (compressed_ds_pool[i]->pointers_to_qual_scores[j])] = '\0';
+						 */
+
+						for ( k = 0 ;
+								compressed_ds_pool[i]->pointers_to_qual_scores[j][k] != '\0' ;
+								k++ )
+							qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k] - 90;
+						qual[k] = '\0';
 						break;
 				}
 				// Writing dummy lines for fclqc
