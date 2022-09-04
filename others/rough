@@ -74,7 +74,6 @@ STAR \
 #####################################################################################################################################################
 # Whole sample
 
-rm -rf SRR13711353_SE_compress_test/inputalignedfilename* SRR13711353_SE_compress_test/sorted_read_names* SRR13711353_SE_compress_test/*abridge
 nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 -ialigned /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE.sam \
 --compress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test \
@@ -83,8 +82,7 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 1> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test.output \
 2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_SE_compress_test.error &
 
-
-rm -rf SRR13711353_PE_compress_test/inputalignedfilename* SRR13711353_PE_compress_test/sorted_read_names* SRR13711353_PE_compress_test/*abridge 
+ 
 nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 -ialigned /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE.sam \
 --compress -o /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_compress_test \
@@ -97,7 +95,7 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
 
 #####################################################################################################################################################
-# Deompress
+# Decompress
 #####################################################################################################################################################
 
 nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \

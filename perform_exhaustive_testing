@@ -1,0 +1,207 @@
+#! /usr/bin/env python3
+
+#####################################################################################################################################################################
+#
+# A standalone script created for the purpose of testing abridge
+# Script does not take any inputs and all the required information is hard coded intentionally to prevent it from being accidentally executed in the future
+# Script will also perform download and alignment of all sequences
+# Can be executed without any changes on Ceres
+# 
+# Tests carried out by this script:
+#     - 2 types of STAR alignments - one with 
+# 
+#####################################################################################################################################################################
+
+def runDockerCommand( logging, name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a docker container
+    """
+
+    # Runs the main command
+    docker_cmd = f" docker run "
+    # docker_cmd += f" -ti "
+    docker_cmd += f" --rm "
+    docker_cmd += f" --cpus={cpus}"
+    docker_cmd += f" --memory='{memory}'"
+    # docker_cmd += f" --name {container_name}"
+    for mapping in volumes:
+        docker_cmd += f" -v {mapping}"
+    docker_cmd += f" {image_location}:{version} "
+    docker_cmd += f" bash -c '{command}'"
+    logging.info( f"Running command - {docker_cmd}" )
+    os.system( docker_cmd )
+
+def runSingularityCommand( logging, name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a Singularity container
+    """
+
+    # Runs the main command
+    singularity_cmd = f" singularity exec  "
+    # singularity_cmd += f" --hostname {container_name}"
+    for mapping in volumes:
+        singularity_cmd += f" -B {mapping}"
+    singularity_cmd += f" {image_location} "
+    singularity_cmd += f" bash -c '{command}'"
+    os.system( singularity_cmd )
+    logging.info( f"Running command - {singularity_cmd}" )
+
+def executeCommand(options, software, version, volumes_list, singularity_sif_location, cmd):
+    """
+    Executes the command within the requested framework
+    """
+    if options.framework == "docker":
+        runDockerCommand( logging,
+                          name = software,
+                            version = version,
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '1g'
+            )
+    elif options.framework == "singularity":
+        runSingularityCommand( logging,
+                            name = software,
+                            version = version,
+                            image_location = singularity_sif_location,
+                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            volumes = volumes_list,
+                            command = cmd,
+                            cpus = options.cpu,
+                            memory = '1g'
+                            )
+
+#####################################################################################################################################################################
+# Variable declaration
+#####################################################################################################################################################################
+
+CPU = 45
+transfer_to_temp_directory = True # Change this flag if transfer of data and results to temporary data storage is not required
+
+list_of_directories = []
+
+MAIN_OUTPUT_DIRECTORY = "/project/maizegdb/sagnik/ABRIDGE/testing" 
+TEMP_OUTPUT_DIRECTORY = "/90daydata/maizegdb/sagnik/ABRIDGE/testing"
+list_of_directories.append(MAIN_OUTPUT_DIRECTORY)
+list_of_directories.append(TEMP_OUTPUT_DIRECTORY)
+
+SINGULARITY_IMAGES = f"{MAIN_OUTPUT_DIRECTORY}/singularity_images"
+list_of_directories.append(SINGULARITY_IMAGES)
+
+REFERENCE_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/reference"
+REFERENCE_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/reference"
+list_of_directories.append(REFERENCE_MAIN_OUTPUT_DIRECTORY)
+list_of_directories.append(REFERENCE_TEMP_OUTPUT_DIRECTORY)
+
+STAR_INDEX_GENOME_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/star_index/genome"
+STAR_INDEX_GENOME_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/star_index/genome"
+list_of_directories.append(STAR_INDEX_GENOME_MAIN_OUTPUT_DIRECTORY)
+list_of_directories.append(STAR_INDEX_GENOME_TEMP_OUTPUT_DIRECTORY)
+
+SRA_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/sra_files"
+SRA_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/sra_files"
+list_of_directories.append(SRA_MAIN_OUTPUT_DIRECTORY)
+list_of_directories.append(SRA_TEMP_OUTPUT_DIRECTORY)
+
+FASTQ_MAIN_OUTPUT_DIRECTORY = f"{MAIN_OUTPUT_DIRECTORY}/fastq_files"
+FASTQ_TEMP_OUTPUT_DIRECTORY = f"{TEMP_OUTPUT_DIRECTORY}/fastq_files"
+list_of_directories.append(FASTQ_MAIN_OUTPUT_DIRECTORY)
+list_of_directories.append(FASTQ_TEMP_OUTPUT_DIRECTORY)
+
+reference = {"ARATH":
+                {"genome":
+                    {
+                    "web_link":"http://ftp.ensemblgenomes.org/pub/plants/release-54/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz",
+                    "local_main": f"{REFERENCE_MAIN_OUTPUT_DIRECTORY}/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+                    "local_temp": f"{REFERENCE_TEMP_OUTPUT_DIRECTORY}/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa",
+                    "sra": "SRR13711353"
+                    }
+                }
+            }
+
+sra_id = "SRR13711353"
+
+def main():
+    list_of_softwares_with_versions = {"sratools":"3.0.0",
+                                       "star":"2.7.9a",
+                                       "samtools":"1.14",
+                                       "bowtie":"0.7.17"
+                                    }
+
+    if framework_of_choice == "docker":
+        for software in list_of_softwares_with_versions:
+            version = list_of_softwares_with_versions[software]
+            os.system( f"docker pull ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
+    else:
+        for software in list_of_softwares_with_versions:
+            version = list_of_softwares_with_versions[software]
+            os.system( f"singularity pull {SINGULARITY_IMAGES}/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
+
+    # Create all directories
+    for directory in list_of_directories:
+        os.system(f"mkdir -p {directory}")
+        
+    #####################################################################################################################################################################
+    # Download reference files and sra data
+    #####################################################################################################################################################################
+    
+    # Download reference
+    if os.path.exists(reference["ARATH"]["genome"]["local_main"]) == False and os.path.exists(reference["ARATH"]["genome"]["local_temp"]): 
+        web_link = reference["ARATH"]["genome"]["web_link"]
+        output_filename = reference["ARATH"]["genome"]["local_main"]
+        cmd = f"wget -O {output_filename}.gz {web_link} "
+        os.system(cmd)
+        
+        cmd = f"gunzip {output_filename}.gz"
+        
+    # Download SRA file
+    if os.path.exists(f"{SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra") == False and os.path.exists(f"{SRA_TEMP_OUTPUT_DIRECTORY}/{sra_id}.sra") == False:
+        cmd  = f" prefetch "
+        cmd += f" -o {SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra "
+        cmd += f" {sra_id} "
+        
+        software = "sratools"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        
+    # Execute fasterq-dump
+    if (os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False) and (os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False):
+        cmd  = f"fasterq-dump "
+        cmd += f" --threads {CPU} "
+        cmd += f" --outdir {FASTQ_MAIN_OUTPUT_DIRECTORY}/"
+        cmd += f" --split-files "
+        cmd += f" --seq-defline '$ac_$sn_$rl/$ri' "
+        cmd += f" {SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra "
+        
+        software = "sratools"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        
+        cmd  = f"fasterq-dump "
+        cmd += f" --threads {CPU} "
+        cmd += f" --outdir {FASTQ_MAIN_OUTPUT_DIRECTORY}/"
+        cmd += f" --concatenate-reads "
+        cmd += f" --seq-defline '$ac_$sn_$rl_$ri' "
+        cmd += f" {SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra "
+        
+        software = "sratools"
+        version = list_of_softwares_with_versions[software]
+        executeCommand(options, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+    
+    if transfer_to_temp_directory:
+        file_origin = reference["ARATH"]["genome"]["local_main"]
+        file_dest = reference["ARATH"]["genome"]["local_temp"] 
+        cmd = f"mv {file_origin} {file_dest}"
+        os.system(cmd)
+        
+        file_origin = f"{SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra"
+        file_dest = f"{SRA_TEMP_OUTPUT_DIRECTORY}/{sra_id}.sra" 
+        cmd = f"mv {file_origin} {file_dest}"
+        os.system(cmd)
+    
+    
+
+if __name__ == "__main__":
+    main()
