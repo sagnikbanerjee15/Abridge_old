@@ -16,6 +16,6 @@
 #SBATCH --error=/project/maizegdb/sagnik/ABRIDGE/exhaustive_testing.error
 
 module load singularity
-module load python_3/3.9.1
+module load python_3/3.9.2
 
 python /project/maizegdb/sagnik/ABRIDGE/Abridge/perform_exhaustive_testing
