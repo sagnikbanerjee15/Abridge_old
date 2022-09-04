@@ -353,7 +353,7 @@ void convertToAlignmentSingleEnded (
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips,
+		short int flag_ignore_all_quality_scores,
 		short int flag_ignore_sequence_information,
 		unsigned long long int *read_number,
 		unsigned long long int *total_mapped_reads,
@@ -572,7 +572,8 @@ void convertToAlignmentSingleEnded (
 					flag_ignore_mismatches ,
 					flag_ignore_soft_clippings ,
 					flag_ignore_unmapped_sequences ,
-					flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips ,
+					flag_ignore_all_quality_scores ,
+					flag_ignore_quality_scores_for_matched_bases ,
 					flag_ignore_sequence_information ,
 					default_quality_value);
 			//printf ("\nConvertion completed");
@@ -656,7 +657,7 @@ void decompressFile (
 	short int flag_ignore_soft_clippings;
 	short int flag_ignore_unmapped_sequences;
 	short int flag_ignore_quality_scores_for_matched_bases;
-	short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
+	short int flag_ignore_all_quality_scores;
 	short int flag_ignore_alignment_scores;
 	short int number_of_columns;
 	short int read_names_stored;
@@ -847,7 +848,7 @@ void decompressFile (
 			10);
 
 	splitByDelimiter (split_on_tab[3] , ':' , split_on_tilde);
-	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = strtol (split_on_tilde[1] ,
+	flag_ignore_all_quality_scores = strtol (split_on_tilde[1] ,
 			&convert_to_int_temp ,
 			10);
 
@@ -974,7 +975,7 @@ void decompressFile (
 				flag_ignore_mismatches ,
 				flag_ignore_soft_clippings ,
 				flag_ignore_unmapped_sequences ,
-				flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips ,
+				flag_ignore_all_quality_scores ,
 				flag_ignore_sequence_information ,
 				&read_number ,
 				&total_mapped_reads ,
