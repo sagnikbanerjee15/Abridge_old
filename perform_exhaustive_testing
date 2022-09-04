@@ -193,24 +193,32 @@ def main():
         cmd += f" --threads {CPU} "
         cmd += f" --outdir {FASTQ_MAIN_OUTPUT_DIRECTORY}/"
         cmd += f" --split-files "
-        cmd += f" --seq-defline '$ac_$sn_$rl/$ri' "
-        cmd += f" {SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra "
+        cmd += f" --seq-defline '$ac_$sn_$rl_$ri' "
+        cmd += f" {sra_id} "
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
         executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        
+        cmd  = f" cat "
+        cmd += f" {FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_1.fastq "
+        cmd += f" {FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_2.fastq "
+        cmd += f" > {FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_0.fastq"
+        os.system(cmd)
         
         cmd  = f"fasterq-dump "
         cmd += f" --progress "
         cmd += f" --threads {CPU} "
         cmd += f" --outdir {FASTQ_MAIN_OUTPUT_DIRECTORY}/"
-        cmd += f" --concatenate-reads "
-        cmd += f" --seq-defline '$ac_$sn_$rl_$ri' "
-        cmd += f" {SRA_MAIN_OUTPUT_DIRECTORY}/{sra_id}.sra "
+        cmd += f" --split-files "
+        cmd += f" --seq-defline '$ac_$sn_$rl/$ri' "
+        cmd += f" {sra_id} "
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
         executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        
+        
     
     if transfer_to_temp_directory:
         file_origin = reference["ARATH"]["genome"]["local_main"]
