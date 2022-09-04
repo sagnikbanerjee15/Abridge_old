@@ -49,11 +49,11 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     os.system( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
 
-def executeCommand(software, version, volumes_list, singularity_sif_location, cmd):
+def executeCommand(framework_of_choice, software, version, volumes_list, singularity_sif_location, cmd):
     """
     Executes the command within the requested framework
     """
-    if options.framework == "docker":
+    if framework_of_choice == "docker":
         runDockerCommand( logging,
                           name = software,
                             version = version,
@@ -64,7 +64,7 @@ def executeCommand(software, version, volumes_list, singularity_sif_location, cm
                             cpus = options.cpu,
                             memory = '1g'
             )
-    elif options.framework == "singularity":
+    elif framework_of_choice == "singularity":
         runSingularityCommand( logging,
                             name = software,
                             version = version,
@@ -172,7 +172,7 @@ def main():
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
         
     # Execute fasterq-dump
     if (os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False) and (os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False):
@@ -185,7 +185,7 @@ def main():
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
         
         cmd  = f"fasterq-dump "
         cmd += f" --threads {CPU} "
@@ -196,7 +196,7 @@ def main():
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        executeCommand(framework_of_choice, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
     
     if transfer_to_temp_directory:
         file_origin = reference["ARATH"]["genome"]["local_main"]
