@@ -1154,6 +1154,10 @@ void convertIcigarToCigarandMDSingleEnded (
 						cigar_items_instance[i].def) || isCharacterInString (mismatch_characters ,
 						cigar_items_instance[i].def) ) )
 				{
+					printf ("\n Currently processing (match and mismatch) %c %d icigar_items_instance_index %d" ,
+							cigar_items_instance[i].def ,
+							cigar_items_instance[i].len ,
+							icigar_items_instance_index);
 					if ( isCharacterInString ("BEFHJKLOPQRU" ,
 							cigar_items_instance[i].def) )
 					{
