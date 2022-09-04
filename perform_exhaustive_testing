@@ -12,6 +12,9 @@
 # 
 #####################################################################################################################################################################
 
+import os
+import sys
+
 def runDockerCommand( logging, name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
     Runs the command in a docker container
