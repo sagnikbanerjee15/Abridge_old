@@ -15,6 +15,8 @@
 import os
 import sys
 
+CPU = 45
+
 def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
     Runs the command in a docker container
@@ -62,7 +64,7 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
                             container_name = f"{software}",
                             volumes = volumes_list,
                             command = cmd,
-                            cpus = options.cpu,
+                            cpus = CPU,
                             memory = '1g'
             )
     elif framework_of_choice == "singularity":
@@ -73,7 +75,7 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
                             container_name = f"{software}",
                             volumes = volumes_list,
                             command = cmd,
-                            cpus = options.cpu,
+                            cpus = CPU,
                             memory = '1g'
                             )
 
@@ -81,7 +83,7 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
 # Variable declaration
 #####################################################################################################################################################################
 
-CPU = 45
+
 framework_of_choice = "singularity"
 transfer_to_temp_directory = True # Change this flag if transfer of data and results to temporary data storage is not required
 
