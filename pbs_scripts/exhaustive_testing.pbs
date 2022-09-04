@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -n 1
+#SBATCH -n 45
 #SBATCH -N 1
 #SBATCH --partition=long
 ##SBATCH --partition=priority-mem768 
@@ -8,7 +8,7 @@
 #SBATCH --mem=150G
 #SBATCH --time=2-00:00:00
 #SBATCH --job-name="testing"
-#SBATCH --mail-user=sagnik@iastate.edu
+#SBATCH --mail-user=sagnikbanerjee15@gmail.com
 #SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
 #SBATCH --mail-type=FAIL
@@ -18,4 +18,4 @@
 module load singularity
 module load python_3/3.9.2
 
-python /project/maizegdb/sagnik/ABRIDGE/Abridge/perform_exhaustive_testing
+/project/maizegdb/sagnik/ABRIDGE/Abridge/perform_exhaustive_testing
