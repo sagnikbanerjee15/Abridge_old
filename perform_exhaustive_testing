@@ -49,7 +49,7 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     os.system( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
 
-def executeCommand(options, software, version, volumes_list, singularity_sif_location, cmd):
+def executeCommand(software, version, volumes_list, singularity_sif_location, cmd):
     """
     Executes the command within the requested framework
     """
@@ -58,7 +58,7 @@ def executeCommand(options, software, version, volumes_list, singularity_sif_loc
                           name = software,
                             version = version,
                             image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
-                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            container_name = f"{software}",
                             volumes = volumes_list,
                             command = cmd,
                             cpus = options.cpu,
@@ -69,7 +69,7 @@ def executeCommand(options, software, version, volumes_list, singularity_sif_loc
                             name = software,
                             version = version,
                             image_location = singularity_sif_location,
-                            container_name = f"{options.output_directory.split('/')[-1]}",
+                            container_name = f"{software}",
                             volumes = volumes_list,
                             command = cmd,
                             cpus = options.cpu,
@@ -130,8 +130,7 @@ sra_id = "SRR13711353"
 def main():
     list_of_softwares_with_versions = {"sratools":"3.0.0",
                                        "star":"2.7.9a",
-                                       "samtools":"1.14",
-                                       "bowtie":"0.7.17"
+                                       "samtools":"1.14"
                                     }
 
     # Create all directories
@@ -169,7 +168,7 @@ def main():
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        executeCommand(software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
         
     # Execute fasterq-dump
     if (os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_MAIN_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False) and (os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_0.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_1.fastq") == False or os.path.exists(f"{FASTQ_TEMP_OUTPUT_DIRECTORY}/{sra_id}_2.fastq") == False):
@@ -182,7 +181,7 @@ def main():
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        executeCommand(software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
         
         cmd  = f"fasterq-dump "
         cmd += f" --threads {CPU} "
@@ -193,7 +192,7 @@ def main():
         
         software = "sratools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
+        executeCommand(software, version, volumes_list, f"{SINGULARITY_IMAGES}/{software}:{version}", cmd)
     
     if transfer_to_temp_directory:
         file_origin = reference["ARATH"]["genome"]["local_main"]
