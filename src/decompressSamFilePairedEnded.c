@@ -125,7 +125,7 @@ void convertToAlignmentPairedEnded (
 		short int flag_ignore_mismatches,
 		short int flag_ignore_soft_clippings,
 		short int flag_ignore_unmapped_sequences,
-		short int flag_ignore_all_quality_score,
+		short int flag_ignore_all_quality_scores,
 		short int flag_ignore_sequence_information,
 		short int flag_ignore_quality_scores_for_matched_bases,
 
@@ -254,7 +254,7 @@ void convertToAlignmentPairedEnded (
 					flag_ignore_mismatches ,
 					flag_ignore_soft_clippings ,
 					flag_ignore_unmapped_sequences ,
-					flag_ignore_all_quality_score ,
+					flag_ignore_all_quality_scores ,
 					flag_ignore_quality_scores_for_matched_bases ,
 					flag_ignore_sequence_information ,
 					default_quality_value ,
