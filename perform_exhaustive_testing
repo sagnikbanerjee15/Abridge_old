@@ -139,6 +139,7 @@ def main():
                                             cmd += f" --skip_shortening_read_names "
                                             
                                         cmd += f" --inputalignedfilename  {alignment_filename} "
+                                        cmd += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
                                         cmd += f" --keep_intermediate_error_files "
                                         cmd += f" --preserve_all_intermediate_files "
                                         cmd += f" --output_directory {OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}"
