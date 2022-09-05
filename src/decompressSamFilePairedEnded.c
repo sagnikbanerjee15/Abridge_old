@@ -155,6 +155,7 @@ void convertToAlignmentPairedEnded (
 	char *temp; //Useless
 	char *distinct_icigars_in_a_line;
 	char *icigar;
+	char str_sprintf[50];
 
 	short int number_of_items_separated_by_underscore;
 	/********************************************************************/
