@@ -380,6 +380,7 @@ void convertToAlignmentSingleEnded (
 	char *temp; //Useless
 	char *distinct_icigars_in_a_line;
 	char *icigar;
+	char str_sprintf[50];
 
 	int read_names_index = 0;
 
@@ -591,9 +592,9 @@ void convertToAlignmentSingleEnded (
 			printf ("\nread_number = %d" , *read_number);
 			fflush (stdout);
 
-			sprintf(temp , "%llu" , *read_number);
+			sprintf(str_sprintf , "%llu" , *read_number);
 
-			printf ("\temp = %s" , *temp);
+			printf ("\ntemp = %s" , str_sprintf);
 			fflush (stdout);
 			( *read_number )++;
 			printf ("\ncopying into read name");
