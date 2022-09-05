@@ -634,6 +634,8 @@ void convertToAlignmentSingleEnded (
 		printf ("\nconvertToAlignmentSingleEnded Checkpoint 7");
 		fflush (stdout);
 	}
+	printf ("\nLeaving function convertToAlignmentSingleEnded");
+	fflush (stdout);
 }
 
 void decompressFile (
