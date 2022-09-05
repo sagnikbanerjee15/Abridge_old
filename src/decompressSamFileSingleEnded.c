@@ -590,6 +590,8 @@ void convertToAlignmentSingleEnded (
 			 }*/
 			sprintf(temp , "%d" , *read_number);
 			( *read_number )++;
+			printf ("\ncopying into read name");
+			fflush (stdout);
 			strcpy(sam_alignment_instance->read_name , temp);
 
 			printf ("\nconvertToAlignmentSingleEnded Checkpoint 5");
