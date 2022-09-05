@@ -1086,6 +1086,8 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     tags_present = returnTagList(options, options.inputalignedfilename, f"{options.output_directory}/temp_file_tags", list_of_softwares_with_versions, volumes_list)
     
     if tags_present["NH"] == 1 and options.skip_shortening_read_names == True: 
+        # Creating a dummy file
+        open(f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos","w").close()
         logging.info("Skipping the generation of short read names")
         return tags_present
     
@@ -1274,11 +1276,11 @@ def main():
     if framework_of_choice == "docker":
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
-            os.system( f"docker pull ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
+            os.system( f"docker pull ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}  > /dev/null 2> /dev/null" )
     else:
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
-            os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
+            os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version} > /dev/null 2> /dev/null" )
     ################################################################################################################################################################################################################################################
 
 
