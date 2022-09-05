@@ -588,6 +588,8 @@ void convertToAlignmentSingleEnded (
 			 printf ("\n==============================================================================================================================");
 			 fflush (stdout);
 			 }*/
+			printf ("\nread_number = %d" , *read_number);
+			fflush (stdout);
 			sprintf(temp , "%d" , *read_number);
 			( *read_number )++;
 			printf ("\ncopying into read name");
@@ -966,6 +968,7 @@ void decompressFile (
 		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 		 continue;
 		 */
+
 		convertToAlignmentSingleEnded (sam_alignment_instance ,
 				cigar_items_instance_for_writing ,
 				whole_genome ,
