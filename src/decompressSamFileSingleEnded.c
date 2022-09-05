@@ -502,8 +502,7 @@ void convertToAlignmentSingleEnded (
 			splitByDelimiter (split_on_dash[0] , '~' , split_on_tilde);
 		else
 		strcpy(split_on_tilde[0] , split_on_dash[0]);
-		printf ("\nI am here");
-		fflush (stdout);
+
 		if ( split_on_comma[j][strlen (split_on_comma[j]) - 1] != '-' )
 		{
 			number_of_repititions_of_the_same_reads = strtol (split_on_dash[1] ,
@@ -536,6 +535,8 @@ void convertToAlignmentSingleEnded (
 				strcpy(sam_alignment_instance->tags[3].val , "X");
 			}
 		}
+		printf ("\nI am here");
+		fflush (stdout);
 		/*
 		 printf("\nconvertToAlignmentSingleEnded Checkpoint 3");
 		 fflush(stdout);
