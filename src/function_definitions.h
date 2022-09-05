@@ -1040,10 +1040,12 @@ void convertIcigarToCigarandMDSingleEnded (
 
 	for ( i = 0 ; i < icigar_items_instance_index ; i++ )
 	{
-		printf ("\n Currently processing %c %d icigar_items_instance_index %d" ,
-				cigar_items_instance[i].def ,
-				cigar_items_instance[i].len ,
-				icigar_items_instance_index);
+		/*
+		 printf ("\n Currently processing %c %d icigar_items_instance_index %d" ,
+		 cigar_items_instance[i].def ,
+		 cigar_items_instance[i].len ,
+		 icigar_items_instance_index);
+		 */
 		if ( processing_left_soft_clip == 1 && isCharacterInString ("atgcn" ,
 				cigar_items_instance[i].def) )
 		{
@@ -1156,11 +1158,13 @@ void convertIcigarToCigarandMDSingleEnded (
 						cigar_items_instance[i].def) || isCharacterInString (mismatch_characters ,
 						cigar_items_instance[i].def) ) )
 				{
-					printf ("\n Currently processing (match and mismatch) %c %d icigar_items_instance_index %d i=%d" ,
-							cigar_items_instance[i].def ,
-							cigar_items_instance[i].len ,
-							icigar_items_instance_index ,
-							i);
+					/*
+					 printf ("\n Currently processing (match and mismatch) %c %d icigar_items_instance_index %d i=%d" ,
+					 cigar_items_instance[i].def ,
+					 cigar_items_instance[i].len ,
+					 icigar_items_instance_index ,
+					 i);
+					 */
 					if ( isCharacterInString ("BEFHJKLOPQRU" ,
 							cigar_items_instance[i].def) )
 					{
@@ -1240,8 +1244,10 @@ void convertIcigarToCigarandMDSingleEnded (
 	}
 	sam_alignment_instance->md_extended[MD_extended_index++ ] = '\0';
 
-	printf ("\nReached here 3");
-	fflush (stdout);
+	/*
+	 printf ("\nReached here 3");
+	 fflush (stdout);
+	 */
 	strcpy (sam_alignment_instance->seq ,
 			sam_alignment_instance->soft_clippings.left);
 	strcat (sam_alignment_instance->seq ,
@@ -1260,8 +1266,11 @@ void convertIcigarToCigarandMDSingleEnded (
 			&sam_alignment_instance->number_of_cigar_items ,
 			sam_alignment_instance->cigar_items);
 
-	printf ("\nReached here 4");
-	fflush (stdout);
+	/*
+	 printf ("\nReached here 4");
+	 fflush (stdout);
+	 */
+
 	if ( flag_ignore_sequence_information == 0 )
 		generateReadSequenceAndMDString (sam_alignment_instance , whole_genome);
 	else
@@ -1281,9 +1290,11 @@ void convertIcigarToCigarandMDSingleEnded (
 		sam_alignment_instance->seq[i] = '\0';
 		sam_alignment_instance->qual[i] = '\0';
 	}
+	/*
+	 printf ("\nReached here 5");
+	 fflush (stdout);
+	 */
 
-	printf ("\nReached here 5");
-	fflush (stdout);
 	if ( flag_ignore_all_quality_scores == 1 )
 	{
 		cigar_items_instance_index = 0;
@@ -1300,20 +1311,23 @@ void convertIcigarToCigarandMDSingleEnded (
 		for ( i = 0 ; i < length_of_read ; i++ )
 			sam_alignment_instance->qual[i] = default_quality_value[0];
 		sam_alignment_instance->qual[i] = '\0';
-		printf ("\nicigar %s cigar %s MD %s cigar_items_instance_index = %d length_of_read = %d %s" ,
-				sam_alignment_instance->icigar ,
-				sam_alignment_instance->cigar ,
-				sam_alignment_instance->tags[2].val ,
-				cigar_items_instance_index ,
-				length_of_read ,
-				sam_alignment_instance->qual);
+		/*
+		 printf ("\nicigar %s cigar %s MD %s cigar_items_instance_index = %d length_of_read = %d %s" ,
+		 sam_alignment_instance->icigar ,
+		 sam_alignment_instance->cigar ,
+		 sam_alignment_instance->tags[2].val ,
+		 cigar_items_instance_index ,
+		 length_of_read ,
+		 sam_alignment_instance->qual);
+		 */
 	}
-
-	printf ("\nicigar %s cigar %s MD %s " ,
-			sam_alignment_instance->icigar ,
-			sam_alignment_instance->cigar ,
-			sam_alignment_instance->tags[2].val);
-	fflush (stdout);
+	/*
+	 printf ("\nicigar %s cigar %s MD %s " ,
+	 sam_alignment_instance->icigar ,
+	 sam_alignment_instance->cigar ,
+	 sam_alignment_instance->tags[2].val);
+	 fflush (stdout);
+	 */
 }
 
 void extractSubString (char *str, char *substr, int start_index, int end_index)
