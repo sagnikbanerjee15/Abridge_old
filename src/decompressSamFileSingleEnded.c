@@ -535,8 +535,6 @@ void convertToAlignmentSingleEnded (
 				strcpy(sam_alignment_instance->tags[3].val , "X");
 			}
 		}
-		printf ("\nI am here");
-		fflush (stdout);
 		/*
 		 printf("\nconvertToAlignmentSingleEnded Checkpoint 3");
 		 fflush(stdout);
@@ -547,9 +545,9 @@ void convertToAlignmentSingleEnded (
 		if ( split_on_comma[j][1] == '-' && isalpha (split_on_dash[0][0]) != 0 )
 		{
 			// Use the same cigar
-			sprintf(temp , "%d" , *read_number);
+			sprintf(str_sprintf , "%d" , *read_number);
 			( *read_number )++;
-			strcpy(sam_alignment_instance->read_name , temp);
+			strcpy(sam_alignment_instance->read_name , str_sprintf);
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nSame iCIGAR");
