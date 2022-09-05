@@ -203,6 +203,7 @@ def main():
                                                     cmd2 = f"mv {output_directory_main} {OUTPUT_DIRECTORY_TEMP}/abridge_decompressed"
                                                     #os.system(cmd1)
                                                     allinputs.append( ["dummy", cmd1, cmd2] )
+    pool.map( runCommand, allinputs )
                                         
     
     
