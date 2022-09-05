@@ -168,7 +168,6 @@ def main():
     ########################################################################################################################
     allinputs = []
     os.chdir(f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed")
-    serial_number = 1
     for ended in ["SE","PE"]:
         for alignment_type in ["all_tags_Aligned.sortedByCoord.out", "no_tags_Aligned.out"]:
             alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}.sam"
@@ -180,35 +179,31 @@ def main():
                             for ignore_mismatches in [0, 1]:
                                 for ignore_unmapped_reads in [0, 1]:
                                     for skip_shortening_read_names in [0, 1]:
-                                        for quality in [0, 1]:
-                                            for ignore_sequence in [0, 1]:
-                                                                            
-                                                output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}.sam_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}_quality_{quality}_ignore_sequence_{ignore_sequence}"
-                                                output_directory_temp = f"{OUTPUT_DIRECTORY_TEMP}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}.sam_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}_quality_{quality}_ignore_sequence_{ignore_sequence}"
-                                                compressed_filename = f"{OUTPUT_DIRECTORY_TEMP}/abridge_compressed/{sra_id}_{ended}_{alignment_type}.sam_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}/{sra_id}_{ended}_{alignment_type}.abridge"
-                                                
-                                                cmd1  = f" /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge "
-                                                cmd1 += f" --decompress "
-                                                cmd1 += f" --inputabrfilename  {compressed_filename} "
-                                                cmd1 += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
-                                                cmd1 += f" --keep_intermediate_error_files "
-                                                cmd1 += f" --preserve_all_intermediate_files "
-                                                cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
-                                                cmd1 += f" --output_directory {OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{serial_number}"
-                                                cmd1 += f" 1> {OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{serial_number}.output "
-                                                cmd1 += f" 2> {OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{serial_number}.error"
-                                                
-                                                print(output_directory_main, serial_number)
-                                                serial_number += 1
-                                                
-                                                if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_decompress.sam") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type}_decompress.sam") == False:
-                                                    #present_working_directory = os.getcwd()
-                                                    #os.chdir(output_directory_temp)
-                                                    #os.system(f"rm -rf {output_directory_temp}")
-                                                    #os.system(cmd1)
-                                                    cmd2 = f"mv {output_directory_main} {OUTPUT_DIRECTORY_TEMP}/abridge_decompressed"
-                                                    #os.system(cmd1)
-                                                    allinputs.append( ["dummy", cmd1, cmd2] )
+                                        
+                                        quality, ignore_sequence = 0 ,0                         
+                                        output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}.sam_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}"
+                                        output_directory_temp = f"{OUTPUT_DIRECTORY_TEMP}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}.sam_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}"
+                                        compressed_filename = f"{OUTPUT_DIRECTORY_TEMP}/abridge_compressed/{sra_id}_{ended}_{alignment_type}.sam_ignore_alignment_scores_{ignore_alignment_scores}_ignore_all_quality_scores_{ignore_all_quality_scores}_ignore_quality_scores_for_matched_bases_{ignore_quality_scores_for_matched_bases}_ignore_soft_clippings_{ignore_soft_clippings}_ignore_mismatches_{ignore_mismatches}_ignore_unmapped_reads_{ignore_unmapped_reads}_skip_shortening_read_names_{skip_shortening_read_names}/{sra_id}_{ended}_{alignment_type}.abridge"
+                                        
+                                        cmd1  = f" /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge "
+                                        cmd1 += f" --decompress "
+                                        cmd1 += f" --inputabrfilename  {compressed_filename} "
+                                        cmd1 += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
+                                        cmd1 += f" --keep_intermediate_error_files "
+                                        cmd1 += f" --preserve_all_intermediate_files "
+                                        cmd1 += f" --output_directory {output_directory_main}"
+                                        cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
+                                        cmd1 += f" 1> {output_directory_main}.output "
+                                        cmd1 += f" 2> {output_directory_main}.error"
+                                        
+                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_decompress.sam") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type}_decompress.sam") == False:
+                                            #present_working_directory = os.getcwd()
+                                            #os.chdir(output_directory_temp)
+                                            #os.system(f"rm -rf {output_directory_temp}")
+                                            #os.system(cmd1)
+                                            cmd2 = f"mv {output_directory_main} {OUTPUT_DIRECTORY_TEMP}/abridge_decompressed"
+                                            #os.system(cmd1)
+                                            allinputs.append( ["dummy", cmd1, cmd2] )
     pool.map( runCommand, allinputs )
                                         
     
