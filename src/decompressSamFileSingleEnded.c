@@ -591,6 +591,8 @@ void convertToAlignmentSingleEnded (
 			printf ("\nread_number = %d" , *read_number);
 			fflush (stdout);
 			sprintf(temp , "%d" , *read_number);
+			printf ("\temp = %s" , *temp);
+			fflush (stdout);
 			( *read_number )++;
 			printf ("\ncopying into read name");
 			fflush (stdout);
