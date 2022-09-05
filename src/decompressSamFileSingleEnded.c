@@ -565,7 +565,7 @@ void convertToAlignmentSingleEnded (
 			strcpy(sam_alignment_instance->icigar , split_on_tilde[0]);
 			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
 			//fflush (stdout);
-			//printf ("\nConvertion started");
+			printf ("\nConvertion started");
 			convertIcigarToCigarandMDSingleEnded (whole_genome ,
 					sam_alignment_instance ,
 					chromosome ,
@@ -577,6 +577,7 @@ void convertToAlignmentSingleEnded (
 					flag_ignore_sequence_information ,
 					default_quality_value);
 			printf ("\nConvertion completed");
+			fflush (stdout);
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
