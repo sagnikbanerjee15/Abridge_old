@@ -168,6 +168,7 @@ def main():
     ########################################################################################################################
     allinputs = []
     os.chdir(f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed")
+    serial_number = 1
     for ended in ["SE","PE"]:
         for alignment_type in ["all_tags_Aligned.sortedByCoord.out", "no_tags_Aligned.out"]:
             alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}.sam"
@@ -193,8 +194,11 @@ def main():
                                                 cmd1 += f" --keep_intermediate_error_files "
                                                 cmd1 += f" --preserve_all_intermediate_files "
                                                 cmd1 += f" --output_directory {output_directory_main}"
-                                                cmd1 += f" 1> {output_directory_main}.output "
-                                                cmd1 += f" 2> {output_directory_main}.error"
+                                                cmd1 += f" 1> {serial_number}.output "
+                                                cmd1 += f" 2> {serial_number}.error"
+                                                
+                                                print(output_directory_main, serial_number)
+                                                serial_number += 1
                                                 
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_decompress.sam") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type}_decompress.sam") == False:
                                                     #present_working_directory = os.getcwd()
