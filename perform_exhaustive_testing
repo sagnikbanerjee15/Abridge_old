@@ -151,6 +151,7 @@ def main():
                                         
                                         
                                         if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}.abridge") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type}.abridge") == False:
+                                            os.system(f"rm -rf {output_directory_temp}")
                                             #os.system(cmd1)
                                             cmd2 = f"mv {output_directory_main} {OUTPUT_DIRECTORY_TEMP}/abridge_compressed"
                                             #os.system(cmd1)
