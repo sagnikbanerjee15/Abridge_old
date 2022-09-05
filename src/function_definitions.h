@@ -1230,6 +1230,7 @@ void convertIcigarToCigarandMDSingleEnded (
 			}
 		}
 	}
+
 	if ( right_soft_clip_index > 0 ) //There were some right soft clips
 	{
 		sprintf (temp , "%d" , right_soft_clip_index);
@@ -1239,6 +1240,8 @@ void convertIcigarToCigarandMDSingleEnded (
 	}
 	sam_alignment_instance->md_extended[MD_extended_index++ ] = '\0';
 
+	printf ("\nReached here 3");
+	fflush (stdout);
 	strcpy (sam_alignment_instance->seq ,
 			sam_alignment_instance->soft_clippings.left);
 	strcat (sam_alignment_instance->seq ,
@@ -1256,6 +1259,9 @@ void convertIcigarToCigarandMDSingleEnded (
 	splitCigar (sam_alignment_instance->cigar ,
 			&sam_alignment_instance->number_of_cigar_items ,
 			sam_alignment_instance->cigar_items);
+
+	printf ("\nReached here 4");
+	fflush (stdout);
 	if ( flag_ignore_sequence_information == 0 )
 		generateReadSequenceAndMDString (sam_alignment_instance , whole_genome);
 	else
@@ -1275,6 +1281,9 @@ void convertIcigarToCigarandMDSingleEnded (
 		sam_alignment_instance->seq[i] = '\0';
 		sam_alignment_instance->qual[i] = '\0';
 	}
+
+	printf ("\nReached here 5");
+	fflush (stdout);
 	if ( flag_ignore_all_quality_scores == 1 )
 	{
 		cigar_items_instance_index = 0;
