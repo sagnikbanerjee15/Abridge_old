@@ -566,7 +566,7 @@ void convertToAlignmentSingleEnded (
 			strcpy(sam_alignment_instance->icigar , split_on_tilde[0]);
 			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
 			//fflush (stdout);
-			printf ("\nConvertion started");
+			//printf ("\nConvertion started");
 			convertIcigarToCigarandMDSingleEnded (whole_genome ,
 					sam_alignment_instance ,
 					chromosome ,
@@ -577,8 +577,10 @@ void convertToAlignmentSingleEnded (
 					flag_ignore_quality_scores_for_matched_bases ,
 					flag_ignore_sequence_information ,
 					default_quality_value);
-			printf ("\nConvertion completed");
-			fflush (stdout);
+			/*
+			 printf ("\nConvertion completed");
+			 fflush (stdout);
+			 */
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
@@ -589,20 +591,20 @@ void convertToAlignmentSingleEnded (
 			 printf ("\n==============================================================================================================================");
 			 fflush (stdout);
 			 }*/
-			printf ("\nread_number = %d" , *read_number);
-			fflush (stdout);
+			/*printf ("\nread_number = %d" , *read_number);
+			 fflush (stdout);*/
 
 			sprintf(str_sprintf , "%llu" , *read_number);
 
-			printf ("\ntemp = %s" , str_sprintf);
-			fflush (stdout);
+			/*printf ("\ntemp = %s" , str_sprintf);
+			 fflush (stdout);*/
 			( *read_number )++;
-			printf ("\ncopying into read name");
-			fflush (stdout);
+			/*printf ("\ncopying into read name");
+			 fflush (stdout);*/
 			strcpy(sam_alignment_instance->read_name , str_sprintf);
 
-			printf ("\nconvertToAlignmentSingleEnded Checkpoint 5");
-			fflush (stdout);
+			/*printf ("\nconvertToAlignmentSingleEnded Checkpoint 5");
+			 fflush (stdout);*/
 
 		}
 		fflush (stdout);
@@ -630,7 +632,6 @@ void convertToAlignmentSingleEnded (
 
 		printf ("\nconvertToAlignmentSingleEnded Checkpoint 7");
 		fflush (stdout);
-
 	}
 }
 
