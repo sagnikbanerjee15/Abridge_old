@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH -n 1
+#SBATCH -n 72
 #SBATCH -N 1
 #SBATCH --partition=long
 ##SBATCH --partition=priority-mem768 
 #SBATCH --qos=maizegdb
-#SBATCH --mem=150G
+#SBATCH --mem=500G
 #SBATCH --time=14-00:00:00
 #SBATCH --job-name="testing"
 #SBATCH --mail-user=sagnikbanerjee15@gmail.com
