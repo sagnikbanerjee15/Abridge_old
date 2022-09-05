@@ -194,7 +194,7 @@ def main():
                                                 cmd1 += f" --keep_intermediate_error_files "
                                                 cmd1 += f" --preserve_all_intermediate_files "
                                                 cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
-                                                cmd1 += f" --output_directory {output_directory_main}"
+                                                cmd1 += f" --output_directory {OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{serial_number}"
                                                 cmd1 += f" 1> {OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{serial_number}.output "
                                                 cmd1 += f" 2> {OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{serial_number}.error"
                                                 
