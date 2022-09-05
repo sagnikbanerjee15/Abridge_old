@@ -1313,6 +1313,7 @@ void convertIcigarToCigarandMDSingleEnded (
 			sam_alignment_instance->icigar ,
 			sam_alignment_instance->cigar ,
 			sam_alignment_instance->tags[2].val);
+	fflush (stdout);
 }
 
 void extractSubString (char *str, char *substr, int start_index, int end_index)
