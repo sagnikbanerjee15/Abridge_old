@@ -576,7 +576,7 @@ void convertToAlignmentSingleEnded (
 					flag_ignore_quality_scores_for_matched_bases ,
 					flag_ignore_sequence_information ,
 					default_quality_value);
-			//printf ("\nConvertion completed");
+			printf ("\nConvertion completed");
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nsplit_on_comma[j] = %s" , split_on_comma[j]);
@@ -590,10 +590,10 @@ void convertToAlignmentSingleEnded (
 			sprintf(temp , "%d" , *read_number);
 			( *read_number )++;
 			strcpy(sam_alignment_instance->read_name , temp);
-			/*
-			 printf("\nconvertToAlignmentSingleEnded Checkpoint 5");
-			 fflush(stdout);
-			 */
+
+			printf ("\nconvertToAlignmentSingleEnded Checkpoint 5");
+			fflush (stdout);
+
 		}
 		fflush (stdout);
 		//printSamAlignmentInstance (sam_alignment_instance , 0);
@@ -617,10 +617,10 @@ void convertToAlignmentSingleEnded (
 				read_names ,
 				flag_ignore_alignment_scores);
 		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
-		/*
-		 printf("\nconvertToAlignmentSingleEnded Checkpoint 7");
-		 fflush(stdout);
-		 */
+
+		printf ("\nconvertToAlignmentSingleEnded Checkpoint 7");
+		fflush (stdout);
+
 	}
 }
 
