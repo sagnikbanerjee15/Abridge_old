@@ -2,7 +2,7 @@
 
 #SBATCH -n 72
 #SBATCH -N 1
-#SBATCH --partition=long
+#SBATCH --partition=short
 ##SBATCH --partition=priority-mem768 
 #SBATCH --qos=maizegdb
 #SBATCH --mem=150G
