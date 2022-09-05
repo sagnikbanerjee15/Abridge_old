@@ -40,6 +40,7 @@ static struct argp_option options[] =
 { "flag_ignore_unmapped_sequences" , 'e' , 0 , 0 , "Set this flag to ignore unmapped sequences along with their quality scores" , 0 } ,
 { "flag_ignore_quality_scores_for_matched_bases" , 'b' , 0 , 0 , "Set this flag to ignore quality scores for nucleotide bases that match to the provided reference" , 0 } ,
 { "flag_ignore_alignment_scores" , 'a' , 0 , 0 , "Set this flag to ignore the alignment scores (Column 5 of SAM file)" , 0 } ,
+{ "skip_shortening_read_names" , 'f' , 0 , 0 , "Set this flag to skip shortening read names" , 0 } ,
 
 { "max_input_reads_in_a_single_nucl_loc" , 'n' , "MAX_READS_IN_ONE_NUCL" , 0 , "Enter the value of the maximum number of input reads mapped to a single nucleotide" , 0 } ,
 { "run_diagnostics" , 'd' , 0 , 0 , "Set this flag to run diagnostics and print out a verbose report" , 0 } ,
@@ -65,6 +66,7 @@ struct arguments
 	int flag_ignore_mismatches;
 	int flag_ignore_all_quality_scores;
 	int flag_ignore_unmapped_sequences;
+	int skip_shortening_read_names;
 	int run_diagnostics;
 	int flag_ignore_quality_scores_for_matched_bases;
 	int flag_ignore_alignment_scores;
@@ -152,6 +154,9 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 			break;
 		case 'l':
 			arguments->max_read_length = strtoull (arg , &eptr , 10);
+			break;
+		case 'f':
+			arguments->skip_shortening_read_names = 1;
 			break;
 
 		case ARGP_KEY_END:
@@ -588,7 +593,8 @@ void compressPairedEndedAlignments (
 		long long int max_number_of_alignments,
 		int max_read_length,
 		char *dictionary_filename,
-		short int flag_ignore_alignment_scores)
+		short int flag_ignore_alignment_scores,
+		short int skip_shortening_read_names)
 {
 	/********************************************************************
 	 * Variable declaration
@@ -929,14 +935,18 @@ void compressPairedEndedAlignments (
 		/***************************************************************************************
 		 * Read a line from the short read names file
 		 ****************************************************************************************/
-		getline ( &line_name_of_file_with_read_names_to_short_read_names_and_NH ,
-				&len ,
-				fhr_name_of_file_with_read_names_to_short_read_names_and_NH);
+		if ( skip_shortening_read_names == 0 )
+		{
+			getline ( &line_name_of_file_with_read_names_to_short_read_names_and_NH ,
+					&len ,
+					fhr_name_of_file_with_read_names_to_short_read_names_and_NH);
 
-		splitByDelimiter (line_name_of_file_with_read_names_to_short_read_names_and_NH ,
-				'\t' ,
-				split_line);
-		strcpy(curr_alignment->read_name , split_line[3]);
+			splitByDelimiter (line_name_of_file_with_read_names_to_short_read_names_and_NH ,
+					'\t' ,
+					split_line);
+			strcpy(curr_alignment->read_name , split_line[3]);
+		}
+
 		//printf("\nRead name: %s", split_line[3]);
 		for ( i = 11 ; i < number_of_fields ; i++ )
 		{
@@ -1290,6 +1300,7 @@ int main (int argc, char *argv[])
 	arguments.max_input_reads_in_a_single_nucl_loc = 0;
 	arguments.max_number_of_alignments = 0;
 	arguments.max_read_length = 0;
+	arguments.skip_shortening_read_names = 0;
 
 	argp_parse ( &argp , argc , argv , 0 , 0 , &arguments);
 
@@ -1314,6 +1325,7 @@ int main (int argc, char *argv[])
 	short int flag_ignore_quality_scores_for_matched_bases;
 	short int run_diagnostics;
 	short int flag_ignore_alignment_scores;
+	short int skip_shortening_read_names;
 
 	long long int max_input_reads_in_a_single_nucl_loc;
 	long long int max_number_of_alignments;
@@ -1350,6 +1362,7 @@ int main (int argc, char *argv[])
 	max_input_reads_in_a_single_nucl_loc = arguments.max_input_reads_in_a_single_nucl_loc;
 	max_number_of_alignments = arguments.max_number_of_alignments;
 	max_read_length = arguments.max_read_length;
+	skip_shortening_read_names = arguments.skip_shortening_read_names;
 
 	/********************************************************************/
 
@@ -1371,7 +1384,8 @@ int main (int argc, char *argv[])
 			max_number_of_alignments ,
 			max_read_length ,
 			dictionary_filename ,
-			flag_ignore_alignment_scores);
+			flag_ignore_alignment_scores ,
+			skip_shortening_read_names);
 	return 0;
 }
 
