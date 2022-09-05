@@ -31,7 +31,7 @@ static struct argp_option options[] =
 { "name_of_file_with_quality_scores" , 'q' , "QUALITY_SCORES_FILENAME" , 0 , "Enter the name of the file where the quality scores will be stored. This file will be compressed later" , 0 } ,
 { "name_of_file_with_read_names_to_short_read_names_and_NH" , 'r' , "SHORT_NAMES_NH_FILENAME" , 0 , "Enter the name of the file that contains the mapping between the long name to the short name and the NH values" , 0 } ,
 
-{ "frequency_of_flags_filename" , 'f' , "FREQUENCY_OF_FLAGS_FILENAME" , 0 , "Enter the name of the file which has the frequency of flags" , 0 } ,
+{ "frequency_of_flags_filename" , 'j' , "FREQUENCY_OF_FLAGS_FILENAME" , 0 , "Enter the name of the file which has the frequency of flags" , 0 } ,
 { "name_of_file_dictionary" , 't' , "DICTIONARY_FILENAME" , 0 , "Enter the name of the dictionary" , 0 } ,
 
 { "flag_ignore_soft_clippings" , 's' , 0 , 0 , "Set this flag to ignore soft clippings" , 0 } ,
@@ -95,27 +95,52 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	// Figure out which option we are parsing, and decide how to store it
 	switch ( key )
 	{
+		case 'a':
+			arguments->flag_ignore_alignment_scores = 1;
+			break;
+		case 'b':
+			arguments->flag_ignore_quality_scores_for_matched_bases = 1;
+			break;
+		case 'c':
+			arguments->name_of_file_with_max_commas = arg;
+			break;
+		case 'd':
+			arguments->run_diagnostics = 1;
+			break;
+		case 'e':
+			arguments->flag_ignore_unmapped_sequences = 1;
+			break;
 		case 'f':
-			arguments->frequency_of_flags_filename = arg;
-			break;
-		case 't':
-			arguments->name_of_file_dictionary = arg;
-			break;
-
-		case 'i':
-			arguments->input_sam_filename = arg;
-			break;
-		case 'o':
-			arguments->output_abridge_filename = arg;
+			arguments->skip_shortening_read_names = 1;
 			break;
 		case 'g':
 			arguments->genome_filename = arg;
 			break;
-		case 'u':
-			arguments->unmapped_filename = arg;
+		case 'i':
+			arguments->input_sam_filename = arg;
 			break;
-		case 'c':
-			arguments->name_of_file_with_max_commas = arg;
+		case 'j':
+			arguments->frequency_of_flags_filename = arg;
+			break;
+		case 'k':
+			arguments->max_number_of_alignments = strtoull (arg , &eptr , 10);
+			break;
+		case 'l':
+			arguments->max_read_length = strtoull (arg , &eptr , 10);
+			break;
+		case 'm':
+			arguments->flag_ignore_mismatches = 1;
+			break;
+		case 'n':
+			arguments->max_input_reads_in_a_single_nucl_loc = strtoull (arg ,
+					&eptr ,
+					10);
+			break;
+		case 'o':
+			arguments->output_abridge_filename = arg;
+			break;
+		case 'p':
+			arguments->flag_ignore_all_quality_scores = 1;
 			break;
 		case 'q':
 			arguments->name_of_file_with_quality_scores = arg;
@@ -126,37 +151,11 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 		case 's':
 			arguments->flag_ignore_soft_clippings = 1;
 			break;
-		case 'm':
-			arguments->flag_ignore_mismatches = 1;
+		case 't':
+			arguments->name_of_file_dictionary = arg;
 			break;
-		case 'p':
-			arguments->flag_ignore_all_quality_scores = 1;
-			break;
-		case 'e':
-			arguments->flag_ignore_unmapped_sequences = 1;
-			break;
-		case 'b':
-			arguments->flag_ignore_quality_scores_for_matched_bases = 1;
-			break;
-		case 'a':
-			arguments->flag_ignore_alignment_scores = 1;
-			break;
-		case 'd':
-			arguments->run_diagnostics = 1;
-			break;
-		case 'n':
-			arguments->max_input_reads_in_a_single_nucl_loc = strtoull (arg ,
-					&eptr ,
-					10);
-			break;
-		case 'k':
-			arguments->max_number_of_alignments = strtoull (arg , &eptr , 10);
-			break;
-		case 'l':
-			arguments->max_read_length = strtoull (arg , &eptr , 10);
-			break;
-		case 'f':
-			arguments->skip_shortening_read_names = 1;
+		case 'u':
+			arguments->unmapped_filename = arg;
 			break;
 
 		case ARGP_KEY_END:

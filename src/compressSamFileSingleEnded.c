@@ -80,20 +80,43 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 	// Figure out which option we are parsing, and decide how to store it
 	switch ( key )
 	{
-		case 'i':
-			arguments->input_sam_filename = arg;
+		case 'a':
+			arguments->flag_ignore_alignment_scores = 1;
 			break;
-		case 'o':
-			arguments->output_abridge_filename = arg;
+		case 'b':
+			arguments->flag_ignore_quality_scores_for_matched_bases = 1;
+			break;
+		case 'c':
+			arguments->name_of_file_with_max_commas = arg;
+			break;
+		case 'd':
+			arguments->run_diagnostics = 1;
+			break;
+		case 'e':
+			arguments->flag_ignore_unmapped_sequences = 1;
+			break;
+		case 'f':
+			arguments->skip_shortening_read_names = 1;
 			break;
 		case 'g':
 			arguments->genome_filename = arg;
 			break;
-		case 'u':
-			arguments->unmapped_filename = arg;
+		case 'i':
+			arguments->input_sam_filename = arg;
 			break;
-		case 'c':
-			arguments->name_of_file_with_max_commas = arg;
+		case 'm':
+			arguments->flag_ignore_mismatches = 1;
+			break;
+		case 'n':
+			arguments->max_input_reads_in_a_single_nucl_loc = strtoull (arg ,
+					&eptr ,
+					10);
+			break;
+		case 'o':
+			arguments->output_abridge_filename = arg;
+			break;
+		case 'p':
+			arguments->flag_ignore_all_quality_scores = 1;
 			break;
 		case 'q':
 			arguments->name_of_file_with_quality_scores = arg;
@@ -104,31 +127,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 		case 's':
 			arguments->flag_ignore_soft_clippings = 1;
 			break;
-		case 'm':
-			arguments->flag_ignore_mismatches = 1;
-			break;
-		case 'p':
-			arguments->flag_ignore_all_quality_scores = 1;
-			break;
-		case 'e':
-			arguments->flag_ignore_unmapped_sequences = 1;
-			break;
-		case 'b':
-			arguments->flag_ignore_quality_scores_for_matched_bases = 1;
-			break;
-		case 'a':
-			arguments->flag_ignore_alignment_scores = 1;
-			break;
-		case 'd':
-			arguments->run_diagnostics = 1;
-			break;
-		case 'n':
-			arguments->max_input_reads_in_a_single_nucl_loc = strtoull (arg ,
-					&eptr ,
-					10);
-			break;
-		case 'f':
-			arguments->skip_shortening_read_names = 1;
+		case 'u':
+			arguments->unmapped_filename = arg;
 			break;
 
 		case ARGP_KEY_END:

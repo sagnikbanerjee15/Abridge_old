@@ -70,6 +70,8 @@ def parseCommandLineArguments():
     optional_named.add_argument( "--force", "-force", help = "Setting this argument will remove the output directory and start the computation from scratch", action = "store_true" )
     optional_named.add_argument( "--preserve_all_intermediate_files", "-preserve_all_intermediate_files", help = "Set this option to preserve all the intermediate files", action = "store_true" )
     
+    optional_named.add_argument( "--software_directory", "--ssftd", help = "Enter the directory with all the software. Providing this argument will ensure faster execution", default = "" )
+    
     # optional_named.add_argument( "-aq", "--save_exact_quality_scores", help = "Adjust quality scores for matched bases to achieve better encoding. For more details please check ...", action = "store_true" )
     # optional_named.add_argument( "-p", "--positions", help = "Enter the position as chromosome:start-end from which reads will be retrieved" )
     # optional_named.add_argument( "-rp", "--read_prefix", help = "Enter a read prefix for decompression - valid only for random access" )
@@ -279,6 +281,11 @@ def validateCommandLineArguments( options ):
     else:
         input_filename_without_location = options.inputabrfilename.split( "/" )[-1][:-8]
     options.outputfilename = f"{options.output_directory}/{input_filename_without_location}.abridge"
+    
+    if options.software_directory != "":
+        options.singularity_images = options.software_directory
+    else:
+        options.singularity_images = f"{options.singularity_images}"
 
 def checkSAMAlignments( options, logging ):
     """NOT CALLED REMOVE IN NEXT VERSION
@@ -408,7 +415,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list,f"{options.singularity_images}/{software}:{version}",  cmd)
         
 
         ######################################################################################
@@ -448,6 +455,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f" --flag_ignore_quality_scores_for_matched_bases "
         if options.ignore_alignment_scores == True:
             cmd += f" --flag_ignore_alignment_scores "
+        if options.skip_shortening_read_names == True:
+            cmd += f" --skip_shortening_read_names"
         
         cmd += f") "
         cmd += f"1> /dev/null "
@@ -458,7 +467,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list,f"{options.singularity_images}/{software}:{version}",  cmd)
     else:
         # Paired ended
 
@@ -490,7 +499,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
         
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list,f"{options.singularity_images}/{software}:{version}",  cmd)
 
         all_commands = []
         # for input_filename in options.inputalignedfilename:
@@ -548,6 +557,8 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             cmd += f" --flag_ignore_quality_scores_for_matched_bases "
         if options.ignore_alignment_scores == True:
             cmd += f" --flag_ignore_alignment_scores "
+        if options.skip_shortening_read_names == True:
+            cmd += f" --skip_shortening_read_names"
         
         cmd += f" --max_number_of_alignments {max_number_of_alignments} "  
         cmd += f" --max_read_length {max_read_length} "  
@@ -562,7 +573,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
             
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     ######################################################################################
     # Compress Quality scores file
@@ -591,7 +602,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
     software = "fclqc"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list,f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list,f"{options.singularity_images}/{software}:{version}",  cmd)
 
     ######################################################################################
     # Generate SHA512 for genome file
@@ -631,7 +642,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
 
     software = "zpaq"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
 
     all_files = glob.glob( f"{options.output_directory}/*" )
     keep_these_files = []
@@ -706,7 +717,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     
     software = "samtools"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     # Check the amount memory needed
     if options.ignore_sequence == 0:
@@ -716,7 +727,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     software = "zpaq"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     fhr = open( f"{options.output_directory}/file_list", "r" )
     line_num = 0
@@ -732,13 +743,13 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     software = "zpaq"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     # Move files
     cmd = f"mv {options.output_directory}/{compression_directory.split('/')[-1]}/* {options.output_directory}"
     software = "abridge"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     # Create the parameter file for fclqc
     fhw = open( f"{options.output_directory}/parameter.json", "w" )
@@ -770,14 +781,14 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
         software = "fclqc"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     cmd = f"mv {fclqc_output_filename}_decompressed001.dec {name_of_file_with_quality_scores}"
 
     if os.path.exists( f"{name_of_file_with_quality_scores}" ) == False and len( glob.glob( f"{options.output_directory}/*fclqc001.enc" ) ) > 0:
         software = "fclqc"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     # flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_quality_score, ignore_quality_scores_for_matched_bases, save_exact_quality_scores, ignore_alignment_scores = list( map( int, open( outputfilename, "rb" ).readline().split() ) )
     flag_ignore_mismatches, flag_ignore_soft_clippings, flag_ignore_unmapped_sequences, flag_ignore_all_quality_scores   , flag_ignore_quality_scores_for_matched_bases, flag_ignore_alignment_scores = open( outputfilename, "rb" ).readline().split()
@@ -798,7 +809,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     software = "abridge"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     max_reads_in_each_line = open( max_reads_in_each_line_filename, "r" ).readline().strip()
 
@@ -828,7 +839,7 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
 
     software = "abridge"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
 
     """for file in files_to_be_removed:
         if options.quiet == False:
@@ -1003,7 +1014,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
         
         software = "samtools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
 
         first_line = open( f"{options.output_directory}/header" , "r" ).readline().strip()
         if "SO:coordinate" in first_line:
@@ -1015,7 +1026,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
         else:
             # Need to sort by coordinate
             cmd = f"samtools sort -@ {options.cpu} {options.inputalignedfilename}|samtools view -h -@ {options.cpu} > {options.output_directory}/inputalignedfilename.sam "
@@ -1025,7 +1036,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
 
     elif inputalignedfilename_onlyextension == "sam":
         first_line = open( options.inputalignedfilename, "r" ).readline().strip()
@@ -1044,7 +1055,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
 
 def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_versions, volumes_list):
     """
@@ -1064,7 +1075,7 @@ def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_vers
     
     software = "abridge"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list,  f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+    executeCommand(options, software, version, volumes_list,  f"{options.singularity_images}/{software}:{version}",  cmd)
     
     tag_presence = {}
     fhr = open(tagfilename, "r")
@@ -1100,7 +1111,7 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     if os.path.exists( f"{options.output_directory}/sorted_read_names" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list,  f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list,  f"{options.singularity_images}/{software}:{version}",  cmd)
         remove_these_files.append( f"{options.output_directory}/sorted_read_names" )
 
     logging.info( "Read names sorted" )
@@ -1152,7 +1163,7 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
         remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names" )
 
     logging.info( "Short read names have been generated" )
@@ -1171,7 +1182,7 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     if os.path.exists( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" ) == False:
         software = "abridge"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
         remove_these_files.append( f"{options.output_directory}/sorted_read_names_with_NH_and_short_read_names_sorted_by_pos" )
 
     logging.info( "Reads sorted according to their actual position" )
@@ -1201,7 +1212,7 @@ def main():
     validateCommandLineArguments( options )
     if options.force == True:
         os.system( f"rm -rf {options.output_directory}" )
-    os.system( f"mkdir -p {options.output_directory}/singularity_images" )
+    os.system( f"mkdir -p {options.singularity_images}" )
     if options.logfilename is None:
         options.logfilename = f"{options.output_directory}/progress.log"
 
@@ -1280,7 +1291,7 @@ def main():
     else:
         for software in list_of_softwares_with_versions:
             version = list_of_softwares_with_versions[software]
-            os.system( f"singularity pull {options.output_directory}/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version} > /dev/null 2> /dev/null" )
+            os.system( f"singularity pull {options.singularity_images}/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version} > /dev/null 2> /dev/null" )
     ################################################################################################################################################################################################################################################
 
 
@@ -1307,7 +1318,7 @@ def main():
 
     software = "samtools"
     version = list_of_softwares_with_versions[software]
-    executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
+    executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
     ################################################################################################################################################################################################################################################
 
     if options.compress == True:
@@ -1330,7 +1341,7 @@ def main():
             cmd += f" {options.inputalignedfilename} "
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}",  cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}",  cmd)
             
             cmd  = f" samtools "
             cmd += f" calmd -bAr "
@@ -1340,7 +1351,7 @@ def main():
             cmd += f" > {options.inputalignedfilename[:-4]}.MD_added.bam"
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
             
             cmd  = f"samtools "
             cmd += f" view "
@@ -1350,7 +1361,7 @@ def main():
             cmd += f" > {options.inputalignedfilename}"
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.output_directory}/singularity_images/{software}:{version}", cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
             
             cmd = f"rm {options.inputalignedfilename[:-4]}.temp.bam {options.inputalignedfilename[:-4]}.MD_added.bam "
             os.system(cmd)
