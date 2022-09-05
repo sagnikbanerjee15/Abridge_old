@@ -99,20 +99,6 @@ def runCommand( eachinput ):
         subprocess.check_call( ['bash', '-c', cmd2] )
 
 def main():
-    list_of_softwares_with_versions = {"sratools":"3.0.0",
-                                       "star":"2.7.9a",
-                                       "samtools":"1.14"
-                                    }
-        
-    framework_of_choice = "singularity"
-    if framework_of_choice == "docker":
-        for software in list_of_softwares_with_versions:
-            version = list_of_softwares_with_versions[software]
-            os.system( f"docker pull ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
-    else:
-        for software in list_of_softwares_with_versions:
-            version = list_of_softwares_with_versions[software]
-            os.system( f"singularity pull /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images/{software}:{version} docker://ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version}" )
 
     OUTPUT_DIRECTORY_MAIN = "/project/maizegdb/sagnik/ABRIDGE/testing"
     OUTPUT_DIRECTORY_TEMP = "/90daydata/maizegdb/sagnik/ABRIDGE/testing"
