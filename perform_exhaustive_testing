@@ -197,8 +197,8 @@ def main():
                                         cmd1 += f" 1> {output_directory_main}.output "
                                         cmd1 += f" 2> {output_directory_main}.error"
                                         
-                                        print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}._decompressed.sam")
-                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type[:-3]}._decompressed.sam") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}._decompressed.sam") == False:
+                                        print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
+                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam") == False and os.path.exists(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam") == False:
                                             #present_working_directory = os.getcwd()
                                             #os.chdir(output_directory_temp)
                                             #os.system(f"rm -rf {output_directory_temp}")
