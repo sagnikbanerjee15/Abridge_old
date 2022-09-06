@@ -192,6 +192,10 @@ def main():
                                         cmd1 += f" --keep_intermediate_error_files "
                                         cmd1 += f" --preserve_all_intermediate_files "
                                         cmd1 += f" --output_directory {output_directory_main}"
+                                        if quality == 1:
+                                            cmd1 += f" --quality C "
+                                        if ignore_sequence == 1:
+                                            cmd1 += f" --ignore_sequence "
                                         cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
                                         cmd1 += f" 1> {output_directory_main}.output "
                                         cmd1 += f" 2> {output_directory_main}.error"
