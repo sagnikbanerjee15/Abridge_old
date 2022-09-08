@@ -111,6 +111,125 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
 static struct argp argp =
 { options , parse_opt , args_doc , doc , 0 , 0 , 0 };
 
+void writeAlignmentToFilePairedEnded (
+		struct Sam_Alignment *sam_alignment,
+		short int flag_ignore_sequence_information,
+		int number_of_repititions_of_the_same_reads,
+		FILE *fhw,
+		FILE *fhr_qual,
+		short int flag_ignore_all_quality_scores,
+		char **read_names,
+		int *read_names_index,
+		short int flag_ignore_alignment_scores,
+		int number_of_reads)
+{
+	int i;
+
+	char line_to_be_written_to_file[MAX_GENERAL_LEN];
+	char temp[100];
+	char *buffer;
+
+	size_t len = 0;
+	ssize_t line_len;
+
+	for ( i = 0 ; i < number_of_repititions_of_the_same_reads ; i++ )
+	{
+		line_to_be_written_to_file[0] = '\0';
+		strcat(line_to_be_written_to_file , read_names[ *read_names_index]);
+		( *read_names_index )++;
+		if ( *read_names_index > number_of_reads )
+		{
+			printf ("\nRead index exceeded");
+			exit (1);
+		}
+		else
+		{
+			//printf ("\nIndex=%d Total=%d" , *read_names_index , number_of_reads);
+		}
+		//sprintf (temp , "%d" , i + 1);
+		//strcat (line_to_be_written_to_file , "_");
+		//strcat (line_to_be_written_to_file , temp);
+		strcat(line_to_be_written_to_file , "\t");
+
+		sprintf(temp , "%d" , sam_alignment->samflag);
+		strcat(line_to_be_written_to_file , temp);
+
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , sam_alignment->reference_name);
+
+		strcat(line_to_be_written_to_file , "\t");
+		sprintf(temp , "%lld" , sam_alignment->start_position);
+		strcat(line_to_be_written_to_file , temp);
+
+		strcat(line_to_be_written_to_file , "\t");
+		if ( flag_ignore_alignment_scores == 1 )
+			strcat(line_to_be_written_to_file , "255");
+		else
+		{
+			sprintf(temp , "%d" , sam_alignment->mapping_quality_score);
+			strcat(line_to_be_written_to_file , temp);
+		}
+
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , sam_alignment->cigar);
+
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "*");
+
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "0");
+
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , "0");
+
+		strcat(line_to_be_written_to_file , "\t");
+		strcat(line_to_be_written_to_file , sam_alignment->seq);
+
+		strcat(line_to_be_written_to_file , "\t");
+		if ( flag_ignore_all_quality_scores == 1 && ( line_len = getline ( &buffer ,
+				&len ,
+				fhr_qual) ) != -1 )
+		{
+			buffer[strlen (buffer) - 1] = '\0';
+			strcat(line_to_be_written_to_file , buffer);
+		}
+		else strcat(line_to_be_written_to_file , sam_alignment->qual);
+
+		strcat(line_to_be_written_to_file , "\t");
+		//Tags
+		strcat(line_to_be_written_to_file , "NH:i:");
+		strcat(line_to_be_written_to_file , sam_alignment->tags[0].val);
+		strcat(line_to_be_written_to_file , "\t");
+
+		if ( strcmp (sam_alignment->tags[1].val , ".") != 0 && strchr (sam_alignment->cigar ,
+				'N') != NULL )
+		{
+			strcat(line_to_be_written_to_file , "XS:A:");
+			strcat(line_to_be_written_to_file , sam_alignment->tags[1].val);
+			strcat(line_to_be_written_to_file , "\t");
+		}
+
+		if ( flag_ignore_sequence_information == 0 )
+		{
+			strcat(line_to_be_written_to_file , "MD:Z:");
+			strcat(line_to_be_written_to_file , sam_alignment->tags[2].val);
+			strcat(line_to_be_written_to_file , "\t");
+		}
+		if ( flag_ignore_alignment_scores == 0 && strcmp (sam_alignment->tags[3].val ,
+				"X") != 0 )
+		{
+			strcat(line_to_be_written_to_file , "AS:i:");
+			strcat(line_to_be_written_to_file , sam_alignment->tags[3].val);
+			strcat(line_to_be_written_to_file , "\t");
+		}
+
+		if ( line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] == '\t' )
+			line_to_be_written_to_file[strlen (line_to_be_written_to_file) - 1] = '\0';
+		strcat(line_to_be_written_to_file , "\n");
+		fprintf (fhw , "%s" , line_to_be_written_to_file);
+	}
+}
+
 void convertToAlignmentPairedEnded (
 		struct Sam_Alignment *sam_alignment_instance,
 		struct Whole_Genome_Sequence *whole_genome,
