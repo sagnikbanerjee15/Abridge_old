@@ -337,19 +337,19 @@ def runCommand( eachpinput ):
 def constructFileNames( input_filename, options ):
     name_of_input_file_without_location = input_filename.split( "/" )[-1][:-4]
 
-    name_of_max_input_reads_file = f"{options.output_directory}/{name_of_input_file_without_location}_max_input_reads"
-    name_of_file_with_max_commas = f"{options.output_directory}/{name_of_input_file_without_location}_max_commas"
-    name_of_file_max_read_length = f"{options.output_directory}/{name_of_input_file_without_location}_max_read_size"
-    name_of_total_number_of_alignments_file = f"{options.output_directory}/{name_of_input_file_without_location}_total_number_of_alignments"
-    frequency_of_flags_filename = f"{options.output_directory}/{name_of_input_file_without_location}_frequency_of_flags"
+    name_of_max_input_reads_file = f"{options.output_directory}/inputalignedfilename_max_input_reads"
+    name_of_file_with_max_commas = f"{options.output_directory}/inputalignedfilename_max_commas"
+    name_of_file_max_read_length = f"{options.output_directory}/inputalignedfilename_max_read_size"
+    name_of_total_number_of_alignments_file = f"{options.output_directory}/inputalignedfilename_total_number_of_alignments"
+    frequency_of_flags_filename = f"{options.output_directory}/inputalignedfilename_frequency_of_flags"
 
-    outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_compressed"
-    index_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_index"
-    unmapped_outputfilename = f"{options.output_directory}/{name_of_input_file_without_location}_unmapped"
-    name_of_file_with_quality_scores = f"{options.output_directory}/{name_of_input_file_without_location}_qual"
+    outputfilename = f"{options.output_directory}/inputalignedfilename_compressed"
+    index_outputfilename = f"{options.output_directory}/inputalignedfilename_index"
+    unmapped_outputfilename = f"{options.output_directory}/inputalignedfilename_unmapped"
+    name_of_file_with_quality_scores = f"{options.output_directory}/inputalignedfilename_qual"
     name_of_file_with_quality_scores_rle = f"{options.output_directory}/{name_of_input_file_without_location}_qual_rle"
-    name_of_file_dictionary = f"{options.output_directory}/{name_of_input_file_without_location}_dictionary"
-    fclqc_output_filename = f"{options.output_directory}/{name_of_input_file_without_location}_qual_compressed_fclqc"
+    name_of_file_dictionary = f"{options.output_directory}/inputalignedfilename_dictionary"
+    fclqc_output_filename = f"{options.output_directory}/inputalignedfilename_qual_compressed_fclqc"
 
     error_file_max_input_reads = f"{name_of_max_input_reads_file}.error"
     error_file_compress_ = f"{outputfilename}.error"

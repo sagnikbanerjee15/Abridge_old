@@ -117,6 +117,10 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 > /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_decompress_test.output \
 2> /project/maizegdb/sagnik/ABRIDGE/testing/SRR13711353_PE_decompress_test.error &
 
+# Remove directories
+
+rm -rf /project/maizegdb/sagnik/ABRIDGE/testing/abridge_*compressed/* /90daydata/maizegdb/sagnik/ABRIDGE/testing/abridge_*compressed/* &
+
 ###################################################################
 # Commands for creating smaller sam file for testing purpose
 ###################################################################
