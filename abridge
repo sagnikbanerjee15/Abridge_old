@@ -357,14 +357,14 @@ def constructFileNames( input_filename, options ):
     error_file_qual_rle = f"{name_of_file_with_quality_scores_rle}.error"
     error_fclqc = f"{fclqc_output_filename}.error"
 
-    error_file_7z_compression = f"{options.error_directory}/{name_of_input_file_without_location}_7z_compression.error"
-    error_file_zpaq_compression = f"{options.error_directory}/{name_of_input_file_without_location}_zpaq_compression.error"
-    error_file_brotli_compression = f"{options.error_directory}/{name_of_input_file_without_location}_brotli_compression.error"
+    error_file_7z_compression = f"{options.error_directory}/7z_compression.error"
+    error_file_zpaq_compression = f"{options.error_directory}/zpaq_compression.error"
+    error_file_brotli_compression = f"{options.error_directory}/brotli_compression.error"
 
     # Decompression
-    error_file_7z_decompression = f"{options.error_directory}/{name_of_input_file_without_location}_7z_decompression.error"
-    error_file_zpaq_decompression = f"{options.error_directory}/{name_of_input_file_without_location}_zpaq_decompression.error"
-    error_file_brotli_decompression = f"{options.error_directory}/{name_of_input_file_without_location}_brotli_decompression.error"
+    error_file_7z_decompression = f"{options.error_directory}/7z_decompression.error"
+    error_file_zpaq_decompression = f"{options.error_directory}/zpaq_decompression.error"
+    error_file_brotli_decompression = f"{options.error_directory}/brotli_decompression.error"
 
     delete_these_files = [name_of_max_input_reads_file, name_of_file_with_max_commas, name_of_file_max_read_length, name_of_total_number_of_alignments_file, frequency_of_flags_filename]
     other_files = [outputfilename, index_outputfilename, unmapped_outputfilename, name_of_file_with_quality_scores, name_of_file_with_quality_scores_rle, name_of_file_dictionary, fclqc_output_filename]
