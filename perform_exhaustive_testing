@@ -98,7 +98,6 @@ def runCommand( eachinput ):
     else:
         subprocess.check_call( ['bash', '-c', cmd1] )
         subprocess.check_call( ['bash', '-c', cmd2] )
-    time.sleep(10)
 
 def main():
 
@@ -164,6 +163,7 @@ def main():
                                             
                                             allinputs.append( ["dummy", cmd1, cmd2] )
     pool.map( runCommand, allinputs )
+    return
     
     ########################################################################################################################
     # Decompress
