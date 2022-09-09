@@ -15,6 +15,7 @@
 import os
 import sys
 import multiprocessing
+import time
 
 CPU = 72
 
@@ -97,6 +98,7 @@ def runCommand( eachinput ):
     else:
         subprocess.check_call( ['bash', '-c', cmd1] )
         subprocess.check_call( ['bash', '-c', cmd2] )
+    time.sleep(10)
 
 def main():
 
