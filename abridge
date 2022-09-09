@@ -1041,8 +1041,8 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
     elif inputalignedfilename_onlyextension == "sam":
         first_line = open( options.inputalignedfilename, "r" ).readline().strip()
         if "SO:coordinate" in first_line:
-            # Copying the input sam file to the output directory
-            cmd = f"cp {options.inputalignedfilename} {options.output_directory}/inputalignedfilename.sam "
+            # Link the input sam file to the output directory
+            cmd = f"ln -s {options.inputalignedfilename} {options.output_directory}/inputalignedfilename.sam "
             options.inputalignedfilename = f"{options.output_directory}/inputalignedfilename.sam"
             remove_these_files.append( options.inputalignedfilename )
             os.system( cmd )
