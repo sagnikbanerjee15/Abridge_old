@@ -142,7 +142,7 @@ def main():
                                             cmd1 += f" --skip_shortening_read_names "
                                             
                                         cmd1 += f" --inputalignedfilename  {alignment_filename} "
-                                        cmd1 += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
+                                        cmd1 += f" --genome /work/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
                                         cmd1 += f" --keep_intermediate_error_files "
                                         cmd1 += f" --preserve_all_intermediate_files "
                                         cmd1 += f" --output_directory {output_directory_main}"
