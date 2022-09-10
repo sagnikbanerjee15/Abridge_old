@@ -1014,7 +1014,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
         
         software = "samtools"
         version = list_of_softwares_with_versions[software]
-        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
+        executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", '10g' , cmd)
 
         first_line = open( f"{options.output_directory}/header" , "r" ).readline().strip()
         if "SO:coordinate" in first_line:
@@ -1036,7 +1036,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", '10g' , cmd)
 
     elif inputalignedfilename_onlyextension == "sam":
         first_line = open( options.inputalignedfilename, "r" ).readline().strip()
@@ -1055,7 +1055,7 @@ def createPositionSortedSAMInputFileForCompressing( options, list_of_softwares_w
             if os.path.exists( f"{options.output_directory}/inputalignedfilename.sam" ) == True:return
             software = "samtools"
             version = list_of_softwares_with_versions[software]
-            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", cmd)
+            executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", '10g' , cmd)
 
 def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_versions, volumes_list):
     """
