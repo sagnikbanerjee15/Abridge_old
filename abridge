@@ -1086,7 +1086,6 @@ def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_vers
         tag_presence[tag_name] = int(tag_value)
     fhr.close()
     
-    os.system(f"rm {tagfilename}")
     return tag_presence
 
 def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging ):
