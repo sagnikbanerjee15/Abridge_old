@@ -138,7 +138,7 @@ def runSingularityCommand( logging, name, version, image_location, container_nam
     os.system( singularity_cmd )
     logging.info( f"Running command - {singularity_cmd}" )
 
-def executeCommand(options, software, version, volumes_list, singularity_sif_location, cmd):
+def executeCommand(options, software, version, volumes_list, singularity_sif_location, mem, cmd):
     """
     Executes the command within the requested framework
     """
@@ -151,7 +151,7 @@ def executeCommand(options, software, version, volumes_list, singularity_sif_loc
                             volumes = volumes_list,
                             command = cmd,
                             cpus = options.cpu,
-                            memory = '1g'
+                            memory = mem
             )
     elif options.framework == "singularity":
         runSingularityCommand( logging,
@@ -162,7 +162,7 @@ def executeCommand(options, software, version, volumes_list, singularity_sif_loc
                             volumes = volumes_list,
                             command = cmd,
                             cpus = options.cpu,
-                            memory = '1g'
+                            memory = mem
                             )
         
 def validateCommandLineArguments( options ):

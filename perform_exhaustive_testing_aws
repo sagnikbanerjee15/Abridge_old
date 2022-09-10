@@ -17,7 +17,7 @@ import sys
 import multiprocessing
 import time
 
-CPU = 32
+CPU = 72
 
 def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
@@ -57,13 +57,10 @@ def runSingularityCommand(name, version, image_location, container_name, volumes
             singularity_cmd += f" -B {mapping}"
         singularity_cmd += f" {image_location} "
         singularity_cmd += f" {command}"
-    
-    print( f"Running command - {singularity_cmd}" )
-    sys.stdout.flush()
     os.system( singularity_cmd )
     
 
-def executeCommand(framework_of_choice, software, version, volumes_list, singularity_sif_location, cmd1):
+def executeCommand(framework_of_choice, software, version, volumes_list, singularity_sif_location, memory = '1g', cmd1):
     """
     Executes the command within the requested framework
     """
@@ -76,7 +73,7 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
                             volumes = volumes_list,
                             command = cmd1,
                             cpus = CPU,
-                            memory = '1g'
+                            memory = memory
             )
     elif framework_of_choice == "singularity":
         runSingularityCommand( 
@@ -87,7 +84,7 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
                             volumes = volumes_list,
                             command = cmd1,
                             cpus = CPU,
-                            memory = '1g'
+                            memory = memory
                             )
 
 def runCommand( eachinput ):
@@ -98,7 +95,7 @@ def runCommand( eachinput ):
 
 def main():
 
-    OUTPUT_DIRECTORY_MAIN = "/work/ABRIDGE/testing"
+    OUTPUT_DIRECTORY_MAIN = "/ssd/ABRIDGE/testing"
     
     sra_id = "SRR13711353"
     
@@ -123,7 +120,7 @@ def main():
                                     for skip_shortening_read_names in [0, 1]:
                                         
                                         output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}"
-                                        cmd1  = f" /work/ABRIDGE/Abridge/abridge "
+                                        cmd1  = f" /ssd/ABRIDGE/Abridge/abridge "
                                         cmd1 += f" --compress "
                                         
                                         if ignore_alignment_scores == 1:
@@ -179,7 +176,7 @@ def main():
                                                 output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}_quality_{quality}_i_seq_{ignore_sequence}"
                                                 compressed_filename = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}/{sra_id}_{ended}_{alignment_type}.abridge"
                                                               
-                                                cmd1  = f" /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge "
+                                                cmd1  = f" /ssd/ABRIDGE/Abridge/abridge "
                                                 cmd1 += f" --decompress "
                                                 cmd1 += f" --inputabrfilename  {compressed_filename} "
                                                 cmd1 += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
