@@ -17,7 +17,7 @@ import sys
 import multiprocessing
 import time
 
-CPU = 72
+CPU = 120
 
 def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
@@ -96,7 +96,7 @@ def runCommand( eachinput ):
 
 def main():
 
-    OUTPUT_DIRECTORY_MAIN = "/ssd3/ABRIDGE/testing"
+    OUTPUT_DIRECTORY_MAIN = "/work/ABRIDGE/testing"
     
     sra_id = "SRR13711353"
     
@@ -122,7 +122,7 @@ def main():
                                     for skip_shortening_read_names in [0, 1]:
                                         
                                         output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}"
-                                        cmd1  = f" /ssd3/ABRIDGE/Abridge/abridge "
+                                        cmd1  = f" /work/ABRIDGE/Abridge/abridge "
                                         cmd1 += f" --compress "
                                         
                                         if ignore_alignment_scores == 1:
@@ -179,7 +179,7 @@ def main():
                                                 output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}_quality_{quality}_i_seq_{ignore_sequence}"
                                                 compressed_filename = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}/{sra_id}_{ended}_{alignment_type}.abridge"
                                                               
-                                                cmd1  = f" /ssd3/ABRIDGE/Abridge/abridge "
+                                                cmd1  = f" /work/ABRIDGE/Abridge/abridge "
                                                 cmd1 += f" --decompress "
                                                 cmd1 += f" --inputabrfilename  {compressed_filename} "
                                                 cmd1 += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
