@@ -112,7 +112,7 @@ def main():
     allinputs = []
     for ended in ["SE","PE"]:
         for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
-            alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}_1.sam"
+            alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}.sam"
             
             for ignore_alignment_scores in [0, 1]:
                 for ignore_all_quality_scores in [0, 1]:
