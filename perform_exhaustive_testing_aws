@@ -92,6 +92,7 @@ def runCommand( eachinput ):
     
     os.system( cmd1 )
     os.system( cmd2 )
+    time.sleep(120)
 
 def main():
 
