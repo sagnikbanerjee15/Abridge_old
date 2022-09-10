@@ -92,12 +92,9 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
 
 def runCommand( eachinput ):
     Run, cmd1, cmd2 = eachinput
-    if "<" not in cmd1:
-        os.system( cmd1 )
-        os.system( cmd2 )
-    else:
-        subprocess.check_call( ['bash', '-c', cmd1] )
-        subprocess.check_call( ['bash', '-c', cmd2] )
+    
+    os.system( cmd1 )
+    os.system( cmd2 )
 
 def main():
 
@@ -150,6 +147,7 @@ def main():
                                         cmd1 += f" --preserve_all_intermediate_files "
                                         cmd1 += f" --output_directory {output_directory_main}"
                                         cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
+                                        cmd1 += f" --framework docker "
                                         cmd1 += f" 1> {output_directory_main}.output "
                                         cmd1 += f" 2> {output_directory_main}.error"
                                         
@@ -192,6 +190,7 @@ def main():
                                                     cmd1 += f" --quality C "
                                                 if ignore_sequence == 1:
                                                     cmd1 += f" --ignore_sequence "
+                                                cmd1 += f" --framework docker "
                                                 cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
                                                 cmd1 += f" 1> {output_directory_main}.output "
                                                 cmd1 += f" 2> {output_directory_main}.error"
