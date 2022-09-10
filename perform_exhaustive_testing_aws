@@ -88,11 +88,11 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
                             )
 
 def runCommand( eachinput ):
-    Run, cmd1, cmd2 = eachinput
-    
+    Run, cmd1, wait_time = eachinput
+    time.sleep(wait_time * 2)
     os.system( cmd1 )
-    os.system( cmd2 )
-    time.sleep(120)
+    
+    
 
 def main():
 
@@ -108,6 +108,7 @@ def main():
     ########################################################################################################################
     
     allinputs = []
+    i=0
     for ended in ["SE","PE"]:
         for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
             alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}.sam"
@@ -151,8 +152,8 @@ def main():
                                         
                                         
                                         if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}.abridge") == False:
-                                            
-                                            allinputs.append( ["dummy", cmd1, "ls"] )
+                                            allinputs.append( ["dummy", cmd1, i] )
+                                            i+=1
     pool.map( runCommand, allinputs )
     return
     
@@ -160,6 +161,7 @@ def main():
     # Decompress
     ########################################################################################################################
     allinputs = []
+    i=0
     os.chdir(f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed")
     for ended in ["SE","PE"]:
         for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
@@ -195,7 +197,8 @@ def main():
                                                 
                                                 #print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type[:-4]}_decompressed.sam") == False:
-                                                    allinputs.append( ["dummy", cmd1, "ls"] )
+                                                    allinputs.append( ["dummy", cmd1, i] )
+                                                    i+=1
     pool.map( runCommand, allinputs )
     #print(len(allinputs))
                                         
