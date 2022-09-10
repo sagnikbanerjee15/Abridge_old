@@ -150,6 +150,7 @@ def main():
                                         cmd1 += f" --framework docker "
                                         cmd1 += f" 1> {output_directory_main}.output "
                                         cmd1 += f" 2> {output_directory_main}.error"
+                                        print(cmd1)
                                         
                                         
                                         if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}.abridge") == False:
