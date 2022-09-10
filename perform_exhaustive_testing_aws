@@ -60,7 +60,7 @@ def runSingularityCommand(name, version, image_location, container_name, volumes
     os.system( singularity_cmd )
     
 
-def executeCommand(framework_of_choice, software, version, volumes_list, singularity_sif_location, memory = '1g', cmd1):
+def executeCommand(framework_of_choice, software, version, volumes_list, singularity_sif_location, memory, cmd1):
     """
     Executes the command within the requested framework
     """
