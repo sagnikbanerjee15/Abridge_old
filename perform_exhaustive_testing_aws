@@ -1,0 +1,209 @@
+#! /usr/bin/env python3
+
+#####################################################################################################################################################################
+#
+# A standalone script created for the purpose of testing abridge
+# Script does not take any inputs and all the required information is hard coded intentionally to prevent it from being accidentally executed in the future
+# Script will also perform download and alignment of all sequences
+# Can be executed without any changes on Ceres
+# 
+# Tests carried out by this script:
+#     - 2 types of STAR alignments - one with 
+# 
+#####################################################################################################################################################################
+
+import os
+import sys
+import multiprocessing
+import time
+
+CPU = 1
+
+def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a docker container
+    """
+
+    # Runs the main command
+    docker_cmd = f" docker run "
+    # docker_cmd += f" -ti "
+    docker_cmd += f" --rm "
+    docker_cmd += f" --cpus={cpus}"
+    docker_cmd += f" --memory='{memory}'"
+    # docker_cmd += f" --name {container_name}"
+    for mapping in volumes:
+        docker_cmd += f" -v {mapping}"
+    docker_cmd += f" {image_location}:{version} "
+    docker_cmd += f" bash -c '{command}'"
+    #logging.info( f"Running command - {docker_cmd}" )
+    os.system( docker_cmd )
+
+def runSingularityCommand(name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
+    """
+    Runs the command in a Singularity container
+    """
+
+    # Runs the main command
+    
+    if "sratools" not in image_location:
+        singularity_cmd = f" singularity exec  "
+        for mapping in volumes:
+            singularity_cmd += f" -B {mapping}"
+        singularity_cmd += f" {image_location} "
+        singularity_cmd += f" bash -c '{command}'"
+    else:
+        singularity_cmd = f" singularity exec  "
+        for mapping in volumes:
+            singularity_cmd += f" -B {mapping}"
+        singularity_cmd += f" {image_location} "
+        singularity_cmd += f" {command}"
+    
+    print( f"Running command - {singularity_cmd}" )
+    sys.stdout.flush()
+    os.system( singularity_cmd )
+    
+
+def executeCommand(framework_of_choice, software, version, volumes_list, singularity_sif_location, cmd1):
+    """
+    Executes the command within the requested framework
+    """
+    if framework_of_choice == "docker":
+        runDockerCommand( 
+                          name = software,
+                            version = version,
+                            image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}",
+                            container_name = f"{software}",
+                            volumes = volumes_list,
+                            command = cmd1,
+                            cpus = CPU,
+                            memory = '1g'
+            )
+    elif framework_of_choice == "singularity":
+        runSingularityCommand( 
+                            name = software,
+                            version = version,
+                            image_location = singularity_sif_location,
+                            container_name = f"{software}",
+                            volumes = volumes_list,
+                            command = cmd1,
+                            cpus = CPU,
+                            memory = '1g'
+                            )
+
+def runCommand( eachinput ):
+    Run, cmd1, cmd2 = eachinput
+    if "<" not in cmd1:
+        os.system( cmd1 )
+        os.system( cmd2 )
+    else:
+        subprocess.check_call( ['bash', '-c', cmd1] )
+        subprocess.check_call( ['bash', '-c', cmd2] )
+
+def main():
+
+    OUTPUT_DIRECTORY_MAIN = "/work/ABRIDGE/testing"
+    
+    sra_id = "SRR13711353"
+    
+    pool = multiprocessing.Pool( processes = int( CPU ) )
+    
+    
+    ########################################################################################################################
+    # Compress
+    ########################################################################################################################
+    
+    allinputs = []
+    for ended in ["SE","PE"]:
+        for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
+            alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}_1.sam"
+            
+            for ignore_alignment_scores in [0, 1]:
+                for ignore_all_quality_scores in [0, 1]:
+                    for ignore_quality_scores_for_matched_bases in [0, 1]:
+                        for ignore_soft_clippings in [0, 1]:
+                            for ignore_mismatches in [0, 1]:
+                                for ignore_unmapped_reads in [0, 1]:
+                                    for skip_shortening_read_names in [0, 1]:
+                                        
+                                        output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names} "
+                                        cmd1  = f" /work/ABRIDGE/Abridge/abridge "
+                                        cmd1 += f" --compress "
+                                        
+                                        if ignore_alignment_scores == 1:
+                                            cmd1 += f" --ignore_alignment_scores "
+                                        if ignore_all_quality_scores == 1:
+                                            cmd1 += f" --ignore_all_quality_scores "
+                                        if ignore_quality_scores_for_matched_bases == 1:
+                                            cmd1 += f" --ignore_quality_scores_for_matched_bases "
+                                        if ignore_soft_clippings == 1:
+                                            cmd1 += " --ignore_soft_clippings "
+                                        if ignore_mismatches == 1:
+                                            cmd1 += " --ignore_mismatches "
+                                        if ignore_unmapped_reads == 1:
+                                            cmd1 += " --ignore_unmapped_reads "
+                                        if skip_shortening_read_names == 1:
+                                            cmd1 += f" --skip_shortening_read_names "
+                                            
+                                        cmd1 += f" --inputalignedfilename  {alignment_filename} "
+                                        cmd1 += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
+                                        cmd1 += f" --keep_intermediate_error_files "
+                                        cmd1 += f" --preserve_all_intermediate_files "
+                                        cmd1 += f" --output_directory {output_directory_main}"
+                                        cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
+                                        cmd1 += f" 1> {output_directory_main}.output "
+                                        cmd1 += f" 2> {output_directory_main}.error"
+                                        
+                                        
+                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}.abridge") == False:
+                                            
+                                            allinputs.append( ["dummy", cmd1, "ls"] )
+    pool.map( runCommand, allinputs )
+    return
+    
+    ########################################################################################################################
+    # Decompress
+    ########################################################################################################################
+    allinputs = []
+    os.chdir(f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed")
+    for ended in ["SE","PE"]:
+        for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
+            alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}.sam"
+            
+            for ignore_alignment_scores in [0, 1]:
+                for ignore_all_quality_scores in [0, 1]:
+                    for ignore_quality_scores_for_matched_bases in [0, 1]:
+                        for ignore_soft_clippings in [0, 1]:
+                            for ignore_mismatches in [0, 1]:
+                                for ignore_unmapped_reads in [0, 1]:
+                                    for skip_shortening_read_names in [0, 1]:   
+                                        for quality in [0, 1]:
+                                            for ignore_sequence in [0, 1]:
+                                                output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}_quality_{quality}_i_seq_{ignore_sequence}"
+                                                compressed_filename = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}/{sra_id}_{ended}_{alignment_type}.abridge"
+                                                              
+                                                cmd1  = f" /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge "
+                                                cmd1 += f" --decompress "
+                                                cmd1 += f" --inputabrfilename  {compressed_filename} "
+                                                cmd1 += f" --genome /project/maizegdb/sagnik/ABRIDGE/testing/reference/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa "
+                                                cmd1 += f" --keep_intermediate_error_files "
+                                                cmd1 += f" --preserve_all_intermediate_files "
+                                                cmd1 += f" --output_directory {output_directory_main}"
+                                                if quality == 1:
+                                                    cmd1 += f" --quality C "
+                                                if ignore_sequence == 1:
+                                                    cmd1 += f" --ignore_sequence "
+                                                cmd1 += f" --software_directory /project/maizegdb/sagnik/ABRIDGE/testing/singularity_images"
+                                                cmd1 += f" 1> {output_directory_main}.output "
+                                                cmd1 += f" 2> {output_directory_main}.error"
+                                                
+                                                #print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
+                                                if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type[:-4]}_decompressed.sam") == False:
+                                                    allinputs.append( ["dummy", cmd1, "ls"] )
+    pool.map( runCommand, allinputs )
+    #print(len(allinputs))
+                                        
+    
+    
+
+if __name__ == "__main__":
+    main()
