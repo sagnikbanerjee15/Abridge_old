@@ -93,6 +93,7 @@ void extractTagsFromSAMFile( char *inputfilename, char *outputfilename )
 	char **split_tags;
 
 	int number_of_fields; // Number of fields in each sam alignment entry
+	int N_in_cigar;
 
 	int i, j, k; // Required in loops
 	int NH_present, MD_present, XS_present; // Flags to indicate whether these tags are present
@@ -132,6 +133,8 @@ void extractTagsFromSAMFile( char *inputfilename, char *outputfilename )
 	MD_present = 0;
 	XS_present = 0;
 
+	N_in_cigar = 0;
+
 	while ( (line_len = getline( &line, &len, fhr )) != -1 )
 		if ( line[0] != '@' )
 			break;
@@ -144,6 +147,13 @@ void extractTagsFromSAMFile( char *inputfilename, char *outputfilename )
 				split_line,
 				number_of_fields,
 				split_tags );
+
+		for ( i = 0; curr_alignment->cigar[i] != '\0'; i++ )
+			if ( curr_alignment->cigar[i] == 'N' )
+			{
+				N_in_cigar = 1;
+				break;
+			}
 		for ( i = 11; i < number_of_fields; i++ )
 		{
 			if ( strcmp( curr_alignment->tags[i - 11].name, "NH" ) == 0 )
@@ -153,7 +163,8 @@ void extractTagsFromSAMFile( char *inputfilename, char *outputfilename )
 			else if ( strcmp( curr_alignment->tags[i - 11].name, "XS" ) == 0 )
 				XS_present = 1;
 		}
-		if ( NH_present * MD_present * XS_present == 1 )
+		if ( NH_present * MD_present * XS_present == 1
+				|| (N_in_cigar == 1 && NH_present * MD_present == 1) )
 			break;
 
 	} while ( (line_len = getline( &line, &len, fhr )) != -1 );
