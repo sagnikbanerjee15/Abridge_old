@@ -17,7 +17,7 @@ import sys
 import multiprocessing
 import time
 
-CPU = 72
+CPU = 1
 
 def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
