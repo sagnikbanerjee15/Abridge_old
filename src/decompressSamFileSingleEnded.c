@@ -396,6 +396,8 @@ void convertToAlignmentSingleEnded(
 
 	/********************************************************************/
 
+	printf( "\nInside convertToAlignmentSingleEnded" );
+	fflush( stdout );
 	if ( read_names_stored == 1 )
 	{
 		if ( number_of_columns == 2 )
@@ -1031,13 +1033,9 @@ void decompressFile(
 		printf( "\nCheckpoint 3 line_num = %d", line_num );
 		fflush( stdout );
 
-		/*
-		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
-		 continue;
+		/*printSamAlignmentInstance( sam_alignment_instance, 0 );
+		 fflush( stdout );
 		 */
-		printSamAlignmentInstance( sam_alignment_instance, 0 );
-		fflush( stdout );
-
 		convertToAlignmentSingleEnded(
 				sam_alignment_instance,
 				cigar_items_instance_for_writing,
