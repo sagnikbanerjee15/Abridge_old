@@ -634,13 +634,12 @@ void convertToAlignmentSingleEnded(
 		//fflush( stdout );
 		//printSamAlignmentInstance( sam_alignment_instance, 0 );
 		//continue;
-		/*
-		 printf(
-		 "\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d number_of_distinct_cigars_in_a_line %d",
-		 j,
-		 number_of_distinct_cigars_in_a_line);
-		 fflush(stdout);
-		 */
+
+		printf(
+				"\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d number_of_distinct_cigars_in_a_line %d",
+				j,
+				number_of_distinct_cigars_in_a_line );
+		fflush( stdout );
 
 		writeAlignmentToFileSingleEnded(
 				sam_alignment_instance,
@@ -656,9 +655,9 @@ void convertToAlignmentSingleEnded(
 
 		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
 
-		/*printf ("\nconvertToAlignmentSingleEnded Checkpoint 7");
-		 fflush (stdout);
-		 */
+		printf( "\nconvertToAlignmentSingleEnded Checkpoint 7" );
+		fflush( stdout );
+
 	}
 	/*
 	 printf ("\nLeaving function convertToAlignmentSingleEnded");
