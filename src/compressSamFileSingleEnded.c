@@ -1059,6 +1059,7 @@ void readAlignmentsAndCompress(
 			strcpy(
 					read_names[quality_score_index],
 					curr_alignment->read_name );
+			printf( "\nRead Name: %s", curr_alignment->read_name );
 			strcpy(
 					compressed_ds_pool[compressed_ds_pool_index]->icigar,
 					curr_alignment->icigar );
@@ -1136,6 +1137,7 @@ void readAlignmentsAndCompress(
 			strcpy(
 					read_names[quality_score_index],
 					curr_alignment->read_name );
+			printf( "\nRead Name: %s", curr_alignment->read_name );
 			quality_score_index++;
 			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
@@ -1172,6 +1174,7 @@ void readAlignmentsAndCompress(
 						strcpy(
 								read_names[quality_score_index],
 								curr_alignment->read_name );
+						printf( "\nRead Name: %s", curr_alignment->read_name );
 						compressed_ds_pool[i]->pointers_to_qual_scores[compressed_ds_pool[i]->num_reads
 								- 1] = qual_scores[quality_score_index];
 						compressed_ds_pool[i]->pointers_to_read_names[compressed_ds_pool[i]->num_reads
@@ -1197,6 +1200,7 @@ void readAlignmentsAndCompress(
 					strcpy(
 							read_names[quality_score_index],
 							curr_alignment->read_name );
+					printf( "\nRead Name: %s", curr_alignment->read_name );
 					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads
 							- 1] = qual_scores[quality_score_index];
 					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads
@@ -1251,6 +1255,7 @@ void readAlignmentsAndCompress(
 				strcpy(
 						read_names[quality_score_index],
 						curr_alignment->read_name );
+				printf( "\nRead Name: %s", curr_alignment->read_name );
 				strcpy(
 						compressed_ds_pool[compressed_ds_pool_index]->icigar,
 						curr_alignment->icigar );
