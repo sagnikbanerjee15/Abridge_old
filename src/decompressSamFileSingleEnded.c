@@ -506,8 +506,8 @@ void convertToAlignmentSingleEnded(
 	 read_names_stored,
 	 number_of_distinct_cigars_in_a_line);
 	 */
-	//printf("\nconvertToAlignmentSingleEnded Checkpoint 1");
-	//fflush (stdout);
+	printf( "\nconvertToAlignmentSingleEnded Checkpoint 1" );
+	fflush( stdout );
 	for ( j = 0; j < number_of_distinct_cigars_in_a_line; j++ )
 	{
 		splitByDelimiter( split_on_comma[j], '-', split_on_dash );
@@ -526,15 +526,14 @@ void convertToAlignmentSingleEnded(
 		else
 			number_of_repititions_of_the_same_reads = 1;
 
-		/*
-		 printf(
-		 "\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
-		 number_of_repititions_of_the_same_reads,
-		 split_on_comma[j]);
+		printf(
+				"\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
+				number_of_repititions_of_the_same_reads,
+				split_on_comma[j] );
 
-		 printf("\nconvertToAlignmentSingleEnded Checkpoint 2");
-		 fflush (stdout);
-		 */
+		printf( "\nconvertToAlignmentSingleEnded Checkpoint 2" );
+		fflush( stdout );
+
 		if ( !(split_on_comma[j][1] == '-'
 				&& isalpha( split_on_dash[0][0] ) != 0) )
 		{
@@ -554,10 +553,10 @@ void convertToAlignmentSingleEnded(
 				strcpy( sam_alignment_instance->tags[3].val, "X" );
 			}
 		}
-		/*
-		 printf("\nconvertToAlignmentSingleEnded Checkpoint 3");
-		 fflush(stdout);
-		 */
+
+		printf( "\nconvertToAlignmentSingleEnded Checkpoint 3" );
+		fflush( stdout );
+
 		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
 		sam_alignment_instance->start_position = curr_position;
 
