@@ -974,8 +974,9 @@ void readAlignmentsAndCompress(
 				number_of_fields,
 				split_tags );
 		strcpy( curr_reference_name, curr_alignment->reference_name );
-
-		printSamAlignmentInstance( curr_alignment, 0 );
+		if ( strcmp( curr_alignment->read_name, "SRR13711353_2589864__151_2" )
+				== 0 )
+			printSamAlignmentInstance( curr_alignment, 0 );
 
 		/***************************************************************************************
 		 * Read a line from the short read names file
@@ -993,7 +994,6 @@ void readAlignmentsAndCompress(
 					split_line );
 			strcpy( curr_alignment->read_name, split_line[3] );
 		}
-		printf( "\n1st Read Name: %s", curr_alignment->read_name );
 
 		for ( i = 11; i < number_of_fields; i++ )
 		{
@@ -1050,7 +1050,6 @@ void readAlignmentsAndCompress(
 				sam_alignment_instance_diagnostics,
 				number_of_records_read,
 				run_diagnostics );
-		printf( "\n2nd Read Name: %s", curr_alignment->read_name );
 
 		//printf ("\n Position:%lld iCIGAR: %s" , curr_alignment->start_position , curr_alignment->icigar);
 		if ( strlen( prev_reference_name ) == 0 ) // 1st chromosome - initialize stuffs
@@ -1063,7 +1062,6 @@ void readAlignmentsAndCompress(
 			strcpy(
 					read_names[quality_score_index],
 					curr_alignment->read_name );
-			printf( "\nRead Name: %s", curr_alignment->read_name );
 			strcpy(
 					compressed_ds_pool[compressed_ds_pool_index]->icigar,
 					curr_alignment->icigar );
@@ -1141,7 +1139,6 @@ void readAlignmentsAndCompress(
 			strcpy(
 					read_names[quality_score_index],
 					curr_alignment->read_name );
-			printf( "\nRead Name: %s", curr_alignment->read_name );
 			quality_score_index++;
 			//printf("\n2. Max_read_at_a_position %d chromosome %s position %d compressed_ds_pool_index %d", compressed_ds_pool[compressed_ds_pool_index]->num_reads, curr_alignment->reference_name, curr_alignment->start_position, compressed_ds_pool_index);
 			compressed_ds_pool_index++;
@@ -1178,7 +1175,6 @@ void readAlignmentsAndCompress(
 						strcpy(
 								read_names[quality_score_index],
 								curr_alignment->read_name );
-						printf( "\nRead Name: %s", curr_alignment->read_name );
 						compressed_ds_pool[i]->pointers_to_qual_scores[compressed_ds_pool[i]->num_reads
 								- 1] = qual_scores[quality_score_index];
 						compressed_ds_pool[i]->pointers_to_read_names[compressed_ds_pool[i]->num_reads
@@ -1204,7 +1200,6 @@ void readAlignmentsAndCompress(
 					strcpy(
 							read_names[quality_score_index],
 							curr_alignment->read_name );
-					printf( "\nRead Name: %s", curr_alignment->read_name );
 					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_qual_scores[compressed_ds_pool[compressed_ds_pool_index]->num_reads
 							- 1] = qual_scores[quality_score_index];
 					compressed_ds_pool[compressed_ds_pool_index]->pointers_to_read_names[compressed_ds_pool[compressed_ds_pool_index]->num_reads
@@ -1259,7 +1254,6 @@ void readAlignmentsAndCompress(
 				strcpy(
 						read_names[quality_score_index],
 						curr_alignment->read_name );
-				printf( "\nRead Name: %s", curr_alignment->read_name );
 				strcpy(
 						compressed_ds_pool[compressed_ds_pool_index]->icigar,
 						curr_alignment->icigar );
