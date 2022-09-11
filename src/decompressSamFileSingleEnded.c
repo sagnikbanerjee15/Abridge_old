@@ -658,10 +658,10 @@ void convertToAlignmentSingleEnded(
 		fflush( stdout );
 
 	}
-	/*
-	 printf ("\nLeaving function convertToAlignmentSingleEnded");
-	 fflush (stdout);
-	 */
+
+	printf( "\nLeaving function convertToAlignmentSingleEnded" );
+	fflush( stdout );
+
 }
 
 void decompressFile(
