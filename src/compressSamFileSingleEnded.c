@@ -991,7 +991,7 @@ void readAlignmentsAndCompress(
 					split_line );
 			strcpy( curr_alignment->read_name, split_line[3] );
 		}
-		//printf( "\nRead Name: %s", curr_alignment->read_name );
+		printf( "\n1st Read Name: %s", curr_alignment->read_name );
 
 		for ( i = 11; i < number_of_fields; i++ )
 		{
@@ -1048,6 +1048,7 @@ void readAlignmentsAndCompress(
 				sam_alignment_instance_diagnostics,
 				number_of_records_read,
 				run_diagnostics );
+
 		//printf ("\n Position:%lld iCIGAR: %s" , curr_alignment->start_position , curr_alignment->icigar);
 		if ( strlen( prev_reference_name ) == 0 ) // 1st chromosome - initialize stuffs
 		{
