@@ -1035,6 +1035,8 @@ void decompressFile(
 		 if (strstr(buffer, "3Zg,2hWh,dpt,DCZz") == NULL)
 		 continue;
 		 */
+		printSamAlignmentInstance( sam_alignment_instance, 0 );
+		fflush( stdout );
 
 		convertToAlignmentSingleEnded(
 				sam_alignment_instance,
