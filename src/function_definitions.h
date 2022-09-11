@@ -2281,10 +2281,6 @@ void generateIntegratedCigarSingleEnded(
 		curr_alignment->read_name[0] = ' ';
 		curr_alignment->read_name[1] = '\0';
 	}
-	else
-	{
-		printf( "\nPreserving read name" );
-	}
 
 	/*
 	 * Change the iCIGAR representation to reflect the samformatflag and XS tag

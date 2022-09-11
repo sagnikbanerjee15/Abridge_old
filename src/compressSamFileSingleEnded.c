@@ -274,7 +274,6 @@ void writeToFile(
 					&& compressed_ds_pool[i]->pointers_to_read_names[j][1]
 							!= '\0' )
 			{
-				printf( "\nInside here" );
 				//strcat(list_of_read_names, "brdg_");
 				strcat(
 						list_of_read_names,
