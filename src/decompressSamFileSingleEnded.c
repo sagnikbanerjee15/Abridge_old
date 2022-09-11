@@ -589,6 +589,7 @@ void convertToAlignmentSingleEnded(
 			//fflush (stdout);
 			printf( "\nConvertion started" );
 			printf( "\niCigar: %s", sam_alignment_instance->icigar );
+			fflush( stdout );
 			convertIcigarToCigarandMDSingleEnded(
 					whole_genome,
 					sam_alignment_instance,
