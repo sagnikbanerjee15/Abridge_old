@@ -949,6 +949,8 @@ void decompressFile(
 	while ( (line_len = getline( &buffer, &len, fhr )) != -1 )
 	{
 		line_num++;
+		printf( "\nBuffer: %s", buffer );
+		fflush( stdout );
 		//if ( line_num == 5 ) return;
 		/*
 		 printf("\nStarting new line");
