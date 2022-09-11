@@ -2277,7 +2277,7 @@ void generateIntegratedCigarSingleEnded(
 	 */
 
 	printf(
-			"\NH_tag_index: %d NH_value: %s",
+			"\nNH_tag_index: %d NH_value: %s",
 			NH_tag_index,
 			curr_alignment->tags[NH_tag_index].val );
 	if ( curr_alignment->tags[NH_tag_index].val[0] == '1'
