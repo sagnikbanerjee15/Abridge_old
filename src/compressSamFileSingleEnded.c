@@ -990,6 +990,7 @@ void readAlignmentsAndCompress(
 					split_line );
 			strcpy( curr_alignment->read_name, split_line[3] );
 		}
+		printf( "\nRead Name: %s", curr_alignment->read_name );
 
 		for ( i = 11; i < number_of_fields; i++ )
 		{
