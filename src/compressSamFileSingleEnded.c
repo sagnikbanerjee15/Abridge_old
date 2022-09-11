@@ -274,6 +274,7 @@ void writeToFile(
 					&& compressed_ds_pool[i]->pointers_to_read_names[j][1]
 							!= '\0' )
 			{
+				printf( "\nInside here" );
 				//strcat(list_of_read_names, "brdg_");
 				strcat(
 						list_of_read_names,
@@ -990,7 +991,7 @@ void readAlignmentsAndCompress(
 					split_line );
 			strcpy( curr_alignment->read_name, split_line[3] );
 		}
-		printf( "\nRead Name: %s", curr_alignment->read_name );
+		//printf( "\nRead Name: %s", curr_alignment->read_name );
 
 		for ( i = 11; i < number_of_fields; i++ )
 		{
