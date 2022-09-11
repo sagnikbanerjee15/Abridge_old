@@ -630,7 +630,7 @@ void convertToAlignmentSingleEnded(
 
 		}
 		fflush( stdout );
-		//printSamAlignmentInstance (sam_alignment_instance , 0);
+		printSamAlignmentInstance( sam_alignment_instance, 0 );
 		//continue;
 		/*
 		 printf(
