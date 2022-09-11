@@ -975,6 +975,8 @@ void readAlignmentsAndCompress(
 				split_tags );
 		strcpy( curr_reference_name, curr_alignment->reference_name );
 
+		printSamAlignmentInstance( curr_alignment, 0 );
+
 		/***************************************************************************************
 		 * Read a line from the short read names file
 		 ****************************************************************************************/
@@ -1035,7 +1037,7 @@ void readAlignmentsAndCompress(
 		}
 
 		current_position = curr_alignment->start_position;
-		printSamAlignmentInstance( curr_alignment, 0 );
+		//printSamAlignmentInstance( curr_alignment, 0 );
 		generateIntegratedCigarSingleEnded(
 				curr_alignment,
 				flag_ignore_alignment_scores,
