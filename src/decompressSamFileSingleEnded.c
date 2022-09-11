@@ -396,7 +396,7 @@ void convertToAlignmentSingleEnded(
 
 	/********************************************************************/
 
-	printf( "\nInside convertToAlignmentSingleEnded" );
+	printf( "\nInside convertToAlignmentSingleEnded %d", read_names_stored );
 	fflush( stdout );
 	if ( read_names_stored == 1 )
 	{
