@@ -408,11 +408,11 @@ void convertToAlignmentSingleEnded(
 					split_on_tab[2],
 					',',
 					read_names );
-		/*
-		 printf("\n Reads read");
-		 for (i = 0; i < read_names_index; i++)
-		 printf("\n%s", read_names[i]);
-		 */
+
+		printf( "\n Reads read" );
+		for ( i = 0; i < read_names_index; i++ )
+			printf( "\n%s", read_names[i] );
+		fflush( stdout );
 
 	}
 
@@ -431,11 +431,11 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[0],
 						',',
 						split_on_comma );
-				/*
-				 printf(
-				 "\nInside here 01 number_of_distinct_cigars_in_a_line %d",
-				 number_of_distinct_cigars_in_a_line);
-				 */
+
+				printf(
+						"\nInside here 01 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line );
+				fflush( stdout );
 			}
 				break;
 			case 2:
@@ -448,11 +448,11 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[1],
 						',',
 						split_on_comma );
-				/*
-				 printf(
-				 "\nInside here 02 number_of_distinct_cigars_in_a_line %d",
-				 number_of_distinct_cigars_in_a_line);
-				 */
+
+				printf(
+						"\nInside here 02 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line );
+				fflush( stdout );
 			}
 				break;
 		}
@@ -472,11 +472,11 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[0],
 						',',
 						split_on_comma );
-				/*
-				 printf(
-				 "\nInside here 12 number_of_distinct_cigars_in_a_line %d",
-				 number_of_distinct_cigars_in_a_line);
-				 */
+
+				printf(
+						"\nInside here 12 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line );
+				fflush( stdout );
 			}
 				break;
 			case 3:
@@ -489,23 +489,24 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[1],
 						',',
 						split_on_comma );
-				/*
-				 printf(
-				 "\nInside here 13 number_of_distinct_cigars_in_a_line %d",
-				 number_of_distinct_cigars_in_a_line);
-				 */
+
+				printf(
+						"\nInside here 13 number_of_distinct_cigars_in_a_line %d",
+						number_of_distinct_cigars_in_a_line );
+				fflush( stdout );
 			}
 				break;
 		}
 
 	}
-	/*
-	 printf(
-	 "\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
-	 number_of_columns,
-	 read_names_stored,
-	 number_of_distinct_cigars_in_a_line);
-	 */
+
+	printf(
+			"\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
+			number_of_columns,
+			read_names_stored,
+			number_of_distinct_cigars_in_a_line );
+	fflush( stdout );
+
 	printf( "\nconvertToAlignmentSingleEnded Checkpoint 1" );
 	fflush( stdout );
 	for ( j = 0; j < number_of_distinct_cigars_in_a_line; j++ )
