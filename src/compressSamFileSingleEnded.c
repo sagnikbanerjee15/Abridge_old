@@ -993,30 +993,29 @@ void readAlignmentsAndCompress(
 					'\t',
 					split_line );
 			strcpy( curr_alignment->read_name, split_line[3] );
-		}
-
-		for ( i = 11; i < number_of_fields; i++ )
-		{
-			if ( strcmp( curr_alignment->tags[i - 11].name, "NH" ) == 0 )
+			for ( i = 11; i < number_of_fields; i++ )
 			{
-				strcpy( curr_alignment->tags[i - 11].type, "i" );
-				strcpy( curr_alignment->tags[i - 11].val, split_line[2] );
-				break;
+				if ( strcmp( curr_alignment->tags[i - 11].name, "NH" ) == 0 )
+				{
+					strcpy( curr_alignment->tags[i - 11].type, "i" );
+					strcpy( curr_alignment->tags[i - 11].val, split_line[2] );
+					break;
+				}
 			}
-		}
-		if ( i == number_of_fields )
-		{
-			strcpy(
-					curr_alignment->tags[curr_alignment->number_of_tag_items].name,
-					"NH" );
-			strcpy(
-					curr_alignment->tags[curr_alignment->number_of_tag_items].type,
-					"i" );
-			strcpy(
-					curr_alignment->tags[curr_alignment->number_of_tag_items].val,
-					split_line[2] );
-			curr_alignment->number_of_tag_items++;
+			if ( i == number_of_fields )
+			{
+				strcpy(
+						curr_alignment->tags[curr_alignment->number_of_tag_items].name,
+						"NH" );
+				strcpy(
+						curr_alignment->tags[curr_alignment->number_of_tag_items].type,
+						"i" );
+				strcpy(
+						curr_alignment->tags[curr_alignment->number_of_tag_items].val,
+						split_line[2] );
+				curr_alignment->number_of_tag_items++;
 
+			}
 		}
 
 		/****************************************************************************************/
