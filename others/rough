@@ -126,6 +126,25 @@ cat <(cat SRR13711353_PE_all_tags_sorted.sam|grep ^@) <(cat SRR13711353_PE_all_t
 cat <(cat SRR13711353_SE_no_tags_unsorted.sam|grep ^@) <(cat SRR13711353_SE_no_tags_unsorted.sam|awk '$3==1') > SRR13711353_SE_no_tags_unsorted_1.sam &
 cat <(cat SRR13711353_PE_no_tags_unsorted.sam|grep ^@) <(cat SRR13711353_PE_no_tags_unsorted.sam|awk '$3==1') > SRR13711353_PE_no_tags_unsorted_1.sam &
 
+cd /work/ABRIDGE/testing/alignments
+STAR --runThreadN 16 --genomeDir ../star_index/genome --readFilesIn ../fastq_files/SRR13711353_0.fastq --limitBAMsortRAM 107374182400 --outFileNamePrefix SRR13711353_SE_all_tags --outSAMtype BAM SortedByCoordinate --outSAMattributes NH AS MD --outSAMunmapped Within --outFilterMultimapNmax 1000 --outFilterScoreMinOverLread 0.6 --outFilterMatchNminOverLread 0.6 --outFilterMismatchNmax 5 --alignIntronMin 20 --alignIntronMax 10000 &
+STAR --runThreadN 16 --genomeDir ../star_index/genome --readFilesIn ../fastq_files/SRR13711353_1.fastq ../fastq_files/SRR13711353_2.fastq --limitBAMsortRAM 107374182400 --outFileNamePrefix SRR13711353_PE_all_tags --outSAMtype BAM SortedByCoordinate --outSAMattributes NH AS MD --outSAMunmapped Within --outFilterMultimapNmax 1000 --outFilterScoreMinOverLread 0.6 --outFilterMatchNminOverLread 0.6 --outFilterMismatchNmax 5 --alignIntronMin 20 --alignIntronMax 10000 &
+STAR --runThreadN 16   --genomeDir ../star_index/genome   --readFilesIn ../fastq_files/SRR13711353_1.fastq   ../fastq_files/SRR13711353_2.fastq      --limitBAMsortRAM 107374182400   --outFileNamePrefix SRR13711353_PE_no_tags_unsorted_   --outSAMtype SAM      --outSAMattributes None      --outSAMunmapped Within      --outFilterMultimapNmax 1000   --outFilterScoreMinOverLread 0.6   --outFilterMatchNminOverLread 0.6   --outFilterMismatchNmax 5   --alignIntronMin 20   --alignIntronMax 10000 &
+STAR   --runThreadN 16   --genomeDir ../star_index/genome   --readFilesIn ../fastq_files/SRR13711353_0.fastq      --limitBAMsortRAM 107374182400   --outFileNamePrefix SRR13711353_SE_no_tags_unsorted_   --outSAMtype SAM      --outSAMattributes None      --outSAMunmapped Within      --outFilterMultimapNmax 1000   --outFilterScoreMinOverLread 0.6   --outFilterMatchNminOverLread 0.6   --outFilterMismatchNmax 5   --alignIntronMin 20   --alignIntronMax 10000 &
+samtools view -h -@ 32 SRR13711353_SE_all_tagsAligned.sortedByCoord.out.bam > SRR13711353_SE_all_tagsAligned.sortedByCoord.out.sam &
+samtools view -h -@ 32 SRR13711353_PE_all_tagsAligned.sortedByCoord.out.bam > SRR13711353_PE_all_tagsAligned.sortedByCoord.out.sam &
+
+rm *tab *out *bam
+mv SRR13711353_PE_no_tags_unsorted_Aligned.out.sam SRR13711353_PE_no_tags_unsorted.sam
+mv SRR13711353_SE_no_tags_unsorted_Aligned.out.sam SRR13711353_SE_no_tags_unsorted.sam
+mv SRR13711353_SE_all_tagsAligned.sortedByCoord.out.sam SRR13711353_SE_all_tags_sorted.sam
+mv SRR13711353_PE_all_tagsAligned.sortedByCoord.out.sam SRR13711353_PE_all_tags_sorted.sam
+
+cat <(cat SRR13711353_PE_all_tags_sorted.sam|grep ^@) <(cat SRR13711353_PE_all_tags_sorted.sam|awk '$2==77 || $2==141 || $3==1') > SRR13711353_PE_all_tags_sorted_1.sam &
+cat <(cat SRR13711353_SE_all_tags_sorted.sam|grep ^@) <(cat SRR13711353_SE_all_tags_sorted.sam|awk '$2==4 || $3==1') > SRR13711353_SE_all_tags_sorted_1.sam &
+cat <(cat SRR13711353_PE_no_tags_unsorted.sam|grep ^@) <(cat SRR13711353_PE_no_tags_unsorted.sam|awk '$2==77 || $2==141 || $3==1') > SRR13711353_PE_no_tags_unsorted_1.sam &
+cat <(cat SRR13711353_SE_no_tags_unsorted.sam|grep ^@) <(cat SRR13711353_SE_no_tags_unsorted.sam|awk '$2==4 || $3==1') > SRR13711353_SE_no_tags_unsorted_1.sam &
+ 
 ###################################################################
 # Commands for creating smaller sam file for testing purpose
 ###################################################################

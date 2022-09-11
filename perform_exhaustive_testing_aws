@@ -90,7 +90,7 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
 
 def runCommand( eachinput ):
     Run, cmd1, wait_time = eachinput
-    time.sleep(wait_time * random.randint(2,5))
+    #time.sleep(wait_time * random.randint(2,5))
     os.system( cmd1 )
     
     
