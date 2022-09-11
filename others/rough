@@ -121,6 +121,11 @@ nohup /project/maizegdb/sagnik/ABRIDGE/Abridge/abridge \
 
 rm -rf /project/maizegdb/sagnik/ABRIDGE/testing/abridge_*compressed/* /90daydata/maizegdb/sagnik/ABRIDGE/testing/abridge_*compressed/* &
 
+cat <(cat SRR13711353_SE_all_tags_sorted.sam|grep ^@) <(cat SRR13711353_SE_all_tags_sorted.sam|awk '$3==1') > SRR13711353_SE_all_tags_sorted_1.sam &
+cat <(cat SRR13711353_PE_all_tags_sorted.sam|grep ^@) <(cat SRR13711353_PE_all_tags_sorted.sam|awk '$3==1') > SRR13711353_PE_all_tags_sorted_1.sam &
+cat <(cat SRR13711353_SE_no_tags_unsorted.sam|grep ^@) <(cat SRR13711353_SE_no_tags_unsorted.sam|awk '$3==1') > SRR13711353_SE_no_tags_unsorted_1.sam &
+cat <(cat SRR13711353_PE_no_tags_unsorted.sam|grep ^@) <(cat SRR13711353_PE_no_tags_unsorted.sam|awk '$3==1') > SRR13711353_PE_no_tags_unsorted_1.sam &
+
 ###################################################################
 # Commands for creating smaller sam file for testing purpose
 ###################################################################
