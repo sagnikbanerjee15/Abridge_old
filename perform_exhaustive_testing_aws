@@ -152,7 +152,7 @@ def main():
                                         cmd1 += f" 2> {output_directory_main}.error"
                                         
                                         
-                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}.abridge") == False:
+                                        if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1.abridge") == False:
                                             allinputs.append( ["dummy", cmd1, i] )
                                             i+=1
     pool.map( runCommand, allinputs )
@@ -196,7 +196,7 @@ def main():
                                                 cmd1 += f" 2> {output_directory_main}.error"
                                                 
                                                 #print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
-                                                if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type[:-4]}_decompressed.sam") == False:
+                                                if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam") == False:
                                                     allinputs.append( ["dummy", cmd1, i] )
                                                     i+=1
     pool.map( runCommand, allinputs )
