@@ -156,7 +156,6 @@ def main():
                                             allinputs.append( ["dummy", cmd1, i] )
                                             i+=1
     pool.map( runCommand, allinputs )
-    return
     
     ########################################################################################################################
     # Decompress
