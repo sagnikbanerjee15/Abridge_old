@@ -2275,6 +2275,8 @@ void generateIntegratedCigarSingleEnded(
 	/*
 	 * Set the read_name to blank if the read is uniquely mapped
 	 */
+
+	printf( "\nNH_value: %d", NH_tag_index );
 	if ( curr_alignment->tags[NH_tag_index].val[0] == '1'
 			&& curr_alignment->tags[NH_tag_index].val[1] == '\0' )
 	{
