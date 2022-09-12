@@ -592,7 +592,7 @@ void convertToAlignmentSingleEnded(
 						"\n%s_%d",
 						sam_alignment_instance->read_name,
 						number_of_repititions_of_the_same_reads );
-				printf( "\nBuffer: %s", buffer );
+				printf( "\niCIGAR: %s", split_on_comma[j] );
 				fflush( stdout );
 			}
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
@@ -663,7 +663,7 @@ void convertToAlignmentSingleEnded(
 						"\n%s_%d",
 						sam_alignment_instance->read_name,
 						number_of_repititions_of_the_same_reads );
-				printf( "\nBuffer: %s", buffer );
+				printf( "\niCIGAR: %s", split_on_comma[j] );
 				fflush( stdout );
 			}
 
