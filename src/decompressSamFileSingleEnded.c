@@ -972,6 +972,8 @@ void decompressFile(
 	while ( (line_len = getline( &buffer, &len, fhr )) != -1 )
 	{
 		line_num++;
+		printf( "\nProcessing line_num %d", line_num );
+		fflush( stdout );
 		/*
 		 printf( "\nBuffer: %s", buffer );
 		 fflush( stdout );
