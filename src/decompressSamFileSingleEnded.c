@@ -655,6 +655,13 @@ void convertToAlignmentSingleEnded(
 			/*printf ("\ncopying into read name");
 			 fflush (stdout);*/
 			strcpy( sam_alignment_instance->read_name, str_sprintf );
+			if ( read_number == 73 )
+			{
+				printf(
+						"\n%s_%d",
+						sam_alignment_instance->read_name,
+						number_of_repititions_of_the_same_reads );
+			}
 
 			/*printf ("\nconvertToAlignmentSingleEnded Checkpoint 5");
 			 fflush (stdout);*/
