@@ -396,7 +396,10 @@ void convertToAlignmentSingleEnded(
 
 	/********************************************************************/
 
-	printf( "\nInside convertToAlignmentSingleEnded %d", read_names_stored );
+	printf(
+			"\nInside convertToAlignmentSingleEnded %d %d",
+			read_names_stored,
+			number_of_columns );
 	fflush( stdout );
 	if ( read_names_stored == 1 )
 	{
@@ -949,8 +952,10 @@ void decompressFile(
 	while ( (line_len = getline( &buffer, &len, fhr )) != -1 )
 	{
 		line_num++;
-		printf( "\nBuffer: %s", buffer );
-		fflush( stdout );
+		/*
+		 printf( "\nBuffer: %s", buffer );
+		 fflush( stdout );
+		 */
 		//if ( line_num == 5 ) return;
 		/*
 		 printf("\nStarting new line");
