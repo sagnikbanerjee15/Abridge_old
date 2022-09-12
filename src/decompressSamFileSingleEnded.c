@@ -428,6 +428,9 @@ void convertToAlignmentSingleEnded(
 		{
 			case 1:
 			{
+
+				printf( "\nI am in here" );
+				fflush( stdout );
 				for ( i = 0; split_on_tab[0][i] != '\0'; i++ )
 					if ( split_on_tab[0][i] == ',' )
 						number_of_commas++;
