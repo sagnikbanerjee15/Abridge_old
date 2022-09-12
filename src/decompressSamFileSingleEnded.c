@@ -794,26 +794,28 @@ void decompressFile(
 	/*
 	 * Find the largest line in the compressed file. Apparently, free and realloc isn't working.
 	 */
-	int max_line_len = 0;
-	int max_commas = 0;
-	while ( (line_len = getline( &buffer, &len, fhr )) != -1 )
-	{
-		if ( buffer[0] != '@' )
-		{
-			if ( max_line_len < strlen( buffer ) )
-				max_line_len = strlen( buffer );
+	/*int max_line_len = 0;
+	 int max_commas = 0;
+	 while ( (line_len = getline( &buffer, &len, fhr )) != -1 )
+	 {
+	 if ( buffer[0] != '@' )
+	 {
+	 if ( max_line_len < strlen( buffer ) )
+	 max_line_len = strlen( buffer );
 
-			int num_commas = 0;
-			for ( int i = 0; buffer[i] != '\0'; i++ )
-				if ( buffer[i] == ',' )
-					num_commas += 1;
-			if ( max_commas < num_commas )
-				max_commas = num_commas;
-		}
-	}
+	 int num_commas = 0;
+	 for ( int i = 0; buffer[i] != '\0'; i++ )
+	 if ( buffer[i] == ',' )
+	 num_commas += 1;
+	 if ( max_commas < num_commas )
+	 max_commas = num_commas;
+	 }
+	 }
 
-	COLS_split_on_tab = max_line_len;
-	ROWS_split_on_comma = max_commas;
+	 COLS_split_on_tab = max_line_len;
+	 ROWS_split_on_comma = max_commas;
+
+	 */
 	fclose( fhr );
 	fhr = fopen( pass1_filename, "r" );
 	if ( fhr == NULL )
