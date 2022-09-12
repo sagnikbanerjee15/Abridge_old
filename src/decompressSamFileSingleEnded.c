@@ -434,7 +434,8 @@ void convertToAlignmentSingleEnded(
 				for ( i = 0; split_on_tab[0][i] != '\0'; i++ )
 					if ( split_on_tab[0][i] == ',' )
 						number_of_commas++;
-
+				printf( "\nNumber of commas: %d ", number_of_commas );
+				fflush( stdout );
 				number_of_distinct_cigars_in_a_line = splitByDelimiter(
 						split_on_tab[0],
 						',',
