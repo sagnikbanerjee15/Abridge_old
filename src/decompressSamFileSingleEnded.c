@@ -675,7 +675,7 @@ void convertToAlignmentSingleEnded(
 				read_names,
 				flag_ignore_alignment_scores );
 
-		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
+		(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
 		/*
 		 printf( "\nconvertToAlignmentSingleEnded Checkpoint 7" );
 		 fflush( stdout );
@@ -972,8 +972,6 @@ void decompressFile(
 	while ( (line_len = getline( &buffer, &len, fhr )) != -1 )
 	{
 		line_num++;
-		printf( "\nProcessing line_num %d", line_num );
-		fflush( stdout );
 		/*
 		 printf( "\nBuffer: %s", buffer );
 		 fflush( stdout );
@@ -1099,8 +1097,8 @@ void decompressFile(
 		buffer = NULL;
 	}
 
-	//printf ("\nTotal mapped reads: %d" , total_mapped_reads);
-	//fflush (stdout);
+	printf( "\nTotal mapped reads: %d", total_mapped_reads );
+	fflush( stdout );
 	/*
 	 * Write all unmapped reads to samfile
 	 */
