@@ -395,12 +395,13 @@ void convertToAlignmentSingleEnded(
 	 ********************************************************************/
 
 	/********************************************************************/
-
-	printf(
-			"\nInside convertToAlignmentSingleEnded %d %d",
-			read_names_stored,
-			number_of_columns );
-	fflush( stdout );
+	/*
+	 printf(
+	 "\nInside convertToAlignmentSingleEnded %d %d",
+	 read_names_stored,
+	 number_of_columns );
+	 fflush( stdout );
+	 */
 	if ( read_names_stored == 1 )
 	{
 		if ( number_of_columns == 2 )
@@ -413,12 +414,12 @@ void convertToAlignmentSingleEnded(
 					split_on_tab[2],
 					',',
 					read_names );
-
-		printf( "\n Reads read" );
-		for ( i = 0; i < read_names_index; i++ )
-			printf( "\n%s", read_names[i] );
-		fflush( stdout );
-
+		/*
+		 printf( "\n Reads read" );
+		 for ( i = 0; i < read_names_index; i++ )
+		 printf( "\n%s", read_names[i] );
+		 fflush( stdout );
+		 */
 	}
 
 	if ( read_names_stored == 0 )
@@ -428,23 +429,27 @@ void convertToAlignmentSingleEnded(
 		{
 			case 1:
 			{
-
-				printf( "\nI am in here" );
-				fflush( stdout );
+				/*
+				 printf( "\nI am in here" );
+				 fflush( stdout );
+				 */
 				for ( i = 0; split_on_tab[0][i] != '\0'; i++ )
 					if ( split_on_tab[0][i] == ',' )
 						number_of_commas++;
-				printf( "\nNumber of commas: %d ", number_of_commas );
-				fflush( stdout );
+				/*
+				 printf( "\nNumber of commas: %d ", number_of_commas );
+				 fflush( stdout );
+				 */
 				number_of_distinct_cigars_in_a_line = splitByDelimiter(
 						split_on_tab[0],
 						',',
 						split_on_comma );
-
-				printf(
-						"\nInside here 01 number_of_distinct_cigars_in_a_line %d",
-						number_of_distinct_cigars_in_a_line );
-				fflush( stdout );
+				/*
+				 printf(
+				 "\nInside here 01 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line );
+				 fflush( stdout );
+				 */
 			}
 				break;
 			case 2:
@@ -457,11 +462,12 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[1],
 						',',
 						split_on_comma );
-
-				printf(
-						"\nInside here 02 number_of_distinct_cigars_in_a_line %d",
-						number_of_distinct_cigars_in_a_line );
-				fflush( stdout );
+				/*
+				 printf(
+				 "\nInside here 02 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line );
+				 fflush( stdout );
+				 */
 			}
 				break;
 		}
@@ -481,11 +487,12 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[0],
 						',',
 						split_on_comma );
-
-				printf(
-						"\nInside here 12 number_of_distinct_cigars_in_a_line %d",
-						number_of_distinct_cigars_in_a_line );
-				fflush( stdout );
+				/*
+				 printf(
+				 "\nInside here 12 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line );
+				 fflush( stdout );
+				 */
 			}
 				break;
 			case 3:
@@ -498,26 +505,28 @@ void convertToAlignmentSingleEnded(
 						split_on_tab[1],
 						',',
 						split_on_comma );
-
-				printf(
-						"\nInside here 13 number_of_distinct_cigars_in_a_line %d",
-						number_of_distinct_cigars_in_a_line );
-				fflush( stdout );
+				/*
+				 printf(
+				 "\nInside here 13 number_of_distinct_cigars_in_a_line %d",
+				 number_of_distinct_cigars_in_a_line );
+				 fflush( stdout );
+				 */
 			}
 				break;
 		}
 
 	}
+	/*
+	 printf(
+	 "\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
+	 number_of_columns,
+	 read_names_stored,
+	 number_of_distinct_cigars_in_a_line );
+	 fflush( stdout );
 
-	printf(
-			"\nnumber_of_columns %d read_names_stored %d number_of_distinct_cigars_in_a_line %d",
-			number_of_columns,
-			read_names_stored,
-			number_of_distinct_cigars_in_a_line );
-	fflush( stdout );
-
-	printf( "\nconvertToAlignmentSingleEnded Checkpoint 1" );
-	fflush( stdout );
+	 printf( "\nconvertToAlignmentSingleEnded Checkpoint 1" );
+	 fflush( stdout );
+	 */
 	for ( j = 0; j < number_of_distinct_cigars_in_a_line; j++ )
 	{
 		splitByDelimiter( split_on_comma[j], '-', split_on_dash );
@@ -535,15 +544,15 @@ void convertToAlignmentSingleEnded(
 		}
 		else
 			number_of_repititions_of_the_same_reads = 1;
+		/*
+		 printf(
+		 "\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
+		 number_of_repititions_of_the_same_reads,
+		 split_on_comma[j] );
 
-		printf(
-				"\nnumber_of_repititions_of_the_same_reads %d split_on_comma %s",
-				number_of_repititions_of_the_same_reads,
-				split_on_comma[j] );
-
-		printf( "\nconvertToAlignmentSingleEnded Checkpoint 2" );
-		fflush( stdout );
-
+		 printf( "\nconvertToAlignmentSingleEnded Checkpoint 2" );
+		 fflush( stdout );
+		 */
 		if ( !(split_on_comma[j][1] == '-'
 				&& isalpha( split_on_dash[0][0] ) != 0) )
 		{
@@ -563,10 +572,10 @@ void convertToAlignmentSingleEnded(
 				strcpy( sam_alignment_instance->tags[3].val, "X" );
 			}
 		}
-
-		printf( "\nconvertToAlignmentSingleEnded Checkpoint 3" );
-		fflush( stdout );
-
+		/*
+		 printf( "\nconvertToAlignmentSingleEnded Checkpoint 3" );
+		 fflush( stdout );
+		 */
 		//printf ("\n%s %d" , split_on_comma[j] , number_of_repititions_of_the_same_reads);
 		sam_alignment_instance->start_position = curr_position;
 
@@ -596,9 +605,11 @@ void convertToAlignmentSingleEnded(
 			strcpy( sam_alignment_instance->icigar, split_on_tilde[0] );
 			//printf ("\nj=%d number_of_distinct_cigars_in_a_line=%d Inside ICIGAR %s" , j , number_of_distinct_cigars_in_a_line , sam_alignment_instance->icigar);
 			//fflush (stdout);
-			printf( "\nConvertion started" );
-			printf( "\niCigar: %s", sam_alignment_instance->icigar );
-			fflush( stdout );
+			/*
+			 printf( "\nConvertion started" );
+			 printf( "\niCigar: %s", sam_alignment_instance->icigar );
+			 fflush( stdout );
+			 */
 			convertIcigarToCigarandMDSingleEnded(
 					whole_genome,
 					sam_alignment_instance,
@@ -610,9 +621,11 @@ void convertToAlignmentSingleEnded(
 					flag_ignore_quality_scores_for_matched_bases,
 					flag_ignore_sequence_information,
 					default_quality_value );
-			printf( "\nCigar: %s", sam_alignment_instance->cigar );
-			printf( "\nConvertion completed" );
-			fflush( stdout );
+			/*
+			 printf( "\nCigar: %s", sam_alignment_instance->cigar );
+			 printf( "\nConvertion completed" );
+			 fflush( stdout );
+			 */
 
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
@@ -643,13 +656,13 @@ void convertToAlignmentSingleEnded(
 		//fflush( stdout );
 		//printSamAlignmentInstance( sam_alignment_instance, 0 );
 		//continue;
-
-		printf(
-				"\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d number_of_distinct_cigars_in_a_line %d",
-				j,
-				number_of_distinct_cigars_in_a_line );
-		fflush( stdout );
-
+		/*
+		 printf(
+		 "\nconvertToAlignmentSingleEnded Checkpoint 6 Value of j %d number_of_distinct_cigars_in_a_line %d",
+		 j,
+		 number_of_distinct_cigars_in_a_line );
+		 fflush( stdout );
+		 */
 		writeAlignmentToFileSingleEnded(
 				sam_alignment_instance,
 				cigar_items_instance_for_writing_to_file,
@@ -663,14 +676,15 @@ void convertToAlignmentSingleEnded(
 				flag_ignore_alignment_scores );
 
 		//(*total_mapped_reads) += number_of_repititions_of_the_same_reads;
-
-		printf( "\nconvertToAlignmentSingleEnded Checkpoint 7" );
-		fflush( stdout );
-
+		/*
+		 printf( "\nconvertToAlignmentSingleEnded Checkpoint 7" );
+		 fflush( stdout );
+		 */
 	}
-
-	printf( "\nLeaving function convertToAlignmentSingleEnded" );
-	fflush( stdout );
+	/*
+	 printf( "\nLeaving function convertToAlignmentSingleEnded" );
+	 fflush( stdout );
+	 */
 
 }
 
@@ -1017,11 +1031,11 @@ void decompressFile(
 		 if (max_number_of_commas < number_of_commas_in_each_line)
 		 max_number_of_commas = number_of_commas_in_each_line;
 		 */
-
-		printf( "\nCheckpoint 1 line_num = %d", line_num );
-		printf( "\n2. line_len %d len %d", line_len, len );
-		fflush( stdout );
-
+		/*
+		 printf( "\nCheckpoint 1 line_num = %d", line_num );
+		 printf( "\n2. line_len %d len %d", line_len, len );
+		 fflush( stdout );
+		 */
 		if ( read_names_stored == 0 )
 		{
 			if ( number_of_columns == 1 )
@@ -1042,10 +1056,10 @@ void decompressFile(
 						&convert_to_int_temp,
 						10 );
 		}
-
-		printf( "\nCheckpoint 3 line_num = %d", line_num );
-		fflush( stdout );
-
+		/*
+		 printf( "\nCheckpoint 3 line_num = %d", line_num );
+		 fflush( stdout );
+		 */
 		/*printSamAlignmentInstance( sam_alignment_instance, 0 );
 		 fflush( stdout );
 		 */
@@ -1075,10 +1089,10 @@ void decompressFile(
 				current_chromosome,
 				read_names,
 				read_names_stored );
-
-		printf( "\nCheckpoint 4 line_num = %d", line_num );
-		fflush( stdout );
-
+		/*
+		 printf( "\nCheckpoint 4 line_num = %d", line_num );
+		 fflush( stdout );
+		 */
 		free( buffer );
 		buffer = NULL;
 	}
