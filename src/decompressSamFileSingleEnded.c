@@ -592,6 +592,7 @@ void convertToAlignmentSingleEnded(
 						"\n%s_%d",
 						sam_alignment_instance->read_name,
 						number_of_repititions_of_the_same_reads );
+				fflush( stdout );
 			}
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
@@ -661,6 +662,7 @@ void convertToAlignmentSingleEnded(
 						"\n%s_%d",
 						sam_alignment_instance->read_name,
 						number_of_repititions_of_the_same_reads );
+				fflush( stdout );
 			}
 
 			/*printf ("\nconvertToAlignmentSingleEnded Checkpoint 5");
@@ -1111,8 +1113,9 @@ void decompressFile(
 		buffer = NULL;
 	}
 
-	printf( "\nTotal mapped reads: %d", total_mapped_reads );
-	fflush( stdout );
+	/*printf( "\nTotal mapped reads: %d", total_mapped_reads );
+	 fflush( stdout );
+	 */
 	/*
 	 * Write all unmapped reads to samfile
 	 */
