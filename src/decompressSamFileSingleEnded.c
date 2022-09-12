@@ -1095,6 +1095,8 @@ void decompressFile(
 		 */
 		free( buffer );
 		buffer = NULL;
+		printf( "\nTotal mapped reads: %d", total_mapped_reads );
+		fflush( stdout );
 	}
 
 	printf( "\nTotal mapped reads: %d", total_mapped_reads );
