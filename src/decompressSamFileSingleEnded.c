@@ -586,7 +586,7 @@ void convertToAlignmentSingleEnded(
 			sprintf( str_sprintf, "%d", *read_number );
 			(*read_number)++;
 			strcpy( sam_alignment_instance->read_name, str_sprintf );
-			if ( read_number == 73 )
+			if ( *read_number == 73 )
 			{
 				printf(
 						"\n%s_%d",
@@ -656,7 +656,7 @@ void convertToAlignmentSingleEnded(
 			/*printf ("\ncopying into read name");
 			 fflush (stdout);*/
 			strcpy( sam_alignment_instance->read_name, str_sprintf );
-			if ( read_number == 73 )
+			if ( *read_number == 73 )
 			{
 				printf(
 						"\n%s_%d",
