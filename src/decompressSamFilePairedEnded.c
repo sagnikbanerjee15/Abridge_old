@@ -892,7 +892,7 @@ int main( int argc, char *argv[] )
 	strcpy( pass1_filename, arguments.compressedfile );
 	strcpy( default_quality_value, arguments.mockquality );
 	flag_ignore_sequence_information = arguments.ignoresequence;
-	strcpy( dictionary_name, arguments.dictionaryfilename] );
+	strcpy( dictionary_name, arguments.dictionaryfilename );
 	strcpy( unmapped_filename, arguments.unmappedreadsfilename );
 	strcpy( name_of_file_with_quality_scores, arguments.qualityscoresfilename );
 	max_reads_in_each_line = arguments.maxreadsineachline;
