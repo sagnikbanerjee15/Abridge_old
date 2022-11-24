@@ -43,7 +43,7 @@ struct arguments
 	char *unmappedreadsfilename;
 	char *qualityscoresfilename;
 	char *dictionaryfilename;
-	long maxreadsineachline;
+	unsigned long long maxreadsineachline;
 };
 
 /*
@@ -87,7 +87,7 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 			arguments->dictionaryfilename = arg;
 			break;
 		case 'x':
-			arguments->maxreadsineachline = strtol( arg, &temp, 10 );
+			arguments->maxreadsineachline = strtoull( arg, &temp, 10 );
 			break;
 
 		case ARGP_KEY_END:
@@ -98,8 +98,7 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 					|| strcmp( arguments->compressedfile, "" ) == 0
 					|| strcmp( arguments->unmappedreadsfilename, "" ) == 0
 					|| strcmp( arguments->qualityscoresfilename, "" ) == 0
-					|| strcmp( arguments->dictionaryfilename, "" ) == 0
-					|| arguments->maxreadsineachline == 0 )
+					|| strcmp( arguments->dictionaryfilename, "" ) == 0 )
 			{
 				argp_usage( state );
 			}
