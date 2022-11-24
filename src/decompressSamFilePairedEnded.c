@@ -87,8 +87,6 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 			arguments->dictionaryfilename = arg;
 			break;
 		case 'x':
-			printf( "\nmaxreadsineachline = %s", arg );
-			fflush( stdout );
 			arguments->maxreadsineachline = strtoull( arg, &temp, 10 );
 			break;
 
@@ -867,7 +865,7 @@ int main( int argc, char *argv[] )
 	arguments.maxreadsineachline = 0;
 
 	argp_parse( &argp, argc, argv, 0, 0, &arguments );
-	return -1;
+
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
