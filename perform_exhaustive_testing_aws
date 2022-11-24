@@ -18,7 +18,7 @@ import multiprocessing
 import time
 import random
 
-CPU = 128
+CPU = 32
 
 def runDockerCommand( name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
