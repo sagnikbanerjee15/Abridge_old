@@ -43,7 +43,7 @@ struct arguments
 	char *unmappedreadsfilename;
 	char *qualityscoresfilename;
 	char *dictionaryfilename;
-	unsigned long long maxreadsineachline;
+	long maxreadsineachline;
 };
 
 /*
@@ -87,7 +87,7 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 			arguments->dictionaryfilename = arg;
 			break;
 		case 'x':
-			arguments->maxreadsineachline = strtoull( arg, &temp, 10 );
+			arguments->maxreadsineachline = strtol( arg, &temp, 10 );
 			break;
 
 		case ARGP_KEY_END:
