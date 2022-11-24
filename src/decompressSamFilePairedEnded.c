@@ -87,8 +87,8 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 			arguments->dictionaryfilename = arg;
 			break;
 		case 'x':
-			//arguments->maxreadsineachline = strtoull( arg, &temp, 10 );
 			printf( "\nmaxreadsineachline = %s", arg );
+			arguments->maxreadsineachline = strtoull( arg, &temp, 10 );
 			break;
 
 		case ARGP_KEY_END:
