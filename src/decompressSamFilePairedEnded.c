@@ -189,15 +189,18 @@ void writeAlignmentToFilePairedEnded(
 		strcat( line_to_be_written_to_file, sam_alignment->seq );
 
 		strcat( line_to_be_written_to_file, "\t" );
-		printf(
-				"\nflag_ignore_quality_scores_for_matched_bases = %d",
-				flag_ignore_quality_scores_for_matched_bases );
+		/*printf(
+		 "\nflag_ignore_quality_scores_for_matched_bases = %d",
+		 flag_ignore_quality_scores_for_matched_bases );
+
+		 */
 		if ( flag_ignore_quality_scores_for_matched_bases == 0
 				&& (line_len = getline( &buffer, &len, fhr_qual )) != -1 )
 		{
-			printf(
-					"\nReading from quality scores file\nLine read: %s",
-					buffer );
+			/*printf(
+			 "\nReading from quality scores file\nLine read: %s",
+			 buffer );
+			 */
 			buffer[strlen( buffer ) - 1] = '\0';
 			strcat( line_to_be_written_to_file, buffer );
 		}
