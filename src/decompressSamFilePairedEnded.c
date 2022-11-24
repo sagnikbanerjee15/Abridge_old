@@ -43,7 +43,7 @@ struct arguments
 	char *unmappedreadsfilename;
 	char *qualityscoresfilename;
 	char *dictionaryfilename;
-	unsigned long long maxreadsineachline;
+	unsigned long long int maxreadsineachline;
 };
 
 /*
@@ -68,7 +68,6 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 		case 'o':
 			arguments->outputfilename = arg;
 			break;
-
 		case 'c':
 			arguments->compressedfile = arg;
 			break;
