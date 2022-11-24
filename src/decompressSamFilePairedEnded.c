@@ -43,7 +43,7 @@ struct arguments
 	char *unmappedreadsfilename;
 	char *qualityscoresfilename;
 	char *dictionaryfilename;
-	unsigned long long int maxreadsineachline;
+	unsigned long long maxreadsineachline;
 };
 
 /*
