@@ -886,14 +886,15 @@ int main( int argc, char *argv[] )
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
-	strcpy( genome_filename, argv[1] );
-	strcpy( output_sam_filename, argv[2] );
-	strcpy( pass1_filename, argv[3] );
-	strcpy( default_quality_value, argv[4] );
-	flag_ignore_sequence_information = strtol( argv[5], &temp, 10 );
-	strcpy( unmapped_filename, argv[6] );
-	strcpy( name_of_file_with_quality_scores, argv[7] );
-	strcpy( dictionary_name, argv[8] );
+
+	strcpy( genome_filename, arguments.reference );
+	strcpy( output_sam_filename, arguments.outputfilename );
+	strcpy( pass1_filename, arguments.compressedfile );
+	strcpy( default_quality_value, arguments.mockquality );
+	flag_ignore_sequence_information = arguments.ignoresequence;
+	strcpy( dictionary_name, arguments.dictionaryfilename] );
+	strcpy( unmapped_filename, arguments.unmappedreadsfilename );
+	strcpy( name_of_file_with_quality_scores, arguments.qualityscoresfilename );
 	max_reads_in_each_line = arguments.maxreadsineachline;
 
 	/********************************************************************/
