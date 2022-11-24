@@ -468,7 +468,7 @@ void decompressFile(
 	short int flag_ignore_unmapped_sequences;
 	short int flag_ignore_quality_score;
 	short int flag_ignore_quality_scores_for_matched_bases;
-	short int flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips;
+	short int flag_ignore_all_quality_scores;
 	short int flag_ignore_alignment_scores;
 	short int flag_skip_shortening_read_names;
 	short int number_of_columns;
@@ -643,7 +643,7 @@ void decompressFile(
 			10 );
 
 	splitByDelimiter( split_on_tab[3], ':', split_on_tilde );
-	flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips = strtol(
+	flag_ignore_all_quality_scores = strtol(
 			split_on_tilde[1],
 			&convert_to_int_temp,
 			10 );
@@ -671,7 +671,7 @@ void decompressFile(
 	 printf ("\nflag_ignore_unmapped_sequences %d" ,
 	 flag_ignore_unmapped_sequences);
 	 printf ("\nflag_ignore_quality_score %d" ,
-	 flag_ignore_quality_scores_for_mismatched_bases_and_soft_clips);
+	 flag_ignore_all_quality_scores);
 	 printf ("\nflag_save_all_quality_scores %d" ,
 	 flag_ignore_quality_scores_for_matched_bases);
 	 printf ("\nflag_save_exact_quality_scores %d" ,
@@ -762,7 +762,7 @@ void decompressFile(
 				flag_ignore_mismatches,
 				flag_ignore_soft_clippings,
 				flag_ignore_unmapped_sequences,
-				flag_ignore_quality_score,
+				flag_ignore_all_quality_scores,
 				flag_ignore_sequence_information,
 				flag_ignore_quality_scores_for_matched_bases,
 
