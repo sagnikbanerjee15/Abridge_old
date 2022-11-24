@@ -200,6 +200,7 @@ def main():
                                                 
                                                 #print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam") == False:
+                                                    print(cmd1)
                                                     allinputs.append( ["dummy", cmd1, i] )
                                                     i+=1
     pool.map( runCommand, allinputs )
