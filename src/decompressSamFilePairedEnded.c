@@ -882,7 +882,7 @@ int main( int argc, char *argv[] )
 	short int flag_ignore_sequence_information;
 	int max_reads_in_each_line;
 	/********************************************************************/
-	return -1;
+
 	/********************************************************************
 	 * Variable initialization
 	 ********************************************************************/
