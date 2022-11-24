@@ -189,6 +189,9 @@ void writeAlignmentToFilePairedEnded(
 		strcat( line_to_be_written_to_file, sam_alignment->seq );
 
 		strcat( line_to_be_written_to_file, "\t" );
+		printf(
+				"\nflag_ignore_quality_scores_for_matched_bases = %d",
+				flag_ignore_quality_scores_for_matched_bases );
 		if ( flag_ignore_quality_scores_for_matched_bases == 0
 				&& (line_len = getline( &buffer, &len, fhr_qual )) != -1 )
 		{
