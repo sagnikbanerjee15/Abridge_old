@@ -100,8 +100,7 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 					|| strcmp( arguments->compressedfile, "" ) == 0
 					|| strcmp( arguments->unmappedreadsfilename, "" ) == 0
 					|| strcmp( arguments->qualityscoresfilename, "" ) == 0
-					|| strcmp( arguments->dictionaryfilename, "" ) == 0
-					|| arguments->maxreadsineachline == 0 )
+					|| strcmp( arguments->dictionaryfilename, "" ) == 0 )
 			{
 				argp_usage( state );
 			}
