@@ -27,7 +27,7 @@ static struct argp_option options[] =
 { "dictionaryfilename", 'd', "dictionaryfilename", 0, "Name of the dictionary", 0 },
 { "unmappedreadsfilename", 'u', "unmappedreadsfilename", 0, "Name of the file with unmapped reads", 0 },
 { "qualityscoresfilename", 'q', "qualityscoresfilename", 0, "Name of the file with quality scores", 0 },
-{ "maxreadsineachline", 'x', 0, 0, "Maximum number of reads mapped to a single reference nucleotide position", 0 },
+{ "maxreadsineachline", 'x', "maxreadsineachline", 0, "Maximum number of reads mapped to a single reference nucleotide position", 0 },
 { 0, 0, 0, 0, 0, 0 } // Last entry should be all zeros in all fields
 };
 
@@ -100,7 +100,8 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 					|| strcmp( arguments->compressedfile, "" ) == 0
 					|| strcmp( arguments->unmappedreadsfilename, "" ) == 0
 					|| strcmp( arguments->qualityscoresfilename, "" ) == 0
-					|| strcmp( arguments->dictionaryfilename, "" ) == 0 )
+					|| strcmp( arguments->dictionaryfilename, "" ) == 0
+					|| arguments->maxreadsineachline == 0 )
 			{
 				argp_usage( state );
 			}
