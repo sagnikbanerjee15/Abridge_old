@@ -862,9 +862,9 @@ int main( int argc, char *argv[] )
 	arguments.qualityscoresfilename = "";
 	arguments.unmappedreadsfilename = "";
 	arguments.maxreadsineachline = 0;
-	return -1;
-	argp_parse( &argp, argc, argv, 0, 0, &arguments );
 
+	argp_parse( &argp, argc, argv, 0, 0, &arguments );
+	return -1;
 	/********************************************************************
 	 * Variable declaration
 	 ********************************************************************/
