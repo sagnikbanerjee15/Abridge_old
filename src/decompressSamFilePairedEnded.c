@@ -88,6 +88,7 @@ static error_t parse_opt( int key, char *arg, struct argp_state *state )
 			break;
 		case 'x':
 			printf( "\nmaxreadsineachline = %s", arg );
+			fflush( stdout );
 			arguments->maxreadsineachline = strtoull( arg, &temp, 10 );
 			break;
 
