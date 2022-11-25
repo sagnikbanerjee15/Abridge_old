@@ -206,8 +206,6 @@ def main():
                                                 cmd1 += f" 1> {output_directory_main}.output "
                                                 cmd1 += f" 2> {output_directory_main}.error"
                                                 
-                                                
-                                                
                                                 #print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam") == False:
                                                     #print(cmd1)
@@ -216,6 +214,7 @@ def main():
     pool.map( runCommand, allinputs )
     #print(len(allinputs))
     
+    # Convert SAM to BAM to ensure that the decompression worked fine
     for ended in ["SE","PE"]:
         #if ended == "PE": continue
         for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
