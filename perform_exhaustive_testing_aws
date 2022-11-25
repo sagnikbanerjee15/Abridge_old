@@ -253,7 +253,8 @@ def main():
                                                 container_name = f"{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}_quality_{quality}_i_seq_{ignore_sequence}"
                                                 volumes = ["/work/ABRIDGE/Abridge/testing:/work/ABRIDGE/Abridge/testing"]
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.bam") == False:
-                                                    runDockerCommand( name = "xyz", version = "1.14", image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}", container_name = container_name, volumes = volumes, command = cmd2 , cpus = CPU, memory = '100g' )
+                                                    print(cmd2)
+                                                    runDockerCommand( name = "xyz", version = "1.14", image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}", container_name = container_name, volumes = volumes, command = cmd2 , cpus = CPU, memory = '25g' )
 
 if __name__ == "__main__":
     main()
