@@ -652,7 +652,8 @@ void convertToAlignmentSingleEnded(
 						"\nj=%d iCIGAR: %s CIGAR: %s",
 						j,
 						split_on_comma[j],
-						sam_alignment_instance->cigar );
+						sam_alignment_instance->cigar,
+						sam_alignment_instance->icigar );
 			}
 			/*
 			 printf( "\nCigar: %s", sam_alignment_instance->cigar );
