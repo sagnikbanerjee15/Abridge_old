@@ -1062,13 +1062,12 @@ def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_vers
     Returns a dictionary of tags.
     For example:
     {"NH": 1 #NH tag is present
-    "XS": 0 #XS tag is absent
     "MD": 0 #MD tag is absent
     }
-    Python will take a very long time to execute especially for samples with no spliced reads. 
-    Hence using C for this purpose.
+    Assume that the same tag is present for all the alignments if it is present for one
     """
     
+    """REMOVE THIS LATER
     cmd  = f" findAllTags "
     cmd += f" --inputsamfilename {samfilename}" 
     cmd += f" --outputfilename {tagfilename}"
@@ -1085,7 +1084,21 @@ def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_vers
         tag_name, tag_value = line.strip().split(":")
         tag_presence[tag_name] = int(tag_value)
     fhr.close()
+    """
     
+    fhr = open(samfilename, "r")
+    for line in fhr:
+        if line[0]=='@': continue
+        else: break
+    fhr.close()
+    
+    tag_presence = {"NH":0, "MD":0}
+    tags = line.strip().split("\t")[11:]
+    if "NH:i:" in tags:
+        tag_presence["NH"] = 1
+    if "MD:Z:" in tags:
+        tag_presence["MD"] = 1
+        
     return tag_presence
 
 def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging ):

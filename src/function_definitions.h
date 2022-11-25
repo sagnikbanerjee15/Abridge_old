@@ -88,6 +88,8 @@ struct Sam_Alignment* allocateMemorySam_Alignment()
 	s->soft_clips_removed_qual[0] = '\0';
 	s->soft_clips_removed_seq[0] = '\0';
 
+	s->NH = 1;
+	s->MD = ( char* ) malloc( sizeof(char) * (MAX_SEQ_LEN * 2) );
 	return s;
 }
 
@@ -474,9 +476,16 @@ void populateSamAlignmentInstance(
 		//dest->tags[i - 11].name = sam_tags[sam_tag_index];
 		if ( i == number_of_fields - 1 )
 			split_tags[2][strlen( split_tags[2] )] = '\0';
-		strcpy( dest->tags[i - 11].name, split_tags[0] );
-		strcpy( dest->tags[i - 11].type, split_tags[1] );
-		strcpy( dest->tags[i - 11].val, split_tags[2] );
+		/*
+		 strcpy( dest->tags[i - 11].name, split_tags[0] );
+		 strcpy( dest->tags[i - 11].type, split_tags[1] );
+		 strcpy( dest->tags[i - 11].val, split_tags[2] );
+		 */
+		if ( strstr( split_tags[0], "NH" ) )
+			dest->NH = strtoull( split_tags[2], &temp, 10 );
+		else if ( strstr( split_tags[0], "MD" ) )
+			strcpy( dest->MD, split_tags[2] );
+
 		//printf("\n Tags %s Parts of the tag %s %s %s ", src[i], split_tags[0], split_tags[1], split_tags[2]);
 	}
 	dest->read_seq_len = strlen( dest->seq );
