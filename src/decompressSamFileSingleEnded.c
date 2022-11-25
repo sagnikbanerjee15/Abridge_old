@@ -546,7 +546,7 @@ void convertToAlignmentSingleEnded(
 		splitByDelimiter( split_on_comma[j], '-', split_on_dash );
 		if ( print_more_info )
 		{
-			printf( "\n%s", split_on_comma[j] );
+			printf( "\nj=%d %s", j, split_on_comma[j] );
 		}
 		if ( flag_ignore_alignment_scores == 0 )
 			splitByDelimiter( split_on_dash[0], '~', split_on_tilde );
