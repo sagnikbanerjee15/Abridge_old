@@ -105,6 +105,8 @@ def main():
     sra_id = "SRR13711353"
     
     pool = multiprocessing.Pool( processes = int( CPU ) )
+    os.system(f"mkdir -p {OUTPUT_DIRECTORY_MAIN}/abridge_compressed")
+    os.system(f"mkdir -p {OUTPUT_DIRECTORY_MAIN}/abridge_decompressed")
     
     
     ########################################################################################################################
