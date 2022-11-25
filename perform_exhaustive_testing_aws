@@ -272,7 +272,7 @@ def main():
                                                     docker_cmd += f" bash -c '{cmd2}'"
                                                     #logging.info( f"Running command - {docker_cmd}" )
                                                     # os.system( docker_cmd )
-                                                    allinputs.append( ["dummy", cmd2, i] )
+                                                    allinputs.append( ["dummy", docker_cmd, i] )
 
     pool.map( runCommand, allinputs )
     print(len(allinputs))
