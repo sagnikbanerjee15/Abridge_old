@@ -601,16 +601,17 @@ void convertToAlignmentSingleEnded(
 			sprintf( str_sprintf, "%d", *read_number );
 			(*read_number)++;
 			strcpy( sam_alignment_instance->read_name, str_sprintf );
-			if ( sam_alignment_instance->start_position == 5297931
-					|| sam_alignment_instance->start_position == 5297932 )
-			{
-				printf(
-						"\n%s_%d",
-						sam_alignment_instance->read_name,
-						number_of_repititions_of_the_same_reads );
-				printf( "\niCIGAR: %s", split_on_comma[j] );
-				fflush( stdout );
-			}
+
+			/*if ( sam_alignment_instance->start_position == 5297931
+			 || sam_alignment_instance->start_position == 5297932 )
+			 {
+			 printf(
+			 "\n%s_%d",
+			 sam_alignment_instance->read_name,
+			 number_of_repititions_of_the_same_reads );
+			 printf( "\niCIGAR: %s", split_on_comma[j] );
+			 fflush( stdout );
+			 }*/
 			/*if ( sam_alignment_instance->start_position == 27381 && strcmp (sam_alignment_instance->reference_name , "1") == 0 )
 			 {
 			 printf ("\nSame iCIGAR");
