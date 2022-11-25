@@ -1336,7 +1336,6 @@ def main():
         if options.quiet == False:
             logging.info( f"Read names have been altered and NH tags have been added" )
         
-        sys.exit()
         if tags_present["MD"] == 0:
             ################################################################################################################################################################################################################################################
             # Use samtools to add MD tag
