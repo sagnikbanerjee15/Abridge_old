@@ -915,37 +915,10 @@ void compressPairedEndedAlignments(
 			strcpy( curr_alignment->read_name, split_line[3] );
 
 			//printf("\nRead name: %s", split_line[3]);
-			for ( i = 11; i < number_of_fields; i++ )
-			{
-				if ( strcmp( curr_alignment->tags[i - 11].name, "NH" ) == 0 )
-				{
-					strcpy( curr_alignment->tags[i - 11].type, "i" );
-					NH_val = strtol( split_line[2], &convert_to_int_temp, 10 );
-					NH_val = NH_val / 2;
-					sprintf( str, "%lld", NH_val );
-					strcpy( curr_alignment->tags[i - 11].val, str );
-
-					break;
-				}
-			}
-			if ( i == number_of_fields )
-			{
-				strcpy(
-						curr_alignment->tags[curr_alignment->number_of_tag_items].name,
-						"NH" );
-				strcpy(
-						curr_alignment->tags[curr_alignment->number_of_tag_items].type,
-						"i" );
-
-				NH_val = strtol( split_line[2], &convert_to_int_temp, 10 );
-				NH_val = NH_val / 2;
-				sprintf( str, "%lld", NH_val );
-				strcpy(
-						curr_alignment->tags[curr_alignment->number_of_tag_items].val,
-						str );
-				curr_alignment->number_of_tag_items++;
-
-			}
+			NH_val = strtol( split_line[2], &convert_to_int_temp, 10 );
+			NH_val = NH_val / 2;
+			sprintf( str, "%lld", NH_val );
+			strcpy( curr_alignment->NH, str );
 		}
 
 		/****************************************************************************************/
