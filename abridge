@@ -1088,9 +1088,9 @@ def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_vers
     tag_presence = {"NH":0, "MD":0}
     tags = line.strip().split("\t")[11:]
     print(tags)
-    if "NH:i:" in tags:
+    if "NH:i:" in line:
         tag_presence["NH"] = 1
-    if "MD:Z:" in tags:
+    if "MD:Z:" in line:
         tag_presence["MD"] = 1
         
     return tag_presence
