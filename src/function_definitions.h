@@ -2347,12 +2347,6 @@ void generateIntegratedCigarPairedEnded(
 	int right_soft_clip_point = 0;
 	int i;
 	int flag;
-	int MD_tag_index;
-	int nM_tag_index;
-	int XS_tag_index;
-	int NH_tag_index;
-	int NM_tag_index;
-	int AS_tag_index;
 	int print_outputs = 0;
 	int perfect_alignment_indicator = 0;
 	//int spliced_alignment_indicator = 0;
@@ -2449,33 +2443,6 @@ void generateIntegratedCigarPairedEnded(
 		strcpy( curr_alignment->soft_clips_removed_qual, curr_alignment->qual );
 		curr_alignment->soft_clips_removed_seq_len = strlen(
 				curr_alignment->soft_clips_removed_seq );
-	}
-
-	/*
-	 * Find the different tags
-	 */
-	XS_tag_index = -1;
-	NH_tag_index = -1;
-	NM_tag_index = -1;
-	nM_tag_index = -1;
-	MD_tag_index = -1;
-	AS_tag_index = -1;
-	for ( i = 0; i < curr_alignment->number_of_tag_items; i++ )
-	{
-		if ( strcmp( curr_alignment->tags[i].name, "MD" ) == 0 )
-			MD_tag_index = i;
-		/*
-		 if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
-		 XS_tag_index = i;
-		 */
-		if ( strcmp( curr_alignment->tags[i].name, "NH" ) == 0 )
-			NH_tag_index = i;
-		if ( strcmp( curr_alignment->tags[i].name, "NM" ) == 0 )
-			NM_tag_index = i;
-		if ( strcmp( curr_alignment->tags[i].name, "nM" ) == 0 )
-			nM_tag_index = i;
-		if ( strcmp( curr_alignment->tags[i].name, "AS" ) == 0 )
-			AS_tag_index = i;
 	}
 
 	perfect_alignment_indicator = isAlignmentPerfect(
@@ -2697,91 +2664,11 @@ void generateIntegratedCigarPairedEnded(
 		sprintf( str, "%d", curr_alignment->mapping_quality_score );
 		strcat( curr_alignment->icigar, "~" );
 		strcat( curr_alignment->icigar, str );
-		if ( AS_tag_index != -1 )
-		{
-			strcat( curr_alignment->icigar, "~" );
-			strcat(
-					curr_alignment->icigar,
-					curr_alignment->tags[AS_tag_index].val );
-		}
-		else
-		{
-			strcat( curr_alignment->icigar, "~" );
-			strcat( curr_alignment->icigar, "X" );
-		}
+		strcat( curr_alignment->icigar, "~" );
+		strcat( curr_alignment->icigar, curr_alignment->AS );
+
 	}
 
-	/*
-	 * For diagnostics
-	 */
-
-	if ( run_diagnostics == 1 )
-	{
-		dummy = 'Z';
-		strcpy(
-				sam_alignment_instance_diagnostics->icigar,
-				curr_alignment->icigar );
-		sam_alignment_instance_diagnostics->start_position = curr_alignment->start_position;
-		convertIcigarToCigarandMDPairedEnded(
-				whole_genome,
-				sam_alignment_instance_diagnostics,
-				curr_alignment->reference_name,
-				flag_ignore_mismatches,
-				flag_ignore_soft_clippings,
-				flag_ignore_unmapped_sequences,
-				flag_ignore_all_quality_score,
-				flag_ignore_quality_scores_for_matched_bases,
-				0,
-				&dummy,
-				samflag_dictionary,
-				number_of_unique_samformatflags,
-				samformatflag_replacer_characters );
-		/************************************************************************
-		 * Remove this section later
-		 *************************************************************************/
-		/*if (isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'I') && isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'D') && isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'N') && isCharacterInString(sam_alignment_instance_diagnostics->cigar, 'S'))
-		 {
-		 printSamAlignmentInstance(curr_alignment, 1);
-		 printSamAlignmentInstance(sam_alignment_instance_diagnostics, 1);
-		 exit(1);
-		 }
-		 */
-		/************************************************************************/
-
-		flag = 0;
-		if ( strcmp(
-				sam_alignment_instance_diagnostics->cigar,
-				curr_alignment->cigar ) != 0 )
-		{
-			printf( "\nCIGAR Mismatch" );
-			flag = 1;
-		}
-		if ( strcmp(
-				sam_alignment_instance_diagnostics->seq,
-				curr_alignment->seq ) != 0 )
-		{
-			printf( "\nSEQ Mismatch" );
-			flag = 1;
-		}
-		if ( strcmp(
-				sam_alignment_instance_diagnostics->tags[2].val,
-				curr_alignment->tags[MD_tag_index].val ) != 0 )
-		{
-			printf(
-					"\nMD Mismatch Actual: %s Deciphered: %s",
-					curr_alignment->tags[MD_tag_index].val,
-					sam_alignment_instance_diagnostics->tags[2].val );
-			flag = 1;
-		}
-
-		if ( flag )
-		{
-			printf( "\nRecord Number : %lld", number_of_records_read );
-			printSamAlignmentInstance( curr_alignment, 1 );
-			printSamAlignmentInstance( sam_alignment_instance_diagnostics, 1 );
-			exit( 1 );
-		}
-	}
 }
 
 void initializePass3_Compression_Symbol_icigar_MappingPool(
