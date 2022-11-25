@@ -152,8 +152,7 @@ void writeAlignmentToFileSingleEnded(
 		/*
 		 * Set up the read name
 		 */
-		if ( sam_alignment->tags[0].val[0] == '1'
-				&& sam_alignment->tags[0].val[1] == '\0' )
+		if ( strcmp( sam_alignment->NH, "1" ) )
 		{
 			strcat( line_to_be_written_to_file, read_prefix );
 			strcat( line_to_be_written_to_file, sam_alignment->read_name );
@@ -295,16 +294,17 @@ void writeAlignmentToFileSingleEnded(
 		 */
 		//Tags
 		strcat( line_to_be_written_to_file, "NH:i:" );
-		strcat( line_to_be_written_to_file, sam_alignment->tags[0].val );
+		strcat( line_to_be_written_to_file, sam_alignment->NH );
 		strcat( line_to_be_written_to_file, "\t" );
 
-		if ( strcmp( sam_alignment->tags[1].val, "." ) != 0
-				&& strchr( sam_alignment->cigar, 'N' ) != NULL )
-		{
-			strcat( line_to_be_written_to_file, "XS:A:" );
-			strcat( line_to_be_written_to_file, sam_alignment->tags[1].val );
-			strcat( line_to_be_written_to_file, "\t" );
-		}
+		/*
+		 if ( strcmp( sam_alignment->tags[1].val, "." ) != 0
+		 && strchr( sam_alignment->cigar, 'N' ) != NULL )
+		 {
+		 strcat( line_to_be_written_to_file, "XS:A:" );
+		 strcat( line_to_be_written_to_file, sam_alignment->tags[1].val );
+		 strcat( line_to_be_written_to_file, "\t" );
+		 }*/
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 5");
 		 fflush(stdout);
@@ -312,7 +312,7 @@ void writeAlignmentToFileSingleEnded(
 		if ( flag_ignore_sequence_information == 0 )
 		{
 			strcat( line_to_be_written_to_file, "MD:Z:" );
-			strcat( line_to_be_written_to_file, sam_alignment->tags[2].val );
+			strcat( line_to_be_written_to_file, sam_alignment->MD );
 			strcat( line_to_be_written_to_file, "\t" );
 		}
 		/*
@@ -320,16 +320,14 @@ void writeAlignmentToFileSingleEnded(
 		 fflush(stdout);
 		 */
 		if ( flag_ignore_alignment_scores == 0
-				&& strcmp( sam_alignment->tags[3].val, "X" ) != 0 )
+				&& strcmp( sam_alignment->AS, "X" ) != 0 )
 		{
 			strcat( line_to_be_written_to_file, "AS:i:" );
-			strcat( line_to_be_written_to_file, sam_alignment->tags[3].val );
+			strcat( line_to_be_written_to_file, sam_alignment->AS );
 			strcat( line_to_be_written_to_file, "\t" );
 			if ( strstr( sam_alignment->read_name, "" ) )
 			{
-				printf(
-						"\nWriting to file AS: %s",
-						sam_alignment->tags[3].val );
+				printf( "\nWriting to file AS: %s", sam_alignment->AS );
 			}
 		}
 		/*
@@ -583,22 +581,17 @@ void convertToAlignmentSingleEnded(
 						split_on_tilde[1],
 						&temp,
 						10 );
-				strcpy(
-						sam_alignment_instance->tags[3].val,
-						split_on_tilde[2] );
+				strcpy( sam_alignment_instance->AS, split_on_tilde[2] );
 			}
 			else
 			{
 				sam_alignment_instance->mapping_quality_score = 255;
-				strcpy( sam_alignment_instance->tags[3].val, "X" );
+				strcpy( sam_alignment_instance->AS, "X" );
 			}
 		}
 		if ( print_more_info )
 		{
-			printf(
-					"\nj=%d AS tag: %s",
-					j,
-					sam_alignment_instance->tags[3].val );
+			printf( "\nj=%d AS tag: %s", j, sam_alignment_instance->AS );
 		}
 		/*
 		 printf( "\nconvertToAlignmentSingleEnded Checkpoint 3" );
