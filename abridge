@@ -622,7 +622,7 @@ def compressSamFile( options , list_of_softwares_with_versions, volumes_list ):
     cmd += f" {outputfilename} "  # The non redundant version of the sam file
     cmd += f" {unmapped_outputfilename} "  # Set of unmapped reads
     cmd += f" {reference_sha512_filename} "  # The 128 bit hash of the reference
-    cmd += f" {fclqc_output_filename}001.enc "  # FCLQC compressed quality scores file
+    cmd += f" {fclqc_output_filename}001* "  # FCLQC compressed quality scores file
     cmd += f" {fclqc_output_filename}.prob "  # FCLQC compressed quality probability file
     if options.single_ended == False:
         cmd += f" {name_of_file_dictionary} "
