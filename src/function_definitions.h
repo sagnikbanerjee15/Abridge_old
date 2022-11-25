@@ -2326,7 +2326,7 @@ void generateIntegratedCigarSingleEnded(
 		 {
 		 printSamAlignmentInstance(curr_alignment, 1);
 		 printSamAlignmentInstance(sam_alignment_instance_diagnostics, 1);
-		 exit(1);
+		 exit(1);;
 		 }
 		 */
 		/************************************************************************/
