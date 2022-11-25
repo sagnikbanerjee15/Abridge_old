@@ -2234,8 +2234,7 @@ void generateIntegratedCigarSingleEnded(
 	/*
 	 * Set the read_name to blank if the read is uniquely mapped
 	 */
-	if ( strcmp( curr_alignment->NH, "1" ) == 0
-			&& curr_alignment->tags[NH_tag_index].val[1] == '\0' )
+	if ( strcmp( curr_alignment->NH, "1" ) == 0 )
 	{
 		curr_alignment->read_name[0] = ' ';
 		curr_alignment->read_name[1] = '\0';
