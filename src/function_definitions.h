@@ -2064,7 +2064,7 @@ void generateIntegratedCigarSingleEnded(
 
 	if ( perfect_alignment_indicator == 0 )
 		designIntegratedCIGARS(
-				curr_alignment->tags[MD_tag_index].val,
+				curr_alignment->MD,
 				curr_alignment->soft_clips_removed_seq,
 				&curr_alignment->soft_clips_removed_seq_len,
 				curr_alignment->soft_clips_removed_qual,
@@ -2234,7 +2234,7 @@ void generateIntegratedCigarSingleEnded(
 	/*
 	 * Set the read_name to blank if the read is uniquely mapped
 	 */
-	if ( curr_alignment->tags[NH_tag_index].val[0] == '1'
+	if ( strcmp( curr_alignment->NH, "1" ) == 0
 			&& curr_alignment->tags[NH_tag_index].val[1] == '\0' )
 	{
 		curr_alignment->read_name[0] = ' ';
