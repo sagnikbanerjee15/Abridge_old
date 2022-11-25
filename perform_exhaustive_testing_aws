@@ -154,17 +154,6 @@ def main():
                                         cmd1 += f" 1> {output_directory_main}.output "
                                         cmd1 += f" 2> {output_directory_main}.error"
                                         
-                                        convert_to_bam_errorfile = f"{output_directory_main.replace('abridge_compressed','abridge_decompressed')}/{sra_id}_{ended}_{alignment_type}_1_decompressed_convert_to_bam.error"
-                                        if os.stat(convert_to_bam_errorfile).st_size != 0:
-                                            cmd = f"rm -rf {output_directory_main}*"
-                                            print(output_directory_main, os.path.exists(output_directory_main))
-                                            #os.system(cmd)
-                                            
-                                            cmd = f"rm -rf {output_directory_main.replace('abridge_compressed','abridge_decompressed')}*"
-                                            print(output_directory_main.replace('abridge_compressed','abridge_decompressed'), os.path.exists(output_directory_main.replace('abridge_compressed','abridge_decompressed')))
-                                            #os.system(cmd)
-                                        
-                                        
                                         if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1.abridge") == False:
                                             allinputs.append( ["dummy", cmd1, "ls"] )
                                             i+=1
