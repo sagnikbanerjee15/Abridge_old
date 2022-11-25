@@ -267,20 +267,6 @@ void convertReadIdToString(
 	read_id_string[i] = '\0';
 }
 
-char returnDirection(
-		char character,
-		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
-		int number_of_unique_samformatflags )
-{
-	int i;
-	for ( i = 0; i < number_of_unique_samformatflags * 2; i++ )
-	{
-		if ( samflag_dictionary->character[i] == character )
-			return samflag_dictionary->direction[i];
-	}
-	return ' ';
-}
-
 void writeToFile(
 		short int flag_ignore_quality_scores_for_matched_bases,
 		short int flag_ignore_all_quality_scores,
