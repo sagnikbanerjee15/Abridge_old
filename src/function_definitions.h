@@ -88,8 +88,12 @@ struct Sam_Alignment* allocateMemorySam_Alignment()
 	s->soft_clips_removed_qual[0] = '\0';
 	s->soft_clips_removed_seq[0] = '\0';
 
-	s->NH = 1;
+	s->NH = ( char* ) malloc( sizeof(char) * 10 );
+	strcpy( s->NH, "-1" );
+	s->AS = ( char* ) malloc( sizeof(char) * 10 );
+	strcpy( s->AS, "X" );
 	s->MD = ( char* ) malloc( sizeof(char) * (MAX_SEQ_LEN * 2) );
+	strcpy( s->MD, "-1" );
 	return s;
 }
 
@@ -482,9 +486,11 @@ void populateSamAlignmentInstance(
 		 strcpy( dest->tags[i - 11].val, split_tags[2] );
 		 */
 		if ( strstr( split_tags[0], "NH" ) )
-			dest->NH = strtoull( split_tags[2], &temp, 10 );
+			strcpy( dest->NH, split_tags[2] );
 		else if ( strstr( split_tags[0], "MD" ) )
 			strcpy( dest->MD, split_tags[2] );
+		else if ( strstr( split_tags[0], "AS" ) )
+			strcpy( dest->AS, split_tags[2] );
 
 		//printf("\n Tags %s Parts of the tag %s %s %s ", src[i], split_tags[0], split_tags[1], split_tags[2]);
 	}
@@ -1969,12 +1975,6 @@ void generateIntegratedCigarSingleEnded(
 	int right_soft_clip_point = 0;
 	int i;
 	int flag;
-	int MD_tag_index;
-	int nM_tag_index;
-	int XS_tag_index;
-	int NH_tag_index;
-	int NM_tag_index;
-	int AS_tag_index;
 	int print_outputs = 0;
 	int perfect_alignment_indicator = 0;
 	//int spliced_alignment_indicator = 0;
@@ -2072,33 +2072,6 @@ void generateIntegratedCigarSingleEnded(
 		strcpy( curr_alignment->soft_clips_removed_qual, curr_alignment->qual );
 		curr_alignment->soft_clips_removed_seq_len = strlen(
 				curr_alignment->soft_clips_removed_seq );
-	}
-
-	/*
-	 * Find the different tags
-	 */
-	XS_tag_index = -1;
-	NH_tag_index = -1;
-	NM_tag_index = -1;
-	nM_tag_index = -1;
-	MD_tag_index = -1;
-	AS_tag_index = -1;
-	for ( i = 0; i < curr_alignment->number_of_tag_items; i++ )
-	{
-		if ( strcmp( curr_alignment->tags[i].name, "MD" ) == 0 )
-			MD_tag_index = i;
-		/*
-		 if ( strcmp (curr_alignment->tags[i].name , "XS") == 0 )
-		 XS_tag_index = i;
-		 */
-		if ( strcmp( curr_alignment->tags[i].name, "NH" ) == 0 )
-			NH_tag_index = i;
-		if ( strcmp( curr_alignment->tags[i].name, "NM" ) == 0 )
-			NM_tag_index = i;
-		if ( strcmp( curr_alignment->tags[i].name, "nM" ) == 0 )
-			nM_tag_index = i;
-		if ( strcmp( curr_alignment->tags[i].name, "AS" ) == 0 )
-			AS_tag_index = i;
 	}
 
 	perfect_alignment_indicator = isAlignmentPerfect(
@@ -2276,11 +2249,7 @@ void generateIntegratedCigarSingleEnded(
 	/*
 	 * Add NH tag
 	 */
-	/*if (XS_tag_index != -1) strcat(curr_alignment->icigar, curr_alignment->tags[XS_tag_index].val);*/
-	if ( NH_tag_index != -1 )
-		strcat(
-				curr_alignment->icigar,
-				curr_alignment->tags[NH_tag_index].val );
+	strcat( curr_alignment->icigar, curr_alignment->NH );
 	/*
 	 * Set the read_name to blank if the read is uniquely mapped
 	 */
@@ -2292,7 +2261,7 @@ void generateIntegratedCigarSingleEnded(
 	}
 
 	/*
-	 * Change the iCIGAR representation to reflect the samformatflag and XS tag
+	 * Change the iCIGAR representation to reflect the samformatflag
 	 */
 	//if ( spliced_alignment_indicator == 0 )
 	//{
@@ -2314,73 +2283,6 @@ void generateIntegratedCigarSingleEnded(
 	for ( i = 0; i < strlen( curr_alignment->icigar ); i++ )
 		if ( curr_alignment->icigar[i] == 'M' )
 			curr_alignment->icigar[i] = M_replacement_character;
-	//}
-	/*
-	 else
-	 {
-	 if ( XS_tag_index == -1 )
-	 {
-	 switch ( curr_alignment->samflag )
-	 {
-	 case 0:
-	 M_replacement_character = 'B';
-	 break;
-	 case 16:
-	 M_replacement_character = 'E';
-	 break;
-	 case 256:
-	 M_replacement_character = 'F';
-	 break;
-	 case 272:
-	 M_replacement_character = 'H';
-	 break;
-	 }
-	 }
-	 else
-	 {
-	 if ( strcmp (curr_alignment->tags[XS_tag_index].val , "+") == 0 )
-	 {
-	 switch ( curr_alignment->samflag )
-	 {
-	 case 0:
-	 M_replacement_character = 'J';
-	 break;
-	 case 16:
-	 M_replacement_character = 'K';
-	 break;
-	 case 256:
-	 M_replacement_character = 'L';
-	 break;
-	 case 272:
-	 M_replacement_character = 'O';
-	 break;
-	 }
-	 }
-	 else if ( strcmp (curr_alignment->tags[XS_tag_index].val , "-") == 0 )
-	 {
-	 switch ( curr_alignment->samflag )
-	 {
-	 case 0:
-	 M_replacement_character = 'P';
-	 break;
-	 case 16:
-	 M_replacement_character = 'Q';
-	 break;
-	 case 256:
-	 M_replacement_character = 'R';
-	 break;
-	 case 272:
-	 M_replacement_character = 'U';
-	 break;
-	 }
-	 }
-
-	 }
-	 for ( i = 0 ; i < strlen (curr_alignment->icigar) ; i++ )
-	 if ( curr_alignment->icigar[i] == 'M' )
-	 curr_alignment->icigar[i] = M_replacement_character;
-	 }
-	 */
 
 	/*
 	 * Append the cigar with mapping quality score and the alignment score (if available)
@@ -2391,18 +2293,8 @@ void generateIntegratedCigarSingleEnded(
 		sprintf( str, "%d", curr_alignment->mapping_quality_score );
 		strcat( curr_alignment->icigar, "~" );
 		strcat( curr_alignment->icigar, str );
-		if ( AS_tag_index != -1 )
-		{
-			strcat( curr_alignment->icigar, "~" );
-			strcat(
-					curr_alignment->icigar,
-					curr_alignment->tags[AS_tag_index].val );
-		}
-		else
-		{
-			strcat( curr_alignment->icigar, "~" );
-			strcat( curr_alignment->icigar, "X" );
-		}
+		strcat( curr_alignment->icigar, "~" );
+		strcat( curr_alignment->icigar, curr_alignment->AS );
 	}
 
 	/*

@@ -192,7 +192,8 @@ struct Sam_Alignment
 		char *selected_qual;
 		int soft_clips_removed_seq_len;
 
-		unsigned long long NH;
+		char *NH;
+		char *AS;
 		char *MD;
 
 };
