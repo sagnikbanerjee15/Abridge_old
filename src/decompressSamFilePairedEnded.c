@@ -680,13 +680,13 @@ void decompressFile(
 	printf(
 			"\nflag_ignore_unmapped_sequences %d",
 			flag_ignore_unmapped_sequences );
-	printf( "\nflag_ignore_quality_score %d", flag_ignore_all_quality_scores );
 	printf(
-			"\nflag_save_all_quality_scores %d",
+			"\flag_ignore_all_quality_scores %d",
+			flag_ignore_all_quality_scores );
+	printf(
+			"\flag_ignore_quality_scores_for_matched_bases %d",
 			flag_ignore_quality_scores_for_matched_bases );
-	printf(
-			"\nflag_save_exact_quality_scores %d",
-			flag_ignore_alignment_scores );
+	printf( "\flag_ignore_alignment_scores %d", flag_ignore_alignment_scores );
 	fflush( stdout );
 
 	line_num = 0;
