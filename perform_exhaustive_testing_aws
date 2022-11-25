@@ -92,7 +92,7 @@ def runCommand( eachinput ):
     Run, cmd1, cmd2 = eachinput
     #time.sleep(wait_time * random.randint(2,5))
     os.system( cmd1 )
-    os.system( cmd2 )
+    #os.system( cmd2 )
     
     
 
@@ -206,25 +206,54 @@ def main():
                                                 cmd1 += f" 1> {output_directory_main}.output "
                                                 cmd1 += f" 2> {output_directory_main}.error"
                                                 
-                                                cmd2  = f"samtools view"
-                                                cmd2 += f" -@ 1 "
-                                                cmd2 += f" -Sb "
-                                                cmd2 += f" -o {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.bam "
-                                                cmd2 += f" {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam "
-                                                cmd2 += f"1> {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed_convert_to_bam.output "
-                                                cmd2 += f"1> {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed_convert_to_bam.error " 
                                                 
                                                 
                                                 #print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam") == False:
                                                     #print(cmd1)
-                                                    allinputs.append( ["dummy", cmd1, cmd2] )
+                                                    allinputs.append( ["dummy", cmd1, i] )
                                                     i+=1
     pool.map( runCommand, allinputs )
     #print(len(allinputs))
-                                        
     
-    
+    for ended in ["SE","PE"]:
+        #if ended == "PE": continue
+        for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
+            #if alignment_type == "no_tags_unsorted": continue
+            alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}_1.sam"
+            for ignore_alignment_scores in [0, 1]:
+                #if ignore_alignment_scores == 1: continue
+                for ignore_all_quality_scores in [0, 1]:
+                    #if ignore_all_quality_scores == 1: continue
+                    for ignore_quality_scores_for_matched_bases in [0, 1]:
+                        #if ignore_quality_scores_for_matched_bases == 1: continue
+                        for ignore_soft_clippings in [0, 1]:
+                            #if ignore_soft_clippings == 1: continue
+                            for ignore_mismatches in [0, 1]:
+                                #if ignore_mismatches == 1: continue
+                                for ignore_unmapped_reads in [0, 1]:
+                                    #if ignore_unmapped_reads == 1: continue
+                                    for skip_shortening_read_names in [0, 1]:
+                                        #if skip_shortening_read_names == 1: continue   
+                                        for quality in [0, 1]:
+                                            #if quality == 0: continue
+                                            for ignore_sequence in [0, 1]:
+                                                #if ignore_sequence == 1:continue
+                                                output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}_quality_{quality}_i_seq_{ignore_sequence}"
+                                                compressed_filename = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}/{sra_id}_{ended}_{alignment_type}_1.abridge"
+                                                 
+                                                cmd2  = f"samtools view"
+                                                cmd2 += f" -@ {CPU} "
+                                                cmd2 += f" -Sb "
+                                                cmd2 += f" -o {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.bam "
+                                                cmd2 += f" {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam "
+                                                cmd2 += f" 1> {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed_convert_to_bam.output "
+                                                cmd2 += f" 2> {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed_convert_to_bam.error " 
+                                                
+                                                software = "samtools"    
+                                                container_name = f"{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}_quality_{quality}_i_seq_{ignore_sequence}"
+                                                volumes = ["/work/ABRIDGE/Abridge/testing:/work/ABRIDGE/Abridge/testing"]
+                                                runDockerCommand( name = "xyz", version = "1.14", image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}", container_name = container_name, volumes = volumes, command = cmd2 , cpus = CPU, memory = '100g' )
 
 if __name__ == "__main__":
     main()
