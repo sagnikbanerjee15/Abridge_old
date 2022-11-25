@@ -38,8 +38,8 @@ def runDockerCommand( name, version, image_location, container_name, volumes, co
     docker_cmd += f" bash -c '{command}'"
     #logging.info( f"Running command - {docker_cmd}" )
     os.system( docker_cmd )
-    print( docker_cmd )
-    sys.exit()
+    #print( docker_cmd )
+    #sys.exit()
 
 def runSingularityCommand(name, version, image_location, container_name, volumes, command , cpus = 1, memory = '1g' ):
     """
