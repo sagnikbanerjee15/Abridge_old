@@ -544,10 +544,7 @@ void convertToAlignmentSingleEnded(
 	for ( j = 0; j < number_of_distinct_cigars_in_a_line; j++ )
 	{
 		splitByDelimiter( split_on_comma[j], '-', split_on_dash );
-		if ( print_more_info )
-		{
-			printf( "\nj=%d %s", j, split_on_comma[j] );
-		}
+
 		if ( flag_ignore_alignment_scores == 0 )
 			splitByDelimiter( split_on_dash[0], '~', split_on_tilde );
 		else
@@ -649,6 +646,14 @@ void convertToAlignmentSingleEnded(
 					flag_ignore_quality_scores_for_matched_bases,
 					flag_ignore_sequence_information,
 					default_quality_value );
+			if ( print_more_info )
+			{
+				printf(
+						"\nj=%d iCIGAR: %s CIGAR: %s",
+						j,
+						split_on_comma[j],
+						sam_alignment_instance->cigar );
+			}
 			/*
 			 printf( "\nCigar: %s", sam_alignment_instance->cigar );
 			 printf( "\nConvertion completed" );
