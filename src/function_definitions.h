@@ -105,7 +105,6 @@ struct Paired_Ended_Flag_to_Single_Character* allocateMemoryPaired_Ended_Flag_to
 			sizeof(struct Paired_Ended_Flag_to_Single_Character) );
 	s->character = ( char* ) malloc( sizeof(char) * size * 2 );
 	s->samflags = ( int* ) malloc( sizeof(int) * size * 2 );
-	s->direction = ( char* ) malloc( sizeof(int) * size * 2 );
 	return s;
 }
 
@@ -623,7 +622,6 @@ int fillUpDictionary(
 				split_on_tab[0],
 				&temp,
 				10 );
-		samflag_dictionary->direction[total_lines] = split_on_tab[1][0];
 		samflag_dictionary->character[total_lines] = split_on_tab[2][0];
 		total_lines++;
 	}
@@ -3248,8 +3246,7 @@ int findSamFormatFlagPairedEnded(
 {
 	int i, j;
 	int samformatflag = -1;
-	XS[0] = 'X';
-	XS[1] = '\0';
+
 	//printf ("\nicigar %s" , icigar);
 	for ( i = 0; i < icigar_length; i++ )
 	{
@@ -3267,7 +3264,7 @@ int findSamFormatFlagPairedEnded(
 			{
 				if ( icigar[i] == samflag_dictionary->character[j] )
 				{
-					XS[0] = samflag_dictionary->direction[j];
+
 					samformatflag = samflag_dictionary->samflags[j];
 					(*character_to_be_replaced) = icigar[i];
 					//printf ("\nicigar_character %c direction %c samformatflag %d " , icigar[i] , samflag_dictionary->direction[j] , samflag_dictionary->samflags[j]);
