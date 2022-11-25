@@ -55,15 +55,15 @@ struct Sam_Alignment* allocateMemorySam_Alignment()
 	s->number_of_cigar_items = 0;
 	s->number_of_tag_items = 0;
 
-	for ( i = 0; i < 50; i++ )
-	{
-		s->tags[i].name = ( char* ) malloc( sizeof(char) * MAX_TAG_LENGTH );
-		s->tags[i].val = ( char* ) malloc( sizeof(char) * MAX_TAG_LENGTH );
-		s->tags[i].type = ( char* ) malloc( sizeof(char) * MAX_TAG_LENGTH );
-		s->tags[i].name[0] = '\0';
-		s->tags[i].val[0] = '\0';
-		s->tags[i].type[0] = '\0';
-	}
+	/*for ( i = 0; i < 50; i++ )
+	 {
+	 s->tags[i].name = ( char* ) malloc( sizeof(char) * MAX_TAG_LENGTH );
+	 s->tags[i].val = ( char* ) malloc( sizeof(char) * MAX_TAG_LENGTH );
+	 s->tags[i].type = ( char* ) malloc( sizeof(char) * MAX_TAG_LENGTH );
+	 s->tags[i].name[0] = '\0';
+	 s->tags[i].val[0] = '\0';
+	 s->tags[i].type[0] = '\0';
+	 }*/
 
 	s->cigar_extended = ( char* ) malloc( sizeof(char) * (MAX_SEQ_LEN * 2) );
 	s->md_extended = ( char* ) malloc( sizeof(char) * (MAX_SEQ_LEN * 2) );

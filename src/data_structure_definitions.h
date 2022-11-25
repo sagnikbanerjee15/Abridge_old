@@ -171,8 +171,7 @@ struct Sam_Alignment
 		/*
 		 * Optional fields of variable length
 		 */
-		struct Sam_Tags tags[100];
-
+		//struct Sam_Tags tags[100];
 		/*
 		 * Other fields created by abridge
 		 */
