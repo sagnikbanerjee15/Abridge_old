@@ -688,7 +688,7 @@ void decompressFile(
 			flag_ignore_quality_scores_for_matched_bases );
 	printf( "\nflag_ignore_alignment_scores %d", flag_ignore_alignment_scores );
 	printf(
-			"\flag_skip_shortening_read_names %d",
+			"\nflag_skip_shortening_read_names %d",
 			flag_skip_shortening_read_names );
 
 	fflush( stdout );
