@@ -2281,44 +2281,18 @@ void generateIntegratedCigarSingleEnded(
 char findReplamentCharacterForPairedEndedReads(
 		int samflag,
 		struct Paired_Ended_Flag_to_Single_Character *samflag_dictionary,
-		int number_of_unique_samformatflags,
-		int XS_tag_index,
-		struct Sam_Tags *tags )
+		int number_of_unique_samformatflags )
 {
 	int i, j, k;
 	char replacement_character;
 	for ( i = 0; i < number_of_unique_samformatflags * 2; i++ )
 	{
-		if ( XS_tag_index == -1 ) // Either splice does not exist or direction could not be determined from the alignment
+		if ( samflag == samflag_dictionary->samflags[i] )
 		{
-			if ( samflag_dictionary->direction[i] == '+'
-					&& samflag == samflag_dictionary->samflags[i] )
-			{
-				replacement_character = samflag_dictionary->character[i];
-				break;
-			}
-		}
-		else
-		{
-			if ( strcmp( tags[XS_tag_index].val, "+" ) == 0
-					&& samflag_dictionary->direction[i] == '+'
-					&& samflag == samflag_dictionary->samflags[i] )
-			{
-				replacement_character = samflag_dictionary->character[i];
-				break;
-			}
-			else if ( strcmp( tags[XS_tag_index].val, "-" ) == 0
-					&& samflag_dictionary->direction[i] == '-'
-					&& samflag == samflag_dictionary->samflags[i] )
-			{
-				replacement_character = samflag_dictionary->character[i];
-				break;
-			}
+			replacement_character = samflag_dictionary->character[i];
+			return replacement_character;
 		}
 	}
-
-	return replacement_character;
-
 }
 
 void generateIntegratedCigarPairedEnded(
@@ -2640,9 +2614,7 @@ void generateIntegratedCigarPairedEnded(
 	M_replacement_character = findReplamentCharacterForPairedEndedReads(
 			curr_alignment->samflag,
 			samflag_dictionary,
-			number_of_unique_samformatflags,
-			XS_tag_index,
-			curr_alignment->tags );
+			number_of_unique_samformatflags );
 	for ( i = 0; i < strlen( curr_alignment->icigar ); i++ )
 		if ( curr_alignment->icigar[i] == 'M' )
 			curr_alignment->icigar[i] = M_replacement_character;

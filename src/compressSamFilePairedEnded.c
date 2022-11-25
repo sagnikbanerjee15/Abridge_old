@@ -388,77 +388,6 @@ void writeToFile(
 				fprintf( fhw_qual, "%s", "\n" );
 				fprintf( fhw_qual, "%s", qual );
 				fprintf( fhw_qual, "%s", "\n" );
-				/*
-				 if (flag_save_exact_quality_scores == 0)
-				 {
-				 fprintf(fhw_qual, "%s", "\t");
-				 if (flag_ignore_soft_clippings == 1)
-				 {
-
-				 splitCigar(
-				 compressed_ds_pool[i]->cigar,
-				 &num_of_types,
-				 cigar_items_instance);
-				 if (cigar_items_instance[0].def == 'S'
-				 && compressed_ds_pool[i]->icigar[1] != '\0') // Left soft clip exists
-				 {
-				 sprintf(str, "%ld", cigar_items_instance[0].len);
-				 fprintf(fhw_qual, "%s", str);
-				 fprintf(fhw_qual, "%s", "S");
-				 }
-				 }
-				 if (compressed_ds_pool[i]->icigar[1] != '\0')
-				 {
-				 for (k = 0;
-				 compressed_ds_pool[i]->icigar[k + 1] != '~'
-				 && compressed_ds_pool[i]->icigar[k + 1] != '\0';
-				 k++)
-				 fputc(compressed_ds_pool[i]->icigar[k], fhw_qual);
-				 }
-				 else
-				 {
-
-				 l = i - 1;
-				 while (l >= 0)
-				 {
-				 if (compressed_ds_pool[l]->icigar[1] != '\0')
-				 break;
-				 else
-				 l--;
-				 }
-
-				 for (k = 0;
-				 compressed_ds_pool[l]->icigar[k + 1] != '~'
-				 && compressed_ds_pool[l]->icigar[k + 1] != '\0';
-				 k++)
-				 fputc(compressed_ds_pool[l]->icigar[k], fhw_qual);
-				 }
-				 if (flag_ignore_soft_clippings == 1)
-				 {
-				 //splitCigar (compressed_ds_pool[i]->cigar , &num_of_types , cigar_items_instance);
-				 if (cigar_items_instance[num_of_types - 1].def == 'S'
-				 && compressed_ds_pool[i]->icigar[1] != '\0') // Right soft clip exists
-				 {
-				 sprintf(
-				 str,
-				 "%ld",
-				 cigar_items_instance[num_of_types - 1].len);
-				 fprintf(fhw_qual, "%s", str);
-				 fprintf(fhw_qual, "%s", "S");
-				 }
-				 }
-				 fprintf(fhw_qual, "%s", "\t");
-				 if (returnDirection(
-				 findMatchCharacterIcigar(
-				 compressed_ds_pool[i]->icigar,
-				 samformatflag_replacer_characters),
-				 samflag_dictionary,
-				 number_of_unique_samformatflags) == '-')
-				 fprintf(fhw_qual, "%s", "2");
-				 else
-				 fprintf(fhw_qual, "%s", "1");
-				 }
-				 */
 			}
 		}
 	}
@@ -913,17 +842,12 @@ void compressPairedEndedAlignments(
 			number_of_unique_samformatflags--;
 			continue;
 		}
-		samflag_dictionary->direction[i] = '+';
-		samflag_dictionary->samflags[i] = strtol( line, &temp, 10 );
-		samflag_dictionary->character[i] = samformatflag_replacer_characters[j++];
-
-		samflag_dictionary->direction[i + 1] = '-';
 		samflag_dictionary->character[i + 1] = samformatflag_replacer_characters[j++];
 		samflag_dictionary->samflags[i + 1] = strtol( line, &temp, 10 );
-		i += 2;
+		i += 1;
 	}
 
-	for ( i = 0; i < number_of_unique_samformatflags * 2; i++ )
+	for ( i = 0; i < number_of_unique_samformatflags; i++ )
 	{
 		//printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
 		line_to_be_written_to_file[0] = '\0';
@@ -932,9 +856,6 @@ void compressPairedEndedAlignments(
 		strcat( line_to_be_written_to_file, "\t" );
 		current_length_of_line_to_be_written_to_file = strlen(
 				line_to_be_written_to_file );
-		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file] = samflag_dictionary->direction[i];
-		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file
-				+ 1] = '\t';
 		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file
 				+ 2] = samflag_dictionary->character[i];
 		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file
@@ -1086,9 +1007,9 @@ void compressPairedEndedAlignments(
 
 		if ( strlen( prev_reference_name ) == 0 ) // 1st chromosome - initialize stuffs
 		{
-//continue;
-//printf ("\n1. compressed_ds_pool_index %d" , compressed_ds_pool_index);
-//fflush (stdout);
+			//continue;
+			//printf ("\n1. compressed_ds_pool_index %d" , compressed_ds_pool_index);
+			//fflush (stdout);
 			previous_position = current_position;
 			strcpy( prev_reference_name, curr_reference_name );
 			strcpy( qual_scores[quality_score_index], curr_alignment->qual );

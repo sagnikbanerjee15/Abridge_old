@@ -253,9 +253,7 @@ struct All_Relevant_Info_PE_per_Alignment
 struct Paired_Ended_Flag_to_Single_Character
 {
 		char *character;
-		char *direction;
 		int *samflags;
-
 };
 
 struct Read_Ids_to_NH
