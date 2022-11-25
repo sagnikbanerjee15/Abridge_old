@@ -2451,7 +2451,7 @@ void generateIntegratedCigarPairedEnded(
 
 	if ( perfect_alignment_indicator == 0 )
 		designIntegratedCIGARS(
-				curr_alignment->tags[MD_tag_index].val,
+				curr_alignment->MD,
 				curr_alignment->soft_clips_removed_seq,
 				&curr_alignment->soft_clips_removed_seq_len,
 				curr_alignment->soft_clips_removed_qual,
@@ -2617,11 +2617,7 @@ void generateIntegratedCigarPairedEnded(
 	/*
 	 * Add NH tag
 	 */
-	/*if (XS_tag_index != -1) strcat(curr_alignment->icigar, curr_alignment->tags[XS_tag_index].val);*/
-	if ( NH_tag_index != -1 )
-		strcat(
-				curr_alignment->icigar,
-				curr_alignment->tags[NH_tag_index].val );
+	strcat( curr_alignment->icigar, curr_alignment->NH );
 
 	/*
 	 * Change the iCIGAR representation to reflect the samformatflag and XS tag
