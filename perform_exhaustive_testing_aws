@@ -89,9 +89,10 @@ def executeCommand(framework_of_choice, software, version, volumes_list, singula
                             )
 
 def runCommand( eachinput ):
-    Run, cmd1, wait_time = eachinput
+    Run, cmd1, cmd2 = eachinput
     #time.sleep(wait_time * random.randint(2,5))
     os.system( cmd1 )
+    os.system( cmd2 )
     
     
 
@@ -153,7 +154,7 @@ def main():
                                         
                                         
                                         if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1.abridge") == False:
-                                            allinputs.append( ["dummy", cmd1, i] )
+                                            allinputs.append( ["dummy", cmd1, "ls"] )
                                             i+=1
     pool.map( runCommand, allinputs )
     
@@ -205,10 +206,19 @@ def main():
                                                 cmd1 += f" 1> {output_directory_main}.output "
                                                 cmd1 += f" 2> {output_directory_main}.error"
                                                 
+                                                cmd2  = f"samtools view"
+                                                cmd2 += f" -@ 1 "
+                                                cmd2 += f" -Sb "
+                                                cmd2 += f" -o {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.bam "
+                                                cmd2 += f" {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam "
+                                                cmd2 += f"1> {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed_convert_to_bam.output "
+                                                cmd2 += f"1> {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed_convert_to_bam.error " 
+                                                
+                                                
                                                 #print(f"{output_directory_temp}/{sra_id}_{ended}_{alignment_type[:-3]}_decompressed.sam")
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam") == False:
-                                                    print(cmd1)
-                                                    allinputs.append( ["dummy", cmd1, i] )
+                                                    #print(cmd1)
+                                                    allinputs.append( ["dummy", cmd1, cmd2] )
                                                     i+=1
     pool.map( runCommand, allinputs )
     #print(len(allinputs))
