@@ -24,10 +24,6 @@ import subprocess
 from shutil import which
 from pprint import pformat
 
-from scripts.assessMemoryRequirement import *
-from scripts.verifyPositions import *
-from scripts.sortPositionsForRandomAccess import *
-
 
 def parseCommandLineArguments():
     parser = argparse.ArgumentParser( prog = "abridge", description = "Compress alignments for storage, decompress from compressed file, view alignments from random locations and generate coverages", formatter_class = RawTextHelpFormatter )
@@ -719,10 +715,6 @@ def decompressSamFile( options , list_of_softwares_with_versions, volumes_list )
     version = list_of_softwares_with_versions[software]
     executeCommand(options, software, version, volumes_list, f"{options.singularity_images}/{software}:{version}", '10g' , cmd)
 
-    # Check the amount memory needed
-    if options.ignore_sequence == 0:
-        assessMemoryRequirement( f"{options.genome}.fai", options )
-
     cmd = f"zpaq l {options.inputabrfilename} > {options.output_directory}/file_list  2> {options.error_directory}/zpaq_file_list.error"
 
     software = "zpaq"
@@ -1345,6 +1337,8 @@ def main():
         if options.quiet == False:
             logging.info( f"Read names have been altered and NH tags have been added" )
         
+        print(tags_present)
+        sys.exit()
         if tags_present["MD"] == 0:
             ################################################################################################################################################################################################################################################
             # Use samtools to add MD tag
