@@ -3548,6 +3548,7 @@ void generateReadSequenceAndMDString(
 		}
 	}
 
+	print( "\nLength of MD: %d", strlen( sam_alignment_instance->MD ) );
 	for ( i = 0; sam_alignment_instance->MD[i] != '\0'; i++ )
 		if ( sam_alignment_instance->MD[i] >= 'A'
 				&& sam_alignment_instance->MD[i] <= 'Z'
