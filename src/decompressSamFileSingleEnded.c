@@ -587,6 +587,13 @@ void convertToAlignmentSingleEnded(
 				strcpy( sam_alignment_instance->tags[3].val, "X" );
 			}
 		}
+		if ( print_more_info )
+		{
+			printf(
+					"\nj=%d AS tag: %s",
+					j,
+					sam_alignment_instance->tags[3].val );
+		}
 		/*
 		 printf( "\nconvertToAlignmentSingleEnded Checkpoint 3" );
 		 fflush( stdout );
