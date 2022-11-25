@@ -3365,15 +3365,13 @@ void generateReadSequenceAndMDString(
 	int chromosome_index;
 	int read_from_genome_index;
 	int distance_from_start_pos;
-	int MD_index = 0;
-	int splices_index = 0;
 	int read_from_genome_including_deletions_index = 0;
 	int num;
 	int temp_index = 0;
 
 	char read_from_genome[MAX_SEQ_LEN];
 	char read_from_genome_including_deletions[MAX_SEQ_LEN];
-	char MD[MAX_SEQ_LEN];
+
 	char temp[100];
 
 	/*
@@ -3397,7 +3395,6 @@ void generateReadSequenceAndMDString(
 	 */
 	read_from_genome_index = 0;
 	distance_from_start_pos = 0;
-	MD[0] = '\0';
 	/*
 	 printf ("\nsam_alignment_instance->start_position %d" , sam_alignment_instance->start_position);
 	 for ( i = 0 ; i < sam_alignment_instance->number_of_cigar_items ; i++ )
@@ -3513,7 +3510,6 @@ void generateReadSequenceAndMDString(
 	/*
 	 * Construct MD String
 	 */
-	MD_index = 0;
 	num = 0;
 	sam_alignment_instance->MD = '\0';
 	for ( i = 0; sam_alignment_instance->md_extended[i] != '\0'; i++ )
