@@ -216,6 +216,7 @@ def main():
     pool.map( runCommand, allinputs )
     #print(len(allinputs))
     
+    allinputs = []
     # Convert SAM to BAM to ensure that the decompression worked fine
     for ended in ["SE","PE"]:
         #if ended == "PE": continue
@@ -244,7 +245,7 @@ def main():
                                                 compressed_filename = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}/{sra_id}_{ended}_{alignment_type}_1.abridge"
                                                  
                                                 cmd2  = f"samtools view"
-                                                cmd2 += f" -@ {CPU} "
+                                                cmd2 += f" -@ 1 "
                                                 cmd2 += f" -Sb "
                                                 cmd2 += f" -o {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.bam "
                                                 cmd2 += f" {output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.sam "
@@ -254,9 +255,27 @@ def main():
                                                 software = "samtools"    
                                                 container_name = f"{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}_quality_{quality}_i_seq_{ignore_sequence}"
                                                 volumes = [f"{OUTPUT_DIRECTORY_MAIN}:{OUTPUT_DIRECTORY_MAIN}"]
+                                                version = "1.14"
                                                 if os.path.exists(f"{output_directory_main}/{sra_id}_{ended}_{alignment_type}_1_decompressed.bam") == False:
                                                     #print(cmd2)
-                                                    runDockerCommand( name = "xyz", version = "1.14", image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}", container_name = container_name, volumes = volumes, command = cmd2 , cpus = CPU, memory = '25g' )
+                                                    #runDockerCommand( name = "xyz", version = "1.14", image_location = f"ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}", container_name = container_name, volumes = volumes, command = cmd2 , cpus = CPU, memory = '25g' )
+                                                    # Runs the main command
+                                                    docker_cmd = f" docker run "
+                                                    # docker_cmd += f" -ti "
+                                                    docker_cmd += f" --rm "
+                                                    docker_cmd += f" --cpus=1"
+                                                    docker_cmd += f" --memory='25g'"
+                                                    # docker_cmd += f" --name {container_name}"
+                                                    for mapping in volumes:
+                                                        docker_cmd += f" -v {mapping}"
+                                                    docker_cmd += f" ghcr.io/sagnikbanerjee15/dockerized_tools_and_pipelines/{software}:{version} "
+                                                    docker_cmd += f" bash -c '{cmd2}'"
+                                                    #logging.info( f"Running command - {docker_cmd}" )
+                                                    # os.system( docker_cmd )
+                                                    allinputs.append( ["dummy", cmd2, i] )
 
+    pool.map( runCommand, allinputs )
+    
+    
 if __name__ == "__main__":
     main()
