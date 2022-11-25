@@ -418,12 +418,12 @@ int locateSamTags( char *tag )
 void freeSamAlignmentInstance( struct Sam_Alignment *s )
 {
 	int i;
-	for ( i = 0; i < 100; i++ )
-	{
-		free( s->tags[i].name );
-		free( s->tags[i].type );
-		free( s->tags[i].val );
-	}
+	/*for ( i = 0; i < 100; i++ )
+	 {
+	 free( s->tags[i].name );
+	 free( s->tags[i].type );
+	 free( s->tags[i].val );
+	 }*/
 	free( s->read_name );
 	free( s->reference_name );
 	free( s->reference_name_next_mate );
@@ -545,11 +545,11 @@ void printSamAlignmentInstance(
 		printf( "%c", s->qual[i] - 90 );
 	printf( "\n" );
 	fflush( stdout );
-	for ( i = 0; i < s->number_of_tag_items; i++ )
-	{
-		printf( "Tag item %s Tag value %s", s->tags[i].name, s->tags[i].val );
-		printf( "\n" );
-	}
+	/*for ( i = 0; i < s->number_of_tag_items; i++ )
+	 {
+	 printf( "Tag item %s Tag value %s", s->tags[i].name, s->tags[i].val );
+	 printf( "\n" );
+	 }*/
 	fflush( stdout );
 	if ( print_everything == 1 )
 	{
@@ -722,24 +722,26 @@ void convertIcigarToCigarandMDPairedEnded(
 	soft_clips_removed_qual_index = 0;
 	soft_clips_removed_seq_index = 0;
 
-	strcpy( sam_alignment_instance->tags[0].name, "NH" );
-	strcpy( sam_alignment_instance->tags[0].type, "i" );
-	sprintf( temp, "%d", NH_value );
-	strcpy( sam_alignment_instance->tags[0].val, temp );
+	/*
+	 strcpy( sam_alignment_instance->tags[0].name, "NH" );
+	 strcpy( sam_alignment_instance->tags[0].type, "i" );
+	 sprintf( temp, "%d", NH_value );
+	 strcpy( sam_alignment_instance->tags[0].val, temp );
 
-	strcpy( sam_alignment_instance->tags[1].name, "XS" );
-	strcpy( sam_alignment_instance->tags[1].type, "." );
-	strcpy( sam_alignment_instance->tags[1].val, XS );
+	 strcpy( sam_alignment_instance->tags[1].name, "XS" );
+	 strcpy( sam_alignment_instance->tags[1].type, "." );
+	 strcpy( sam_alignment_instance->tags[1].val, XS );
 
-	strcpy( sam_alignment_instance->tags[2].name, "MD" );
-	strcpy( sam_alignment_instance->tags[2].type, "Z" );
-	strcpy( sam_alignment_instance->tags[2].val, "dummy" );
+	 strcpy( sam_alignment_instance->tags[2].name, "MD" );
+	 strcpy( sam_alignment_instance->tags[2].type, "Z" );
+	 strcpy( sam_alignment_instance->MD, "dummy" );
 
-	strcpy( sam_alignment_instance->tags[3].name, "AS" );
-	strcpy( sam_alignment_instance->tags[3].type, "i" );
-	//strcpy (sam_alignment_instance->tags[3].val , "X");
+	 strcpy( sam_alignment_instance->tags[3].name, "AS" );
+	 strcpy( sam_alignment_instance->tags[3].type, "i" );
+	 //strcpy (sam_alignment_instance->tags[3].val , "X");
 
-	sam_alignment_instance->number_of_tag_items = 3;
+	 sam_alignment_instance->number_of_tag_items = 3;
+	 */
 	sam_alignment_instance->md_extended[0] = '\0';
 	MD_extended_index = 0;
 
@@ -1110,25 +1112,26 @@ void convertIcigarToCigarandMDSingleEnded(
 	sam_alignment_instance->soft_clips_removed_seq[0] = '\0';
 	soft_clips_removed_qual_index = 0;
 	soft_clips_removed_seq_index = 0;
+	/*
+	 strcpy( sam_alignment_instance->tags[0].name, "NH" );
+	 strcpy( sam_alignment_instance->tags[0].type, "i" );
+	 sprintf( temp, "%d", NH_value );
+	 strcpy( sam_alignment_instance->tags[0].val, temp );
 
-	strcpy( sam_alignment_instance->tags[0].name, "NH" );
-	strcpy( sam_alignment_instance->tags[0].type, "i" );
-	sprintf( temp, "%d", NH_value );
-	strcpy( sam_alignment_instance->tags[0].val, temp );
+	 strcpy( sam_alignment_instance->tags[1].name, "XS" );
+	 strcpy( sam_alignment_instance->tags[1].type, "." );
+	 strcpy( sam_alignment_instance->tags[1].val, XS );
 
-	strcpy( sam_alignment_instance->tags[1].name, "XS" );
-	strcpy( sam_alignment_instance->tags[1].type, "." );
-	strcpy( sam_alignment_instance->tags[1].val, XS );
+	 strcpy( sam_alignment_instance->tags[2].name, "MD" );
+	 strcpy( sam_alignment_instance->tags[2].type, "Z" );
+	 strcpy( sam_alignment_instance->MD, "dummy" );
 
-	strcpy( sam_alignment_instance->tags[2].name, "MD" );
-	strcpy( sam_alignment_instance->tags[2].type, "Z" );
-	strcpy( sam_alignment_instance->tags[2].val, "dummy" );
+	 strcpy( sam_alignment_instance->tags[3].name, "AS" );
+	 strcpy( sam_alignment_instance->tags[3].type, "i" );
+	 //strcpy (sam_alignment_instance->tags[3].val , "X");
 
-	strcpy( sam_alignment_instance->tags[3].name, "AS" );
-	strcpy( sam_alignment_instance->tags[3].type, "i" );
-	//strcpy (sam_alignment_instance->tags[3].val , "X");
-
-	sam_alignment_instance->number_of_tag_items = 4;
+	 sam_alignment_instance->number_of_tag_items = 4;
+	 */
 	sam_alignment_instance->md_extended[0] = '\0';
 	MD_extended_index = 0;
 
@@ -1450,7 +1453,7 @@ void convertIcigarToCigarandMDSingleEnded(
 		 printf ("\nicigar %s cigar %s MD %s cigar_items_instance_index = %d length_of_read = %d %s" ,
 		 sam_alignment_instance->icigar ,
 		 sam_alignment_instance->cigar ,
-		 sam_alignment_instance->tags[2].val ,
+		 sam_alignment_instance->MD ,
 		 cigar_items_instance_index ,
 		 length_of_read ,
 		 sam_alignment_instance->qual);
@@ -1460,7 +1463,7 @@ void convertIcigarToCigarandMDSingleEnded(
 	 printf ("\nicigar %s cigar %s MD %s " ,
 	 sam_alignment_instance->icigar ,
 	 sam_alignment_instance->cigar ,
-	 sam_alignment_instance->tags[2].val);
+	 sam_alignment_instance->MD);
 	 fflush (stdout);
 	 */
 }
@@ -3512,7 +3515,7 @@ void generateReadSequenceAndMDString(
 	 */
 	MD_index = 0;
 	num = 0;
-	sam_alignment_instance->tags[2].val[0] = '\0';
+	sam_alignment_instance->MD = '\0';
 	for ( i = 0; sam_alignment_instance->md_extended[i] != '\0'; i++ )
 	{
 		if ( sam_alignment_instance->md_extended[i] == '=' )
@@ -3522,11 +3525,11 @@ void generateReadSequenceAndMDString(
 			if ( num > 0 )
 			{
 				sprintf( temp, "%d", num );
-				strcat( sam_alignment_instance->tags[2].val, temp );
+				strcat( sam_alignment_instance->MD, temp );
 			}
 			num = 0;
 
-			strcat( sam_alignment_instance->tags[2].val, "^" );
+			strcat( sam_alignment_instance->MD, "^" );
 			temp_index = 0;
 			while ( sam_alignment_instance->md_extended[i] == '-' )
 			{
@@ -3534,34 +3537,34 @@ void generateReadSequenceAndMDString(
 				i++;
 			}
 			temp[temp_index++] = '\0';
-			strcat( sam_alignment_instance->tags[2].val, temp );
+			strcat( sam_alignment_instance->MD, temp );
 			i--;
 		}
 		else if ( sam_alignment_instance->md_extended[i] >= 38
 				&& sam_alignment_instance->md_extended[i] <= 42 ) // Mismatches
 		{
 			sprintf( temp, "%d", num );
-			strcat( sam_alignment_instance->tags[2].val, temp );
+			strcat( sam_alignment_instance->MD, temp );
 			num = 0;
 			temp[0] = read_from_genome_including_deletions[i];
 			temp[1] = '\0';
-			strcat( sam_alignment_instance->tags[2].val, temp );
+			strcat( sam_alignment_instance->MD, temp );
 		}
 	}
 
-	for ( i = 0; sam_alignment_instance->tags[2].val[i] != '\0'; i++ )
-		if ( sam_alignment_instance->tags[2].val[i] >= 'A'
-				&& sam_alignment_instance->tags[2].val[i] <= 'Z'
-				&& sam_alignment_instance->tags[2].val[i] != 'A'
-				&& sam_alignment_instance->tags[2].val[i] != 'T'
-				&& sam_alignment_instance->tags[2].val[i] != 'G'
-				&& sam_alignment_instance->tags[2].val[i] != 'C' )
-			sam_alignment_instance->tags[2].val[i] = 'N';
+	for ( i = 0; sam_alignment_instance->MD[i] != '\0'; i++ )
+		if ( sam_alignment_instance->MD[i] >= 'A'
+				&& sam_alignment_instance->MD[i] <= 'Z'
+				&& sam_alignment_instance->MD[i] != 'A'
+				&& sam_alignment_instance->MD[i] != 'T'
+				&& sam_alignment_instance->MD[i] != 'G'
+				&& sam_alignment_instance->MD[i] != 'C' )
+			sam_alignment_instance->MD[i] = 'N';
 
 	if ( num > 0 )
 	{
 		sprintf( temp, "%d", num );
-		strcat( sam_alignment_instance->tags[2].val, temp );
+		strcat( sam_alignment_instance->MD, temp );
 	}
 	/*
 	 printf("\n%d %d", read_from_genome_index, read_from_genome_including_deletions_index);
