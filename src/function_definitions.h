@@ -1914,22 +1914,9 @@ void designIntegratedCIGARS(
 	strcat( icigar, "M" );
 }
 
-int isAlignmentPerfect(
-		char *cigar,
-		struct Sam_Tags *tags,
-		int MD_tag_index,
-		int NM_tag_index,
-		int nM_tag_index )
+int isAlignmentPerfect( char *cigar, char *MD )
 {
 	int i;
-	if ( NM_tag_index != -1 && nM_tag_index != -1 )
-	{
-		if ( tags[NM_tag_index].val[0] == '0'
-				&& tags[nM_tag_index].val[0] == '0' )
-			return 1;
-		else
-			return 0;
-	}
 
 	/*
 	 * Checking for insertions
@@ -1939,14 +1926,11 @@ int isAlignmentPerfect(
 			return 0;
 
 	/*
-	 * Checking for deletions
+	 * Checking for deletions/mismatches
 	 */
-	for ( i = 0; tags[MD_tag_index].val[i] != '\0'; i++ )
-		if ( tags[MD_tag_index].val[i] == '^'
-				|| (tags[MD_tag_index].val[i] >= 65
-						&& tags[MD_tag_index].val[i] <= 90)
-				|| (tags[MD_tag_index].val[i] >= 97
-						&& tags[MD_tag_index].val[i] <= 122) )
+	for ( i = 0; MD[i] != '\0'; i++ )
+		if ( MD[i] == '^' || (MD[i] >= 65 && MD[i] <= 90)
+				|| (MD[i] >= 97 && MD[i] <= 122) )
 			return 0;
 
 	return 1;
@@ -2076,10 +2060,7 @@ void generateIntegratedCigarSingleEnded(
 
 	perfect_alignment_indicator = isAlignmentPerfect(
 			curr_alignment->cigar,
-			curr_alignment->tags,
-			MD_tag_index,
-			NM_tag_index,
-			nM_tag_index );
+			curr_alignment->MD );
 
 	if ( perfect_alignment_indicator == 0 )
 		designIntegratedCIGARS(
