@@ -958,12 +958,6 @@ void compressPairedEndedAlignments(
 				number_of_unique_samformatflags,
 				samformatflag_replacer_characters );
 
-		//continue;
-		NH_tag_index = -1;
-		for ( i = 0; i < curr_alignment->number_of_tag_items; i++ )
-			if ( strcmp( curr_alignment->tags[i].name, "NH" ) == 0 )
-				NH_tag_index = i;
-
 		if ( strlen( prev_reference_name ) == 0 ) // 1st chromosome - initialize stuffs
 		{
 			//continue;
