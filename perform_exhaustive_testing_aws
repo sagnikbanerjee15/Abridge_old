@@ -274,7 +274,7 @@ def main():
                                                     allinputs.append( ["dummy", docker_cmd, i] )
 
     pool.map( runCommand, allinputs )
-    print(len(allinputs))
+    
     
 if __name__ == "__main__":
     main()

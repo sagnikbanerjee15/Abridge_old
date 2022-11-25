@@ -388,6 +388,7 @@ void convertToAlignmentSingleEnded(
 	int read_names_index = 0;
 
 	short int number_of_items_separated_by_underscore;
+	short int print_more_info = 0;
 	/********************************************************************/
 
 	/********************************************************************
@@ -402,24 +403,37 @@ void convertToAlignmentSingleEnded(
 	 number_of_columns );
 	 fflush( stdout );
 	 */
+
 	if ( read_names_stored == 1 )
 	{
 		if ( number_of_columns == 2 )
+		{
 			read_names_index = splitByDelimiter(
 					split_on_tab[1],
 					',',
 					read_names );
+			if ( strstr( split_on_tab[1], "SRR13711353_7100792__151_1" ) )
+				print_more_info = 1;
+		}
 		else if ( number_of_columns == 3 )
+		{
 			read_names_index = splitByDelimiter(
 					split_on_tab[2],
 					',',
 					read_names );
+			if ( strstr( split_on_tab[2], "SRR13711353_7100792__151_1" ) )
+				print_more_info = 1;
+		}
 		/*
 		 printf( "\n Reads read" );
 		 for ( i = 0; i < read_names_index; i++ )
 		 printf( "\n%s", read_names[i] );
 		 fflush( stdout );
 		 */
+	}
+	if ( print_more_info )
+	{
+		printf( "\nNumber of reads: %d", read_names_index );
 	}
 
 	if ( read_names_stored == 0 )
