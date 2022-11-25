@@ -467,7 +467,7 @@ void populateSamAlignmentInstance(
 	strcpy( dest->seq, src[9] );
 	strcpy( dest->qual, src[10] );
 	for ( i = 0; dest->qual[i] != '\0'; i++ )
-		dest->qual[i] += 90;
+		dest->qual[i] += 100;
 
 	// Assign SAM tags
 	for ( i = 11; i < number_of_fields; i++ )
@@ -542,7 +542,7 @@ void printSamAlignmentInstance(
 	printf( "\n" );
 	printf( "Qual: " );
 	for ( i = 0; s->qual[i] != '\0'; i++ )
-		printf( "%c", s->qual[i] - 90 );
+		printf( "%c", s->qual[i] - 100 );
 	printf( "\n" );
 	fflush( stdout );
 	/*for ( i = 0; i < s->number_of_tag_items; i++ )
@@ -758,7 +758,7 @@ void convertIcigarToCigarandMDPairedEnded(
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def
-						- 90;
+						- 100;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index
 						+ 1] = '\0';
 			}
@@ -776,7 +776,7 @@ void convertIcigarToCigarandMDPairedEnded(
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def
-						- 90;
+						- 100;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index
 						+ 1] = '\0';
 			}
@@ -849,7 +849,7 @@ void convertIcigarToCigarandMDPairedEnded(
 					{
 						i++;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def
-								- 90;
+								- 100;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index
 								+ 1] = '\0';
 						soft_clips_removed_qual_index++;
@@ -942,7 +942,7 @@ void convertIcigarToCigarandMDPairedEnded(
 						{
 							i++;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def
-									- 90;
+									- 100;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index
 									+ 1] = '\0';
 							soft_clips_removed_qual_index++;
@@ -1154,7 +1154,7 @@ void convertIcigarToCigarandMDSingleEnded(
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index] = cigar_items_instance[i].def
-						- 90;
+						- 100;
 				sam_alignment_instance->soft_clippings.left_qual[left_soft_clip_index
 						+ 1] = '\0';
 			}
@@ -1172,7 +1172,7 @@ void convertIcigarToCigarandMDSingleEnded(
 			{
 				i++;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index] = cigar_items_instance[i].def
-						- 90;
+						- 100;
 				sam_alignment_instance->soft_clippings.right_qual[right_soft_clip_index
 						+ 1] = '\0';
 			}
@@ -1245,7 +1245,7 @@ void convertIcigarToCigarandMDSingleEnded(
 					{
 						i++;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def
-								- 90;
+								- 100;
 						sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index
 								+ 1] = '\0';
 						soft_clips_removed_qual_index++;
@@ -1341,7 +1341,7 @@ void convertIcigarToCigarandMDSingleEnded(
 						{
 							i++;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index] = cigar_items_instance[i].def
-									- 90;
+									- 100;
 							sam_alignment_instance->soft_clips_removed_qual[soft_clips_removed_qual_index
 									+ 1] = '\0';
 							soft_clips_removed_qual_index++;
@@ -1731,7 +1731,7 @@ void designIntegratedCIGARS(
 		printf( "\n%s", seq );
 		printf( "\n" );
 		for ( i = 0; soft_clips_removed_qual[i] != '\0'; i++ )
-			printf( "%c", soft_clips_removed_qual[i] - 90 );
+			printf( "%c", soft_clips_removed_qual[i] - 100 );
 		printf( "\n%s", md_extended );
 	}
 	/*printf("\n%s %d", md_extended, md_extended_length);*/
