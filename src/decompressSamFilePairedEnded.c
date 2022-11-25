@@ -663,7 +663,7 @@ void decompressFile(
 			&convert_to_int_temp,
 			10 );
 
-	splitByDelimiter( split_on_tab[6], ':', split_on_tilde );
+	splitByDelimiter( split_on_tab[5], ':', split_on_tilde );
 	flag_ignore_alignment_scores = strtol(
 			split_on_tilde[1],
 			&convert_to_int_temp,
