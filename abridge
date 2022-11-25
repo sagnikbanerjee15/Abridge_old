@@ -1084,10 +1084,8 @@ def returnTagList(options, samfilename, tagfilename, list_of_softwares_with_vers
         else: break
     fhr.close()
     
-    print(line)
+    
     tag_presence = {"NH":0, "MD":0}
-    tags = line.strip().split("\t")[11:]
-    print(tags)
     if "NH:i:" in line:
         tag_presence["NH"] = 1
     if "MD:Z:" in line:
@@ -1100,11 +1098,8 @@ def alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_
     Reduce the length of the read names
     Add more tags as required
     """
-    
     # Check which tags are already present in the aligned file
     tags_present = returnTagList(options, options.inputalignedfilename, f"{options.output_directory}/temp_file_tags", list_of_softwares_with_versions, volumes_list)
-    print(tags_present)
-    return
     
     if tags_present["NH"] == 1 and options.skip_shortening_read_names == True: 
         # Creating a dummy file
