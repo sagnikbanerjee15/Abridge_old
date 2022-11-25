@@ -2480,10 +2480,7 @@ void generateIntegratedCigarPairedEnded(
 
 	perfect_alignment_indicator = isAlignmentPerfect(
 			curr_alignment->cigar,
-			curr_alignment->tags,
-			MD_tag_index,
-			NM_tag_index,
-			nM_tag_index );
+			curr_alignment->MD );
 
 	if ( perfect_alignment_indicator == 0 )
 		designIntegratedCIGARS(
