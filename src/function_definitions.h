@@ -3511,7 +3511,7 @@ void generateReadSequenceAndMDString(
 	 * Construct MD String
 	 */
 	num = 0;
-	sam_alignment_instance->MD = '\0';
+	sam_alignment_instance->MD[0] = '\0';
 	for ( i = 0; sam_alignment_instance->md_extended[i] != '\0'; i++ )
 	{
 		if ( sam_alignment_instance->md_extended[i] == '=' )
