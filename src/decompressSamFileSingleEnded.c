@@ -325,10 +325,6 @@ void writeAlignmentToFileSingleEnded(
 			strcat( line_to_be_written_to_file, "AS:i:" );
 			strcat( line_to_be_written_to_file, sam_alignment->AS );
 			strcat( line_to_be_written_to_file, "\t" );
-			if ( strstr( sam_alignment->read_name, "" ) )
-			{
-				printf( "\nWriting to file AS: %s", sam_alignment->AS );
-			}
 		}
 		/*
 		 printf("\nwriteAlignmentToFileSingleEnded Checkpoint 7");
