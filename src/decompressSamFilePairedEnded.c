@@ -880,7 +880,6 @@ int main( int argc, char *argv[] )
 	arguments.maxreadsineachline = 0;
 
 	argp_parse( &argp, argc, argv, 0, 0, &arguments );
-	return 0;
 
 	/********************************************************************
 	 * Variable declaration
@@ -912,7 +911,7 @@ int main( int argc, char *argv[] )
 	strcpy( unmapped_filename, arguments.unmappedreadsfilename );
 	strcpy( name_of_file_with_quality_scores, arguments.qualityscoresfilename );
 	max_reads_in_each_line = arguments.maxreadsineachline;
-
+	return 0;
 	/********************************************************************/
 
 	decompressFile(
