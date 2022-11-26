@@ -28,6 +28,7 @@
 # define MAX_REFERENCE_SEQ_LEN 1000000000
 # define MAX_FILES_FOR_MERGING 1000
 # define MAX_READ_ID_LENGTH 1000
+# define QUAL_SCORE_ADJUSTMENT 100
 
 char *sam_tags[] =
 { "NH", "HI", "AS", "nM", "NM", "MD", "jM", "jI", "XS", "RG", "XT", "XM", "AM", "X0", "X1", "XO", "XG" };

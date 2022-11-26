@@ -303,7 +303,7 @@ void writeToFile(
 								compressed_ds_pool[i]->pointers_to_qual_scores[j][k]
 										!= '\0'; k++ )
 							qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k]
-									- 90;
+									- QUAL_SCORE_ADJUSTMENT;
 						qual[k] = '\0';
 						break;
 					case 'E':
@@ -1009,7 +1009,7 @@ void readAlignmentsAndCompress(
 				fprintf( fhw_unmapped, "%s", curr_alignment->seq );
 				fprintf( fhw_unmapped, "%s", "\n" );
 				for ( i = 0; curr_alignment->qual[i] != '\0'; i++ )
-					curr_alignment->qual[i] -= 100;
+					curr_alignment->qual[i] -= QUAL_SCORE_ADJUSTMENT;
 				fprintf( fhw_unmapped, "%s", curr_alignment->qual );
 				fprintf( fhw_unmapped, "%s", "\n" );
 			}
