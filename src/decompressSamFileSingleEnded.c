@@ -690,16 +690,19 @@ void convertToAlignmentSingleEnded(
 			/*printf ("\ncopying into read name");
 			 fflush (stdout);*/
 			strcpy( sam_alignment_instance->read_name, str_sprintf );
-			if ( sam_alignment_instance->start_position == 5297931
-					|| sam_alignment_instance->start_position == 5297932 )
-			{
-				printf(
-						"\nThis%s_%d",
-						sam_alignment_instance->read_name,
-						number_of_repititions_of_the_same_reads );
-				printf( "\niCIGAR: %s", split_on_comma[j] );
-				fflush( stdout );
-			}
+
+			/*
+			 if ( sam_alignment_instance->start_position == 5297931
+			 || sam_alignment_instance->start_position == 5297932 )
+			 {
+			 printf(
+			 "\nThis%s_%d",
+			 sam_alignment_instance->read_name,
+			 number_of_repititions_of_the_same_reads );
+			 printf( "\niCIGAR: %s", split_on_comma[j] );
+			 fflush( stdout );
+			 }
+			 */
 
 			/*printf ("\nconvertToAlignmentSingleEnded Checkpoint 5");
 			 fflush (stdout);*/

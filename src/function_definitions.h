@@ -687,9 +687,10 @@ void convertIcigarToCigarandMDPairedEnded(
 	char cigar_temp[MAX_SEQ_LEN];
 
 	icigar_length = strlen( sam_alignment_instance->icigar );
-	NH_value = extractNHfromicigar(
+	extractNHfromicigar(
 			sam_alignment_instance->icigar,
-			icigar_length );
+			icigar_length,
+			sam_alignment_instance->NH );
 
 	XS[1] = '\0';
 	samformatflag = findSamFormatFlagPairedEnded(
@@ -1083,9 +1084,10 @@ void convertIcigarToCigarandMDSingleEnded(
 	char cigar_temp[MAX_SEQ_LEN];
 
 	icigar_length = strlen( sam_alignment_instance->icigar );
-	NH_value = extractNHfromicigar(
+	extractNHfromicigar(
 			sam_alignment_instance->icigar,
-			icigar_length );
+			icigar_length,
+			sam_alignment_instance->NH );
 
 	XS[1] = '\0';
 	samformatflag = findSamFormatFlagSingleEnded(
@@ -3195,9 +3197,9 @@ long long int reverseInteger( long long int val )
 	return temp;
 }
 
-long long int extractNHfromicigar( char *icigar, int icigar_length )
+void extractNHfromicigar( char *icigar, int icigar_length, char *nh_val_string )
 {
-	char nh_val_string[15];
+	//char nh_val_string[15];
 	char nh_val_string_rev[15];
 	long long int nh_val = 0;
 	int i;
@@ -3222,8 +3224,9 @@ long long int extractNHfromicigar( char *icigar, int icigar_length )
 	for ( i = 0; i < j; i++ )
 		nh_val_string_rev[i] = nh_val_string[k--];
 	nh_val_string_rev[j] = '\0';
-	nh_val = strtol( nh_val_string_rev, &t, 10 );
-	return nh_val;
+	strcpy( nh_val_string, nh_val_string_rev );
+	//nh_val = strtol( nh_val_string_rev, &t, 10 );
+
 }
 
 void replaceCharacterInString(
