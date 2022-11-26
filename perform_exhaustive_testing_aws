@@ -116,7 +116,7 @@ def main():
     allinputs = []
     i=0
     for ended in ["SE","PE"]:
-        if ended == "PE": continue
+        #if ended == "PE": continue
         for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
             #if alignment_type == "all_tags_sorted": continue
             alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}_1.sam"
@@ -177,7 +177,7 @@ def main():
     i=0
     os.chdir(f"{OUTPUT_DIRECTORY_MAIN}/abridge_decompressed")
     for ended in ["SE","PE"]:
-        if ended == "PE": continue
+        #if ended == "PE": continue
         for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
             #if alignment_type == "no_tags_unsorted": continue
             alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}_1.sam"
