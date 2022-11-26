@@ -828,12 +828,12 @@ void compressPairedEndedAlignments(
 		 number_of_unique_samformatflags--;
 		 continue;
 		 }*/
-		samflag_dictionary->character[i + 1] = samformatflag_replacer_characters[j++];
-		samflag_dictionary->samflags[i + 1] = strtol( line, &temp, 10 );
+		samflag_dictionary->character[i] = samformatflag_replacer_characters[j++];
+		samflag_dictionary->samflags[i] = strtol( line, &temp, 10 );
 		i += 1;
 	}
 
-	for ( i = 1; i < number_of_unique_samformatflags; i++ )
+	for ( i = 0; i < number_of_unique_samformatflags; i++ )
 	{
 		//printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
 		line_to_be_written_to_file[0] = '\0';
