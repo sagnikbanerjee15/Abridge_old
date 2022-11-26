@@ -843,11 +843,11 @@ void compressPairedEndedAlignments(
 		current_length_of_line_to_be_written_to_file = strlen(
 				line_to_be_written_to_file );
 		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file
-				+ 2] = samflag_dictionary->character[i];
+				+ 1] = samflag_dictionary->character[i];
 		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file
-				+ 3] = '\n';
+				+ 2] = '\n';
 		line_to_be_written_to_file[current_length_of_line_to_be_written_to_file
-				+ 4] = '\0';
+				+ 3] = '\0';
 		fprintf( fhw_dictionary, "%s", line_to_be_written_to_file );
 	}
 	/*

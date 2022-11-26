@@ -622,7 +622,7 @@ int fillUpDictionary(
 				split_on_tab[0],
 				&temp,
 				10 );
-		samflag_dictionary->character[total_lines] = split_on_tab[2][0];
+		samflag_dictionary->character[total_lines] = split_on_tab[1][0];
 		total_lines++;
 	}
 
