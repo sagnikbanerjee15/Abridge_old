@@ -655,6 +655,7 @@ void convertToAlignmentSingleEnded(
 					default_quality_value );
 			if ( print_more_info )
 			{
+				printf( "\nInside decompressSamFileSingleEnded" );
 				printf(
 						"\nj=%d iCIGAR: %s CIGAR: %s iCIGAR: %s",
 						j,
