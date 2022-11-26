@@ -980,20 +980,24 @@ void readAlignmentsAndCompress(
 		/***************************************************************************************
 		 * Read a line from the short read names file
 		 ****************************************************************************************/
-		if ( skip_shortening_read_names == 0 )
-		{
-			getline(
-					&line_name_of_file_with_read_names_to_short_read_names_and_NH,
-					&len,
-					fhr_name_of_file_with_read_names_to_short_read_names_and_NH );
+		/*
+		 if ( skip_shortening_read_names == 0 )
+		 {
+		 */
+		getline(
+				&line_name_of_file_with_read_names_to_short_read_names_and_NH,
+				&len,
+				fhr_name_of_file_with_read_names_to_short_read_names_and_NH );
 
-			splitByDelimiter(
-					line_name_of_file_with_read_names_to_short_read_names_and_NH,
-					'\t',
-					split_line );
-			strcpy( curr_alignment->read_name, split_line[3] );
-			strcpy( curr_alignment->NH, split_line[2] );
-		}
+		splitByDelimiter(
+				line_name_of_file_with_read_names_to_short_read_names_and_NH,
+				'\t',
+				split_line );
+		strcpy( curr_alignment->read_name, split_line[3] );
+		strcpy( curr_alignment->NH, split_line[2] );
+
+		/*}
+		 */
 
 		/****************************************************************************************/
 
@@ -1005,7 +1009,7 @@ void readAlignmentsAndCompress(
 				fprintf( fhw_unmapped, "%s", curr_alignment->seq );
 				fprintf( fhw_unmapped, "%s", "\n" );
 				for ( i = 0; curr_alignment->qual[i] != '\0'; i++ )
-					curr_alignment->qual[i] -= 90;
+					curr_alignment->qual[i] -= 100;
 				fprintf( fhw_unmapped, "%s", curr_alignment->qual );
 				fprintf( fhw_unmapped, "%s", "\n" );
 			}
