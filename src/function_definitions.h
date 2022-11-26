@@ -3547,11 +3547,12 @@ void generateReadSequenceAndMDString(
 			strcat( sam_alignment_instance->MD, temp );
 		}
 	}
-
-	printf( "\nThe MD string: %s", sam_alignment_instance->MD );
-	fflush (stdout);
-	printf( "\nLength of MD: %d", strlen( sam_alignment_instance->MD ) );
-	fflush( stdout );
+	/*
+	 printf( "\nThe MD string: %s", sam_alignment_instance->MD );
+	 fflush (stdout);
+	 printf( "\nLength of MD: %d", strlen( sam_alignment_instance->MD ) );
+	 fflush( stdout );
+	 */
 	for ( i = 0; sam_alignment_instance->MD[i] != '\0'; i++ )
 		if ( sam_alignment_instance->MD[i] >= 'A'
 				&& sam_alignment_instance->MD[i] <= 'Z'
