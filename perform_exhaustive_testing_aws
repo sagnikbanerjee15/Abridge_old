@@ -118,15 +118,22 @@ def main():
     for ended in ["SE","PE"]:
         if ended == "PE": continue
         for alignment_type in ["all_tags_sorted", "no_tags_unsorted"]:
+            if alignment_type == "all_tags_sorted": continue
             alignment_filename = f"{OUTPUT_DIRECTORY_MAIN}/alignments/{sra_id}_{ended}_{alignment_type}_1.sam"
-            
             for ignore_alignment_scores in [0, 1]:
+                if ignore_alignment_scores == 1: continue
                 for ignore_all_quality_scores in [0, 1]:
+                    if ignore_all_quality_scores == 1: continue
                     for ignore_quality_scores_for_matched_bases in [0, 1]:
+                        if ignore_quality_scores_for_matched_bases == 1: continue
                         for ignore_soft_clippings in [0, 1]:
+                            if ignore_soft_clippings == 1: continue
                             for ignore_mismatches in [0, 1]:
+                                if ignore_mismatches == 1: continue
                                 for ignore_unmapped_reads in [0, 1]:
+                                    if ignore_unmapped_reads == 1: continue
                                     for skip_shortening_read_names in [0, 1]:
+                                        if skip_shortening_read_names == 1: continue 
                                         
                                         output_directory_main = f"{OUTPUT_DIRECTORY_MAIN}/abridge_compressed/{sra_id}_{ended}_{alignment_type}_i_align_sc_{ignore_alignment_scores}_i_all_qual_sc_{ignore_all_quality_scores}_i_qual_sc_matched_bases_{ignore_quality_scores_for_matched_bases}_i_soft_clippings_{ignore_soft_clippings}_i_mismatches_{ignore_mismatches}_i_unmapped_reads_{ignore_unmapped_reads}_skip_shrtnng_rn_{skip_shortening_read_names}"
                                         cmd1  = f" /work/ABRIDGE/Abridge/abridge "
@@ -161,6 +168,7 @@ def main():
                                             allinputs.append( ["dummy", cmd1, "ls"] )
                                             i+=1
     pool.map( runCommand, allinputs )
+    return
     
     ########################################################################################################################
     # Decompress
