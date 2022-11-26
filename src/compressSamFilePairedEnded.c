@@ -822,12 +822,12 @@ void compressPairedEndedAlignments(
 	j = 0;
 	while ( (line_len = getline( &line, &len, fhr_freq_samflags )) != -1 )
 	{
-		if ( strtol( line, &temp, 10 ) == 77
-				|| strtol( line, &temp, 10 ) == 141 )
-		{
-			number_of_unique_samformatflags--;
-			continue;
-		}
+		/*if ( strtol( line, &temp, 10 ) == 77
+		 || strtol( line, &temp, 10 ) == 141 )
+		 {
+		 number_of_unique_samformatflags--;
+		 continue;
+		 }*/
 		samflag_dictionary->character[i + 1] = samformatflag_replacer_characters[j++];
 		samflag_dictionary->samflags[i + 1] = strtol( line, &temp, 10 );
 		i += 1;
