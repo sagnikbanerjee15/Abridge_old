@@ -327,7 +327,7 @@ void writeToFile(
 								compressed_ds_pool[i]->pointers_to_qual_scores[j][k]
 										!= '\0'; k++ )
 							qual[k] = compressed_ds_pool[i]->pointers_to_qual_scores[j][k]
-									- 90;
+									- QUAL_SCORE_ADJUSTMENT;
 						qual[k] = '\0';
 						break;
 				}
