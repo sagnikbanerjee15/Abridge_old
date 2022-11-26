@@ -1332,10 +1332,7 @@ def main():
         if options.quiet == False:
             logging.info( f"Position sorted SAM input file has been generated" )
         
-        tags_present = alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
-        if options.quiet == False:
-            logging.info( f"Read names have been altered and NH tags have been added" )
-        
+        tags_present = returnTagList(options, options.inputalignedfilename, f"{options.output_directory}/temp_file_tags", list_of_softwares_with_versions, volumes_list)
         if tags_present["MD"] == 0:
             ################################################################################################################################################################################################################################################
             # Use samtools to add MD tag
@@ -1371,6 +1368,10 @@ def main():
             
             cmd = f"rm {options.inputalignedfilename[:-4]}.temp.bam {options.inputalignedfilename[:-4]}.MD_added.bam "
             os.system(cmd)
+            
+        tags_present = alterReadNamesAndAddNHTag( options, list_of_softwares_with_versions, remove_these_files, volumes_list, logging )
+        if options.quiet == False:
+            logging.info( f"Read names have been altered and NH tags have been added" )
             
         findEndedness( options, logging )
         if options.quiet == False:
