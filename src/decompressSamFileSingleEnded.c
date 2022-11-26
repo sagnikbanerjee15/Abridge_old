@@ -152,7 +152,7 @@ void writeAlignmentToFileSingleEnded(
 		/*
 		 * Set up the read name
 		 */
-		if ( strcmp( sam_alignment->NH, "1" ) )
+		if ( strcmp( sam_alignment->NH, "1" ) == 0 )
 		{
 			strcat( line_to_be_written_to_file, read_prefix );
 			strcat( line_to_be_written_to_file, sam_alignment->read_name );
