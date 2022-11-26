@@ -263,7 +263,7 @@ struct Read_Ids_to_NH
 
 int isCharacterInString( char*, char );
 void splitCigar( char*, int*, struct Cigar_Items* );
-long long int extractNHfromicigar( char*, int, char* );
+void extractNHfromicigar( char*, int, char* );
 void generateReadSequenceAndMDString(
 		struct Sam_Alignment*,
 		struct Whole_Genome_Sequence* );
