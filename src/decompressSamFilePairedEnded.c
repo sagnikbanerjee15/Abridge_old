@@ -880,6 +880,7 @@ int main( int argc, char *argv[] )
 	arguments.maxreadsineachline = 0;
 
 	argp_parse( &argp, argc, argv, 0, 0, &arguments );
+	return 0;
 
 	/********************************************************************
 	 * Variable declaration
