@@ -833,7 +833,7 @@ void compressPairedEndedAlignments(
 		i += 1;
 	}
 
-	for ( i = 0; i < number_of_unique_samformatflags; i++ )
+	for ( i = 1; i < number_of_unique_samformatflags; i++ )
 	{
 		//printf ("\n%c %d %c" , samflag_dictionary->direction[i] , samflag_dictionary->samflags[i] , samflag_dictionary->character[i]);
 		line_to_be_written_to_file[0] = '\0';
